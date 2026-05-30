@@ -275,6 +275,14 @@ export const en: Dict = {
   coopWinName: "We all win! 🎉",
   coopTeamwork: "🤝 Teamwork",
   coopTogether: (shared) => `${shared}🦴 pellets together`,
+  resultsSaved: "✅ Results saved automatically",
+  viewResultsBtn: "📊 All Results",
+
+  viewResults: "📊 Results",
+  resultsTitle: "📊 Game Results",
+  noResults: "No saved results yet",
+  clearResults: "🗑 Clear All",
+  downloadResults: "⬇ Export CSV",
 
   sharedBank: "🤝 Shared Bank",
   sharedProgress: (shared) => `${shared}/100 🎯`,

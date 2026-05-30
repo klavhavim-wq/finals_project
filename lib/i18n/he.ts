@@ -281,6 +281,14 @@ export const he: Dict = {
   coopWinName: "כולנו מנצחים! 🎉",
   coopTeamwork: "🤝 שיתוף פעולה",
   coopTogether: (shared) => `${shared}🦴 ביחד`,
+  resultsSaved: "✅ התוצאות נשמרו אוטומטית",
+  viewResultsBtn: "📊 כל התוצאות",
+
+  viewResults: "📊 תוצאות",
+  resultsTitle: "📊 תוצאות משחקים",
+  noResults: "אין תוצאות שמורות עדיין",
+  clearResults: "🗑 נקה הכל",
+  downloadResults: "⬇ ייצא לקובץ",
 
   sharedBank: "🤝 בנק משותף",
   sharedProgress: (shared) => `🦴 ${shared}/100 לניצחון!`,

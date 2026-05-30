@@ -53,7 +53,10 @@ export default function Win({
                 <span>
                   {DOGS[i]} {p.name}
                 </span>
-                <span>📍{p.hex}</span>
+                <span style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                  <span>📍{p.hex}</span>
+                  <span style={{ color: "#ef4444", fontSize: ".88rem" }}>{p.errors} ❌</span>
+                </span>
               </div>
             ))}
           </>
@@ -63,11 +66,20 @@ export default function Win({
               <span>
                 {MEDALS[i]} {p.name}
               </span>
-              <span>{p.tokens}🦴</span>
+              <span style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                <span>{p.tokens}🦴</span>
+                <span style={{ color: "#ef4444", fontSize: ".88rem" }}>{p.errors} ❌</span>
+              </span>
             </div>
           ))
         )}
       </div>
+      <div style={{ fontSize: ".8rem", color: "#6b7280", textAlign: "center", marginTop: 10 }}>
+        {t.resultsSaved}
+      </div>
+      <button className="btnout" style={{ marginTop: 8 }} onClick={() => actions.showScreen("sresults")}>
+        {t.viewResultsBtn}
+      </button>
       <button className="btnbig" style={{ marginTop: 8 }} onClick={() => actions.showScreen("sw")}>
         {t.newGameBtn}
       </button>

@@ -10,11 +10,13 @@ import {
   reducer,
   rollDoor,
 } from "@/lib/engine/gameReducer";
-import type { CardType, GameState, Level, Locale, Player, Settings } from "@/lib/engine/types";
+import type { CardType, GameState, Level, Locale, Player, SessionRecord, Settings } from "@/lib/engine/types";
 
 function usesMC(state: GameState): boolean {
   return state.settings.mc && (state.level === "beg" || state.level === "med");
 }
+
+const LS_KEY = "kaskash_sessions";
 
 export function useGame(locale: Locale) {
   const [state, dispatch] = useReducer(reducer, locale, initState);
@@ -24,6 +26,30 @@ export function useGame(locale: Locale) {
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
+
+  // Auto-save session to localStorage when game ends.
+  const savedThisGame = useRef(false);
+  useEffect(() => {
+    if (state.screen === "swin" && !savedThisGame.current) {
+      savedThisGame.current = true;
+      const s = stateRef.current;
+      const session: SessionRecord = {
+        id: Date.now().toString(),
+        date: new Date().toISOString(),
+        level: s.level,
+        coop: s.settings.coop,
+        players: s.players.map((p) => ({ name: p.name, tokens: p.tokens, errors: p.errors })),
+        winnerName: s.coopWin ? null : s.winnerIdx !== null ? s.players[s.winnerIdx].name : null,
+        sharedTokens: s.settings.coop ? s.sharedTokens : undefined,
+      };
+      try {
+        const existing: SessionRecord[] = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+        localStorage.setItem(LS_KEY, JSON.stringify([session, ...existing].slice(0, 100)));
+      } catch {}
+    } else if (state.screen !== "swin") {
+      savedThisGame.current = false;
+    }
+  }, [state.screen]);
 
   const startP1 = useCallback(() => {
     const s = stateRef.current;
@@ -150,6 +176,8 @@ export function useGame(locale: Locale) {
     []
   );
 
+  const goResults = useCallback(() => dispatch({ type: "SHOW_SCREEN", screen: "sresults" }), []);
+
   return {
     state,
     actions: {
@@ -180,6 +208,7 @@ export function useGame(locale: Locale) {
       openSettingsHelp,
       openVideo,
       openVideoMenu,
+      goResults,
     },
   };
 }

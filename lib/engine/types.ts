@@ -6,7 +6,7 @@ export type Level = "beg" | "med" | "adv" | "champ" | "hero";
 
 export type WinMode = "rounds" | "first100" | "both";
 
-export type Screen = "sw" | "si" | "ss" | "sg" | "swin";
+export type Screen = "sw" | "si" | "ss" | "sg" | "swin" | "sresults";
 
 /** 0 = not in game; 1 = find target; 2 = plan route; 3 = execute */
 export type Phase = 0 | 1 | 2 | 3;
@@ -65,6 +65,17 @@ export interface Player {
   color: string;
   tokens: number;
   hex: number;
+  errors: number;
+}
+
+export interface SessionRecord {
+  id: string;
+  date: string;
+  level: Level;
+  coop: boolean;
+  players: { name: string; tokens: number; errors: number }[];
+  winnerName: string | null;
+  sharedTokens?: number;
 }
 
 export interface PendingRoll {

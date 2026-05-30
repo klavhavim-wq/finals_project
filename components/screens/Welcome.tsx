@@ -45,6 +45,9 @@ export default function Welcome({
       <button className="btnout" onClick={actions.openVideoMenu}>
         {t.tutorialVideos}
       </button>
+      <button className="btnout" onClick={actions.goResults}>
+        {t.viewResults}
+      </button>
     </div>
   );
 }

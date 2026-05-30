@@ -7,6 +7,7 @@ import Instructions from "./screens/Instructions";
 import Setup from "./screens/Setup";
 import GameScreen from "./screens/GameScreen";
 import Win from "./screens/Win";
+import Results from "./screens/Results";
 import { getDict } from "@/lib/i18n";
 import type { Locale } from "@/lib/engine/types";
 
@@ -27,6 +28,7 @@ export default function Game({ locale }: { locale: Locale }) {
         <GameScreen t={t} state={state} actions={actions} locale={locale} />
       )}
       {state.screen === "swin" && <Win t={t} state={state} actions={actions} />}
+      {state.screen === "sresults" && <Results t={t} actions={actions} />}
       <Modal t={t} state={state} actions={actions} />
       {state.instOpen && <Instructions t={t} idx={state.instIdx} actions={actions} />}
     </div>

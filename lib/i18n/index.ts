@@ -146,6 +146,15 @@ export interface Dict {
   coopWinName: string;
   coopTeamwork: string;
   coopTogether: (shared: number) => string;
+  resultsSaved: string;
+  viewResultsBtn: string;
+
+  // Results screen
+  viewResults: string;
+  resultsTitle: string;
+  noResults: string;
+  clearResults: string;
+  downloadResults: string;
 
   // Sidebar
   sharedBank: string;

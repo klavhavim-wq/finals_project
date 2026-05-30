@@ -209,6 +209,15 @@ function applyEffect(
   return { turnPts: tp, extraTurn: extra, res };
 }
 
+function withError(state: GameState): GameState {
+  return {
+    ...state,
+    players: state.players.map((p, i) =>
+      i === state.cur ? { ...p, errors: p.errors + 1 } : p
+    ),
+  };
+}
+
 // ── State helpers ──
 
 function wins100(s: GameState): boolean {
@@ -446,7 +455,7 @@ export function reducer(state: GameState, action: Action): GameState {
             modal: { kind: "found", hex: n, sym: hexSym(n) },
           };
         }
-        return { ...state, wrongHex: n };
+        return { ...withError(state), wrongHex: n };
       }
       if (state.phase === 2) {
         const start = state.players[state.cur].hex;
@@ -476,7 +485,7 @@ export function reducer(state: GameState, action: Action): GameState {
         if (n === state.pendingRoll.correct) {
           return markCorrect(state);
         }
-        return { ...state, wrongHex: n, wrongAnswerVisible: true };
+        return { ...withError(state), wrongHex: n, wrongAnswerVisible: true };
       }
       return state;
     }
@@ -544,13 +553,13 @@ export function reducer(state: GameState, action: Action): GameState {
     case "MC_ANSWER": {
       if (!state.pendingRoll) return state;
       if (action.chosen === state.pendingRoll.correct) return markCorrect(state);
-      return { ...state, mcWrong: action.chosen, wrongAnswerVisible: true };
+      return { ...withError(state), mcWrong: action.chosen, wrongAnswerVisible: true };
     }
 
     case "INPUT_ANSWER": {
       if (!state.pendingRoll) return state;
       if (action.value === state.pendingRoll.correct) return markCorrect(state);
-      return { ...state, inputWrong: true, wrongAnswerVisible: true };
+      return { ...withError(state), inputWrong: true, wrongAnswerVisible: true };
     }
 
     case "CLEAR_ANSWER_FLASH":
