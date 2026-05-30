@@ -44,71 +44,145 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
   };
 
   return (
-    <div id="sresults" className="screen active">
+    <div
+      id="sresults"
+      className="screen active"
+      style={{
+        alignItems: "center",
+        padding: "22px 14px 32px",
+        gap: 14,
+        overflowY: "auto",
+        background: "var(--honey)",
+      }}
+    >
       <div className="stitle">{t.resultsTitle}</div>
 
       {sessions.length === 0 ? (
         <div
-          className="rcardwrap"
-          style={{ padding: "28px 18px", textAlign: "center", color: "#9ca3af", fontSize: "1rem" }}
+          className="scard"
+          style={{ textAlign: "center", color: "#9ca3af", fontSize: "1rem", padding: "28px 18px" }}
         >
           {t.noResults}
         </div>
       ) : (
         sessions.map((session) => {
-          const sorted = [...session.players].sort((a, b) => b.tokens - a.tokens);
+          const sorted = session.coop
+            ? session.players
+            : [...session.players].sort((a, b) => b.tokens - a.tokens);
           return (
-            <div key={session.id} className="rcardwrap">
+            <div
+              key={session.id}
+              className="scard"
+              style={{ padding: 0, overflow: "hidden" }}
+            >
               {/* Card header */}
-              <div className="rchead">
-                <span className="rclevel">
+              <div
+                style={{
+                  background: "linear-gradient(135deg,#FFFBEB,#FEF3C7)",
+                  padding: "11px 16px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  borderBottom: "2px solid #FDE68A",
+                }}
+              >
+                <span style={{ fontWeight: 800, fontSize: ".92rem", color: "#78350F" }}>
                   {t.levels[session.level].icon} {t.levels[session.level].name}
-                  {session.coop && <span style={{ opacity: .7, fontWeight: 600 }}>· 🤝</span>}
+                  {session.coop ? "  ·  🤝" : ""}
                 </span>
-                <span className="rcdate">{formatDate(session.date)}</span>
+                <span style={{ fontSize: ".76rem", color: "#92400E", opacity: 0.85 }}>
+                  {formatDate(session.date)}
+                </span>
               </div>
 
               {/* Player rows */}
-              <div className="rcbody">
-                {session.coop ? (
-                  <>
-                    {session.sharedTokens !== undefined && (
-                      <div className="rccoopbank">
-                        <span>{t.coopTeamwork}</span>
-                        <span>{session.sharedTokens} 🦴</span>
-                      </div>
-                    )}
-                    {session.players.map((p, i) => (
-                      <div key={i} className="rcrow">
-                        <span className="rcname">
-                          {DOGS[i] ?? "🐕"} {p.name}
-                        </span>
-                        <span className="rcstats">
-                          <span className="rcerr">{p.errors ?? 0} ❌</span>
-                        </span>
-                      </div>
-                    ))}
-                  </>
-                ) : (
-                  sorted.map((p, i) => (
-                    <div key={i} className="rcrow">
-                      <span className={`rcname${i === 0 ? " top" : ""}`}>
-                        {MEDALS[i]} {p.name}
-                      </span>
-                      <span className="rcstats">
-                        <span className="rcscore">{p.tokens} 🦴</span>
-                        <span className="rcerr">{p.errors ?? 0} ❌</span>
-                      </span>
-                    </div>
-                  ))
+              <div style={{ padding: "6px 16px 12px" }}>
+                {session.coop && session.sharedTokens !== undefined && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      background: "#F0FDF4",
+                      borderRadius: 9,
+                      padding: "8px 12px",
+                      margin: "8px 0",
+                      fontWeight: 700,
+                      color: "#065F46",
+                    }}
+                  >
+                    <span>{t.coopTeamwork}</span>
+                    <span>{session.sharedTokens} 🦴</span>
+                  </div>
                 )}
+
+                {sorted.map((p, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "9px 0",
+                      borderBottom: i < sorted.length - 1 ? "1px solid #F3F4F6" : "none",
+                    }}
+                  >
+                    {/* Player name */}
+                    <span
+                      style={{
+                        fontWeight: !session.coop && i === 0 ? 800 : 600,
+                        color: !session.coop && i === 0 ? "#78350F" : "#1F2937",
+                        fontSize: ".93rem",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 5,
+                      }}
+                    >
+                      {session.coop ? (DOGS[i] ?? "🐕") : MEDALS[i]}
+                      {" "}
+                      {p.name}
+                    </span>
+
+                    {/* Stats */}
+                    <span style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      {!session.coop && (
+                        <span
+                          style={{
+                            background: "#FFFBEB",
+                            border: "1.5px solid #FDE68A",
+                            borderRadius: 20,
+                            padding: "3px 11px",
+                            fontSize: ".85rem",
+                            fontWeight: 700,
+                            color: "#92400E",
+                          }}
+                        >
+                          {p.tokens} 🦴
+                        </span>
+                      )}
+                      <span
+                        style={{
+                          background: "#FEF2F2",
+                          border: "1.5px solid #FECACA",
+                          borderRadius: 20,
+                          padding: "3px 10px",
+                          fontSize: ".82rem",
+                          fontWeight: 700,
+                          color: "#B91C1C",
+                        }}
+                      >
+                        {p.errors ?? 0} ❌
+                      </span>
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           );
         })
       )}
 
-      {/* Action buttons */}
+      {/* Buttons */}
       <div className="sacts" style={{ flexWrap: "wrap" }}>
         <button className="btnout" onClick={() => actions.showScreen("sw")}>
           {t.back}
