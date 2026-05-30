@@ -1,0 +1,178 @@
+"use client";
+
+import { DC, DOGS, SFILL } from "@/lib/engine/constants";
+import {
+  H,
+  HP,
+  hCenter,
+  hexBaseFill,
+  hexSym,
+  hNeighbors,
+  hVerts,
+  isPrime,
+  OO,
+  PAD,
+  R,
+  VP,
+  W,
+  edgeColor,
+} from "@/lib/engine/hexgrid";
+import type { GameState } from "@/lib/engine/types";
+
+const SVG_W = Math.ceil(9 * HP + OO + W + PAD * 2);
+const SVG_H = Math.ceil(9 * VP + H + PAD * 2);
+
+function fillFor(state: GameState, n: number): string {
+  if (state.wrongHex === n) return SFILL.blocked;
+  const pathIdx = state.path.indexOf(n);
+  if (pathIdx !== -1) {
+    return pathIdx < state.stepIdx ? SFILL.done : SFILL.path;
+  }
+  if (state.targetHex === n) return SFILL.target;
+  return hexBaseFill(n);
+}
+
+export default function HexBoard({
+  state,
+  onHexClick,
+}: {
+  state: GameState;
+  onHexClick: (n: number) => void;
+}) {
+  const hexes = [];
+  for (let n = 1; n <= 100; n++) {
+    const { x: cx, y: cy } = hCenter(n);
+    const v = hVerts(cx, cy);
+    const pts = v.map((p) => p.x.toFixed(1) + "," + p.y.toFixed(1)).join(" ");
+    const nb = hNeighbors(n);
+    const prime = isPrime(n);
+    const sym = hexSym(n);
+    const tcol = prime ? "#7C3AED" : "#78350F";
+    const fw = prime ? 900 : 700;
+
+    const edges = [];
+    for (let e = 0; e < 6; e++) {
+      const v1 = v[e];
+      const v2 = v[(e + 1) % 6];
+      const neighbor = nb[e];
+      if (neighbor) {
+        const stroke = DC[edgeColor(state.edgeColors, state.level, n, neighbor)].color;
+        edges.push(
+          <line
+            key={e}
+            x1={v1.x.toFixed(1)}
+            y1={v1.y.toFixed(1)}
+            x2={v2.x.toFixed(1)}
+            y2={v2.y.toFixed(1)}
+            stroke={stroke}
+            strokeWidth={4.5}
+            strokeLinecap="round"
+          />
+        );
+      } else {
+        edges.push(
+          <line
+            key={e}
+            x1={v1.x.toFixed(1)}
+            y1={v1.y.toFixed(1)}
+            x2={v2.x.toFixed(1)}
+            y2={v2.y.toFixed(1)}
+            stroke="#C9A882"
+            strokeWidth={1.5}
+          />
+        );
+      }
+    }
+
+    hexes.push(
+      <g
+        key={n}
+        className="hex-group"
+        onClick={() => onHexClick(n)}
+      >
+        <polygon points={pts} fill={fillFor(state, n)} stroke="none" />
+        {edges}
+        <text
+          x={cx.toFixed(1)}
+          y={(cy - (sym ? 6 : 0)).toFixed(1)}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fontSize={13}
+          fontWeight={fw}
+          fill={tcol}
+          pointerEvents="none"
+          fontFamily="Arial,sans-serif"
+        >
+          {n}
+        </text>
+        {sym && (
+          <text
+            x={cx.toFixed(1)}
+            y={(cy + 11).toFixed(1)}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize={12}
+            pointerEvents="none"
+          >
+            {sym}
+          </text>
+        )}
+      </g>
+    );
+  }
+
+  const badges =
+    state.phase === 2
+      ? state.path.map((h, i) => {
+          const { x: cx, y: cy } = hCenter(h);
+          return (
+            <g key={`badge-${h}`} className="svg-badge">
+              <circle cx={(cx + 12).toFixed(1)} cy={(cy - 12).toFixed(1)} r={7} fill="#3B82F6" />
+              <text
+                x={(cx + 12).toFixed(1)}
+                y={(cy - 12).toFixed(1)}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize={7}
+                fill="white"
+                fontWeight={800}
+                pointerEvents="none"
+              >
+                {i + 1}
+              </text>
+            </g>
+          );
+        })
+      : null;
+
+  const tokens = state.players.map((p, i) => {
+    const { x: cx, y: cy } = hCenter(p.hex);
+    return (
+      <text
+        key={`tok-${i}`}
+        transform={`translate(${cx.toFixed(1)},${(cy - R / 2).toFixed(1)})`}
+        fontSize={24}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        style={{ transition: "transform .45s ease" }}
+        pointerEvents="none"
+      >
+        {DOGS[i]}
+      </text>
+    );
+  });
+
+  return (
+    <svg
+      id="hsvg"
+      viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+      width={SVG_W}
+      height={SVG_H}
+      style={{ display: "block" }}
+    >
+      {hexes}
+      {badges}
+      {tokens}
+    </svg>
+  );
+}
