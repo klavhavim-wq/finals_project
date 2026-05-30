@@ -29,15 +29,9 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
     const lines: string[] = ["תאריך,רמה,שיתופי,שחקן,ניקוד,טעויות"];
     for (const s of sessions) {
       for (const p of s.players) {
-        const row = [
-          formatDate(s.date),
-          s.level,
-          s.coop ? "כן" : "לא",
-          p.name,
-          p.tokens,
-          p.errors ?? 0,
-        ].join(",");
-        lines.push(row);
+        lines.push(
+          [formatDate(s.date), s.level, s.coop ? "כן" : "לא", p.name, p.tokens, p.errors ?? 0].join(",")
+        );
       }
     }
     const blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
@@ -54,91 +48,84 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
       <div className="stitle">{t.resultsTitle}</div>
 
       {sessions.length === 0 ? (
-        <div className="scard" style={{ textAlign: "center", color: "#6b7280", padding: "24px 16px" }}>
+        <div
+          className="rcardwrap"
+          style={{ padding: "28px 18px", textAlign: "center", color: "#9ca3af", fontSize: "1rem" }}
+        >
           {t.noResults}
         </div>
       ) : (
-        sessions.map((session) => (
-          <div key={session.id} className="scard">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: 10,
-                fontSize: ".82rem",
-                color: "#6b7280",
-              }}
-            >
-              <span>{formatDate(session.date)}</span>
-              <span>
-                {t.levels[session.level].icon} {t.levels[session.level].name}
-                {session.coop ? " · 🤝" : ""}
-              </span>
-            </div>
-
-            {!session.coop && session.winnerName && (
-              <div style={{ fontWeight: 700, fontSize: ".9rem", marginBottom: 6 }}>
-                🏆 {session.winnerName}
+        sessions.map((session) => {
+          const sorted = [...session.players].sort((a, b) => b.tokens - a.tokens);
+          return (
+            <div key={session.id} className="rcardwrap">
+              {/* Card header */}
+              <div className="rchead">
+                <span className="rclevel">
+                  {t.levels[session.level].icon} {t.levels[session.level].name}
+                  {session.coop && <span style={{ opacity: .7, fontWeight: 600 }}>· 🤝</span>}
+                </span>
+                <span className="rcdate">{formatDate(session.date)}</span>
               </div>
-            )}
 
-            {session.coop ? (
-              <>
-                {session.sharedTokens !== undefined && (
-                  <div className="wsrow" style={{ fontWeight: 700, marginBottom: 4 }}>
-                    <span>{t.coopTeamwork}</span>
-                    <span>{session.sharedTokens}🦴</span>
-                  </div>
-                )}
-                {session.players.map((p, i) => (
-                  <div key={i} className="wsrow">
-                    <span>
-                      {DOGS[i] ?? "🐕"} {p.name}
-                    </span>
-                    <span style={{ color: "#ef4444", fontSize: ".88rem" }}>
-                      {p.errors ?? 0} ❌
-                    </span>
-                  </div>
-                ))}
-              </>
-            ) : (
-              [...session.players]
-                .sort((a, b) => b.tokens - a.tokens)
-                .map((p, i) => (
-                  <div key={i} className="wsrow">
-                    <span>
-                      {MEDALS[i]} {p.name}
-                    </span>
-                    <span style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                      <span>{p.tokens}🦴</span>
-                      <span style={{ color: "#ef4444", fontSize: ".88rem" }}>
-                        {p.errors ?? 0} ❌
+              {/* Player rows */}
+              <div className="rcbody">
+                {session.coop ? (
+                  <>
+                    {session.sharedTokens !== undefined && (
+                      <div className="rccoopbank">
+                        <span>{t.coopTeamwork}</span>
+                        <span>{session.sharedTokens} 🦴</span>
+                      </div>
+                    )}
+                    {session.players.map((p, i) => (
+                      <div key={i} className="rcrow">
+                        <span className="rcname">
+                          {DOGS[i] ?? "🐕"} {p.name}
+                        </span>
+                        <span className="rcstats">
+                          <span className="rcerr">{p.errors ?? 0} ❌</span>
+                        </span>
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  sorted.map((p, i) => (
+                    <div key={i} className="rcrow">
+                      <span className={`rcname${i === 0 ? " top" : ""}`}>
+                        {MEDALS[i]} {p.name}
                       </span>
-                    </span>
-                  </div>
-                ))
-            )}
-          </div>
-        ))
+                      <span className="rcstats">
+                        <span className="rcscore">{p.tokens} 🦴</span>
+                        <span className="rcerr">{p.errors ?? 0} ❌</span>
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          );
+        })
       )}
 
-      <div className="sacts">
+      {/* Action buttons */}
+      <div className="sacts" style={{ flexWrap: "wrap" }}>
         <button className="btnout" onClick={() => actions.showScreen("sw")}>
           {t.back}
         </button>
         {sessions.length > 0 && (
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <>
             <button className="btnout" onClick={downloadCSV}>
               {t.downloadResults}
             </button>
             <button
               className="btnout"
-              style={{ color: "#ef4444", borderColor: "#ef4444" }}
+              style={{ color: "#ef4444", borderColor: "#FECACA" }}
               onClick={clearAll}
             >
               {t.clearResults}
             </button>
-          </div>
+          </>
         )}
       </div>
     </div>
