@@ -89,6 +89,7 @@ export function useGame(locale: Locale) {
     const roll = rollDoor(door, {
       turnUsedExprs: s.turnUsedExprs,
       lastTurnExprs: s.lastTurnExprs,
+      lastExpr: s.lastExpr,
       turnHasOne: s.turnHasOne,
       turnHasTen: s.turnHasTen,
     });

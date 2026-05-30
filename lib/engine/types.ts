@@ -142,6 +142,7 @@ export interface GameState {
   /** exercise-repetition guards */
   turnUsedExprs: string[];
   lastTurnExprs: string[];
+  lastExpr: string;
   turnHasOne: boolean;
   turnHasTen: boolean;
 

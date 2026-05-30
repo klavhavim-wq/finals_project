@@ -42,6 +42,7 @@ export function pickTargetCard(
 export interface RollGuards {
   turnUsedExprs: string[];
   lastTurnExprs: string[];
+  lastExpr: string;
   turnHasOne: boolean;
   turnHasTen: boolean;
 }
@@ -73,9 +74,24 @@ export function rollDoor(door: Door, guards: RollGuards, rand: Rand = Math.rando
     if (tries > 40) break;
     if (guards.turnUsedExprs.includes(expr)) continue;
     if (guards.lastTurnExprs.includes(expr)) continue;
+    if (expr === guards.lastExpr) continue;
     if (rolls.includes(1) && guards.turnHasOne) continue;
     if (correct % 10 === 0 && guards.turnHasTen) continue;
     break;
+  }
+  // Guarantee no consecutive repeat even when the broader guards are exhausted.
+  for (let i = 0; expr === guards.lastExpr && i < 20; i++) {
+    if (door.ranges) {
+      rolls = door.ranges.map(([mn, mx]) => Math.floor(rand() * (mx - mn + 1)) + mn);
+      correct = rolls.reduce((a, b) => a * b, 1);
+      expr = rolls.join(" × ");
+    } else {
+      const min = door.min!;
+      const max = door.max!;
+      rolls = Array.from({ length: door.cnt }, () => Math.floor(rand() * (max - min + 1)) + min);
+      correct = rolls.reduce((a, b) => a * b, 1);
+      expr = [...rolls].sort((a, b) => a - b).join(" × ");
+    }
   }
   return { rolls, correct, expr };
 }
@@ -286,6 +302,7 @@ export function initState(locale: Locale): GameState {
     extraTurn: false,
     turnUsedExprs: [],
     lastTurnExprs: [],
+    lastExpr: "",
     turnHasOne: false,
     turnHasTen: false,
     wrongHex: null,
@@ -406,6 +423,7 @@ export function reducer(state: GameState, action: Action): GameState {
         edgeColors,
         turnUsedExprs: [],
         lastTurnExprs: [],
+        lastExpr: "",
         turnHasOne: false,
         turnHasTen: false,
         winnerIdx: null,
@@ -508,6 +526,7 @@ export function reducer(state: GameState, action: Action): GameState {
         turnUsedExprs: [...state.turnUsedExprs, expr],
         turnHasOne: state.turnHasOne || rolls.includes(1),
         turnHasTen: state.turnHasTen || correct % 10 === 0,
+        lastExpr: expr,
         pendingRoll: { rolls, color: col, pts: dc.pts, expr, correct },
         boardAns: true,
         choices: action.choices,
