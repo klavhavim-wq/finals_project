@@ -51,6 +51,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .iicon{font-size:68px;margin-bottom:10px}
 .ititl{font-size:1.5rem;font-weight:800;color:#1e1b4b;margin-bottom:8px}
 .itext{font-size:1rem;color:#374151;line-height:1.7;margin-bottom:18px}
+.itext svg{display:block;margin:0 auto}
 .inav{display:flex;gap:10px;justify-content:center;align-items:center}
 .idot{width:9px;height:9px;border-radius:50%;background:#d1d5db;cursor:pointer;transition:all .2s}
 .idot.on{background:var(--pu);transform:scale(1.3)}
