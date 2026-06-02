@@ -73,10 +73,21 @@ function calcHintHe(expr: string): string {
   const aM = expr.match(/^(\d+)\s*\+\s*(\d+)$/);
   if (aM) {
     const [a, b] = [+aM[1], +aM[2]];
+    const [small, big] = a <= b ? [a, b] : [b, a];
     if (a % 10 === 0 || b % 10 === 0)
-      return `💜 רמז: התחילו מ-<strong>${Math.max(a, b)}</strong> וספרו עוד <strong>${Math.min(a, b)}</strong>`;
-    if (b <= 5) return `💜 רמז: ספרו ${b} קדימה מ-${a}`;
-    return `💜 רמז: ${ltr(`${a} + ${b}`)} — ספרו קדימה!`;
+      return `💜 רמז: התחילו מ-<strong>${big}</strong> וספרו עוד <strong>${small}</strong>`;
+    if (small <= 3) {
+      if (small === 1) return `💜 רמז: ספרו 1 קדימה מ-${big}`;
+      const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
+      return `💜 רמז: ספרו ${small} קדימה מ-${big}: ${ltr(`${steps}, ?`)}`;
+    }
+    if (a + b > 10) {
+      const toTen = 10 - big;
+      const leftover = small - toTen;
+      return `💜 רמז: ${ltr(`${big} + ${toTen} = <strong>10</strong>`)}... ועוד ${leftover} = ?`;
+    }
+    const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
+    return `💜 רמז: התחילו מ-${big}: ${ltr(`${steps}, ?`)}`;
   }
   return `💜 רמז: חשבו צעד-צעד! 🐾`;
 }

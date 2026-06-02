@@ -69,10 +69,21 @@ function calcHintEn(expr: string): string {
   const aM = expr.match(/^(\d+)\s*\+\s*(\d+)$/);
   if (aM) {
     const [a, b] = [+aM[1], +aM[2]];
+    const [small, big] = a <= b ? [a, b] : [b, a];
     if (a % 10 === 0 || b % 10 === 0)
-      return `💜 Hint: start at <strong>${Math.max(a, b)}</strong> and count up <strong>${Math.min(a, b)}</strong>`;
-    if (b <= 5) return `💜 Hint: count ${b} forward from ${a}`;
-    return `💜 Hint: ${a} + ${b} — count forward!`;
+      return `💜 Hint: start at <strong>${big}</strong> and count up <strong>${small}</strong>`;
+    if (small <= 3) {
+      if (small === 1) return `💜 Hint: count 1 forward from ${big}`;
+      const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
+      return `💜 Hint: count ${small} forward from ${big}: ${steps}, ?`;
+    }
+    if (a + b > 10) {
+      const toTen = 10 - big;
+      const leftover = small - toTen;
+      return `💜 Hint: ${big} + ${toTen} = <strong>10</strong>... then add ${leftover} more = ?`;
+    }
+    const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
+    return `💜 Hint: start at ${big}: ${steps}, ?`;
   }
   return `💜 Hint: think step by step! 🐾`;
 }
