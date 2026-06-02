@@ -58,50 +58,63 @@ export const en: Dict = {
   welcomeSub2b: "👥 1–4 players \u00a0·\u00a0 ⏱ 20–45 min",
   startGame: "🎮 Start Game!",
   howToPlay: "📖 How to Play?",
-  tutorialVideos: "🎬 Tutorial Videos",
-
-  inst: [
-    {
-      i: "🎯",
-      t: "Step 1 — Find the Target",
-      x: 'Draw a challenge card!<br>For example: <strong>6 × 4 = ?</strong><br><br>Solve it in your head 🧠 and click the hex with the answer (24) on the board.<br><br>Wrong? <strong>You can try again as many times as you like!</strong> 😊<br>Need help? Click "Show Answer" — but it won\'t move your dog.',
-    },
-    {
-      i: "🗺️",
-      t: "Step 2 — Plan Your Route",
-      x: 'Click hexes on the board to build your path to the target.<br><br>The edge between hexes shows the food door type:<br><br>🦴 <strong>Bone</strong> — (2–4)×(2–4) = 1 pellet 🦴<br>🐟 <strong>Fish</strong> — (3–6)×(3–6) = 2 pellets 🦴🦴<br>🍗 <strong>Wing</strong> — (5–8)×(5–8) = 5 pellets 🦴×5<br>🌭 <strong>Sausage</strong> — (7–9)×(7–9) = 10 pellets 🦴×10<br>🥩 <strong>Steak</strong> — (11–19)×(2–9) = 20 pellets 🦴×20<br><em style="font-size:.85em;color:#7C3AED">Steak — Hero level only!</em><br><br>Harder = more pellets in the bank! 🐕',
-    },
-    {
-      i: "🎨",
-      t: "Board Colors",
-      x: '<div style="text-align:center;margin:0 0 6px"><svg width="160" height="145" viewBox="-5 0 250 245" xmlns="http://www.w3.org/2000/svg"><polygon points="120,20 207,70 207,170 120,220 33,170 33,70" fill="#FFF8E7" stroke="#e5e7eb" stroke-width="2"/><line x1="120" y1="20" x2="207" y2="70" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="70" x2="207" y2="170" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="170" x2="120" y2="220" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/><line x1="120" y1="220" x2="33" y2="170" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="170" x2="33" y2="70" stroke="#DC2626" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="70" x2="120" y2="20" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><text x="120" y="130" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="serif">🐕</text></svg></div><div style="font-size:.78rem;line-height:1.95"><div>🦴 <strong style="color:#3B82F6">Blue — Bone</strong>: Easy | (2–4)×(2–4) = <strong>1 pellet/step</strong> | 3×4=12 ✔</div><div>🐟 <strong style="color:#8B5CF6">Purple — Fish</strong>: Medium | (3–6)×(3–6) = <strong>2 pellets/step</strong> | 4×5=20 ✔</div><div>🍗 <strong style="color:#F59E0B">Yellow — Wing</strong>: Hard | (5–8)×(5–8) = <strong>5 pellets/step</strong> | 6×7=42 ✔</div><div>🌭 <strong style="color:#EF4444">Red — Sausage</strong>: Brave! | (7–9)×(7–9) = <strong>10 pellets/step</strong> | 8×9=72 ✔</div><div>🥩 <strong style="color:#DC2626">Dark Red — Steak</strong>: Hero only! | (11–19)×(2–9) = <strong>20 pellets/step</strong> | 13×4=52 ✔</div></div>',
-    },
-    {
-      i: "🐕",
-      t: "Step 3 — Off You Go!",
-      x: "Your dog runs onto the board and starts collecting! 🐾<br><br>Each step: roll dice × dice = math equation.<br>Answer correctly → dog advances, earn pellets 🦴<br>Wrong? <strong>Try again unlimited times!</strong><br>Choose to reveal the answer → dog stops, <strong>pellets earned so far are saved in the bank!</strong> 🦴",
-    },
-    {
-      i: "🦴",
-      t: "How Much Is Each Pellet Worth?",
-      x: "Each step earns pellets based on the door type:<br><br>🦴 <strong>Bone</strong> — Easy | (2–4)×(2–4) | 1 pellet per step<br>🐟 <strong>Fish</strong> — Medium | (3–6)×(3–6) | 2 pellets per step<br>🍗 <strong>Wing</strong> — Hard | (5–8)×(5–8) | 5 pellets per step<br>🌭 <strong>Sausage</strong> — Brave! | (7–9)×(7–9) | 10 pellets per step<br>🥩 <strong>Steak</strong> — Hero! | (11–19)×(2–9) | 20 pellets per step<br><br>🧠 <em>Choose harder doors if you're confident in your math!</em><br><br>⏱ Time runs out? Stay in place — pellets earned so far are saved!",
-    },
-    {
-      i: "✨",
-      t: "Special Symbols on the Board",
-      x: '<strong>💎 Round numbers (10,20,30...)</strong><br>Landed here? Draw a Bonus card!<br>You might get: double pellets / extra turn / +10 pellets<br><br><strong>🚧 Numbers ending in 5 (15,25,35...)</strong><br>Draw a Limit card — a condition for collecting pellets!<br>Example: "Your pellets must be even"<br><br><strong>🦹 Numbers ending in 6 (16,26,36...)</strong><br>Steal! ✋ You can steal pellets from a rival<br><br><strong>🎲 Prime numbers (2,3,5,7,11,13...)</strong><br>A number divisible only by 1 and itself!<br>Draw a Twist card — the rules change!',
-    },
-    {
-      i: "🏆",
-      t: "How to Win?",
-      x: '<strong>First to 100 pellets wins immediately! 🎉</strong><br><br>After 4 rounds — whoever collected the most wins.<br><br><span style="color:#7C3AED;font-weight:700;font-size:1rem">🔮 Purple numbers = prime numbers</span><br>A prime number is divisible only by 1 and itself.<br>Examples: 2, 3, 5, 7, 11, 13, 17... are prime!<br><br>Reach a prime hex → draw a Twist card! 🎲',
-    },
-    {
-      i: "🤝",
-      t: "Cooperative Mode — Together!",
-      x: 'Enable "Cooperative mode" in settings.<br>In this mode — <strong>everyone works together!</strong><br><br>✅ All pellets go into one big shared bank 🦴<br>✅ No stealing — we\'re all one team!<br>✅ Reach 100 pellets together — <strong>everyone wins! 🎉</strong><br><br>🐕🐩🐕‍🦺🦮 Every dog helps fill the bank!',
-    },
-  ],
+  tutorialVideos: "🎬 Tutorial Videos",     inst: [
+       {
+         i: "🎮",
+         t: "The Game Board",
+         x: '<div style="text-align:center;margin:0 0 8px"><svg width="160" height="70" viewBox="0 0 136 70" xmlns="http://www.w3.org/2000/svg"><polygon points="30,13 49,24 49,46 30,57 11,46 11,24" fill="#D1FAE5" stroke="#e5e7eb" stroke-width="1.5"/><polygon points="68,13 87,24 87,46 68,57 49,46 49,24" fill="#FFF8E7" stroke="#e5e7eb" stroke-width="1.5"/><polygon points="106,13 125,24 125,46 106,57 87,46 87,24" fill="#FEF08A" stroke="#e5e7eb" stroke-width="1.5"/><line x1="49" y1="24" x2="49" y2="46" stroke="#3B82F6" stroke-width="4" stroke-linecap="round"/><line x1="87" y1="24" x2="87" y2="46" stroke="#8B5CF6" stroke-width="4" stroke-linecap="round"/><text x="30" y="38" text-anchor="middle" font-size="10" font-family="serif">🐕</text><text x="106" y="38" text-anchor="middle" font-size="10" font-family="serif">⭐</text><text x="30" y="10" text-anchor="middle" font-size="7" fill="#555">12</text><text x="68" y="10" text-anchor="middle" font-size="7" fill="#555">24</text><text x="106" y="10" text-anchor="middle" font-size="7" fill="#555">36</text></svg></div>The board has 100 numbered hexes. Between the hexes you\'ll see colored edges — those are the "doors"! 🚪<br><br>Each color = a food type + difficulty level.<br><br>🎯 <strong>The goal:</strong> Collect as many pellets as you can for your dog\'s bank! 🐶🦴',
+       },
+       {
+         i: "🎯",
+         t: "Step 1 — Find the Target",
+         x: '<div style="text-align:center;margin:0 0 8px"><svg width="180" height="70" viewBox="0 0 180 70" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="176" height="66" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/><text x="90" y="22" text-anchor="middle" font-size="12" fill="#64748b">🎯 Target Card</text><text x="90" y="50" text-anchor="middle" font-size="22" font-weight="bold" fill="#1e293b">6 × 4 = ?</text></svg></div>Draw a target card with a math problem, for example: <strong>6 × 4 = ?</strong><br><br>Solve it in your head 🧠 and click the hex with the answer (24) on the board!<br><br>Wrong? <strong>You can try again as many times as you want!</strong> 😊<br>Need help? Click "Show Answer".<br><br>ℹ️ <strong>This step has NO time limit!</strong>',
+       },
+       {
+         i: "🗺️",
+         t: "Step 2 — Plan Your Route",
+         x: '<div style="text-align:center;margin:0 0 8px"><svg width="120" height="110" viewBox="-5 0 250 245" xmlns="http://www.w3.org/2000/svg"><polygon points="120,20 207,70 207,170 120,220 33,170 33,70" fill="#FFF8E7" stroke="#e5e7eb" stroke-width="2"/><line x1="120" y1="20" x2="207" y2="70" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="70" x2="207" y2="170" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="170" x2="120" y2="220" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/><line x1="120" y1="220" x2="33" y2="170" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="170" x2="33" y2="70" stroke="#DC2626" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="70" x2="120" y2="20" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><text x="120" y="130" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="serif">🐕</text></svg></div>Remember — the goal is more pellets! 🦴<br>Click hexes to build your route to the target (don\'t forget to mark the target hex too!).<br><br>The colored edge between hexes = food type:<br><br>🦴 <strong>Bone</strong> — Tables up to 4 | 1 pellet per step<br>🐟 <strong>Fish</strong> — Tables up to 6 | 2 pellets per step<br>🍗 <strong>Wing</strong> — Tables up to 8 | 5 pellets per step<br>🌭 <strong>Sausage</strong> — Tables 7–9 | 10 pellets per step<br>🥩 <strong>Steak</strong> — Long multiplication | 20 pellets per step<br><em style="font-size:.85em;color:#7C3AED">Steak — Hero level only!</em><br><br>Harder = more pellets in the bank! 🐶',
+       },
+       {
+         i: "🎨",
+         t: "The Doors — Board Colors",
+         x: '<div style="text-align:center;margin:0 0 8px"><svg width="160" height="145" viewBox="-5 0 250 245" xmlns="http://www.w3.org/2000/svg"><polygon points="120,20 207,70 207,170 120,220 33,170 33,70" fill="#FFF8E7" stroke="#e5e7eb" stroke-width="2"/><line x1="120" y1="20" x2="207" y2="70" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="70" x2="207" y2="170" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="170" x2="120" y2="220" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/><line x1="120" y1="220" x2="33" y2="170" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="170" x2="33" y2="70" stroke="#DC2626" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="70" x2="120" y2="20" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><text x="120" y="130" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="serif">🐕</text></svg></div><div style="font-size:.78rem;line-height:1.95"><div>🦴 <strong style="color:#3B82F6">Blue — Bone</strong>: Tables up to 4 | (2–4)×(2–4) = <strong>1 pellet/step</strong> | 3×4=12 ✔</div><div>🐟 <strong style="color:#8B5CF6">Purple — Fish</strong>: Tables up to 6 | (3–6)×(3–6) = <strong>2 pellets/step</strong> | 4×5=20 ✔</div><div>🍗 <strong style="color:#F59E0B">Yellow — Wing</strong>: Tables up to 8 | (5–8)×(5–8) = <strong>5 pellets/step</strong> | 6×7=42 ✔</div><div>🌭 <strong style="color:#EF4444">Red — Sausage</strong>: Tables 7–9 | (7–9)×(7–9) = <strong>10 pellets/step</strong> | 8×9=72 ✔</div><div>🥩 <strong style="color:#DC2626">Dark Red — Steak</strong>: Hero only! | (11–19)×(2–9) = <strong>20 pellets/step</strong> | 13×4=52 ✔</div></div>',
+       },
+       {
+         i: "✅",
+         t: "Review & Confirm",
+         x: 'Before you start walking — check your route! 📝<br><br>You\'ll see how many pellets you can earn, how many steps, and which doors are on the way.<br><br>Not happy? Click "Clear" 🗑 and build a new route!<br><br>Ready? Click "Confirm Route" ✅ and off you go!',
+       },
+       {
+         i: "🐕",
+         t: "Step 3 — Off You Go!",
+         x: 'Your dog jumps on the board and starts moving! 🐾<br><br>Each step:<br>1️⃣ Press "Roll" 🎲<br>2️⃣ Get a multiplication problem based on the door color<br>3️⃣ Answer by clicking a hex, typing, or using choice buttons<br><br>✅ Correct → the dog moves forward + pellets! 🦴<br>❌ Wrong → try again — no limit!<br>💡 Reveal answer → the dog stops, <strong>pellets earned so far are saved!</strong> 🦴',
+       },
+       {
+         i: "⏱",
+         t: "Time Limits",
+         x: 'Each difficulty level has a time limit per turn:<br><br>🐾⭐🌟 <strong>Beginner / Medium / Advanced</strong> — 3 minutes<br>🏆 <strong>Champion</strong> — 2 minutes<br>⚡ <strong>Hero</strong> — 1:30 minutes<br><br>Didn\'t finish in time? You stay in place, <strong>pellets earned so far are saved!</strong> 🦴<br><br>💡 You can turn off the timer in the settings.',
+       },
+       {
+         i: "🏆",
+         t: "How to Win?",
+         x: 'You can choose in the settings:<br><br>🔄 <strong>4 Rounds</strong> — Everyone plays 4 rounds, whoever collected the most pellets wins!<br><br>🎯 <strong>First to 100</strong> — Reach 100 pellets? Instant win! 🎉<br><br>⚡ <strong>Both</strong> — 4 rounds, but if someone reaches 100 first — instant win!<br><br>Choose before you start. ⚙️',
+       },
+       {
+         i: "✨",
+         t: "Special Symbols on the Board",
+         x: '<strong>💎 Round numbers (10, 20, 30...)</strong><br>Landed here? Draw a Bonus card! 🎁<br>You might get: double pellets / extra turn / +10 pellets<br><br><strong>🚧 Numbers ending in 5 (15, 25, 35...)</strong><br>Draw a Limit card — a challenge for collecting!<br>Example: "Your pellets must be even"<br><br><strong>🦹 Numbers ending in 6 (16, 26, 36...)</strong><br>Steal! ✋ You can steal pellets from a rival!<br><br><strong>🔮 Prime numbers (2, 3, 5, 7, 11, 13...)</strong><br>A number that can only be divided by 1 and itself!<br>Draw a Twist card — the rules change! 🎲',
+       },
+       {
+         i: "⚙️",
+         t: "Game Settings",
+         x: 'Before you start you can customize the game:<br><br>📊 <strong>Difficulty level</strong> — Beginner to Hero<br>⏱ <strong>Timer</strong> — on or off<br>🔤 <strong>Choice buttons</strong> — for Beginner/Medium levels<br>🦹 <strong>Steal</strong> — on or off<br>🤝 <strong>Cooperative</strong> — play together instead of competing<br>🏁 <strong>Win condition</strong> — how do you win?',
+       },
+       {
+         i: "🤝",
+         t: "Together — Cooperative Mode",
+         x: 'Enable "Cooperative mode" in settings.<br>In this mode — <strong>everyone works together!</strong><br><br>✅ All pellets go into one shared bank 🦴<br>✅ No stealing — we\'re all one team!<br>✅ Reach 100 together — <strong>everyone wins! 🎉</strong><br><br>🐕🐩🐕‍🦺🦮 Great for young kids, therapy, and family play.',
+       }
+     ],
   back: "← Back",
   next: "Next →",
   gotItDone: "Got it! ✅",
