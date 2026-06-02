@@ -58,7 +58,7 @@ export default function PlayerCards({ t, state }: { t: Dict; state: GameState })
           <div className="pchead">
             <div className="pcname" style={{ color: p.color }}>
               {i === state.cur ? "▶ " : ""}
-              {DOGS[i]} {p.name}
+              {p.name}
             </div>
             {!coop && <div className="pchon">🦴{p.tokens}</div>}
           </div>

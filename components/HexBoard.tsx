@@ -1,6 +1,6 @@
 "use client";
 
-import { DC, DOGS, SFILL } from "@/lib/engine/constants";
+import { DC, DOGS, PCOLORS, SFILL } from "@/lib/engine/constants";
 import {
   H,
   HP,
@@ -150,17 +150,17 @@ export default function HexBoard({
   const tokens = state.players.map((p, i) => {
     const { x: cx, y: cy } = hCenter(p.hex);
     return (
-      <text
+      <g
         key={`tok-${i}`}
-        transform={`translate(${cx.toFixed(1)},${(cy - R / 2).toFixed(1)})`}
-        fontSize={24}
-        textAnchor="middle"
-        dominantBaseline="middle"
+        transform={`translate(${cx.toFixed(1)},${(cy - R * 0.5).toFixed(1)})`}
         style={{ transition: "transform .45s ease" }}
         pointerEvents="none"
       >
-        {DOGS[i]}
-      </text>
+        <circle r={17} fill="white" fillOpacity={0.93} stroke={PCOLORS[i]} strokeWidth={3} />
+        <text fontSize={24} textAnchor="middle" dominantBaseline="middle">
+          {DOGS[i]}
+        </text>
+      </g>
     );
   });
 
