@@ -27,9 +27,6 @@ function Phase1({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
   const [hintVisible, setHintVisible] = useState(false);
   if (!card) return null;
 
-  const low = Math.floor(card.ans / 10) * 10;
-  const high = low + 9;
-
   return (
     <div>
       <RichText className="aphint" html={t.p1Hint} />
@@ -39,7 +36,7 @@ function Phase1({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
         <RichText className="tcinst" html={t.targetInstruction(!!card.prime)} />
       </div>
       {hintVisible ? (
-        <RichText className="hintbox" html={t.hintResult(low, high)} />
+        <RichText className="hintbox" html={t.hintResult(card.ex, card.ans)} />
       ) : (
         <button className="abt abp" onClick={() => setHintVisible(true)}>
           {t.hintBtn}
@@ -114,9 +111,6 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
   const dc = DC[col];
   const dieClass = col === "redlong" ? "redlong" : col;
 
-  const correct = state.pendingRoll?.correct;
-  const hintLow = correct !== undefined ? Math.floor(correct / 10) * 10 : 0;
-  const hintHigh = hintLow + 9;
 
   return (
     <div>
@@ -167,7 +161,7 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
           )}
 
           {hintVisible ? (
-            <RichText className="hintbox" html={t.hintResult(hintLow, hintHigh)} />
+            <RichText className="hintbox" html={t.hintResult(state.pendingRoll.expr, state.pendingRoll.correct)} />
           ) : (
             <button className="abt abp" onClick={() => setHintVisible(true)}>
               {t.hintBtn}

@@ -71,7 +71,7 @@ export interface Dict {
   showAnswer: string;
   wrongHexInline: (n: number) => string;
   hintBtn: string;
-  hintResult: (low: number, high: number) => string;
+  hintResult: (expr: string, ans: number) => string;
 
   // Phase 2
   p2Hint: (target: number) => string;

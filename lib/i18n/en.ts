@@ -17,6 +17,73 @@ const DOOR_RANGES: Record<DoorKey, string> = {
   redlong: "11–19 × 2–9",
 };
 
+function mulHintEn(a: number, b: number): string {
+  if (a === 10 || b === 10) {
+    const x = a === 10 ? b : a;
+    return `💜 Hint: ×10 — just add a zero! ${x} × 10 = ${x}0`;
+  }
+  if (a === 5 || b === 5) {
+    const x = a === 5 ? b : a;
+    return `💜 Hint: ×5 = ×10 then halve<br>${x} × 10 = <strong>${x * 10}</strong>, then ÷2 = ?`;
+  }
+  if (a === 2 || b === 2) {
+    const x = a === 2 ? b : a;
+    return `💜 Hint: ×2 = add the number to itself!<br><strong>${x} + ${x}</strong> = ?`;
+  }
+  if (a >= 10) {
+    const t = Math.floor(a / 10) * 10, o = a % 10;
+    return `💜 Hint: split ${a} into ${t}+${o}:<br>${t}×${b} = <strong>${t * b}</strong>, ${o}×${b} = <strong>${o * b}</strong><br>${t * b} + ${o * b} = ?`;
+  }
+  if (b >= 10) {
+    const t = Math.floor(b / 10) * 10, o = b % 10;
+    return `💜 Hint: split ${b} into ${t}+${o}:<br>${a}×${t} = <strong>${a * t}</strong>, ${a}×${o} = <strong>${a * o}</strong><br>${a * t} + ${a * o} = ?`;
+  }
+  const [s, g] = a <= b ? [a, b] : [b, a];
+  if (g <= 4) {
+    const steps = Array.from({ length: g }, (_, i) => s * (i + 1)).join(", ");
+    return `💜 Hint: count by ${s}, ${g} times:<br><strong>${steps}</strong>`;
+  }
+  return `💜 Hint: split into 5+${g - 5}:<br>${s}×5 = <strong>${s * 5}</strong>, ${s}×${g - 5} = <strong>${s * (g - 5)}</strong><br>${s * 5} + ${s * (g - 5)} = ?`;
+}
+
+function calcHintEn(expr: string, ans: number): string {
+  const mParts = expr.split(/\s*×\s*/);
+  if (mParts.length >= 2 && mParts.every(p => /^\d+$/.test(p.trim()))) {
+    const nums = mParts.map(p => parseInt(p.trim()));
+    if (nums.length === 2) return mulHintEn(nums[0], nums[1]);
+    return `💜 Hint: ${nums[0]} × ${nums[1]} = <strong>${nums[0] * nums[1]}</strong>, then × ${nums[2]} = ?`;
+  }
+  const dM = expr.match(/^(\d+)\s*÷\s*(\d+)$/);
+  if (dM) {
+    const [a, b] = [+dM[1], +dM[2]];
+    if (b === 2) return `💜 Hint: ÷2 = half! What's half of ${a}?`;
+    return `💜 Hint: ${b} × ? = ${a}<br>What times <strong>${b}</strong> gives <strong>${a}</strong>?`;
+  }
+  const sM = expr.match(/^(\d+)\s*[−-]\s*(\d+)$/);
+  if (sM) {
+    const [a, b] = [+sM[1], +sM[2]];
+    if (b <= 3) {
+      const cnt = Array.from({ length: b }, (_, i) => a - i - 1).join(", ");
+      return `💜 Hint: count back ${b} from ${a}: <strong>${cnt}</strong>`;
+    }
+    if (a % 10 === 0)
+      return `💜 Hint: ${a} − ${b} = ${a} − 10 + ${10 - b} = <strong>${a - 10}</strong> + <strong>${10 - b}</strong> = ?`;
+    return `💜 Hint: ${a} − ${b} = <strong>${ans}</strong>`;
+  }
+  const aM = expr.match(/^(\d+)\s*\+\s*(\d+)$/);
+  if (aM) {
+    const [a, b] = [+aM[1], +aM[2]];
+    if (a % 10 === 0 || b % 10 === 0)
+      return `💜 Hint: ${a} + ${b}: start at <strong>${a}</strong> and count up <strong>${b}</strong>`;
+    if (b <= 5) {
+      const steps = Array.from({ length: b }, (_, i) => a + i + 1).join(", ");
+      return `💜 Hint: count ${b} forward from ${a}: <strong>${steps}</strong>`;
+    }
+    return `💜 Hint: ${a} + ${b} = <strong>${ans}</strong>`;
+  }
+  return `💜 Hint: <strong>${ans}</strong>`;
+}
+
 function formatEff(r: EffResult): string {
   switch (r.eff) {
     case "dblPts":
@@ -162,7 +229,7 @@ export const en: Dict = {
   showAnswer: "💡 Show Answer",
   wrongHexInline: (n) => `Hex ${n} is wrong — try again! 😊`,
   hintBtn: "💜 Hint",
-  hintResult: (low, high) => `💜 Hint: the answer is between <strong>${low}</strong> and <strong>${high}</strong>`,
+  hintResult: (expr, ans) => calcHintEn(expr, ans),
 
   p2Hint: (target) =>
     `<strong>Step 2 — Plan Your Route 🗺️</strong><br>Click hexes to build your path.<br>Colored edge between hexes = door difficulty.<br>Target: <strong>Hex ${target}</strong>`,

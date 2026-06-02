@@ -17,6 +17,77 @@ const DOOR_RANGES: Record<DoorKey, string> = {
   redlong: "11–19 × 2–9",
 };
 
+function ltr(s: string): string {
+  return `<span dir="ltr">${s}</span>`;
+}
+
+function mulHintHe(a: number, b: number): string {
+  if (a === 10 || b === 10) {
+    const x = a === 10 ? b : a;
+    return `💜 רמז: לכפול ב-10 — פשוט הוסיפו אפס בסוף! ${ltr(`${x} × 10 = ${x}0`)}`;
+  }
+  if (a === 5 || b === 5) {
+    const x = a === 5 ? b : a;
+    return `💜 רמז: לכפול ב-5 = לכפול ב-10 ואז לחלק ב-2<br>${ltr(`${x} × 10 = <strong>${x * 10}</strong>, ÷2 = ?`)}`;
+  }
+  if (a === 2 || b === 2) {
+    const x = a === 2 ? b : a;
+    return `💜 רמז: לכפול ב-2 = לחבר את המספר לעצמו!<br>${ltr(`<strong>${x} + ${x}</strong> = ?`)}`;
+  }
+  if (a >= 10) {
+    const t = Math.floor(a / 10) * 10, o = a % 10;
+    return `💜 רמז: פרקו את ${a} ל-${t}+${o}:<br>${ltr(`${t}×${b} = <strong>${t * b}</strong>,  ${o}×${b} = <strong>${o * b}</strong><br>${t * b} + ${o * b} = ?`)}`;
+  }
+  if (b >= 10) {
+    const t = Math.floor(b / 10) * 10, o = b % 10;
+    return `💜 רמז: פרקו את ${b} ל-${t}+${o}:<br>${ltr(`${a}×${t} = <strong>${a * t}</strong>,  ${a}×${o} = <strong>${a * o}</strong><br>${a * t} + ${a * o} = ?`)}`;
+  }
+  const [s, g] = a <= b ? [a, b] : [b, a];
+  if (g <= 4) {
+    const steps = Array.from({ length: g }, (_, i) => s * (i + 1)).join(", ");
+    return `💜 רמז: ספרו ב-${s}, ${g} פעמים:<br>${ltr(`<strong>${steps}</strong>`)}`;
+  }
+  return `💜 רמז: פרקו ל-5+${g - 5}:<br>${ltr(`${s}×5 = <strong>${s * 5}</strong>,  ${s}×${g - 5} = <strong>${s * (g - 5)}</strong><br>${s * 5} + ${s * (g - 5)} = ?`)}`;
+}
+
+function calcHintHe(expr: string, ans: number): string {
+  const mParts = expr.split(/\s*×\s*/);
+  if (mParts.length >= 2 && mParts.every(p => /^\d+$/.test(p.trim()))) {
+    const nums = mParts.map(p => parseInt(p.trim()));
+    if (nums.length === 2) return mulHintHe(nums[0], nums[1]);
+    return `💜 רמז: ${ltr(`${nums[0]} × ${nums[1]} = <strong>${nums[0] * nums[1]}</strong>, × ${nums[2]} = ?`)}`;
+  }
+  const dM = expr.match(/^(\d+)\s*÷\s*(\d+)$/);
+  if (dM) {
+    const [a, b] = [+dM[1], +dM[2]];
+    if (b === 2) return `💜 רמז: ÷2 = חצי! מה זה חצי מ-${a}?`;
+    return `💜 רמז: ${ltr(`${b} × ? = ${a}`)}<br>מה צריך לכפול ב-<strong>${b}</strong> כדי לקבל <strong>${a}</strong>?`;
+  }
+  const sM = expr.match(/^(\d+)\s*[−-]\s*(\d+)$/);
+  if (sM) {
+    const [a, b] = [+sM[1], +sM[2]];
+    if (b <= 3) {
+      const cnt = Array.from({ length: b }, (_, i) => a - i - 1).join(", ");
+      return `💜 רמז: ספרו ${b} אחורה מ-${a}: ${ltr(`<strong>${cnt}</strong>`)}`;
+    }
+    if (a % 10 === 0)
+      return `💜 רמז: ${ltr(`${a} − ${b} = ${a} − 10 + ${10 - b} = <strong>${a - 10} + ${10 - b}</strong> = ?`)}`;
+    return `💜 רמז: ${ltr(`${a} − ${b} = <strong>${ans}</strong>`)}`;
+  }
+  const aM = expr.match(/^(\d+)\s*\+\s*(\d+)$/);
+  if (aM) {
+    const [a, b] = [+aM[1], +aM[2]];
+    if (a % 10 === 0 || b % 10 === 0)
+      return `💜 רמז: ${ltr(`${a} + ${b}`)}: התחילו מ-<strong>${a}</strong> וספרו עוד <strong>${b}</strong>`;
+    if (b <= 5) {
+      const steps = Array.from({ length: b }, (_, i) => a + i + 1).join(", ");
+      return `💜 רמז: ספרו ${b} קדימה מ-${a}: ${ltr(`<strong>${steps}</strong>`)}`;
+    }
+    return `💜 רמז: ${ltr(`${a} + ${b} = <strong>${ans}</strong>`)}`;
+  }
+  return `💜 רמז: <strong>${ans}</strong>`;
+}
+
 function formatEff(r: EffResult): string {
   switch (r.eff) {
     case "dblPts":
@@ -162,7 +233,7 @@ export const he: Dict = {
   showAnswer: "💡 הראה תשובה",
   wrongHexInline: (n) => `המשושה ${n} לא נכון — נסה שוב! 😊`,
   hintBtn: "💜 רמז",
-  hintResult: (low, high) => `💜 רמז: התשובה בין <strong>${low}</strong> לבין <strong>${high}</strong>`,
+  hintResult: (expr, ans) => calcHintHe(expr, ans),
 
   p2Hint: (target) =>
     `<strong>שלב 2 — תכנן מסלול 🗺️</strong><br>לחץ על משושים לבניית הדרך.<br>הצלע הצבועה בין שני משושים = רמת הקושי.<br>יעד: <strong>משושה ${target}</strong>`,
