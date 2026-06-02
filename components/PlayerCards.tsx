@@ -1,6 +1,6 @@
 "use client";
 
-import { DOGS } from "@/lib/engine/constants";
+import { DOGS, PCOLORS } from "@/lib/engine/constants";
 import type { GameState } from "@/lib/engine/types";
 import type { Dict } from "@/lib/i18n";
 
@@ -54,7 +54,14 @@ export default function PlayerCards({ t, state }: { t: Dict; state: GameState })
         </div>
       )}
       {state.players.map((p, i) => (
-        <div className={"pcard" + (i === state.cur ? " cur" : "")} key={i}>
+        <div
+          className={"pcard" + (i === state.cur ? " cur" : "")}
+          key={i}
+          style={i === state.cur ? {
+            borderInlineEndColor: PCOLORS[i],
+            boxShadow: `0 4px 18px ${PCOLORS[i]}44`,
+          } : undefined}
+        >
           <div className="pchead">
             <div className="pcname" style={{ color: p.color }}>
               {i === state.cur ? "▶ " : ""}
