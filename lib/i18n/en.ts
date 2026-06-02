@@ -77,11 +77,11 @@ function calcHintEn(expr: string): string {
       const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
       return `💜 Hint: count ${small} forward from ${big}: ${steps}, ?`;
     }
-    if (a + b > 10) {
-      const toTen = 10 - big;
-      const leftover = small - toTen;
-      return `💜 Hint: ${big} + ${toTen} = <strong>10</strong>... then add ${leftover} more = ?`;
-    }
+    const nextRound = Math.ceil(big / 10) * 10;
+    const toNext = nextRound - big;
+    const leftover = small - toNext;
+    if (toNext > 0 && leftover > 0)
+      return `💜 Hint: ${big} + ${toNext} = <strong>${nextRound}</strong>... then add ${leftover} more = ?`;
     const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
     return `💜 Hint: start at ${big}: ${steps}, ?`;
   }

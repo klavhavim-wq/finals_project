@@ -81,11 +81,11 @@ function calcHintHe(expr: string): string {
       const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
       return `💜 רמז: ספרו ${small} קדימה מ-${big}: ${ltr(`${steps}, ?`)}`;
     }
-    if (a + b > 10) {
-      const toTen = 10 - big;
-      const leftover = small - toTen;
-      return `💜 רמז: ${ltr(`${big} + ${toTen} = <strong>10</strong>`)}... ועוד ${leftover} = ?`;
-    }
+    const nextRound = Math.ceil(big / 10) * 10;
+    const toNext = nextRound - big;
+    const leftover = small - toNext;
+    if (toNext > 0 && leftover > 0)
+      return `💜 רמז: ${ltr(`${big} + ${toNext} = <strong>${nextRound}</strong>`)}... ועוד ${leftover} = ?`;
     const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
     return `💜 רמז: התחילו מ-${big}: ${ltr(`${steps}, ?`)}`;
   }
