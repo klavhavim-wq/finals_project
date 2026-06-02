@@ -391,4 +391,14 @@ export const en: Dict = {
   sharedBank: "🤝 Shared Bank",
   sharedProgress: (shared) => `${shared}/100 🎯`,
   hexLabel: (h) => `📍 Hex ${h}`,
+
+  doorLegendTitle: "🚪 Doors & Points",
+  doorLegendPts: (pts) => `${pts}pt`,
+
+  helpCardBtn: "Times Table",
+
+  spectatorPrompt: "Does anyone else know? Click your name:",
+  spectatorAnswerFor: (name) => `${name} answers:`,
+  spectatorCorrect: (name) => `+1 for ${name}! 🎉`,
+  spectatorWrong: "❌ Wrong",
 };

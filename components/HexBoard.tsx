@@ -39,6 +39,16 @@ export default function HexBoard({
   state: GameState;
   onHexClick: (n: number) => void;
 }) {
+  const validNextHexes = new Set<number>();
+  if (state.phase === 2) {
+    const tip = state.path.length > 0
+      ? state.path[state.path.length - 1]
+      : state.players[state.cur].hex;
+    hNeighbors(tip).forEach(n => { if (n !== null) validNextHexes.add(n); });
+    state.path.forEach(h => validNextHexes.delete(h));
+    validNextHexes.delete(state.players[state.cur].hex);
+  }
+
   const hexes = [];
   for (let n = 1; n <= 100; n++) {
     const { x: cx, y: cy } = hCenter(n);
@@ -92,7 +102,7 @@ export default function HexBoard({
         className="hex-group"
         onClick={() => onHexClick(n)}
       >
-        <polygon points={pts} fill={fillFor(state, n)} stroke={isUpcomingPath ? "#0891B2" : "none"} strokeWidth={isUpcomingPath ? 2.5 : 0} />
+        <polygon points={pts} fill={fillFor(state, n)} stroke={isUpcomingPath ? "#0891B2" : validNextHexes.has(n) ? "#86EFAC" : "none"} strokeWidth={isUpcomingPath ? 2.5 : validNextHexes.has(n) ? 2 : 0} />
         {edges}
         <text
           x={cx.toFixed(1)}

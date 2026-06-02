@@ -26,6 +26,13 @@ export type Effect =
   | "shortPath"
   | "extraTurn";
 
+export interface ErrorRecord {
+  phase: 1 | 3;
+  expr: string;
+  correct: number;
+  wrong: number;
+}
+
 export interface Door {
   key: DoorKey;
   /** symmetric dice range (blue/purple/yellow/red) */
@@ -66,14 +73,16 @@ export interface Player {
   tokens: number;
   hex: number;
   errors: number;
+  errorLog: ErrorRecord[];
 }
 
 export interface SessionRecord {
   id: string;
   date: string;
   level: Level;
+  settings?: Settings;
   coop: boolean;
-  players: { name: string; tokens: number; errors: number }[];
+  players: { name: string; tokens: number; errors: number; errorLog?: ErrorRecord[] }[];
   winnerName: string | null;
   sharedTokens?: number;
 }

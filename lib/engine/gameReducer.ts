@@ -11,6 +11,7 @@ import type {
   CardType,
   Door,
   EffResult,
+  ErrorRecord,
   GameState,
   Level,
   Locale,
@@ -96,18 +97,41 @@ export function rollDoor(door: Door, guards: RollGuards, rand: Rand = Math.rando
   return { rolls, correct, expr };
 }
 
+function doorProducts(door: Door): number[] {
+  const prods = new Set<number>();
+  if (door.ranges) {
+    const [[mn1, mx1], [mn2, mx2]] = door.ranges;
+    for (let a = mn1; a <= mx1; a++)
+      for (let b = mn2; b <= mx2; b++)
+        prods.add(a * b);
+  } else {
+    const min = door.min!, max = door.max!;
+    for (let a = min; a <= max; a++)
+      for (let b = min; b <= max; b++)
+        prods.add(a * b);
+  }
+  return [...prods];
+}
+
 export function makeChoices(correct: number, door: Door, rand: Rand = Math.random): number[] {
+  const allProds = doorProducts(door).filter(v => v !== correct);
+  const shuffled = [...allProds].sort(() => rand() - 0.5);
+  const s = new Set<number>([correct]);
+  for (const v of shuffled) {
+    if (s.size >= 4) break;
+    s.add(v);
+  }
+  // Fallback for large doors: add nearby valid values if still not enough
   const maxProd = door.ranges
     ? door.ranges.reduce((a, [, mx]) => a * mx, 1)
     : Math.pow(door.max!, door.cnt);
-  const spread = Math.max(8, Math.floor(correct * 0.15));
-  const s = new Set<number>([correct]);
   let tries = 0;
-  while (s.size < 4 && tries < 60) {
+  while (s.size < 4 && tries < 40) {
     tries++;
+    const spread = Math.max(6, Math.floor(correct * 0.2));
     const d = Math.floor(rand() * spread) + 1;
     const v = rand() > 0.5 ? correct + d : Math.max(1, correct - d);
-    if (v !== correct && v > 0 && v <= maxProd + spread) s.add(v);
+    if (v !== correct && v > 0 && v <= maxProd) s.add(v);
   }
   return [...s].sort(() => rand() - 0.5);
 }
@@ -209,11 +233,11 @@ function applyEffect(
   return { turnPts: tp, extraTurn: extra, res };
 }
 
-function withError(state: GameState): GameState {
+function withError(state: GameState, record: ErrorRecord): GameState {
   return {
     ...state,
     players: state.players.map((p, i) =>
-      i === state.cur ? { ...p, errors: p.errors + 1 } : p
+      i === state.cur ? { ...p, errors: p.errors + 1, errorLog: [...p.errorLog, record] } : p
     ),
   };
 }
@@ -367,7 +391,8 @@ export type Action =
   | { type: "OPEN_ROB" }
   | { type: "DO_ROB"; index: number }
   | { type: "OPEN_MODAL"; modal: GameState["modal"] }
-  | { type: "CLOSE_MODAL" };
+  | { type: "CLOSE_MODAL" }
+  | { type: "SPECTATOR_BONUS"; playerIdx: number };
 
 function startNewTurnState(s: GameState, card: TargetCard, resetUsed: boolean): GameState {
   return {
@@ -422,7 +447,7 @@ export function reducer(state: GameState, action: Action): GameState {
       return {
         ...state,
         screen: "sg",
-        players: action.players,
+        players: action.players.map(p => ({ ...p, errorLog: p.errorLog ?? [] })),
         level: action.level,
         settings: action.settings,
         cur: 0,
@@ -455,7 +480,7 @@ export function reducer(state: GameState, action: Action): GameState {
             modal: { kind: "found", hex: n, sym: hexSym(n) },
           };
         }
-        return { ...withError(state), wrongHex: n };
+        return { ...withError(state, { phase: 1, expr: state.card?.ex ?? "", correct: state.card?.ans ?? 0, wrong: n }), wrongHex: n };
       }
       if (state.phase === 2) {
         const start = state.players[state.cur].hex;
@@ -485,7 +510,7 @@ export function reducer(state: GameState, action: Action): GameState {
         if (n === state.pendingRoll.correct) {
           return markCorrect(state);
         }
-        return { ...withError(state), wrongHex: n, wrongAnswerVisible: true };
+        return { ...withError(state, { phase: 3, expr: state.pendingRoll.expr, correct: state.pendingRoll.correct, wrong: n }), wrongHex: n, wrongAnswerVisible: true };
       }
       return state;
     }
@@ -553,13 +578,13 @@ export function reducer(state: GameState, action: Action): GameState {
     case "MC_ANSWER": {
       if (!state.pendingRoll) return state;
       if (action.chosen === state.pendingRoll.correct) return markCorrect(state);
-      return { ...withError(state), mcWrong: action.chosen, wrongAnswerVisible: true };
+      return { ...withError(state, { phase: 3, expr: state.pendingRoll.expr, correct: state.pendingRoll.correct, wrong: action.chosen }), mcWrong: action.chosen, wrongAnswerVisible: true };
     }
 
     case "INPUT_ANSWER": {
       if (!state.pendingRoll) return state;
       if (action.value === state.pendingRoll.correct) return markCorrect(state);
-      return { ...withError(state), inputWrong: true, wrongAnswerVisible: true };
+      return { ...withError(state, { phase: 3, expr: state.pendingRoll.expr, correct: state.pendingRoll.correct, wrong: action.value }), inputWrong: true, wrongAnswerVisible: true };
     }
 
     case "CLEAR_ANSWER_FLASH":
@@ -640,9 +665,7 @@ export function reducer(state: GameState, action: Action): GameState {
 
     case "DO_ROB": {
       const t = state.players[action.index];
-      const stolen = ["adv", "champ", "hero"].includes(state.level)
-        ? Math.max(1, Math.floor(t.tokens * 0.1))
-        : Math.max(1, (state.targetHex ?? 0) % 10 || 5);
+      const stolen = Math.min(15, Math.max(2, Math.round(t.tokens * 0.1)));
       const players = state.players.map((p, i) =>
         i === action.index ? { ...p, tokens: Math.max(0, p.tokens - stolen) } : p
       );
@@ -652,6 +675,16 @@ export function reducer(state: GameState, action: Action): GameState {
         turnPts: state.turnPts + stolen,
         modal: { kind: "robResult", stolen, name: t.name },
       };
+    }
+
+    case "SPECTATOR_BONUS": {
+      if (state.settings.coop) {
+        return { ...state, sharedTokens: state.sharedTokens + 1 };
+      }
+      const players = state.players.map((p, i) =>
+        i === action.playerIdx ? { ...p, tokens: p.tokens + 1 } : p
+      );
+      return { ...state, players };
     }
 
     case "OPEN_MODAL":

@@ -5,9 +5,41 @@ import HexBoard from "../HexBoard";
 import PlayerCards from "../PlayerCards";
 import ActionPanel from "../ActionPanel";
 import LanguageSwitch from "../LanguageSwitch";
+import { DC, LVL_DOORS } from "@/lib/engine/constants";
 import type { GameState, Locale } from "@/lib/engine/types";
 import type { GameActions } from "../useGame";
 import type { Dict } from "@/lib/i18n";
+
+function DoorLegend({ t, state }: { t: Dict; state: GameState }) {
+  const doors = LVL_DOORS[state.level];
+  const unique = [...new Set(doors)];
+  return (
+    <div style={{
+      padding: "10px 14px", background: "white",
+      borderRadius: 14, boxShadow: "0 2px 8px rgba(0,0,0,.07)",
+      marginTop: 8, fontSize: ".78rem",
+    }}>
+      <div style={{ fontWeight: 700, color: "#9ca3af", fontSize: ".68rem", textTransform: "uppercase", letterSpacing: ".05em", marginBottom: 7 }}>
+        {t.doorLegendTitle}
+      </div>
+      {unique.map(d => {
+        const dc = DC[d];
+        const range = dc.ranges
+          ? `${dc.ranges[0][0]}–${dc.ranges[0][1]} × ${dc.ranges[1][0]}–${dc.ranges[1][1]}`
+          : `${dc.min}–${dc.max}`;
+        return (
+          <div key={d} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
+            <div style={{ width: 10, height: 10, borderRadius: 2, background: dc.color, flexShrink: 0 }} />
+            <span style={{ color: "#374151", direction: "ltr", unicodeBidi: "embed" }}>
+              {t.doorLabel(d)} · ×({range}) ·{" "}
+              <strong style={{ color: dc.color }}>{t.doorLegendPts(dc.pts)}</strong>
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 function fmtTime(s: number): string {
   return "⏱ " + Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60);
@@ -179,6 +211,7 @@ export default function GameScreen({
 
         <div className="sidebar">
           <PlayerCards t={t} state={state} />
+          <DoorLegend t={t} state={state} />
         </div>
       </div>
     </div>

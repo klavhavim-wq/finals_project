@@ -26,6 +26,7 @@ export default function Setup({ t, actions }: { t: Dict; actions: GameActions })
       tokens: 0,
       hex: 1,
       errors: 0,
+      errorLog: [],
     }));
     const settings: Settings = { timer, mc, rob, winMode, coop };
     actions.startGame(players, level, settings);

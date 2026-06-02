@@ -7,6 +7,103 @@ import type { GameState } from "@/lib/engine/types";
 import type { GameActions } from "./useGame";
 import type { Dict } from "@/lib/i18n";
 
+function MulTable() {
+  return (
+    <div style={{ overflowX: "auto", marginTop: 8 }}>
+      <table style={{ borderCollapse: "collapse", fontSize: ".68rem", direction: "ltr", margin: "0 auto" }}>
+        <tbody>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(row => (
+            <tr key={row}>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(col => (
+                <td key={col} style={{
+                  padding: "3px 5px", textAlign: "center",
+                  border: "1px solid #e5e7eb",
+                  background: row === 1 || col === 1 ? "#FEF08A" : (row + col) % 2 === 0 ? "#f9fafb" : "white",
+                  fontWeight: (row === 1 || col === 1) ? 800 : 400,
+                  color: (row === 1 || col === 1) ? "#78350F" : "#1F2937",
+                  minWidth: 22,
+                }}>
+                  {row * col}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function HelpCard({ t }: { t: Dict }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ marginTop: 8, borderTop: "1px solid #f3f4f6", paddingTop: 8 }}>
+      <button className="abt abgr" style={{ fontSize: ".82rem", padding: "5px 14px" }}
+        onClick={() => setOpen(v => !v)}>
+        {open ? "✖ " : "🔢 "}{t.helpCardBtn}
+      </button>
+      {open && <MulTable />}
+    </div>
+  );
+}
+
+function SpectatorSection({ t, state, actions }: { t: Dict; state: GameState; actions: GameActions }) {
+  const [claim, setClaim] = useState<number | null>(null);
+  const [inputVal, setInputVal] = useState("");
+  const [feedback, setFeedback] = useState<"ok" | "no" | null>(null);
+
+  const otherPlayers = state.players.map((p, i) => ({ p, i })).filter(({ i }) => i !== state.cur);
+  if (otherPlayers.length === 0 || !state.pendingRoll) return null;
+
+  const handleAnswer = () => {
+    if (claim === null) return;
+    const v = parseInt(inputVal, 10);
+    if (isNaN(v)) return;
+    if (v === state.pendingRoll!.correct) {
+      actions.awardSpectatorBonus(claim);
+      setFeedback("ok");
+      setTimeout(() => { setFeedback(null); setClaim(null); setInputVal(""); }, 1500);
+    } else {
+      setFeedback("no");
+      setTimeout(() => { setFeedback(null); setClaim(null); setInputVal(""); }, 800);
+    }
+  };
+
+  return (
+    <div style={{ marginTop: 10, borderTop: "1px dashed #d1d5db", paddingTop: 8 }}>
+      <div style={{ fontSize: ".76rem", color: "#9ca3af", marginBottom: 5 }}>{t.spectatorPrompt}</div>
+      {feedback === "ok" ? (
+        <div style={{ color: "#10B981", fontWeight: 700, fontSize: ".88rem" }}>
+          {t.spectatorCorrect(state.players[claim!].name)}
+        </div>
+      ) : feedback === "no" ? (
+        <div style={{ color: "#EF4444", fontWeight: 700, fontSize: ".88rem" }}>{t.spectatorWrong}</div>
+      ) : claim === null ? (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+          {otherPlayers.map(({ p, i }) => (
+            <button key={i} className="abt abgr" style={{ fontSize: ".82rem", padding: "4px 10px" }}
+              onClick={() => { setClaim(i); setInputVal(""); }}>
+              {p.name}
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div>
+          <div style={{ fontSize: ".8rem", color: "#374151", marginBottom: 4 }}>
+            {t.spectatorAnswerFor(state.players[claim].name)}
+          </div>
+          <div className="ansinp">
+            <input type="number" value={inputVal} autoFocus placeholder={t.answerPlaceholder}
+              onChange={e => setInputVal(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter") handleAnswer(); }} />
+            <button className="abt abg" onClick={handleAnswer}>✓</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ActionPanel({
   t,
   state,
@@ -48,6 +145,7 @@ function Phase1({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
       {state.wrongHex !== null && (
         <div className="wrongbox">{t.wrongHexInline(state.wrongHex)}</div>
       )}
+      <HelpCard t={t} />
     </div>
   );
 }
@@ -176,8 +274,12 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
               </button>
             </div>
           )}
+          {!state.mcCorrect && state.players.length > 1 && (
+            <SpectatorSection t={t} state={state} actions={actions} />
+          )}
         </div>
       )}
+      <HelpCard t={t} />
     </div>
   );
 }

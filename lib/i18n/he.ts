@@ -401,4 +401,14 @@ export const he: Dict = {
   sharedBank: "🤝 בנק משותף",
   sharedProgress: (shared) => `🦴 ${shared}/100 לניצחון!`,
   hexLabel: (h) => `📍 משושה ${h}`,
+
+  doorLegendTitle: "🚪 דלתות ונקודות",
+  doorLegendPts: (pts) => `${pts}נק'`,
+
+  helpCardBtn: "לוח כפל",
+
+  spectatorPrompt: "מישהו אחר יודע? לחץ על שמך:",
+  spectatorAnswerFor: (name) => `${name} עונה:`,
+  spectatorCorrect: (name) => `+1 ל-${name}! 🎉`,
+  spectatorWrong: "❌ לא נכון",
 };

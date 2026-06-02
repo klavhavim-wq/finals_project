@@ -26,14 +26,43 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
   };
 
   const downloadCSV = () => {
-    const lines: string[] = ["תאריך,רמה,שיתופי,שחקן,ניקוד,טעויות"];
+    const lines: string[] = [];
+
+    lines.push("--- סיכום משחקים ---");
+    lines.push("תאריך,מזהה,רמה,שיתופי,טיימר,בחירה,שוד,תנאי_ניצחון,מנצח,גרגירים_משותפים");
+    for (const s of sessions) {
+      const st = s.settings;
+      lines.push([
+        formatDate(s.date), s.id, s.level, s.coop ? "כן" : "לא",
+        st?.timer ? "כן" : "לא", st?.mc ? "כן" : "לא", st?.rob ? "כן" : "לא", st?.winMode ?? "",
+        s.winnerName ?? (s.coop ? "כולם" : ""), s.sharedTokens ?? "",
+      ].join(","));
+    }
+
+    lines.push("");
+    lines.push("--- תוצאות שחקנים ---");
+    lines.push("תאריך,מזהה_משחק,שחקן,ניקוד,שגיאות");
     for (const s of sessions) {
       for (const p of s.players) {
-        lines.push(
-          [formatDate(s.date), s.level, s.coop ? "כן" : "לא", p.name, p.tokens, p.errors ?? 0].join(",")
-        );
+        lines.push([formatDate(s.date), s.id, p.name, p.tokens, p.errors ?? 0].join(","));
       }
     }
+
+    lines.push("");
+    lines.push("--- יומן שגיאות ---");
+    lines.push("תאריך,מזהה_משחק,שחקן,שלב,תרגיל,תשובה_נכונה,תשובה_שגויה");
+    for (const s of sessions) {
+      for (const p of s.players) {
+        for (const e of p.errorLog ?? []) {
+          lines.push([
+            formatDate(s.date), s.id, p.name,
+            e.phase === 1 ? "שלב1-יעד" : "שלב3-דרך",
+            e.expr, e.correct, e.wrong,
+          ].join(","));
+        }
+      }
+    }
+
     const blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -160,19 +189,6 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
                           {p.tokens} 🦴
                         </span>
                       )}
-                      <span
-                        style={{
-                          background: "#FEF2F2",
-                          border: "1.5px solid #FECACA",
-                          borderRadius: 20,
-                          padding: "3px 10px",
-                          fontSize: ".82rem",
-                          fontWeight: 700,
-                          color: "#B91C1C",
-                        }}
-                      >
-                        {p.errors ?? 0} ❌
-                      </span>
                     </span>
                   </div>
                 ))}

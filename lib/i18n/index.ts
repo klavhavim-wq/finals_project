@@ -163,6 +163,19 @@ export interface Dict {
   sharedBank: string;
   sharedProgress: (shared: number) => string;
   hexLabel: (h: number) => string;
+
+  // Door legend
+  doorLegendTitle: string;
+  doorLegendPts: (pts: number) => string;
+
+  // Help card
+  helpCardBtn: string;
+
+  // Spectator answering
+  spectatorPrompt: string;
+  spectatorAnswerFor: (name: string) => string;
+  spectatorCorrect: (name: string) => string;
+  spectatorWrong: string;
 }
 
 const DICTS: Record<Locale, Dict> = { en, he };

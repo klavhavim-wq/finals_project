@@ -37,8 +37,9 @@ export function useGame(locale: Locale) {
         id: Date.now().toString(),
         date: new Date().toISOString(),
         level: s.level,
+        settings: s.settings,
         coop: s.settings.coop,
-        players: s.players.map((p) => ({ name: p.name, tokens: p.tokens, errors: p.errors })),
+        players: s.players.map((p) => ({ name: p.name, tokens: p.tokens, errors: p.errors, errorLog: p.errorLog })),
         winnerName: s.coopWin ? null : s.winnerIdx !== null ? s.players[s.winnerIdx].name : null,
         sharedTokens: s.settings.coop ? s.sharedTokens : undefined,
       };
@@ -176,6 +177,10 @@ export function useGame(locale: Locale) {
     []
   );
 
+  const awardSpectatorBonus = useCallback((playerIdx: number) => {
+    dispatch({ type: "SPECTATOR_BONUS", playerIdx });
+  }, []);
+
   const goResults = useCallback(() => dispatch({ type: "SHOW_SCREEN", screen: "sresults" }), []);
 
   return {
@@ -209,6 +214,7 @@ export function useGame(locale: Locale) {
       openVideo,
       openVideoMenu,
       goResults,
+      awardSpectatorBonus,
     },
   };
 }
