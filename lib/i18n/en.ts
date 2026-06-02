@@ -9,6 +9,14 @@ const DOOR_LABELS: Record<DoorKey, string> = {
   redlong: "🥩 Steak",
 };
 
+const DOOR_RANGES: Record<DoorKey, string> = {
+  blue: "2–4 × 2–4",
+  purple: "3–6 × 3–6",
+  yellow: "5–8 × 5–8",
+  red: "7–9 × 7–9",
+  redlong: "11–19 × 2–9",
+};
+
 function formatEff(r: EffResult): string {
   switch (r.eff) {
     case "dblPts":
@@ -62,27 +70,22 @@ export const en: Dict = {
        {
          i: "🎮",
          t: "The Game Board",
-         x: '<div style="text-align:center;margin:0 0 8px"><svg width="160" height="70" viewBox="0 0 136 70" xmlns="http://www.w3.org/2000/svg"><polygon points="30,13 49,24 49,46 30,57 11,46 11,24" fill="#D1FAE5" stroke="#e5e7eb" stroke-width="1.5"/><polygon points="68,13 87,24 87,46 68,57 49,46 49,24" fill="#FFF8E7" stroke="#e5e7eb" stroke-width="1.5"/><polygon points="106,13 125,24 125,46 106,57 87,46 87,24" fill="#FEF08A" stroke="#e5e7eb" stroke-width="1.5"/><line x1="49" y1="24" x2="49" y2="46" stroke="#3B82F6" stroke-width="4" stroke-linecap="round"/><line x1="87" y1="24" x2="87" y2="46" stroke="#8B5CF6" stroke-width="4" stroke-linecap="round"/><text x="30" y="38" text-anchor="middle" font-size="10" font-family="serif">🐕</text><text x="106" y="38" text-anchor="middle" font-size="10" font-family="serif">⭐</text><text x="30" y="10" text-anchor="middle" font-size="7" fill="#555">12</text><text x="68" y="10" text-anchor="middle" font-size="7" fill="#555">24</text><text x="106" y="10" text-anchor="middle" font-size="7" fill="#555">36</text></svg></div>The board has 100 numbered hexes. Between the hexes you\'ll see colored edges — those are the "doors"! 🚪<br><br>Each color = a food type + difficulty level.<br><br>🎯 <strong>The goal:</strong> Collect as many pellets as you can for your dog\'s bank! 🐶🦴',
+         x: '<div style="text-align:center;margin:0 0 8px"><svg width="200" height="80" viewBox="0 0 182 80" xmlns="http://www.w3.org/2000/svg"><polygon points="46,14 68.5,27 68.5,53 46,66 23.5,53 23.5,27" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="91,14 113.5,27 113.5,53 91,66 68.5,53 68.5,27" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="136,14 158.5,27 158.5,53 136,66 113.5,53 113.5,27" fill="#FEF08A" stroke="#C9A882" stroke-width="1.5"/><line x1="68.5" y1="27" x2="68.5" y2="53" stroke="#3B82F6" stroke-width="4.5" stroke-linecap="round"/><line x1="113.5" y1="27" x2="113.5" y2="53" stroke="#8B5CF6" stroke-width="4.5" stroke-linecap="round"/><text x="46" y="44" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">12</text><text x="91" y="40" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">24</text><text x="136" y="40" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">36</text><text x="46" y="29" text-anchor="middle" font-size="16">🐕</text></svg></div>The board has 100 numbered hexes. Between the hexes you\'ll see colored edges — those are the "doors"! 🚪<br><br>Each color = a food type + difficulty level.<br><br>🎯 <strong>The goal:</strong> Collect as many pellets as you can for your dog\'s bank! 🐶🦴',
        },
        {
          i: "🎯",
          t: "Step 1 — Find the Target",
-         x: '<div style="text-align:center;margin:0 0 8px"><svg width="180" height="70" viewBox="0 0 180 70" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="176" height="66" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/><text x="90" y="22" text-anchor="middle" font-size="12" fill="#64748b">🎯 Target Card</text><text x="90" y="50" text-anchor="middle" font-size="22" font-weight="bold" fill="#1e293b">6 × 4 = ?</text></svg></div>Draw a target card with a math problem, for example: <strong>6 × 4 = ?</strong><br><br>Solve it in your head 🧠 and click the hex with the answer (24) on the board!<br><br>Wrong? <strong>You can try again as many times as you want!</strong> 😊<br>Need help? Click "Show Answer".<br><br>ℹ️ <strong>This step has NO time limit!</strong>',
+         x: '<div style="text-align:center;margin:0 0 8px"><svg width="180" height="70" viewBox="0 0 180 70" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="176" height="66" rx="12" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2"/><text x="90" y="22" text-anchor="middle" font-size="12" fill="#64748b">🎯 Target Card</text><text x="90" y="50" text-anchor="middle" font-size="22" font-weight="bold" fill="#1e293b">6 × 4 = ?</text></svg></div>Draw a target card with a math problem, for example: <strong>6 × 4 = ?</strong><br><br>Solve it in your head 🧠 and click the hex with the answer (24) on the board!<br><br>Wrong? <strong>You can try again as many times as you want!</strong> 😊<br>Need help? You can choose a hint 💡, or click "Show Answer".<br><br>ℹ️ <strong>This step has NO time limit!</strong>',
        },
        {
          i: "🗺️",
          t: "Step 2 — Plan Your Route",
-         x: '<div style="text-align:center;margin:0 0 8px"><svg width="120" height="110" viewBox="-5 0 250 245" xmlns="http://www.w3.org/2000/svg"><polygon points="120,20 207,70 207,170 120,220 33,170 33,70" fill="#FFF8E7" stroke="#e5e7eb" stroke-width="2"/><line x1="120" y1="20" x2="207" y2="70" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="70" x2="207" y2="170" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="170" x2="120" y2="220" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/><line x1="120" y1="220" x2="33" y2="170" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="170" x2="33" y2="70" stroke="#DC2626" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="70" x2="120" y2="20" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><text x="120" y="130" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="serif">🐕</text></svg></div>Remember — the goal is more pellets! 🦴<br>Click hexes to build your route to the target (don\'t forget to mark the target hex too!).<br><br>The colored edge between hexes = food type:<br><br>🦴 <strong>Bone</strong> — Tables up to 4 | 1 pellet per step<br>🐟 <strong>Fish</strong> — Tables up to 6 | 2 pellets per step<br>🍗 <strong>Wing</strong> — Tables up to 8 | 5 pellets per step<br>🌭 <strong>Sausage</strong> — Tables 7–9 | 10 pellets per step<br>🥩 <strong>Steak</strong> — Long multiplication | 20 pellets per step<br><em style="font-size:.85em;color:#7C3AED">Steak — Hero level only!</em><br><br>Harder = more pellets in the bank! 🐶',
-       },
-       {
-         i: "🎨",
-         t: "The Doors — Board Colors",
-         x: '<div style="text-align:center;margin:0 0 8px"><svg width="160" height="145" viewBox="-5 0 250 245" xmlns="http://www.w3.org/2000/svg"><polygon points="120,20 207,70 207,170 120,220 33,170 33,70" fill="#FFF8E7" stroke="#e5e7eb" stroke-width="2"/><line x1="120" y1="20" x2="207" y2="70" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="70" x2="207" y2="170" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="170" x2="120" y2="220" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/><line x1="120" y1="220" x2="33" y2="170" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="170" x2="33" y2="70" stroke="#DC2626" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="70" x2="120" y2="20" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><text x="120" y="130" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="serif">🐕</text></svg></div><div style="font-size:.78rem;line-height:1.95"><div>🦴 <strong style="color:#3B82F6">Blue — Bone</strong>: Tables up to 4 | (2–4)×(2–4) = <strong>1 pellet/step</strong> | 3×4=12 ✔</div><div>🐟 <strong style="color:#8B5CF6">Purple — Fish</strong>: Tables up to 6 | (3–6)×(3–6) = <strong>2 pellets/step</strong> | 4×5=20 ✔</div><div>🍗 <strong style="color:#F59E0B">Yellow — Wing</strong>: Tables up to 8 | (5–8)×(5–8) = <strong>5 pellets/step</strong> | 6×7=42 ✔</div><div>🌭 <strong style="color:#EF4444">Red — Sausage</strong>: Tables 7–9 | (7–9)×(7–9) = <strong>10 pellets/step</strong> | 8×9=72 ✔</div><div>🥩 <strong style="color:#DC2626">Dark Red — Steak</strong>: Hero only! | (11–19)×(2–9) = <strong>20 pellets/step</strong> | 13×4=52 ✔</div></div>',
+         x: '<div style="text-align:center;margin:0 0 8px"><svg width="140" height="130" viewBox="-5 0 250 245" xmlns="http://www.w3.org/2000/svg"><polygon points="120,20 207,70 207,170 120,220 33,170 33,70" fill="#FFF8E7" stroke="#C9A882" stroke-width="2"/><line x1="120" y1="20" x2="207" y2="70" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="70" x2="207" y2="170" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="170" x2="120" y2="220" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/><line x1="120" y1="220" x2="33" y2="170" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="170" x2="33" y2="70" stroke="#DC2626" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="70" x2="120" y2="20" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><text x="120" y="120" text-anchor="middle" dominant-baseline="middle" font-size="36" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">42</text></svg></div>Click hexes to build your route to the target.<br>Don\'t forget to mark the target hex too!<br><br>The colors show the exercise difficulty and how many pellets you earn for solving it and moving to the next hex:<br><br><div style="font-size:.85em;line-height:2">🦴 <strong style="color:#3B82F6">Blue — Bone</strong>: Tables up to 4, e.g. <span dir="ltr">3 × 4 = 12</span> — <strong>1 pellet</strong> per step<br>🐟 <strong style="color:#8B5CF6">Purple — Fish</strong>: Tables up to 6, e.g. <span dir="ltr">4 × 5 = 20</span> — <strong>2 pellets</strong> per step<br>🍗 <strong style="color:#F59E0B">Yellow — Wing</strong>: Tables up to 8, e.g. <span dir="ltr">6 × 7 = 42</span> — <strong>5 pellets</strong> per step<br>🌭 <strong style="color:#EF4444">Red — Sausage</strong>: Tables 7–9, e.g. <span dir="ltr">8 × 9 = 72</span> — <strong>10 pellets</strong> per step<br>🥩 <strong style="color:#DC2626">Dark Red — Steak</strong>: Long multiplication, e.g. <span dir="ltr">13 × 4 = 52</span> — <strong>20 pellets</strong> per step</div><em style="font-size:.8em;color:#7C3AED">Steak — Hero level only!</em><br><br>Harder = more pellets in the bank! 🐶',
        },
        {
          i: "✅",
          t: "Review & Confirm",
-         x: 'Before you start walking — check your route! 📝<br><br>You\'ll see how many pellets you can earn, how many steps, and which doors are on the way.<br><br>Not happy? Click "Clear" 🗑 and build a new route!<br><br>Ready? Click "Confirm Route" ✅ and off you go!',
+         x: 'Before you start walking — check your route! 📝<br><br>On the side of the screen you\'ll see your route details: each step, the food type at each door, and the total pellets you can earn.<br><br>This helps you decide if it\'s worth going through a hard door for more pellets, or picking an easier path.<br><br>Not happy? Click "Clear" 🗑 and build a new route!<br>Ready? Click "Confirm Route" ✅ and off you go!',
        },
        {
          i: "🐕",
@@ -107,7 +110,7 @@ export const en: Dict = {
        {
          i: "⚙️",
          t: "Game Settings",
-         x: 'Before you start you can customize the game:<br><br>📊 <strong>Difficulty level</strong> — Beginner to Hero<br>⏱ <strong>Timer</strong> — on or off<br>🔤 <strong>Choice buttons</strong> — for Beginner/Medium levels<br>🦹 <strong>Steal</strong> — on or off<br>🤝 <strong>Cooperative</strong> — play together instead of competing<br>🏁 <strong>Win condition</strong> — how do you win?',
+         x: 'Before you start — set your game preferences:<br><br>📊 <strong>Difficulty level</strong> — Beginner to Hero<br>⏱ <strong>Timer</strong> — on or off<br>🔤 <strong>Choice buttons</strong> — for Beginner/Medium levels<br>🦹 <strong>Steal</strong> — on or off<br>🤝 <strong>Cooperative</strong> — play together instead of competing<br>🏁 <strong>Win condition</strong> — how do you win?',
        },
        {
          i: "🤝",
@@ -158,15 +161,17 @@ export const en: Dict = {
     `${prime ? "🔮 Prime number — Twist card awaits!<br>" : ""}Click the hex on the board 👆`,
   showAnswer: "💡 Show Answer",
   wrongHexInline: (n) => `Hex ${n} is wrong — try again! 😊`,
+  hintBtn: "💜 Hint",
+  hintResult: (low, high) => `💜 Hint: the answer is between <strong>${low}</strong> and <strong>${high}</strong>`,
 
   p2Hint: (target) =>
     `<strong>Step 2 — Plan Your Route 🗺️</strong><br>Click hexes to build your path.<br>Colored edge between hexes = door difficulty.<br>Target: <strong>Hex ${target}</strong>`,
   p2Empty: "Click hexes on the board to build the route 👆",
   stepHexLabel: (h) => `→ Hex ${h}`,
   doorLabel: (key) => DOOR_LABELS[key],
-  pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} (${pts}pts)`,
+  pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | ${DOOR_RANGES[key]} | ${pts}pts`,
   possiblePellets: (pts, steps) =>
-    `🦴 Possible pellets: <strong>${pts} points</strong> | ${steps} steps`,
+    `🍖 <strong>Total possible: ${pts} points</strong> in ${steps} steps`,
   routeNotReach: (target) => `⚠️ Route doesn't reach Hex ${target}!`,
   confirmRoute: "✅ Confirm Route",
   clearRoute: "🗑 Clear",
