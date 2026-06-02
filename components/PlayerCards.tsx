@@ -59,7 +59,9 @@ export default function PlayerCards({ t, state }: { t: Dict; state: GameState })
           key={i}
           style={i === state.cur ? {
             borderInlineEndColor: PCOLORS[i],
-            boxShadow: `0 4px 18px ${PCOLORS[i]}44`,
+            borderInlineEndWidth: 6,
+            background: `linear-gradient(135deg, ${PCOLORS[i]}28, white)`,
+            boxShadow: `0 4px 18px ${PCOLORS[i]}55`,
           } : undefined}
         >
           <div className="pchead">
