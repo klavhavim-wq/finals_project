@@ -15,28 +15,49 @@ function DoorLegend({ t, state }: { t: Dict; state: GameState }) {
   const unique = [...new Set(doors)];
   return (
     <div style={{
-      padding: "10px 14px", background: "white",
+      padding: "10px 12px", background: "white",
       borderRadius: 14, boxShadow: "0 2px 8px rgba(0,0,0,.07)",
-      marginTop: 8, fontSize: ".78rem",
+      marginTop: 8,
     }}>
-      <div style={{ fontWeight: 700, color: "#9ca3af", fontSize: ".68rem", textTransform: "uppercase", letterSpacing: ".05em", marginBottom: 7 }}>
+      <div style={{ fontWeight: 700, color: "#9ca3af", fontSize: ".7rem", textTransform: "uppercase", letterSpacing: ".05em", marginBottom: 8 }}>
         {t.doorLegendTitle}
       </div>
-      {unique.map(d => {
-        const dc = DC[d];
-        const range = dc.ranges
-          ? `${dc.ranges[0][0]}–${dc.ranges[0][1]} × ${dc.ranges[1][0]}–${dc.ranges[1][1]}`
-          : `${dc.min}–${dc.max}`;
-        return (
-          <div key={d} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 5 }}>
-            <div style={{ width: 10, height: 10, borderRadius: 2, background: dc.color, flexShrink: 0 }} />
-            <span style={{ color: "#374151", direction: "ltr", unicodeBidi: "embed" }}>
-              {t.doorLabel(d)} · ×({range}) ·{" "}
-              <strong style={{ color: dc.color }}>{t.doorLegendPts(dc.pts)}</strong>
-            </span>
-          </div>
-        );
-      })}
+      <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+        {unique.map(d => {
+          const dc = DC[d];
+          const range = dc.ranges
+            ? `${dc.ranges[0][0]}–${dc.ranges[0][1]} × ${dc.ranges[1][0]}–${dc.ranges[1][1]}`
+            : `${dc.min}–${dc.max}`;
+          return (
+            <div key={d} style={{
+              display: "flex", alignItems: "center", gap: 8,
+              background: dc.color + "18",
+              borderRadius: 8, padding: "5px 8px",
+              borderLeft: `4px solid ${dc.color}`,
+            }}>
+              <span style={{ fontSize: "1rem", lineHeight: 1 }}>
+                {t.doorLabel(d).split(" ")[0]}
+              </span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 700, fontSize: ".82rem", color: "#1f2937", lineHeight: 1.2 }}>
+                  {t.doorLabel(d).split(" ").slice(1).join(" ")}
+                </div>
+                <div style={{ fontSize: ".74rem", color: "#6b7280", direction: "ltr", unicodeBidi: "embed", lineHeight: 1.3 }}>
+                  ×({range})
+                </div>
+              </div>
+              <span style={{
+                fontWeight: 800, fontSize: ".88rem", color: dc.color,
+                background: "white", borderRadius: 6,
+                padding: "2px 7px", flexShrink: 0,
+                border: `1.5px solid ${dc.color}`,
+              }}>
+                {t.doorLegendPts(dc.pts)}
+              </span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
