@@ -104,7 +104,7 @@ function Body({
             {t.drawTwist}
           </button>
         );
-      else if (modal.sym === "🦹" && state.settings.rob)
+      else if (modal.sym === "🦹" && state.settings.rob && !state.settings.coop)
         symBtn = (
           <button className="abt abr" style={{ padding: "9px 18px" }} onClick={actions.openRob}>
             {t.steal}
@@ -114,6 +114,11 @@ function Body({
         <>
           <h2>{t.arrivalTitle(modal.hex)}</h2>
           <RichText as="p" html={t.pelletsThisTurn(modal.turnPts)} />
+          {modal.sym === "🦹" && state.settings.coop && (
+            <p style={{ textAlign: "center", color: "#6b7280", fontSize: ".9rem", margin: "4px 0 8px" }}>
+              {t.coopNoRob}
+            </p>
+          )}
           <div className="macts" style={{ flexWrap: "wrap", gap: 7 }}>
             {symBtn ?? (
               <button className="abt abg" style={{ padding: "9px 18px" }} onClick={actions.collectNext}>

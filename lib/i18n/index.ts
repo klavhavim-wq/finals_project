@@ -107,6 +107,7 @@ export interface Dict {
   drawLimit: string;
   drawTwist: string;
   steal: string;
+  coopNoRob: string;
   collectPellets: string;
   cards: Record<string, CardCopy>;
   formatEff: (r: EffResult) => string;
