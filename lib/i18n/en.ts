@@ -72,6 +72,11 @@ export const en: Dict = {
       x: 'Click hexes on the board to build your path to the target.<br><br>The edge between hexes shows the food door type:<br><br>🦴 <strong>Bone</strong> — (2–4)×(2–4) = 1 pellet 🦴<br>🐟 <strong>Fish</strong> — (3–6)×(3–6) = 2 pellets 🦴🦴<br>🍗 <strong>Wing</strong> — (5–8)×(5–8) = 5 pellets 🦴×5<br>🌭 <strong>Sausage</strong> — (7–9)×(7–9) = 10 pellets 🦴×10<br>🥩 <strong>Steak</strong> — (11–19)×(2–9) = 20 pellets 🦴×20<br><em style="font-size:.85em;color:#7C3AED">Steak — Hero level only!</em><br><br>Harder = more pellets in the bank! 🐕',
     },
     {
+      i: "🎨",
+      t: "Board Colors",
+      x: '<div style="text-align:center;margin:0 0 6px"><svg width="160" height="145" viewBox="-5 0 250 245" xmlns="http://www.w3.org/2000/svg"><polygon points="120,20 207,70 207,170 120,220 33,170 33,70" fill="#FFF8E7" stroke="#e5e7eb" stroke-width="2"/><line x1="120" y1="20" x2="207" y2="70" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="70" x2="207" y2="170" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="170" x2="120" y2="220" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/><line x1="120" y1="220" x2="33" y2="170" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="170" x2="33" y2="70" stroke="#DC2626" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="70" x2="120" y2="20" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><text x="120" y="130" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="serif">🐕</text></svg></div><div style="font-size:.78rem;line-height:1.95"><div>🦴 <strong style="color:#3B82F6">Blue — Bone</strong>: Easy | (2–4)×(2–4) = <strong>1 pellet/step</strong> | 3×4=12 ✔</div><div>🐟 <strong style="color:#8B5CF6">Purple — Fish</strong>: Medium | (3–6)×(3–6) = <strong>2 pellets/step</strong> | 4×5=20 ✔</div><div>🍗 <strong style="color:#F59E0B">Yellow — Wing</strong>: Hard | (5–8)×(5–8) = <strong>5 pellets/step</strong> | 6×7=42 ✔</div><div>🌭 <strong style="color:#EF4444">Red — Sausage</strong>: Brave! | (7–9)×(7–9) = <strong>10 pellets/step</strong> | 8×9=72 ✔</div><div>🥩 <strong style="color:#DC2626">Dark Red — Steak</strong>: Hero only! | (11–19)×(2–9) = <strong>20 pellets/step</strong> | 13×4=52 ✔</div></div>',
+    },
+    {
       i: "🐕",
       t: "Step 3 — Off You Go!",
       x: "Your dog runs onto the board and starts collecting! 🐾<br><br>Each step: roll dice × dice = math equation.<br>Answer correctly → dog advances, earn pellets 🦴<br>Wrong? <strong>Try again unlimited times!</strong><br>Choose to reveal the answer → dog stops, <strong>pellets earned so far are saved in the bank!</strong> 🦴",
@@ -115,7 +120,7 @@ export const en: Dict = {
   },
   watch: "🎬 Watch",
   options: "🔧 Options",
-  whatsThis: "❓ What's this?",
+  whatsThis: "What's this?",
   optTimer: "⏱ Turn timer",
   optMc: "🔤 Choice buttons (Beginner/Intermediate)",
   optRob: "🦹 Steal mechanic",

@@ -53,7 +53,7 @@ export const he: Dict = {
 
   logoAlt: "דפי והכלבים",
   title: "כשכש-נשנש 🐕🍖",
-  welcomeSub: "עזרו לכלב לאגור גרגירים בבנק שלו! 🦴",
+  welcomeSub: "עזרו לכלב לצבור גרגירים בבנק שלו! 🦴",
   welcomeSub2a: "📚 לוח הכפל · עובדות יסוד · אסטרטגיה",
   welcomeSub2b: "👥 1–4 שחקנים \u00a0·\u00a0 ⏱ 20–45 דק׳",
   startGame: "🎮 התחל משחק!",
@@ -64,7 +64,7 @@ export const he: Dict = {
     {
       i: "🎯",
       t: "שלב 1 — מוצאים יעד",
-      x: 'שולפים כרטיס עם תרגיל חשבון!<br>לדוגמה: <strong><span dir="ltr">6 × 4 = ?</span></strong><br><br>פותרים בראש 🧠 ולוחצים על המשושה עם התשובה (24) בלוח.<br><br>טעות? <strong>אפשר לנסות שוב כמה פעמים שרוצים!</strong> 😊<br>רוצה עזרה? לחץ "הראה תשובה" — אבל זה לא מזיז את הכלב.',
+      x: 'שולפים כרטיס עם תרגיל חשבון!<br>לדוגמה: <strong><span dir="ltr">6 × 4 = ?</span></strong><br><br>פותרים בראש 🧠 ולוחצים על המשושה עם התשובה (24) בלוח.<br><br>טעות? <strong>אפשר לנסות שוב כמה פעמים שרוצים!</strong> 😊<br>רוצים עזרה? לוחצים "הראה תשובה" — אבל זה לא מזיז את הכלב.',
     },
     {
       i: "🗺️",
@@ -72,9 +72,14 @@ export const he: Dict = {
       x: 'לוחצים על משושים בלוח לבניית הדרך ליעד.<br><br>הקו בין שני משושים = סוג האוכל:<br><br>🦴 <strong>עצם</strong> — <span dir="ltr">(2–4)×(2–4) = 1</span> גרגיר<br>🐟 <strong>דג</strong> — <span dir="ltr">(3–6)×(3–6) = 2</span> גרגירים<br>🍗 <strong>כנף</strong> — <span dir="ltr">(5–8)×(5–8) = 5</span> גרגירים<br>🌭 <strong>נקניקיה</strong> — <span dir="ltr">(7–9)×(7–9) = 10</span> גרגירים<br>🥩 <strong>סטייק</strong> — <span dir="ltr">(11–19)×(2–9) = 20</span> גרגירים<br><em style="font-size:.85em;color:#7C3AED">סטייק — רמת גיבור בלבד!</em><br><br>קשה יותר = יותר גרגירים לבנק! 🐶',
     },
     {
+      i: "🎨",
+      t: "הצבעים על הלוח",
+      x: '<div style="text-align:center;margin:0 0 6px"><svg width="160" height="145" viewBox="-5 0 250 245" xmlns="http://www.w3.org/2000/svg"><polygon points="120,20 207,70 207,170 120,220 33,170 33,70" fill="#FFF8E7" stroke="#e5e7eb" stroke-width="2"/><line x1="120" y1="20" x2="207" y2="70" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="70" x2="207" y2="170" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="170" x2="120" y2="220" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/><line x1="120" y1="220" x2="33" y2="170" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="170" x2="33" y2="70" stroke="#DC2626" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="70" x2="120" y2="20" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><text x="120" y="130" text-anchor="middle" dominant-baseline="middle" font-size="38" font-family="serif">🐕</text></svg></div><div style="font-size:.78rem;line-height:1.95"><div>🦴 <strong style="color:#3B82F6">כחול — עצם</strong>: קל | <span dir="ltr">(2–4)×(2–4)</span> = <strong>1 גרגיר לצעד</strong> | <span dir="ltr">3×4=12</span> ✔</div><div>🐟 <strong style="color:#8B5CF6">סגול — דג</strong>: בינוני | <span dir="ltr">(3–6)×(3–6)</span> = <strong>2 גרגירים לצעד</strong> | <span dir="ltr">4×5=20</span> ✔</div><div>🍗 <strong style="color:#F59E0B">צהוב — כנף</strong>: קשה | <span dir="ltr">(5–8)×(5–8)</span> = <strong>5 גרגירים לצעד</strong> | <span dir="ltr">6×7=42</span> ✔</div><div>🌭 <strong style="color:#EF4444">אדום — נקניקיה</strong>: אמיץ! | <span dir="ltr">(7–9)×(7–9)</span> = <strong>10 גרגירים לצעד</strong> | <span dir="ltr">8×9=72</span> ✔</div><div>🥩 <strong style="color:#DC2626">אדום-כהה — סטייק</strong>: גיבורים! | <span dir="ltr">(11–19)×(2–9)</span> = <strong>20 גרגירים לצעד</strong> | <span dir="ltr">13×4=52</span> ✔</div></div>',
+    },
+    {
       i: "🐕",
       t: "שלב 3 — יוצאים לדרך!",
-      x: "הכלב קופץ ללוח ומתחיל לנוע! 🐾<br><br>לכל צעד: זורקים קוביות ✕ קוביות = תרגיל.<br>עונים נכון → הכלב מתקדם ומקבל גרגירים 🦴<br>טועים → <strong>אפשר לנסות שוב בלי הגבלה!</strong><br>בוחרים לחשוף תשובה → הכלב נעצר, <strong>הגרגירים שנצברו עד כה נשמרים!</strong> 🦴",
+      x: "הכלב קופץ ללוח ומתחיל לנוע! 🐾<br><br>לכל צעד: לוחצים 'זרוק' ומקבלים תרגיל כפל לפי סוג האוכל.<br>עונים נכון → הכלב מתקדם ומקבל גרגירים 🦴<br>טועים → <strong>אפשר לנסות שוב בלי הגבלה!</strong><br>בוחרים לחשוף תשובה → הכלב נעצר, <strong>הגרגירים שנצברו עד כה נשמרים!</strong> 🦴",
     },
     {
       i: "🦴",
@@ -94,11 +99,11 @@ export const he: Dict = {
     {
       i: "🤝",
       t: "מצב שיתופי — ביחד!",
-      x: 'הפעל "משחק שיתופי" בהגדרות.<br>במצב הזה — <strong>כולנו עובדים ביחד!</strong><br><br>✅ כל הגרגירים שמרוויחים נכנסים לבנק המשותף 🦴<br>✅ אין שוד — כולנו אחד!<br>✅ מגיעים ל-100 ביחד — <strong>כולנו מנצחים! 🎉</strong><br><br>🐕🐩🐕‍🦺🦮 כל כלב עוזר לקבוצה!',
+      x: 'מפעילים "משחק שיתופי" בהגדרות.<br>במצב הזה — <strong>כולנו עובדים ביחד!</strong><br><br>✅ כל הגרגירים שמרוויחים נכנסים לבנק המשותף 🦴<br>✅ אין שוד — כולנו אחד!<br>✅ מגיעים ל-100 ביחד — <strong>כולנו מנצחים! 🎉</strong><br><br>🐕🐩🐕‍🦺🦮 כל כלב עוזר לקבוצה!',
     },
   ],
-  back: "→ אחורה",
-  next: "הבא ←",
+  back: "אחורה →",
+  next: "← הבא",
   gotItDone: "✅ הבנתי!",
 
   setupTitle: "⚙️ הגדרות משחק",
@@ -108,14 +113,14 @@ export const he: Dict = {
   difficulty: "📊 רמת קושי",
   levels: {
     beg: { icon: "🐾", name: "מתחילים", desc: "כפל ראשון | \u2066(2–4)×(2–4)\u2069" },
-    med: { icon: "⭐", name: "בינוני", desc: "לוחות עד 6 | \u2066(3–6)×(3–6)\u2069" },
-    adv: { icon: "🌟", name: "מתקדם", desc: "לוחות עד 8 | \u2066(5–8)×(5–8)\u2069" },
-    champ: { icon: "🏆", name: "אלוף", desc: "לוחות \u20667–9\u2069 | 2 דקות" },
+    med: { icon: "⭐", name: "בינוני", desc: "כפל עד 6 | \u2066(3–6)×(3–6)\u2069" },
+    adv: { icon: "🌟", name: "מתקדם", desc: "כפל עד 8 | \u2066(5–8)×(5–8)\u2069" },
+    champ: { icon: "🏆", name: "אלוף", desc: "כפל \u20667–9\u2069 | 2 דקות" },
     hero: { icon: "⚡", name: "גיבור", desc: "כפל ארוך | \u2066(11–19)×(2–9)\u2069 | \u20661:30\u2069 דקות" },
   },
   watch: "🎬 צפה",
   options: "🔧 התאמות",
-  whatsThis: "❓ מה זה?",
+  whatsThis: "מה זה?",
   optTimer: "⏱ טיימר לכל תור",
   optMc: "🔤 כפתורי בחירה (מתחילים/בינוני)",
   optRob: "🦹 מנגנון שוד",

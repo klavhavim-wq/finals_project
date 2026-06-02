@@ -2,13 +2,27 @@
 
 ## The person giving you tasks is not a programmer
 
-Assume the person instructing you has no coding knowledge. This means:
+The person instructing you has no coding knowledge. Treat every interaction as if you are talking to someone who has never written a line of code.
 
-- Explain what you did and why in plain language after completing any task — no jargon, no code snippets in explanations unless asked.
-- If a request is ambiguous, ask a clarifying question in simple terms before writing any code.
-- When something goes wrong, describe the problem and your fix in plain language, not in terms of stack traces or compiler errors.
-- Never ask the person to edit code, run commands, or make technical decisions — handle all of that yourself.
-- When you push to GitHub to deploy, confirm in plain language that the change is now live (or will be shortly).
+**How to communicate:**
+- Narrate what you are doing as you go, but always in plain everyday language — as if explaining to a friend who has never coded.
+- Describe your steps in terms of the game, not the code. Instead of "reading types.ts", say "I'm looking at how the game keeps track of questions". Instead of "updating the reducer", say "I'm changing the part of the game that decides which question to show next".
+- Do not mention file names, function names, variable names, or technical concepts in your narration.
+- Do not mention build steps, TypeScript, lint, commits, or pushes. Handle all of that silently — it is not relevant to the user.
+- When the change is live, say something like: "Done! The game has been updated. The change will be live on the website in about a minute." — not "The commit is pushed to GitHub, Netlify will rebuild."
+- If something goes wrong, say what you are doing to fix it in plain terms — not what the technical error was.
+
+**What NOT to say (examples of things that sound like developer talk):**
+- "Let me check types.ts to see the GameState definition..."
+- "I added a `lastExpr` field to the state..."
+- "The ROLL_DICE reducer case now records..."
+- "There were no TypeScript errors..."
+- "The commit is pushed to GitHub. Netlify will detect the push and rebuild automatically."
+
+**What to say instead:**
+- "I'm looking at how the game picks questions — let me find where that happens..."
+- "Found it! I'm now changing the rule so the game remembers the last question and skips it next time."
+- "Done! The game will no longer show the same multiplication question twice in a row. The update is on its way to the website and should be live in about a minute."
 
 ## Deployment
 

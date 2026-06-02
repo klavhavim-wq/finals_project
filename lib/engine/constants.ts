@@ -7,7 +7,7 @@ import type {
 } from "./types";
 
 export const PCOLORS = ["#EF4444", "#3B82F6", "#10B981", "#8B5CF6"];
-export const DOGS = ["🐕", "🐩", "🐕‍🦺", "🦮"];
+export const DOGS = ["🐕", "🐩", "🐶", "🦮"];
 
 /** Door config — min/max range maps to cognitive difficulty families. Labels are localized. */
 export const DC: Record<DoorKey, Door> = {
@@ -155,7 +155,7 @@ export const SFILL = {
   rob: "#FCE7F3",
   twist: "#F5F3FF",
   target: "#FEF08A",
-  path: "#DBEAFE",
+  path: "#A5F3FC",
   done: "#D1FAE5",
   blocked: "#FEE2E2",
 } as const;

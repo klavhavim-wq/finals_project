@@ -49,6 +49,8 @@ export default function HexBoard({
     const sym = hexSym(n);
     const tcol = prime ? "#7C3AED" : "#78350F";
     const fw = prime ? 900 : 700;
+    const pathIdx = state.path.indexOf(n);
+    const isUpcomingPath = pathIdx !== -1 && pathIdx >= state.stepIdx;
 
     const edges = [];
     for (let e = 0; e < 6; e++) {
@@ -90,7 +92,7 @@ export default function HexBoard({
         className="hex-group"
         onClick={() => onHexClick(n)}
       >
-        <polygon points={pts} fill={fillFor(state, n)} stroke="none" />
+        <polygon points={pts} fill={fillFor(state, n)} stroke={isUpcomingPath ? "#0891B2" : "none"} strokeWidth={isUpcomingPath ? 2.5 : 0} />
         {edges}
         <text
           x={cx.toFixed(1)}
