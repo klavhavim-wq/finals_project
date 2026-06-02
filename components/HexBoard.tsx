@@ -147,22 +147,29 @@ export default function HexBoard({
         })
       : null;
 
-  const tokens = state.players.map((p, i) => {
-    const { x: cx, y: cy } = hCenter(p.hex);
-    return (
-      <g
-        key={`tok-${i}`}
-        transform={`translate(${cx.toFixed(1)},${(cy - R * 0.5).toFixed(1)})`}
-        style={{ transition: "transform .45s ease" }}
-        pointerEvents="none"
-      >
-        <circle r={17} fill="white" fillOpacity={0.93} stroke={PCOLORS[i]} strokeWidth={3} />
-        <text fontSize={24} textAnchor="middle" dominantBaseline="middle">
-          {DOGS[i]}
-        </text>
-      </g>
-    );
-  });
+  const tokens = [...state.players.map((p, i) => ({ p, i }))]
+    .sort((a, b) => {
+      if (a.p.hex !== b.p.hex) return a.p.hex - b.p.hex;
+      if (b.i === state.cur) return -1;
+      if (a.i === state.cur) return 1;
+      return a.i - b.i;
+    })
+    .map(({ p, i }) => {
+      const { x: cx, y: cy } = hCenter(p.hex);
+      return (
+        <g
+          key={`tok-${i}`}
+          transform={`translate(${cx.toFixed(1)},${(cy - R * 0.5).toFixed(1)})`}
+          style={{ transition: "transform .45s ease" }}
+          pointerEvents="none"
+        >
+          <circle r={17} fill="white" fillOpacity={0.93} stroke={PCOLORS[i]} strokeWidth={3} />
+          <text fontSize={24} textAnchor="middle" dominantBaseline="middle">
+            {DOGS[i]}
+          </text>
+        </g>
+      );
+    });
 
   return (
     <svg
