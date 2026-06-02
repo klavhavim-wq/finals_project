@@ -16,15 +16,20 @@ export default function ActionPanel({
   state: GameState;
   actions: GameActions;
 }) {
-  if (state.phase === 1) return <Phase1 t={t} state={state} actions={actions} />;
+  if (state.phase === 1) return <Phase1 key={state.card?.id ?? 0} t={t} state={state} actions={actions} />;
   if (state.phase === 2) return <Phase2 t={t} state={state} actions={actions} />;
-  if (state.phase === 3) return <Phase3 t={t} state={state} actions={actions} />;
+  if (state.phase === 3) return <Phase3 key={state.pendingRoll?.expr ?? ""} t={t} state={state} actions={actions} />;
   return null;
 }
 
 function Phase1({ t, state, actions }: { t: Dict; state: GameState; actions: GameActions }) {
   const card = state.card;
+  const [hintVisible, setHintVisible] = useState(false);
   if (!card) return null;
+
+  const low = Math.floor(card.ans / 10) * 10;
+  const high = low + 9;
+
   return (
     <div>
       <RichText className="aphint" html={t.p1Hint} />
@@ -33,6 +38,13 @@ function Phase1({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
         <div className="tcex">{t.targetExpr(card.ex)}</div>
         <RichText className="tcinst" html={t.targetInstruction(!!card.prime)} />
       </div>
+      {hintVisible ? (
+        <RichText className="hintbox" html={t.hintResult(low, high)} />
+      ) : (
+        <button className="abt abp" onClick={() => setHintVisible(true)}>
+          {t.hintBtn}
+        </button>
+      )}
       <button className="abt abgr" onClick={actions.revealTarget}>
         {t.showAnswer}
       </button>
@@ -52,7 +64,7 @@ function Phase2({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
     <div>
       <RichText className="aphint" html={t.p2Hint(state.targetHex ?? 0)} />
       {steps === 0 ? (
-        <div style={{ fontSize: ".8rem", color: "#9ca3af", padding: 10, textAlign: "center" }}>
+        <div style={{ fontSize: ".85rem", color: "#9ca3af", padding: 10, textAlign: "center" }}>
           {t.p2Empty}
         </div>
       ) : (
@@ -64,13 +76,15 @@ function Phase2({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
               <div className="pstep" key={i}>
                 <div className="psnum">{i + 1}</div>
                 <div className="pshex">{t.stepHexLabel(h)}</div>
-                <span className={"psdoor " + dclass}>{t.pathDoorLabel(d, DC[d].pts)}</span>
+                <RichText className={"psdoor " + dclass} html={t.pathDoorLabel(d, DC[d].pts)} />
               </div>
             );
           })}
         </div>
       )}
-      {steps > 0 && <RichText className="rsum" html={t.possiblePellets(pts, steps)} />}
+      {steps > 0 && (
+        <RichText className="rsum rsum-big" html={t.possiblePellets(pts, steps)} />
+      )}
       {steps > 0 && !hasTarget && (
         <div className="wrongbox">{t.routeNotReach(state.targetHex ?? 0)}</div>
       )}
@@ -94,10 +108,15 @@ function Phase2({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
 function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: GameActions }) {
   const step = state.stepIdx;
   const col = state.pathDoors[step];
-  // All steps walked — the arrival modal is taking over; nothing to render here.
+  const [hintVisible, setHintVisible] = useState(false);
+
   if (!col) return null;
   const dc = DC[col];
   const dieClass = col === "redlong" ? "redlong" : col;
+
+  const correct = state.pendingRoll?.correct;
+  const hintLow = correct !== undefined ? Math.floor(correct / 10) * 10 : 0;
+  const hintHigh = hintLow + 9;
 
   return (
     <div>
@@ -106,7 +125,7 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
         html={t.p3Hint(step + 1, state.path.length, t.doorLabel(col), dc.pts, state.turnPts)}
       />
       <button
-        className="abt abl"
+        className="abt abl p3-roll-btn"
         onClick={() => actions.rollDice(step)}
         disabled={!!state.pendingRoll}
       >
@@ -125,14 +144,7 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
             </div>
             <div className="mathex">{state.pendingRoll.expr} = ?</div>
           </div>
-          <div
-            style={{
-              fontSize: ".77rem",
-              color: "#6b7280",
-              textAlign: "center",
-              marginBottom: 5,
-            }}
-          >
+          <div className="orchex-hint">
             {t.orClickHex}
           </div>
 
@@ -152,6 +164,14 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
             </div>
           ) : (
             <AnswerInput t={t} wrong={state.inputWrong} onSubmit={actions.inputAnswer} />
+          )}
+
+          {hintVisible ? (
+            <RichText className="hintbox" html={t.hintResult(hintLow, hintHigh)} />
+          ) : (
+            <button className="abt abp" onClick={() => setHintVisible(true)}>
+              {t.hintBtn}
+            </button>
           )}
 
           {state.wrongAnswerVisible && (

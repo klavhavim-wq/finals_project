@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import HexBoard from "../HexBoard";
 import PlayerCards from "../PlayerCards";
 import ActionPanel from "../ActionPanel";
@@ -12,6 +12,8 @@ import type { Dict } from "@/lib/i18n";
 function fmtTime(s: number): string {
   return "⏱ " + Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60);
 }
+
+const PHASE_ICONS = ["", "🎯", "🗺️", "🐕"];
 
 export default function GameScreen({
   t,
@@ -31,7 +33,7 @@ export default function GameScreen({
   const pct = state.timerTotal ? Math.max(0, (state.timerSecs / state.timerTotal) * 100) : 0;
   const curName = state.players[state.cur]?.name ?? "";
 
-  // Mouse drag-to-pan for the board (touch pans natively via overflow scroll).
+  // Board pan
   const scrollRef = useRef<HTMLDivElement>(null);
   const pan = useRef({ active: false, moved: false, x: 0, y: 0, l: 0, t: 0 });
 
@@ -76,6 +78,43 @@ export default function GameScreen({
     actions.hexClick(n);
   };
 
+  // Floating panel drag
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [panelPos, setPanelPos] = useState({ x: 15, y: 65 });
+  const fpDrag = useRef({ active: false, ox: 0, oy: 0 });
+  const initializedRef = useRef(false);
+
+  useEffect(() => {
+    if (!initializedRef.current) {
+      initializedRef.current = true;
+      const wide = window.innerWidth > 820;
+      setIsDesktop(wide);
+      if (wide) {
+        // Start on the right side of the board, clear of the 274px sidebar
+        setPanelPos({ x: window.innerWidth - 580, y: 70 });
+      }
+    }
+    const onResize = () => setIsDesktop(window.innerWidth > 820);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  const onHandleDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDesktop) return;
+    fpDrag.current = { active: true, ox: e.clientX - panelPos.x, oy: e.clientY - panelPos.y };
+    e.currentTarget.setPointerCapture(e.pointerId);
+    e.stopPropagation();
+  };
+  const onHandleMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!fpDrag.current.active || !isDesktop) return;
+    e.stopPropagation();
+    setPanelPos({ x: e.clientX - fpDrag.current.ox, y: e.clientY - fpDrag.current.oy });
+  };
+  const onHandleUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    fpDrag.current.active = false;
+    e.stopPropagation();
+  };
+
   return (
     <div id="sg" className="screen active">
       <div className="ghdr">
@@ -108,10 +147,19 @@ export default function GameScreen({
         >
           <HexBoard state={state} onHexClick={guardedHexClick} />
         </div>
-        <div className="sidebar">
-          <PlayerCards t={t} state={state} />
-          <div className="apanel">
-            <div className="aphdots">
+
+        {/* Action panel — floats on desktop, flows in sidebar on mobile */}
+        <div
+          className={"floatpanel" + (isDesktop ? " float-active" : "")}
+          style={isDesktop ? { left: panelPos.x, top: panelPos.y } : undefined}
+        >
+          <div
+            className="floatpanel-handle"
+            onPointerDown={onHandleDown}
+            onPointerMove={onHandleMove}
+            onPointerUp={onHandleUp}
+          >
+            <div className="aphdots fp-dots">
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
@@ -121,8 +169,16 @@ export default function GameScreen({
                 />
               ))}
             </div>
+            <span className="fp-phase">{PHASE_ICONS[state.phase]}</span>
+            {isDesktop && <span className="fp-grip">⠿</span>}
+          </div>
+          <div className="floatpanel-body">
             <ActionPanel t={t} state={state} actions={actions} />
           </div>
+        </div>
+
+        <div className="sidebar">
+          <PlayerCards t={t} state={state} />
         </div>
       </div>
     </div>

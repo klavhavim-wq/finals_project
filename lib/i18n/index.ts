@@ -70,6 +70,8 @@ export interface Dict {
   targetInstruction: (prime: boolean) => string;
   showAnswer: string;
   wrongHexInline: (n: number) => string;
+  hintBtn: string;
+  hintResult: (low: number, high: number) => string;
 
   // Phase 2
   p2Hint: (target: number) => string;
