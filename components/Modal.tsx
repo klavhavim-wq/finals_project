@@ -115,10 +115,11 @@ function Body({
           <h2>{t.arrivalTitle(modal.hex)}</h2>
           <RichText as="p" html={t.pelletsThisTurn(modal.turnPts)} />
           <div className="macts" style={{ flexWrap: "wrap", gap: 7 }}>
-            {symBtn}
-            <button className="abt abg" style={{ padding: "9px 18px" }} onClick={actions.collectNext}>
-              {t.collectPellets}
-            </button>
+            {symBtn ?? (
+              <button className="abt abg" style={{ padding: "9px 18px" }} onClick={actions.collectNext}>
+                {t.collectPellets}
+              </button>
+            )}
           </div>
         </>
       );
