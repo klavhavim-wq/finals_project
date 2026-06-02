@@ -36,7 +36,7 @@ function Phase1({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
         <RichText className="tcinst" html={t.targetInstruction(!!card.prime)} />
       </div>
       {hintVisible ? (
-        <RichText className="hintbox" html={t.hintResult(card.ex, card.ans)} />
+        <RichText className="hintbox" html={t.hintResult(card.ex)} />
       ) : (
         <button className="abt abp" onClick={() => setHintVisible(true)}>
           {t.hintBtn}
@@ -161,7 +161,7 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
           )}
 
           {hintVisible ? (
-            <RichText className="hintbox" html={t.hintResult(state.pendingRoll.expr, state.pendingRoll.correct)} />
+            <RichText className="hintbox" html={t.hintResult(state.pendingRoll.expr)} />
           ) : (
             <button className="abt abp" onClick={() => setHintVisible(true)}>
               {t.hintBtn}
