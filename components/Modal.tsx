@@ -14,6 +14,12 @@ const DISMISSABLE = new Set<ModalState["kind"]>([
   "confirmEnd",
 ]);
 
+/** Real video files available per locale. Keys map to videoMenu entries. */
+const VIDEO_SRC: Record<string, { en: string; he: string }> = {
+  tutorial: { en: "/howto-en.mp4", he: "/howto-he.mp4" },
+  gameplay: { en: "/howto-en.mp4", he: "/howto-he.mp4" },
+};
+
 export default function Modal({
   t,
   state,
@@ -266,19 +272,30 @@ function Body({
         </>
       );
 
-    case "video":
+    case "video": {
+      const src = VIDEO_SRC[modal.videoKey]?.[state.locale];
       return (
         <>
           <h2>{t.videoLabels[modal.videoKey] ?? "🎬"}</h2>
-          <div style={{ textAlign: "center", padding: "24px 0" }}>
-            <div style={{ fontSize: "3.5rem" }}>🎬</div>
-            <p style={{ color: "#6b7280", marginTop: 10, fontSize: "1rem" }}>{t.videoComingSoon}</p>
-            <RichText
-              as="p"
-              style={{ color: "#9ca3af", fontSize: ".82rem", marginTop: 6 }}
-              html={t.videoComingSoonHint}
+          {src ? (
+            <video
+              src={src}
+              controls
+              autoPlay
+              playsInline
+              style={{ width: "100%", borderRadius: 12, marginTop: 8, background: "#000" }}
             />
-          </div>
+          ) : (
+            <div style={{ textAlign: "center", padding: "24px 0" }}>
+              <div style={{ fontSize: "3.5rem" }}>🎬</div>
+              <p style={{ color: "#6b7280", marginTop: 10, fontSize: "1rem" }}>{t.videoComingSoon}</p>
+              <RichText
+                as="p"
+                style={{ color: "#9ca3af", fontSize: ".82rem", marginTop: 6 }}
+                html={t.videoComingSoonHint}
+              />
+            </div>
+          )}
           <div className="macts">
             <button className="abt abgr" style={{ padding: "9px 18px" }} onClick={actions.closeModal}>
               {t.close}
@@ -286,6 +303,7 @@ function Body({
           </div>
         </>
       );
+    }
 
     case "primeHex":
       return (
