@@ -365,6 +365,10 @@ export const en: Dict = {
         <strong>🤝 Cooperative Mode</strong>
         <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">All players are one team — pellets go into a shared bank, no stealing, no competition. Win together at 100!<br>💡 Great for young children, therapy sessions, and relaxed family play.</p>
       </div>
+      <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
+        <strong>🎓 Free Play</strong>
+        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">A no-score, no-winner mode — instead of pellets, it simply counts how many exercises each player solved. No pressure to win, no stealing, and the game doesn't end after 4 rounds — play as long as you like.<br><strong>Who's it for?</strong> Children who feel stressed by competition, relaxed practice, and a lesson or therapy session focused purely on learning.<br>💡 Best when the goal is lots of enjoyable math practice — without the distraction of scores and winning.</p>
+      </div>
     </div>`,
 
   videoLabels: {
