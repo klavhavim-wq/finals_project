@@ -152,7 +152,12 @@ export function useGame(locale: Locale) {
 
   const drawCard = useCallback((cardType: CardType) => {
     const cardId = pickSpecialId(cardType);
-    dispatch({ type: "OPEN_DRAW", cardType, cardId });
+    const randData = {
+      hex: Math.floor(Math.random() * 100) + 1,
+      bool: Math.random() > 0.5,
+      targetIdx: Math.floor(Math.random() * 4),
+    };
+    dispatch({ type: "OPEN_DRAW", cardType, cardId, randData });
   }, []);
 
   const collectNext = useCallback(() => dispatch({ type: "COLLECT_NEXT" }), []);

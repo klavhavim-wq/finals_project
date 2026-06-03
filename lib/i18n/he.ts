@@ -132,6 +132,18 @@ function formatEff(r: EffResult): string {
         : "✅ מסלול קצר! עובר בשלום";
     case "extraTurn":
       return "🎉 תור נוסף מגיע לך!";
+    case "teleport":
+      return `🎲 קפצת למשושה <strong>${r.hex}</strong>! מתחילים תור חדש משם`;
+    case "swapHex":
+      return `🔀 החלפת מיקום עם <strong>${r.withName}</strong>! עכשיו אתה על משושה <strong>${r.myNewHex}</strong>`;
+    case "dblOrHalf":
+      return r.doubled
+        ? `🎉 כפול! סה"כ: <strong>${r.total}</strong> גרגירים`
+        : `😅 חצי... סה"כ: <strong>${r.total}</strong> גרגירים`;
+    case "giveTokens":
+      return r.given > 0
+        ? `🤝 העברת <strong>${r.given}</strong> גרגירים ל-${r.toName}!`
+        : `🤷 אין שחקנים אחרים לתרום להם`;
   }
 }
 
@@ -312,10 +324,10 @@ export const he: Dict = {
     bon_add10: { t: "+10 גרגירים 🦴", tx: "רק על הגעה ליעד — +10 גרגירים נוספים! 🦴" },
     bon_steps: { t: "צעדים שווים 🐾", tx: "מקבל +2 גרגירים על כל צעד שהלכת!" },
     twi_extra: { t: "תור נוסף! 🔄", tx: "קיבלת מזל — תור נוסף!" },
-    twi_dbl: { t: "כפול גרגירים! 🦴", tx: "מקבל פי 2 גרגירים בתור הזה! 🦴🦴" },
-    twi_prime: { t: "בונוס ראשוני 🎲", tx: "הגעת למספר ראשוני — +15 גרגירים!" },
-    twi_kibble: { t: "קערת האוכל 🦴", tx: "מקבל +2 גרגירים על כל צעד שהלכת!" },
-    twi_dbl2: { t: "כפול גרגירים! 🦴🦴", tx: "כפול גרגירים לתור הזה!" },
+    twi_teleport: { t: "קפיצה! 🎲", tx: "כוח המשושה הראשוני מקפיץ אותך למקום אחר על הלוח!" },
+    twi_swap: { t: "החלפת מיקום! 🔀", tx: "מתחלפים! אתה ושחקן אחר מחליפים מיקומים על הלוח." },
+    twi_dblOrHalf: { t: "כפול או חצי? 🎲", tx: "גורל מכריע: <strong>כפול גרגירים</strong> — או <strong>חצי מהם</strong>. 50/50!" },
+    twi_give5: { t: "נדיב! 🤝", tx: "מוציאים עד 5 גרגירים מהבנק שלך ומוסרים לשחקן עם הכי מעט גרגירים." },
   },
   formatEff,
   extraTurnBtn: "🔄 תור נוסף!",

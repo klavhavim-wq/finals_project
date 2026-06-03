@@ -145,11 +145,13 @@ export function pickSpecialId(type: CardType, rand: Rand = Math.random): string 
 
 function applyEffect(
   state: GameState,
-  eff: string
-): { turnPts: number; extraTurn: boolean; res: EffResult } {
+  eff: string,
+  randData: { hex: number; bool: boolean; targetIdx: number }
+): { turnPts: number; extraTurn: boolean; res: EffResult; players?: Player[] } {
   let tp = state.turnPts;
   let extra = false;
   let res: EffResult;
+  let players: Player[] | undefined;
   switch (eff) {
     case "dblPts":
       tp *= 2;
@@ -224,13 +226,70 @@ function applyEffect(
       }
       break;
     }
+    case "teleport": {
+      const hex = randData.hex;
+      players = state.players.map((p, i) => i === state.cur ? { ...p, hex } : p);
+      res = { eff: "teleport", hex, total: tp };
+      break;
+    }
+    case "swapHex": {
+      const others = state.players.map((_, i) => i).filter(i => i !== state.cur);
+      if (others.length === 0) {
+        const hex = randData.hex;
+        players = state.players.map((p, i) => i === state.cur ? { ...p, hex } : p);
+        res = { eff: "teleport", hex, total: tp };
+      } else {
+        const tgtI = others[randData.targetIdx % others.length];
+        const myNewHex = state.players[tgtI].hex;
+        const theirNewHex = state.players[state.cur].hex;
+        players = state.players.map((p, i) => {
+          if (i === state.cur) return { ...p, hex: myNewHex };
+          if (i === tgtI) return { ...p, hex: theirNewHex };
+          return p;
+        });
+        res = { eff: "swapHex", withName: state.players[tgtI].name, myNewHex, total: tp };
+      }
+      break;
+    }
+    case "dblOrHalf": {
+      if (randData.bool) {
+        tp *= 2;
+        res = { eff: "dblOrHalf", doubled: true, total: tp };
+      } else {
+        tp = Math.max(0, Math.floor(tp / 2));
+        res = { eff: "dblOrHalf", doubled: false, total: tp };
+      }
+      break;
+    }
+    case "giveTokens": {
+      if (state.players.length < 2 || state.settings.coop) {
+        res = { eff: "giveTokens", given: 0, toName: "", total: tp };
+        break;
+      }
+      let lowestIdx = -1, lowestTokens = Infinity;
+      state.players.forEach((p, i) => {
+        if (i !== state.cur && p.tokens < lowestTokens) {
+          lowestTokens = p.tokens;
+          lowestIdx = i;
+        }
+      });
+      if (lowestIdx === -1) { res = { eff: "giveTokens", given: 0, toName: "", total: tp }; break; }
+      const given = Math.min(5, state.players[state.cur].tokens);
+      players = state.players.map((p, i) => {
+        if (i === state.cur) return { ...p, tokens: Math.max(0, p.tokens - given) };
+        if (i === lowestIdx) return { ...p, tokens: p.tokens + given };
+        return p;
+      });
+      res = { eff: "giveTokens", given, toName: state.players[lowestIdx].name, total: tp };
+      break;
+    }
     case "extraTurn":
     default:
       extra = true;
       res = { eff: "extraTurn", total: tp };
       break;
   }
-  return { turnPts: tp, extraTurn: extra, res };
+  return { turnPts: tp, extraTurn: extra, res, players };
 }
 
 function withError(state: GameState, record: ErrorRecord): GameState {
@@ -385,7 +444,7 @@ export type Action =
   | { type: "OPEN_FORFEIT" }
   | { type: "FORFEIT_COLLECT" }
   | { type: "TICK" }
-  | { type: "OPEN_DRAW"; cardType: CardType; cardId: string }
+  | { type: "OPEN_DRAW"; cardType: CardType; cardId: string; randData: { hex: number; bool: boolean; targetIdx: number } }
   | { type: "COLLECT_NEXT" }
   | { type: "COLLECT_THEN_EXTRA" }
   | { type: "OPEN_ROB" }
@@ -631,9 +690,10 @@ export function reducer(state: GameState, action: Action): GameState {
 
     case "OPEN_DRAW": {
       const def = SPECIAL_BY_ID[action.cardId];
-      const { turnPts, extraTurn, res } = applyEffect(state, def.eff);
+      const { turnPts, extraTurn, res, players } = applyEffect(state, def.eff, action.randData);
       return {
         ...state,
+        ...(players ? { players } : {}),
         turnPts,
         extraTurn,
         modal: {

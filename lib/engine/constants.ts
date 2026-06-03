@@ -131,10 +131,10 @@ export const BONUS_C: SpecialCardDef[] = [
 
 export const TWIST_C: SpecialCardDef[] = [
   { id: "twi_extra", type: "twi", icon: "🎲", eff: "extraTurn" },
-  { id: "twi_dbl", type: "twi", icon: "🎲", eff: "dblPts" },
-  { id: "twi_prime", type: "twi", icon: "🎲", eff: "add15" },
-  { id: "twi_kibble", type: "twi", icon: "🎲", eff: "stepsBonus" },
-  { id: "twi_dbl2", type: "twi", icon: "🎲", eff: "dblPts" },
+  { id: "twi_teleport", type: "twi", icon: "🎲", eff: "teleport" },
+  { id: "twi_swap", type: "twi", icon: "🎲", eff: "swapHex" },
+  { id: "twi_dblOrHalf", type: "twi", icon: "🎲", eff: "dblOrHalf" },
+  { id: "twi_give5", type: "twi", icon: "🎲", eff: "giveTokens" },
 ];
 
 export const SPECIAL_BY_ID: Record<string, SpecialCardDef> = Object.fromEntries(

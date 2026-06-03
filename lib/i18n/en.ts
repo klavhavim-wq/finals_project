@@ -128,6 +128,18 @@ function formatEff(r: EffResult): string {
         : "✅ Short route! All good";
     case "extraTurn":
       return "🎉 You get an extra turn!";
+    case "teleport":
+      return `🎲 Jumped to hex <strong>${r.hex}</strong>! Next turn starts from there`;
+    case "swapHex":
+      return `🔀 Swapped positions with <strong>${r.withName}</strong>! You are now on hex <strong>${r.myNewHex}</strong>`;
+    case "dblOrHalf":
+      return r.doubled
+        ? `🎉 Double! Total: <strong>${r.total}</strong> pellets`
+        : `😅 Half... Total: <strong>${r.total}</strong> pellets`;
+    case "giveTokens":
+      return r.given > 0
+        ? `🤝 You gave <strong>${r.given}</strong> pellets to ${r.toName}!`
+        : `🤷 No other players to give to`;
   }
 }
 
@@ -302,10 +314,10 @@ export const en: Dict = {
     bon_add10: { t: "+10 Bonus", tx: "Just for reaching the target — +10 extra pellets! 🦴" },
     bon_steps: { t: "Step Bonus 🐾", tx: "Get +2 pellets for every step you walked!" },
     twi_extra: { t: "Extra Turn! 🔄", tx: "Lucky you — an extra turn!" },
-    twi_dbl: { t: "Double Roll", tx: "Get ×2 pellets this turn! 🦴🦴" },
-    twi_prime: { t: "Prime Bonus 🎲", tx: "You reached a prime number — +15 pellets!" },
-    twi_kibble: { t: "Kibble Combo 🦴", tx: "Get +2 pellets per step walked 🦴" },
-    twi_dbl2: { t: "Double Pellets! 🦴🦴", tx: "Double pellets this turn!" },
+    twi_teleport: { t: "Jump! 🎲", tx: "The prime hex's power flings you to a new spot on the board!" },
+    twi_swap: { t: "Swap Positions! 🔀", tx: "Trade places! You and another player swap positions on the board." },
+    twi_dblOrHalf: { t: "Double or Half? 🎲", tx: "Fate decides: <strong>double your pellets</strong> — or <strong>halve them</strong>. 50/50!" },
+    twi_give5: { t: "Generous! 🤝", tx: "Up to 5 pellets from your bank go to the player with the fewest pellets." },
   },
   formatEff,
   extraTurnBtn: "🔄 Extra Turn!",

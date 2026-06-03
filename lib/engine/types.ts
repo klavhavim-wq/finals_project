@@ -24,7 +24,11 @@ export type Effect =
   | "threeColors"
   | "noRed"
   | "shortPath"
-  | "extraTurn";
+  | "extraTurn"
+  | "teleport"
+  | "swapHex"
+  | "dblOrHalf"
+  | "giveTokens";
 
 export interface ErrorRecord {
   phase: 1 | 3;
@@ -107,7 +111,11 @@ export type EffResult =
   | { eff: "threeColors"; count: number; applied: boolean; total: number }
   | { eff: "noRed"; count: number; lost: number; applied: boolean; total: number }
   | { eff: "shortPath"; steps: number; applied: boolean; total: number }
-  | { eff: "extraTurn"; total: number };
+  | { eff: "extraTurn"; total: number }
+  | { eff: "teleport"; hex: number; total: number }
+  | { eff: "swapHex"; withName: string; myNewHex: number; total: number }
+  | { eff: "dblOrHalf"; doubled: boolean; total: number }
+  | { eff: "giveTokens"; given: number; toName: string; total: number };
 
 export type ModalState =
   | { kind: "reveal"; ans: number }
