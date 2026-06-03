@@ -176,6 +176,27 @@ export interface Dict {
   spectatorAnswerFor: (name: string) => string;
   spectatorCorrect: (name: string) => string;
   spectatorWrong: string;
+
+  // Prime hex explanation modal
+  primeHexTitle: (n: number) => string;
+  primeHexMsg: (n: number) => string;
+  drawTwistAfterPrime: string;
+
+  // Free play mode
+  optFreePlay: string;
+  freeSolvedCount: (n: number) => string;
+
+  // Phase 2 coop hint
+  p2CoopHint: string;
+
+  // Quick start
+  quickStartBtn: string;
+  quickStartTitle: string;
+  quickStartSteps: [string, string, string];
+  quickStartGo: string;
+
+  // Phase labels (for the action panel header)
+  phaseLabels: [string, string, string];
 }
 
 const DICTS: Record<Locale, Dict> = { en, he };

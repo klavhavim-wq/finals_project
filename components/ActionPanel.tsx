@@ -3,18 +3,21 @@
 import { useState } from "react";
 import RichText from "./RichText";
 import { DC } from "@/lib/engine/constants";
-import type { GameState } from "@/lib/engine/types";
+import type { GameState, Level } from "@/lib/engine/types";
 import type { GameActions } from "./useGame";
 import type { Dict } from "@/lib/i18n";
 
-function MulTable() {
+const LVL_MAX: Record<Level, number> = { beg: 4, med: 6, adv: 8, champ: 9, hero: 9 };
+
+function MulTable({ max }: { max: number }) {
+  const nums = Array.from({ length: max }, (_, i) => i + 1);
   return (
     <div style={{ overflowX: "auto", marginTop: 8 }}>
       <table style={{ borderCollapse: "collapse", fontSize: ".68rem", direction: "ltr", margin: "0 auto" }}>
         <tbody>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(row => (
+          {nums.map(row => (
             <tr key={row}>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(col => (
+              {nums.map(col => (
                 <td key={col} style={{
                   padding: "3px 5px", textAlign: "center",
                   border: "1px solid #e5e7eb",
@@ -34,15 +37,16 @@ function MulTable() {
   );
 }
 
-function HelpCard({ t }: { t: Dict }) {
+function HelpCard({ t, level }: { t: Dict; level: Level }) {
   const [open, setOpen] = useState(false);
+  const max = LVL_MAX[level];
   return (
     <div style={{ marginTop: 8, borderTop: "1px solid #f3f4f6", paddingTop: 8 }}>
       <button className="abt abgr" style={{ fontSize: ".82rem", padding: "5px 14px" }}
         onClick={() => setOpen(v => !v)}>
         {open ? "✖ " : "🔢 "}{t.helpCardBtn}
       </button>
-      {open && <MulTable />}
+      {open && <MulTable max={max} />}
     </div>
   );
 }
@@ -145,7 +149,7 @@ function Phase1({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
       {state.wrongHex !== null && (
         <div className="wrongbox">{t.wrongHexInline(state.wrongHex)}</div>
       )}
-      <HelpCard t={t} />
+      <HelpCard t={t} level={state.level} />
     </div>
   );
 }
@@ -182,6 +186,11 @@ function Phase2({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
       )}
       {steps > 0 && !hasTarget && (
         <div className="wrongbox">{t.routeNotReach(state.targetHex ?? 0)}</div>
+      )}
+      {state.settings.coop && (
+        <p style={{ fontSize: ".82rem", color: "#0891B2", background: "#EFF6FF", padding: "6px 10px", borderRadius: 8, margin: "6px 0" }}>
+          {t.p2CoopHint}
+        </p>
       )}
       <button
         className="abt abg"
@@ -258,7 +267,7 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
             <AnswerInput t={t} wrong={state.inputWrong} onSubmit={actions.inputAnswer} />
           )}
 
-          {hintVisible ? (
+          {(hintVisible || state.wrongAnswerVisible) ? (
             <RichText className="hintbox" html={t.hintResult(state.pendingRoll.expr)} />
           ) : (
             <button className="abt abp" onClick={() => setHintVisible(true)}>
@@ -279,7 +288,7 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
           )}
         </div>
       )}
-      <HelpCard t={t} />
+      <HelpCard t={t} level={state.level} />
     </div>
   );
 }

@@ -100,7 +100,7 @@ function Body({
         );
       else if (modal.sym === "🎲")
         symBtn = (
-          <button className="abt abp" style={{ padding: "9px 18px" }} onClick={() => actions.drawCard("twi")}>
+          <button className="abt abp" style={{ padding: "9px 18px" }} onClick={() => actions.openPrimeHex(modal.hex)}>
             {t.drawTwist}
           </button>
         );
@@ -282,6 +282,19 @@ function Body({
           <div className="macts">
             <button className="abt abgr" style={{ padding: "9px 18px" }} onClick={actions.closeModal}>
               {t.close}
+            </button>
+          </div>
+        </>
+      );
+
+    case "primeHex":
+      return (
+        <>
+          <h2>{t.primeHexTitle(modal.hex)}</h2>
+          <RichText as="p" html={t.primeHexMsg(modal.hex)} />
+          <div className="macts">
+            <button className="abt abp" style={{ padding: "9px 18px" }} onClick={() => actions.drawCard("twi")}>
+              {t.drawTwistAfterPrime}
             </button>
           </div>
         </>

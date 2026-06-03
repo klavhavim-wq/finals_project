@@ -423,4 +423,24 @@ export const he: Dict = {
   spectatorAnswerFor: (name) => `${name} עונה:`,
   spectatorCorrect: (name) => `+1 ל-${name}! 🎉`,
   spectatorWrong: "❌ לא נכון",
+
+  primeHexTitle: (n) => `🎲 משושה ראשוני — ${n}!`,
+  primeHexMsg: (n) => `המספר <strong>${n}</strong> הוא מספר ראשוני — מתחלק רק ב-1 ובעצמו!<br>זה אומר... קלף טוויסט מחכה לך! 🎲`,
+  drawTwistAfterPrime: "🎲 שלוף קלף טוויסט!",
+
+  optFreePlay: "🎓 משחק חופשי — ספור תרגילים (ללא ניקוד)",
+  freeSolvedCount: (n) => `✅ ${n}`,
+
+  p2CoopHint: "💡 שיתוף פעולה: כל הגרגירים נכנסים לבנק המשותף!",
+
+  quickStartBtn: "🚀 התחל מהר!",
+  quickStartTitle: "⚡ 3 שלבים פשוטים",
+  quickStartSteps: [
+    "🎯 שלב 1: פתור תרגיל חשבון ולחץ על המשושה עם התשובה בלוח",
+    "🗺️ שלב 2: תכנן מסלול למשושה היעד על ידי לחיצה על משושים",
+    "🐕 שלב 3: עבור כל דלת על ידי פתרון תרגיל כפל — וצבור גרגירים!",
+  ],
+  quickStartGo: "🎮 בואו נשחק!",
+
+  phaseLabels: ["מצא יעד", "תכנן", "צא לדרך"],
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import LanguageSwitch from "../LanguageSwitch";
 import type { GameActions } from "../useGame";
 import type { Locale } from "@/lib/engine/types";
@@ -14,6 +15,8 @@ export default function Welcome({
   actions: GameActions;
   locale: Locale;
 }) {
+  const [showQuickStart, setShowQuickStart] = useState(false);
+
   return (
     <div id="sw" className="screen active">
       <div
@@ -36,8 +39,34 @@ export default function Welcome({
       <div className="wsub">{t.welcomeSub}</div>
       <div className="wsub2">{t.welcomeSub2a}</div>
       <div className="wsub2">{t.welcomeSub2b}</div>
+      {showQuickStart && (
+        <div
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 16 }}
+          onClick={() => setShowQuickStart(false)}
+        >
+          <div
+            style={{ background: "white", borderRadius: 18, padding: "28px 24px", maxWidth: 380, width: "100%", boxShadow: "0 18px 55px rgba(0,0,0,.3)" }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h2 style={{ textAlign: "center", marginBottom: 16, color: "#78350F" }}>{t.quickStartTitle}</h2>
+            <ol style={{ paddingInlineStart: 22, lineHeight: 2.1, color: "#374151" }}>
+              {t.quickStartSteps.map((s, i) => <li key={i}>{s}</li>)}
+            </ol>
+            <button
+              className="btnbig"
+              style={{ width: "100%", marginTop: 20 }}
+              onClick={() => { setShowQuickStart(false); actions.goSetup(); }}
+            >
+              {t.quickStartGo}
+            </button>
+          </div>
+        </div>
+      )}
       <button className="btnbig" onClick={actions.goSetup}>
         {t.startGame}
+      </button>
+      <button className="btnout" onClick={() => setShowQuickStart(true)}>
+        {t.quickStartBtn}
       </button>
       <button className="btnout" onClick={actions.goInst}>
         {t.howToPlay}

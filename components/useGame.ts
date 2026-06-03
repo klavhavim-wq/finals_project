@@ -186,6 +186,10 @@ export function useGame(locale: Locale) {
     dispatch({ type: "SPECTATOR_BONUS", playerIdx });
   }, []);
 
+  const openPrimeHex = useCallback((hex: number) => {
+    dispatch({ type: "OPEN_PRIME_HEX", hex });
+  }, []);
+
   const goResults = useCallback(() => dispatch({ type: "SHOW_SCREEN", screen: "sresults" }), []);
 
   return {
@@ -220,6 +224,7 @@ export function useGame(locale: Locale) {
       openVideoMenu,
       goResults,
       awardSpectatorBonus,
+      openPrimeHex,
     },
   };
 }

@@ -69,7 +69,11 @@ export default function PlayerCards({ t, state }: { t: Dict; state: GameState })
               {i === state.cur ? "▶ " : ""}
               {p.name}
             </div>
-            {!coop && <div className="pchon">🦴{p.tokens}</div>}
+            {!coop && (
+              state.settings.freePlay
+                ? <div className="pchon" style={{ color: "#10B981" }}>{t.freeSolvedCount(p.solvedCount)}</div>
+                : <div className="pchon">🦴{p.tokens}</div>
+            )}
           </div>
           <div className="pcpos">{t.hexLabel(p.hex)}</div>
         </div>

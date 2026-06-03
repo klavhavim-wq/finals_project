@@ -17,6 +17,7 @@ export default function Setup({ t, actions }: { t: Dict; actions: GameActions })
   const [mc, setMc] = useState(true);
   const [rob, setRob] = useState(true);
   const [coop, setCoop] = useState(false);
+  const [freePlay, setFreePlay] = useState(false);
   const [winMode, setWinMode] = useState<WinMode>("rounds");
 
   const start = () => {
@@ -27,8 +28,9 @@ export default function Setup({ t, actions }: { t: Dict; actions: GameActions })
       hex: 1,
       errors: 0,
       errorLog: [],
+      solvedCount: 0,
     }));
-    const settings: Settings = { timer, mc, rob, winMode, coop };
+    const settings: Settings = { timer, mc, rob, winMode, coop, freePlay };
     actions.startGame(players, level, settings);
   };
 
@@ -123,6 +125,7 @@ export default function Setup({ t, actions }: { t: Dict; actions: GameActions })
         <Toggle label={t.optMc} checked={mc} onChange={setMc} />
         <Toggle label={t.optRob} checked={rob} onChange={setRob} />
         <Toggle label={t.optCoop} checked={coop} onChange={setCoop} />
+        <Toggle label={t.optFreePlay} checked={freePlay} onChange={setFreePlay} />
       </div>
 
       <div className="scard">

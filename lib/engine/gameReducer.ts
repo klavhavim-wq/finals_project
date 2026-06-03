@@ -316,6 +316,16 @@ function bankPoints(s: GameState): Player[] {
 
 /** Bank this turn's points and return next state up to (but not starting) a new turn. */
 function collect(s: GameState, samePlayer: boolean): GameState {
+  if (s.settings.freePlay) {
+    const players = s.players.map((p, i) =>
+      i === s.cur ? { ...p, solvedCount: p.solvedCount + s.path.length + 1 } : p
+    );
+    const base: GameState = { ...s, players, modal: null, timerRunning: false };
+    if (samePlayer) return { ...base, awaitNewTurn: true };
+    const next = (base.cur + 1) % base.players.length;
+    return { ...base, cur: next, awaitNewTurn: true };
+  }
+
   let players = s.players;
   let sharedTokens = s.sharedTokens;
   if (s.settings.coop) {
@@ -374,7 +384,7 @@ export function initState(locale: Locale): GameState {
     players: [],
     cur: 0,
     level: "med",
-    settings: { timer: true, mc: true, rob: true, winMode: "both", coop: false },
+    settings: { timer: true, mc: true, rob: true, winMode: "both", coop: false, freePlay: false },
     round: 0,
     sharedTokens: 0,
     phase: 0,
@@ -451,7 +461,8 @@ export type Action =
   | { type: "DO_ROB"; index: number }
   | { type: "OPEN_MODAL"; modal: GameState["modal"] }
   | { type: "CLOSE_MODAL" }
-  | { type: "SPECTATOR_BONUS"; playerIdx: number };
+  | { type: "SPECTATOR_BONUS"; playerIdx: number }
+  | { type: "OPEN_PRIME_HEX"; hex: number };
 
 function startNewTurnState(s: GameState, card: TargetCard, resetUsed: boolean): GameState {
   return {
@@ -506,7 +517,7 @@ export function reducer(state: GameState, action: Action): GameState {
       return {
         ...state,
         screen: "sg",
-        players: action.players.map(p => ({ ...p, errorLog: p.errorLog ?? [] })),
+        players: action.players.map(p => ({ ...p, errorLog: p.errorLog ?? [], solvedCount: p.solvedCount ?? 0 })),
         level: action.level,
         settings: action.settings,
         cur: 0,
@@ -752,6 +763,9 @@ export function reducer(state: GameState, action: Action): GameState {
 
     case "CLOSE_MODAL":
       return { ...state, modal: null };
+
+    case "OPEN_PRIME_HEX":
+      return { ...state, modal: { kind: "primeHex", hex: action.hex } };
 
     default:
       return state;

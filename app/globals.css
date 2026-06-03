@@ -105,9 +105,9 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .ghtimer.warn .tnum{color:#D97706}
 .ghtimer.warn{border-color:#FCD34D}
 .ghtimer.warn .tfill{background:#D97706}
-.ghtimer.urg .tnum{color:#DC2626}
-.ghtimer.urg{animation:tpulse 1.4s ease-in-out infinite;border-color:#FCA5A5;background:#FEF2F2}
-.ghtimer.urg .tfill{background:#EF4444}
+.ghtimer.urg .tnum{color:#B45309}
+.ghtimer.urg{animation:tpulse 1.4s ease-in-out infinite;border-color:#F97316;background:#FFF7ED}
+.ghtimer.urg .tfill{background:#F97316}
 @keyframes tpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 .ghbtn{background:none;border:2px solid #e5e7eb;border-radius:18px;padding:5px 12px;font-size:.82rem;cursor:pointer;font-weight:600;color:#6b7280;transition:all .15s}
 .ghbtn:hover{border-color:#d97706;color:#d97706}

@@ -69,6 +69,7 @@ export interface Settings {
   rob: boolean;
   winMode: WinMode;
   coop: boolean;
+  freePlay: boolean;
 }
 
 export interface Player {
@@ -78,6 +79,7 @@ export interface Player {
   hex: number;
   errors: number;
   errorLog: ErrorRecord[];
+  solvedCount: number;
 }
 
 export interface SessionRecord {
@@ -136,7 +138,8 @@ export type ModalState =
   | { kind: "confirmEnd" }
   | { kind: "settingsHelp" }
   | { kind: "video"; videoKey: string }
-  | { kind: "videoMenu" };
+  | { kind: "videoMenu" }
+  | { kind: "primeHex"; hex: number };
 
 export interface GameState {
   screen: Screen;

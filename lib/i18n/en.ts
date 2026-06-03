@@ -413,4 +413,24 @@ export const en: Dict = {
   spectatorAnswerFor: (name) => `${name} answers:`,
   spectatorCorrect: (name) => `+1 for ${name}! 🎉`,
   spectatorWrong: "❌ Wrong",
+
+  primeHexTitle: (n) => `🎲 Prime Hex — ${n}!`,
+  primeHexMsg: (n) => `<strong>${n}</strong> is a prime number — only divisible by 1 and itself!<br>That means a Twist card is waiting for you! 🎲`,
+  drawTwistAfterPrime: "🎲 Draw Twist Card!",
+
+  optFreePlay: "🎓 Free Play — count exercises (no scoring)",
+  freeSolvedCount: (n) => `✅ ${n}`,
+
+  p2CoopHint: "💡 Cooperative: all pellets go into the shared bank!",
+
+  quickStartBtn: "🚀 Quick Start!",
+  quickStartTitle: "⚡ 3 Simple Steps",
+  quickStartSteps: [
+    "🎯 Step 1: Solve a math problem and click the hex with the answer",
+    "🗺️ Step 2: Plan a route to the target hex by clicking hexes on the board",
+    "🐕 Step 3: Cross each door by solving a multiplication problem — and earn pellets!",
+  ],
+  quickStartGo: "🎮 Let's Play!",
+
+  phaseLabels: ["Find Target", "Plan", "Go!"],
 };

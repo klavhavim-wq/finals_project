@@ -212,17 +212,22 @@ export default function GameScreen({
             onPointerMove={onHandleMove}
             onPointerUp={onHandleUp}
           >
-            <div className="aphdots fp-dots">
-              {[1, 2, 3].map((i) => (
+            <div style={{ display: "flex", gap: 4, flex: 1 }}>
+              {([1, 2, 3] as const).map((i) => (
                 <div
                   key={i}
-                  className={
-                    "apdot" + (i < state.phase ? " done" : i === state.phase ? " cur" : "")
-                  }
-                />
+                  style={{
+                    flex: 1, textAlign: "center", fontSize: ".68rem",
+                    fontWeight: i === state.phase ? 800 : 500,
+                    background: i === state.phase ? "#FDE68A" : i < state.phase ? "#d1fae5" : "transparent",
+                    color: i === state.phase ? "#92400E" : i < state.phase ? "#065F46" : "#b45309",
+                    borderRadius: 6, padding: "2px 3px", transition: "all .2s",
+                  }}
+                >
+                  {PHASE_ICONS[i]} {t.phaseLabels[i - 1]}
+                </div>
               ))}
             </div>
-            <span className="fp-phase">{PHASE_ICONS[state.phase]}</span>
             {isDesktop && <span className="fp-grip">⠿</span>}
           </div>
           <div className="floatpanel-body">
