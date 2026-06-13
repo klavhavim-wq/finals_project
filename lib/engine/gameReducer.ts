@@ -1,13 +1,14 @@
 import {
-  BEG_CARDS,
-  boardMaxFor,
   DC,
+  FACTOR_SOLVE_BONUS,
+  FACTOR_TILE_BONUS,
   SPECIAL_BY_ID,
   SPECIAL_POOLS,
-  TARGET_CARDS,
+  factorBonusActive,
+  targetPoolFor,
   timerTotalFor,
 } from "./constants";
-import { edgeColor, hexSym, hNeighbors, initEdgeColors, isPrime } from "./hexgrid";
+import { edgeColor, hasFactorPair, hexSym, hNeighbors, initEdgeColors, isPrime } from "./hexgrid";
 import type {
   CardType,
   Door,
@@ -30,9 +31,8 @@ export function pickTargetCard(
   usedCards: number[],
   rand: Rand = Math.random
 ): { card: TargetCard; resetUsed: boolean } {
-  // Each level's targets must land on its (smaller) board, so cap answers at the board max.
-  const max = boardMaxFor(level);
-  const pool = (level === "beg" ? BEG_CARDS : TARGET_CARDS).filter((c) => c.ans <= max);
+  // Each level has its own multiplication target pool, already sized to its board.
+  const pool = targetPoolFor(level);
   let avail = pool.filter((c) => !usedCards.includes(c.id));
   let resetUsed = false;
   if (!avail.length) {
@@ -425,6 +425,8 @@ export function initState(locale: Locale): GameState {
     winnerIdx: null,
     coopWin: false,
     awaitNewTurn: false,
+    tourActive: false,
+    tourStep: 0,
   };
 }
 
@@ -469,7 +471,12 @@ export type Action =
   | { type: "OPEN_MODAL"; modal: GameState["modal"] }
   | { type: "CLOSE_MODAL" }
   | { type: "SPECTATOR_BONUS"; playerIdx: number }
-  | { type: "OPEN_PRIME_HEX"; hex: number };
+  | { type: "OPEN_PRIME_HEX"; hex: number }
+  | { type: "FACTOR_SOLVED" }
+  | { type: "FACTOR_SKIP" }
+  | { type: "TOUR_START" }
+  | { type: "TOUR_SET"; step: number }
+  | { type: "TOUR_END" };
 
 function startNewTurnState(s: GameState, card: TargetCard, resetUsed: boolean): GameState {
   return {
@@ -780,6 +787,46 @@ export function reducer(state: GameState, action: Action): GameState {
     case "OPEN_PRIME_HEX":
       return { ...state, modal: { kind: "primeHex", hex: action.hex } };
 
+    case "FACTOR_SOLVED": {
+      if (state.modal?.kind !== "factor") return state;
+      const turnPts = state.turnPts + FACTOR_SOLVE_BONUS;
+      return {
+        ...state,
+        turnPts,
+        modal: {
+          kind: "arrival",
+          hex: state.modal.hex,
+          turnPts,
+          sym: state.modal.sym,
+          factorTiles: state.modal.factorTiles,
+        },
+      };
+    }
+
+    case "FACTOR_SKIP": {
+      if (state.modal?.kind !== "factor") return state;
+      return {
+        ...state,
+        modal: {
+          kind: "arrival",
+          hex: state.modal.hex,
+          turnPts: state.turnPts,
+          sym: state.modal.sym,
+          factorTiles: state.modal.factorTiles,
+        },
+      };
+    }
+
+    case "TOUR_START":
+      return { ...state, tourActive: true, tourStep: 0 };
+
+    case "TOUR_SET":
+      return { ...state, tourStep: action.step };
+
+    case "TOUR_END":
+      // Leave the sample game and return to this level's setup screen.
+      return { ...state, tourActive: false, tourStep: 0, modal: null, timerRunning: false, screen: "ss" };
+
     default:
       return state;
   }
@@ -820,12 +867,19 @@ function commitStep(state: GameState): GameState {
   };
   if (movedHex === state.targetHex || stepIdx >= state.path.length) {
     const hex = state.targetHex!;
-    return {
-      ...base,
-      timerRunning: false,
-      extraTurn: false,
-      modal: { kind: "arrival", hex, turnPts: base.turnPts, sym: hexSym(hex) },
-    };
+    // Route factor-tile bonus: reward steps taken on tiles that divide the target.
+    let turnPts = base.turnPts;
+    let factorTiles = 0;
+    if (factorBonusActive(state.level)) {
+      factorTiles = state.path.filter((h) => h !== hex && h >= 2 && hex % h === 0).length;
+      turnPts += factorTiles * FACTOR_TILE_BONUS;
+    }
+    const common: GameState = { ...base, turnPts, timerRunning: false, extraTurn: false };
+    // Composite targets get an optional "break it into factors" challenge first.
+    if (factorBonusActive(state.level) && hasFactorPair(hex)) {
+      return { ...common, modal: { kind: "factor", hex, turnPts, sym: hexSym(hex), factorTiles } };
+    }
+    return { ...common, modal: { kind: "arrival", hex, turnPts, sym: hexSym(hex), factorTiles } };
   }
   return base;
 }

@@ -21,14 +21,15 @@ export default function Setup({
   const [names, setNames] = useState<string[]>(["", "", "", ""]);
   const [timer, setTimer] = useState(true);
   const [mc, setMc] = useState(true);
-  const [rob, setRob] = useState(true);
+  // Steal defaults off for Beginner (gentlest for the youngest players), on elsewhere.
+  const [rob, setRob] = useState(level !== "beg");
   const [coop, setCoop] = useState(false);
   const [freePlay, setFreePlay] = useState(false);
   const [winMode, setWinMode] = useState<WinMode>("rounds");
 
   // Which options are relevant for this level.
   const showMc = level === "beg" || level === "med"; // multiple-choice only applies to these levels
-  const showRob = level !== "beg"; // no rob for Beginner — too competitive for the youngest players
+  const showRob = true; // every level can toggle steal; Beginner defaults it off
   const showCoop = true; // cooperative play is available on every level, including Beginner
   const showWinMode = level !== "beg";
 
@@ -67,6 +68,11 @@ export default function Setup({
         </div>
       </div>
 
+      <div className="lvlactions">
+        <button className="btnbig demo-cta" onClick={() => actions.startDemo(level)}>
+          {t.demoGameBtn}
+        </button>
+      </div>
       <div className="lvlactions">
         <button className="btnout" onClick={() => actions.goSimpleGuide(level)}>
           {t.howToPlay}

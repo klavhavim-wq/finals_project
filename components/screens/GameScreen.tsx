@@ -14,7 +14,7 @@ function DoorLegend({ t, state }: { t: Dict; state: GameState }) {
   const doors = LVL_DOORS[state.level];
   const unique = [...new Set(doors)];
   return (
-    <div style={{
+    <div id="door-legend" style={{
       padding: "10px 12px", background: "white",
       borderRadius: 14, boxShadow: "0 2px 8px rgba(0,0,0,.07)",
       marginTop: 8,

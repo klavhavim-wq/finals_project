@@ -83,6 +83,20 @@ export function isPrime(n: number): boolean {
   return true;
 }
 
+/** Proper factor tiles of n that sit on the board: divisors d with 2 ≤ d < n. */
+export function factorTilesOf(n: number, boardMax: number): number[] {
+  const out: number[] = [];
+  for (let d = 2; d < n && d <= boardMax; d++) {
+    if (n % d === 0) out.push(d);
+  }
+  return out;
+}
+
+/** Whether n can be broken into a factor pair a×b with a,b ≥ 2 (i.e. composite). */
+export function hasFactorPair(n: number): boolean {
+  return n >= 4 && !isPrime(n);
+}
+
 export function hexSym(n: number): string {
   if (n % 10 === 0) return "💎";
   if (n % 10 === 5) return "🚧";

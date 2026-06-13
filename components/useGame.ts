@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import { boardMaxFor, DC } from "@/lib/engine/constants";
+import { boardMaxFor, DC, PCOLORS } from "@/lib/engine/constants";
+import { getDict } from "@/lib/i18n";
 import {
   initState,
   makeChoices,
@@ -93,6 +94,36 @@ export function useGame(locale: Locale) {
     },
     []
   );
+
+  // Guided demo: spin up a gentle single-player sample game, then open the tour overlay.
+  const startDemo = useCallback(
+    (level: Level) => {
+      const players: Player[] = [
+        {
+          name: getDict(locale).demoPlayerName,
+          color: PCOLORS[0],
+          tokens: 0,
+          hex: 1,
+          errors: 0,
+          errorLog: [],
+          solvedCount: 0,
+        },
+      ];
+      const settings: Settings = {
+        timer: false,
+        mc: level === "beg" || level === "med",
+        rob: false,
+        winMode: "rounds",
+        coop: false,
+        freePlay: false,
+      };
+      dispatch({ type: "START_GAME", players, level, settings });
+      dispatch({ type: "TOUR_START" });
+    },
+    [locale]
+  );
+  const tourSet = useCallback((step: number) => dispatch({ type: "TOUR_SET", step }), []);
+  const tourEnd = useCallback(() => dispatch({ type: "TOUR_END" }), []);
 
   const hexClick = useCallback((n: number) => {
     const s = stateRef.current;
@@ -195,6 +226,9 @@ export function useGame(locale: Locale) {
     dispatch({ type: "OPEN_PRIME_HEX", hex });
   }, []);
 
+  const factorSolved = useCallback(() => dispatch({ type: "FACTOR_SOLVED" }), []);
+  const factorSkip = useCallback(() => dispatch({ type: "FACTOR_SKIP" }), []);
+
   const goResults = useCallback(() => dispatch({ type: "SHOW_SCREEN", screen: "sresults" }), []);
 
   return {
@@ -208,6 +242,9 @@ export function useGame(locale: Locale) {
       goSetup,
       goSetupLevel,
       startGame,
+      startDemo,
+      tourSet,
+      tourEnd,
       startP1,
       hexClick,
       startP2,
@@ -231,6 +268,8 @@ export function useGame(locale: Locale) {
       goResults,
       awardSpectatorBonus,
       openPrimeHex,
+      factorSolved,
+      factorSkip,
     },
   };
 }

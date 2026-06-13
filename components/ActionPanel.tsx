@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import RichText from "./RichText";
-import { DC } from "@/lib/engine/constants";
+import { DC, factorBonusActive } from "@/lib/engine/constants";
 import type { GameState, Level } from "@/lib/engine/types";
 import type { GameActions } from "./useGame";
 import type { Dict } from "@/lib/i18n";
@@ -162,6 +162,12 @@ function Phase2({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
   return (
     <div>
       <RichText className="aphint" html={t.p2Hint(state.targetHex ?? 0)} />
+      {factorBonusActive(state.level) && state.targetHex !== null && (
+        <RichText
+          html={t.factorHuntHint(state.targetHex)}
+          style={{ fontSize: ".8rem", color: "#92400E", background: "#FFFBEB", padding: "6px 10px", borderRadius: 8, margin: "6px 0", border: "1px dashed #D97706" }}
+        />
+      )}
       {steps === 0 ? (
         <div style={{ fontSize: ".85rem", color: "#9ca3af", padding: 10, textAlign: "center" }}>
           {t.p2Empty}

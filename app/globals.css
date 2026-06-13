@@ -59,6 +59,26 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .ibtn{background:var(--pu);color:white;border:none;border-radius:18px;padding:9px 22px;font-size:.95rem;font-weight:700;cursor:pointer}
 .iback{background:none;border:2px solid #e5e7eb;border-radius:18px;padding:9px 22px;font-size:.95rem;font-weight:600;cursor:pointer;color:#6b7280}
 
+/* ── GUIDED DEMO TOUR ── */
+.tour-layer{position:fixed;inset:0;z-index:240}
+.tour-blocker{position:fixed;inset:0}
+.tour-spot{position:fixed;border-radius:18px;pointer-events:none;
+  box-shadow:0 0 0 4px #FDE68A, 0 0 0 9999px rgba(15,23,42,.62), 0 0 26px 8px rgba(253,224,138,.6);
+  animation:tourGlow 1.6s ease-in-out infinite}
+@keyframes tourGlow{0%,100%{box-shadow:0 0 0 4px #FDE68A,0 0 0 9999px rgba(15,23,42,.62),0 0 26px 8px rgba(253,224,138,.55)}
+  50%{box-shadow:0 0 0 5px #FBBF24,0 0 0 9999px rgba(15,23,42,.62),0 0 34px 12px rgba(251,191,36,.8)}}
+.tour-card{position:fixed;background:white;border-radius:22px;padding:22px 24px 16px;
+  width:calc(100% - 32px);max-width:430px;max-height:78vh;overflow-y:auto;
+  box-shadow:0 18px 55px rgba(0,0,0,.35);text-align:center;animation:popIn .25s ease}
+.tour-close{position:absolute;top:10px;inset-inline-end:12px;background:none;border:none;
+  font-size:1.1rem;color:#9ca3af;cursor:pointer;line-height:1}
+.tour-ico{font-size:56px;margin-bottom:6px;animation:cbob 2.4s ease-in-out infinite}
+.tour-titl{font-size:1.3rem;font-weight:800;color:#1e1b4b;margin-bottom:7px}
+.tour-text{font-size:1rem;color:#374151;line-height:1.65;margin-bottom:16px}
+.tour-text [dir="ltr"]{unicode-bidi:bidi-override}
+.tour-nav{display:flex;gap:10px;justify-content:space-between;align-items:center}
+.demo-cta{background:linear-gradient(135deg,#8B5CF6,#EC4899)}
+
 /* ── SETUP ── */
 #ss{align-items:center;padding:22px 14px;gap:14px;overflow-y:auto;background:var(--honey)}
 .stitle{font-size:1.65rem;font-weight:800;color:#78350F}

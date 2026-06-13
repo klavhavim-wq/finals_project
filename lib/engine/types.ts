@@ -122,7 +122,8 @@ export type EffResult =
 export type ModalState =
   | { kind: "reveal"; ans: number }
   | { kind: "found"; hex: number; sym: string }
-  | { kind: "arrival"; hex: number; turnPts: number; sym: string }
+  | { kind: "arrival"; hex: number; turnPts: number; sym: string; factorTiles: number }
+  | { kind: "factor"; hex: number; turnPts: number; sym: string; factorTiles: number }
   | {
       kind: "card";
       cardType: CardType;
@@ -202,4 +203,8 @@ export interface GameState {
 
   /** set when the game should begin a fresh turn (engine asks the host to pick a card) */
   awaitNewTurn: boolean;
+
+  /** guided demo tour: overlay of step-by-step popups over a live sample game */
+  tourActive: boolean;
+  tourStep: number;
 }

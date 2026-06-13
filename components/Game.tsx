@@ -8,6 +8,7 @@ import Setup from "./screens/Setup";
 import GameScreen from "./screens/GameScreen";
 import Win from "./screens/Win";
 import Results from "./screens/Results";
+import GuidedTour from "./GuidedTour";
 import { getDict } from "@/lib/i18n";
 import type { Locale } from "@/lib/engine/types";
 
@@ -38,6 +39,9 @@ export default function Game({ locale }: { locale: Locale }) {
           mode={state.instMode}
           level={state.instLevel}
         />
+      )}
+      {state.tourActive && state.screen === "sg" && (
+        <GuidedTour t={t} state={state} actions={actions} />
       )}
     </div>
   );

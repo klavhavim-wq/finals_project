@@ -9,6 +9,18 @@ export interface InstPage {
   x: string;
 }
 
+/** Which area of the live game a tour step spotlights. */
+export type TourTarget = "board" | "panel" | "sidebar" | "doors" | "header" | "center";
+
+export interface TourStep {
+  /** big icon */
+  i: string;
+  t: string;
+  /** rich HTML body */
+  x: string;
+  target: TourTarget;
+}
+
 export interface LabelDesc {
   icon: string;
   name: string;
@@ -44,6 +56,14 @@ export interface Dict {
   back: string;
   next: string;
   gotItDone: string;
+
+  // Guided demo tour
+  /** step-by-step popups shown over a live sample game, tailored per level */
+  tour: (level: Level) => TourStep[];
+  demoGameBtn: string;
+  demoPlayerName: string;
+  tourFinish: string;
+  tourExit: string;
 
   // Setup
   setupTitle: string;
@@ -181,6 +201,16 @@ export interface Dict {
   primeHexTitle: (n: number) => string;
   primeHexMsg: (n: number) => string;
   drawTwistAfterPrime: string;
+
+  // Factoring add-on (Advanced level and up)
+  factorTitle: (n: number) => string;
+  factorPrompt: (n: number) => string;
+  factorCheck: string;
+  factorSkipBtn: string;
+  factorCorrect: (a: number, b: number, n: number, bonus: number) => string;
+  factorWrong: (n: number) => string;
+  factorTilesBonus: (count: number, pts: number) => string;
+  factorHuntHint: (target: number) => string;
 
   // Free play mode
   optFreePlay: string;

@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import RichText from "./RichText";
-import { SPECIAL_BY_ID } from "@/lib/engine/constants";
+import { FACTOR_SOLVE_BONUS, FACTOR_TILE_BONUS, SPECIAL_BY_ID } from "@/lib/engine/constants";
 import type { GameState, ModalState } from "@/lib/engine/types";
 import type { GameActions } from "./useGame";
 import type { Dict } from "@/lib/i18n";
@@ -118,6 +119,13 @@ function Body({
         <>
           <h2>{t.arrivalTitle(modal.hex)}</h2>
           <RichText as="p" html={t.pelletsThisTurn(modal.turnPts)} />
+          {modal.factorTiles > 0 && (
+            <RichText
+              as="p"
+              style={{ textAlign: "center", color: "#92400E", fontSize: ".88rem", margin: "2px 0 6px" }}
+              html={t.factorTilesBonus(modal.factorTiles, modal.factorTiles * FACTOR_TILE_BONUS)}
+            />
+          )}
           {modal.sym === "🦹" && state.settings.coop && (
             <p style={{ textAlign: "center", color: "#6b7280", fontSize: ".9rem", margin: "4px 0 8px" }}>
               {t.coopNoRob}
@@ -315,5 +323,88 @@ function Body({
           </div>
         </>
       );
+
+    case "factor":
+      return <FactorChallenge t={t} n={modal.hex} actions={actions} />;
   }
+}
+
+function FactorChallenge({
+  t,
+  n,
+  actions,
+}: {
+  t: Dict;
+  n: number;
+  actions: GameActions;
+}) {
+  const [a, setA] = useState("");
+  const [b, setB] = useState("");
+  const [feedback, setFeedback] = useState<"ok" | "no" | null>(null);
+  const [pair, setPair] = useState<{ a: number; b: number } | null>(null);
+
+  const check = () => {
+    const av = parseInt(a, 10);
+    const bv = parseInt(b, 10);
+    if (Number.isNaN(av) || Number.isNaN(bv)) return;
+    if (av >= 2 && bv >= 2 && av * bv === n) {
+      setPair({ a: av, b: bv });
+      setFeedback("ok");
+      setTimeout(() => actions.factorSolved(), 1100);
+    } else {
+      setFeedback("no");
+      setTimeout(() => setFeedback(null), 1200);
+    }
+  };
+
+  return (
+    <>
+      <h2>{t.factorTitle(n)}</h2>
+      {feedback === "ok" && pair ? (
+        <RichText
+          as="p"
+          style={{ textAlign: "center", color: "#10B981", fontWeight: 700, fontSize: "1.05rem", margin: "10px 0" }}
+          html={t.factorCorrect(pair.a, pair.b, n, FACTOR_SOLVE_BONUS)}
+        />
+      ) : (
+        <>
+          <RichText as="p" html={t.factorPrompt(n)} />
+          <div
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, margin: "12px 0", direction: "ltr" }}
+          >
+            <input
+              type="number"
+              value={a}
+              autoFocus
+              placeholder="?"
+              onChange={(e) => setA(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") check(); }}
+              style={{ width: 64, textAlign: "center", fontSize: "1.15rem", padding: "8px 6px", borderRadius: 10, border: "2px solid #d1d5db" }}
+            />
+            <span style={{ fontSize: "1.3rem", fontWeight: 800, color: "#6b7280" }}>×</span>
+            <input
+              type="number"
+              value={b}
+              placeholder="?"
+              onChange={(e) => setB(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") check(); }}
+              style={{ width: 64, textAlign: "center", fontSize: "1.15rem", padding: "8px 6px", borderRadius: 10, border: "2px solid #d1d5db" }}
+            />
+            <span style={{ fontSize: "1.3rem", fontWeight: 800, color: "#6b7280" }}>= {n}</span>
+          </div>
+          {feedback === "no" && (
+            <div className="wrongbox">{t.factorWrong(n)}</div>
+          )}
+          <div className="macts" style={{ flexWrap: "wrap", gap: 7 }}>
+            <button className="abt abg" style={{ padding: "9px 18px" }} onClick={check}>
+              {t.factorCheck}
+            </button>
+            <button className="abt abgr" style={{ padding: "9px 18px" }} onClick={actions.factorSkip}>
+              {t.factorSkipBtn}
+            </button>
+          </div>
+        </>
+      )}
+    </>
+  );
 }

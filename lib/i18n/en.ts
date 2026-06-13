@@ -194,7 +194,7 @@ export const en: Dict = {
        {
          i: "⏱",
          t: "Time Limits",
-         x: 'Each difficulty level has a time limit per turn:<br><br>🐾⭐🌟 <strong>Beginner / Medium / Advanced</strong> — 3 minutes<br>🏆 <strong>Champion</strong> — 2 minutes<br>⚡ <strong>Hero</strong> — 1:30 minutes<br><br>Didn\'t finish in time? You stay in place, <strong>pellets earned so far are saved!</strong> 🦴<br><br>💡 You can turn off the timer in the settings.',
+         x: 'Each difficulty level has a time limit per turn:<br><br>🐾⭐🌟 <strong>Beginner / Medium / Advanced</strong> — 3 minutes<br>🏆 <strong>Champion</strong> — 2 minutes<br>⚡ <strong>Hero</strong> — <span dir="ltr">1:30</span> minutes<br><br>Did not finish in time? You stay in place, <strong>pellets earned so far are saved!</strong> 🦴<br><br>💡 You can turn off the timer in the settings.',
        },
        {
          i: "🏆",
@@ -205,6 +205,11 @@ export const en: Dict = {
          i: "✨",
          t: "Special Symbols on the Board",
          x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0"><img src="/crop-board-en.png" alt="Board symbols" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center;margin:-4px 0 10px">📸 Notice the symbols on the hexes!</div><strong>💎 Round numbers (10, 20, 30...)</strong><br>Landed here? Draw a Bonus card! 🎁<br>You might get: double pellets / extra turn / +10 pellets<br><br><strong>🚧 Numbers ending in 5 (15, 25, 35...)</strong><br>Draw a Limit card — a challenge for collecting!<br>Example: "Your pellets must be even"<br><br><strong>🦹 Numbers ending in 6 (16, 26, 36...)</strong><br>Steal! ✋ You can steal pellets from a rival!<br><br><strong>🎲 Prime numbers (2, 3, 5, 7, 11, 13...)</strong><br>A number that can only be divided by 1 and itself!<br>Draw a Twist card — the rules change! 🎲',
+       },
+       {
+         i: "🧩",
+         t: "Factor Hunt",
+         x: '<strong>🧩 Factor Hunt — Advanced level and up</strong><br><br>With the bigger numbers, when you reach the target you get a fun challenge: break it into two numbers that multiply to it — for example <span dir="ltr">24 = 4 × 6</span> or <span dir="ltr">24 = 3 × 8</span>.<br>Solved it? +5 pellet bonus! 🦴 <em>(You can also skip.)</em><br><br>And while planning your route — tiles with a <strong>gold ring</strong> are factors of the target. Every factor tile you step through earns +2 extra pellets! 🐾',
        },
        {
          i: "⚙️",
@@ -230,10 +235,10 @@ export const en: Dict = {
       x: '<strong>1.</strong> Get an exercise and tap the right number on the board. 🔢<br><br><strong>2.</strong> Build a path from the dog to that number. 🗺️<br><br><strong>3.</strong> At every step solve a little exercise and move — each step earns pellets! 🦴<br><br>Made a mistake? Try again, and there\'s a hint too 💡',
     };
     const LV: Record<string, string> = {
-      beg: '🐾 <strong>Beginner</strong> — basic multiplication (up to 4×4). A short, easy board with numbers up to 40. Perfect to start! 😊',
-      med: '⭐ <strong>Intermediate</strong> — multiplication up to 6. Board with numbers up to 60.',
-      adv: '🌟 <strong>Advanced</strong> — multiplication up to 8. Board with numbers up to 80.',
-      champ: '🏆 <strong>Champion</strong> — multiplication 7–9. Board with numbers up to 90.',
+      beg: '🐾 <strong>Beginner</strong> — the times tables up to 40. A short, friendly board with numbers up to 40. Perfect to start! 😊',
+      med: '⭐ <strong>Intermediate</strong> — times tables up to 60. Board with numbers up to 60.',
+      adv: '🌟 <strong>Advanced</strong> — times tables up to 90. Board with numbers up to 90.',
+      champ: '🏆 <strong>Champion</strong> — times tables up to 100. Board with numbers up to 100.',
       hero: '⚡ <strong>Hero</strong> — long multiplication (two-digit × one-digit). The full board, up to 100.',
     };
     const levelPage = level
@@ -247,11 +252,113 @@ export const en: Dict = {
           t: "Five Levels",
           x: 'The game has 5 levels, from easy to hard:<br><br>🐾 Beginner · ⭐ Intermediate · 🌟 Advanced · 🏆 Champion · ⚡ Hero<br><br>Pick the level that fits you — each level has its own exercises and board. You can always switch! 😊',
         };
-    return [goal, steps, levelPage];
+    const pages = [goal, steps, levelPage];
+    if (level === "adv" || level === "champ" || level === "hero") {
+      pages.push({
+        i: "🧩",
+        t: "Factor Hunt",
+        x: 'Higher levels have a special bonus! 🧩<br><br>When you reach the target number, you can break it into two numbers that multiply to it (e.g. <span dir="ltr">24 = 4 × 6</span>) — and earn extra pellets! 🦴<br><br>Stepping on tiles with a gold ring (factors of the target) also earns a bonus.',
+      });
+    }
+    return pages;
   },
   back: "← Back",
   next: "Next →",
   gotItDone: "Got it! ✅",
+
+  tour: (level) => {
+    const mathByLevel: Record<string, string> = {
+      beg: "small multiplication, up to 4×4",
+      med: "multiplication up to 6",
+      adv: "multiplication up to 8",
+      champ: "multiplication 7–9",
+      hero: "long multiplication — two-digit × one-digit",
+    };
+    const topNum: Record<string, number> = { beg: 16, med: 36, adv: 64, champ: 81, hero: 100 };
+    const timeByLevel: Record<string, string> = {
+      beg: "3 minutes",
+      med: "3 minutes",
+      adv: "3 minutes",
+      champ: "2 minutes",
+      hero: "a minute and a half",
+    };
+    const answerStyle =
+      level === "beg" || level === "med"
+        ? "the answers appear as buttons — tap the right one."
+        : 'type your answer and press "Confirm".';
+    return [
+      {
+        i: "🐕",
+        t: "Hi! Let's learn to play",
+        target: "center",
+        x: 'This is a <strong>demo game</strong> — we\'ll go through every part of the board, the options, and how to play, step by step. 😊<br><br>Tap <strong>"Next"</strong> to continue, or ✕ to leave any time.',
+      },
+      {
+        i: "📋",
+        t: "The top bar",
+        target: "header",
+        x: `At the top you can always see:<br><br>👦 <strong>Whose turn it is</strong> — the name of the current player.<br>⏱ <strong>The clock</strong> — appears here once you start moving, showing the time left in the turn (this level: ${timeByLevel[level]}).<br>📖 <strong>Help</strong> — opens the guide any time.<br>✖ <strong>Exit</strong> — ends the game.`,
+      },
+      {
+        i: "🗺️",
+        t: "This is the game board",
+        target: "board",
+        x: `Every hex is a number. The dog 🐕 starts at the bottom, and the goal is to travel across the board and collect as many pellets as you can 🦴.<br><br>On this level the numbers go up to <strong>${topNum[level]}</strong>. You can drag with the mouse to move the board and see all of it.`,
+      },
+      {
+        i: "🎯",
+        t: "Step 1 — Find the target",
+        target: "panel",
+        x: `Here you get an exercise (${mathByLevel[level]}).<br><br>Solve it and tap the hex with the answer on the board. 🔢<br><br>Need help? There's a <strong>💜 Hint</strong> button, you can <strong>Show the answer</strong>, and there's a <strong>times-table</strong> helper too.`,
+      },
+      {
+        i: "🚪",
+        t: "The colored doors",
+        target: "doors",
+        x: 'The colored lines between hexes are <strong>doors</strong> 🚪.<br><br>Each color is a different food and a different exercise. Here you can see which doors this level has and how many pellets each is worth — <strong>the harder the door, the more pellets you earn!</strong> 🦴',
+      },
+      {
+        i: "🐾",
+        t: "Step 2 — Build the path",
+        target: "board",
+        x: 'Once you found the target, build a route from the dog to it — tap hex after hex. Each hex must touch the previous one.<br><br>The color of the line you cross decides which exercise will be there. 🗺️',
+      },
+      {
+        i: "🧠",
+        t: "Strategy & confirming",
+        target: "panel",
+        x: 'Here you think it through: 🤔<br><br>• A short route = fewer exercises, but fewer pellets.<br>• Hard doors = more pellets, but harder.<br>Pick the path that suits you!<br><br>Ready? Press <strong>✅ Confirm route</strong>. Want to change it? <strong>🗑 Clear</strong> and start over.',
+      },
+      {
+        i: "🦴",
+        t: "Step 3 — Set off!",
+        target: "panel",
+        x: `Now you walk, and the clock starts ticking ⏱.<br><br>At each step you solve the door's exercise — ${answerStyle} Correct? You move forward and collect pellets! 🦴<br><br>Mistake? Try again or ask for a hint 💡. You can also give up — you lose the turn but keep what you already collected.`,
+      },
+      {
+        i: "✨",
+        t: "Surprise tiles",
+        target: "board",
+        x: `Some hexes have special symbols:<br><br>💎 <strong>Bonus</strong> — a gift! (double pellets / extra turn and more)<br>🚧 <strong>Challenge</strong> — a small rule to collect<br>🎲 <strong>Surprise</strong> — the rules change!<br>🦹 <strong>Robber</strong> — steal pellets from a rival${level === "beg" ? " (on Beginner you can turn it off in settings)" : ""}`,
+      },
+      {
+        i: "🏆",
+        t: "Score & who wins",
+        target: "sidebar",
+        x: 'On the side you can always see how many pellets each player has 🦴, and the doors-and-points table.<br><br>Whoever collects the most pellets — wins! 🎉',
+      },
+      {
+        i: "🎉",
+        t: "That's it, you're ready!",
+        target: "center",
+        x: 'Now it\'s your turn — let\'s really play! 🐕🦴',
+      },
+    ];
+  },
+  demoGameBtn: "🎬 Demo game",
+  demoPlayerName: "🐕 Demo",
+  tourFinish: "🎮 Let's play!",
+  tourExit: "Skip the demo",
 
   setupTitle: "⚙️ Game Settings",
   howManyPlayers: "👥 How many players?",
@@ -259,10 +366,10 @@ export const en: Dict = {
   playerPlaceholder: (dog, i) => `${dog} Player ${i + 1}...`,
   difficulty: "📊 Difficulty",
   levels: {
-    beg: { icon: "🐾", name: "Beginner", desc: "Basic multiplication | (2–4)×(2–4)" },
-    med: { icon: "⭐", name: "Intermediate", desc: "Tables up to 6 | (3–6)×(3–6)" },
-    adv: { icon: "🌟", name: "Advanced", desc: "Tables up to 8 | (5–8)×(5–8)" },
-    champ: { icon: "🏆", name: "Champion", desc: "Hard tables 7–9 | 2 min" },
+    beg: { icon: "🐾", name: "Beginner", desc: "Times tables up to 40" },
+    med: { icon: "⭐", name: "Intermediate", desc: "Times tables up to 60" },
+    adv: { icon: "🌟", name: "Advanced", desc: "Times tables up to 90" },
+    champ: { icon: "🏆", name: "Champion", desc: "Times tables up to 100 | 2 min" },
     hero: { icon: "⚡", name: "Hero", desc: "Long multiplication | (11–19)×(2–9) | 1:30 min" },
   },
   options: "🔧 Options",
@@ -453,8 +560,21 @@ export const en: Dict = {
   spectatorWrong: "❌ Wrong",
 
   primeHexTitle: (n) => `🎲 Prime Hex — ${n}!`,
-  primeHexMsg: (n) => `<strong>${n}</strong> is a prime number — only divisible by 1 and itself!<br>That means a Twist card is waiting for you! 🎲`,
+  primeHexMsg: (n) => `<strong>${n}</strong> is a prime number — only divisible by 1 and itself, and it can't be broken into factors!<br>That means a Twist card is waiting for you! 🎲`,
   drawTwistAfterPrime: "🎲 Draw Twist Card!",
+
+  factorTitle: (n) => `🧩 Break ${n} into factors!`,
+  factorPrompt: (n) =>
+    `Find two numbers (each 2 or more) that multiply to <strong>${n}</strong>.<br>Get it right for a bonus! 🦴`,
+  factorCheck: "✅ Check",
+  factorSkipBtn: "Skip",
+  factorCorrect: (a, b, n, bonus) =>
+    `🎉 Nice! <span dir="ltr">${a} × ${b} = ${n}</span> — bonus +${bonus} 🦴`,
+  factorWrong: (n) => `Almost! Two numbers that multiply to ${n}. Try again 😊`,
+  factorTilesBonus: (count, pts) =>
+    `🧩 You stepped on ${count} factor tile(s) of the target — bonus +${pts} 🦴`,
+  factorHuntHint: (target) =>
+    `🧩 The gold-outlined tiles are factors of ${target} — walk on them for a bonus!`,
 
   optFreePlay: "🎓 Free Play — count exercises (no scoring)",
   freeSolvedCount: (n) => `✅ ${n}`,

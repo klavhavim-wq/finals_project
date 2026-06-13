@@ -1,9 +1,10 @@
 "use client";
 
-import { boardMaxFor, DC, DOGS, PCOLORS, SFILL } from "@/lib/engine/constants";
+import { boardMaxFor, DC, DOGS, factorBonusActive, PCOLORS, SFILL } from "@/lib/engine/constants";
 import {
   R,
   hCenter,
+  factorTilesOf,
   hexBaseFill,
   hexSym,
   hNeighbors,
@@ -44,6 +45,16 @@ export default function HexBoard({
   }
 
   const boardMax = boardMaxFor(state.level);
+
+  // Factor-hunt highlight: gold ring on tiles that are factors of the target.
+  const factorSet = new Set<number>();
+  if (
+    factorBonusActive(state.level) &&
+    state.targetHex != null &&
+    (state.phase === 2 || state.phase === 3)
+  ) {
+    factorTilesOf(state.targetHex, boardMax).forEach((d) => factorSet.add(d));
+  }
 
   const hexes = [];
   for (let n = 1; n <= boardMax; n++) {
@@ -92,6 +103,17 @@ export default function HexBoard({
       }
     }
 
+    const factorRing = factorSet.has(n)
+      ? v
+          .map(
+            (p) =>
+              (cx + (p.x - cx) * 0.64).toFixed(1) +
+              "," +
+              (cy + (p.y - cy) * 0.64).toFixed(1)
+          )
+          .join(" ")
+      : null;
+
     hexes.push(
       <g
         key={n}
@@ -115,6 +137,16 @@ export default function HexBoard({
           }
         />
         {edges}
+        {factorRing && (
+          <polygon
+            points={factorRing}
+            fill="none"
+            stroke="#D97706"
+            strokeWidth={2}
+            strokeDasharray="4 3"
+            pointerEvents="none"
+          />
+        )}
         <text
           x={cx.toFixed(1)}
           y={(cy - (sym ? 6 : 0)).toFixed(1)}

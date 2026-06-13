@@ -42,11 +42,11 @@ export const LVL_DOORS: Record<Level, DoorKey[]> = {
  * instead of always spanning 1–100. Width stays 10 columns; rows scale.
  */
 export const BOARD_MAX: Record<Level, number> = {
-  beg: 40,
-  med: 60,
-  adv: 80,
-  champ: 90,
-  hero: 100,
+  beg: 40, // full times tables, products up to 40
+  med: 60, // full times tables, products up to 60
+  adv: 90, // full times tables, products up to 90
+  champ: 100, // full times tables, products up to 100
+  hero: 100, // long multiplication, up to 100
 };
 
 export function boardMaxFor(level: Level): number {
@@ -58,81 +58,85 @@ export function boardRowsFor(level: Level): number {
   return Math.ceil(BOARD_MAX[level] / 10);
 }
 
-export const TARGET_CARDS: TargetCard[] = [
-  { id: 1, ex: "3 × 4", ans: 12 },
-  { id: 2, ex: "2 × 7", ans: 14 },
-  { id: 3, ex: "4 × 4", ans: 16 },
-  { id: 4, ex: "3 × 6", ans: 18 },
-  { id: 5, ex: "4 × 5", ans: 20 },
-  { id: 6, ex: "3 × 7", ans: 21 },
-  { id: 7, ex: "6 × 4", ans: 24 },
-  { id: 8, ex: "5 × 5", ans: 25 },
-  { id: 9, ex: "81 ÷ 3", ans: 27 },
-  { id: 10, ex: "4 × 7", ans: 28 },
-  { id: 11, ex: "6 × 5", ans: 30 },
-  { id: 12, ex: "40 − 8", ans: 32 },
-  { id: 13, ex: "7 × 5", ans: 35 },
-  { id: 14, ex: "6 × 6", ans: 36 },
-  { id: 15, ex: "80 ÷ 2", ans: 40 },
-  { id: 16, ex: "6 × 7", ans: 42 },
-  { id: 17, ex: "9 × 5", ans: 45 },
-  { id: 18, ex: "8 × 6", ans: 48 },
-  { id: 19, ex: "98 ÷ 2", ans: 49 },
-  { id: 20, ex: "5 × 10", ans: 50 },
-  { id: 21, ex: "6 × 9", ans: 54 },
-  { id: 22, ex: "7 × 8", ans: 56 },
-  { id: 23, ex: "9 × 7", ans: 63 },
-  { id: 24, ex: "8 × 8", ans: 64 },
-  { id: 25, ex: "7 × 10", ans: 70 },
-  { id: 26, ex: "9 × 8", ans: 72 },
-  { id: 27, ex: "8 × 10", ans: 80 },
-  { id: 28, ex: "9 × 9", ans: 81 },
-  { id: 29, ex: "9 × 10", ans: 90 },
-  { id: 30, ex: "12 × 8", ans: 96 },
-  // 🎲 Prime number targets!
-  { id: 31, ex: "6 + 7", ans: 13, prime: true },
-  { id: 32, ex: "10 + 7", ans: 17, prime: true },
-  { id: 33, ex: "10 + 9", ans: 19, prime: true },
-  { id: 34, ex: "12 + 11", ans: 23, prime: true },
-  { id: 35, ex: "30 − 1", ans: 29, prime: true },
-  { id: 36, ex: "25 + 6", ans: 31, prime: true },
-  { id: 37, ex: "40 − 3", ans: 37, prime: true },
-  { id: 38, ex: "40 + 1", ans: 41, prime: true },
-  { id: 39, ex: "50 − 3", ans: 47, prime: true },
-  { id: 40, ex: "50 + 3", ans: 53, prime: true },
-  { id: 41, ex: "60 − 1", ans: 59, prime: true },
-  { id: 42, ex: "60 + 1", ans: 61, prime: true },
-  { id: 43, ex: "70 − 3", ans: 67, prime: true },
-  { id: 44, ex: "70 + 1", ans: 71, prime: true },
-  { id: 45, ex: "80 − 1", ans: 79, prime: true },
-  { id: 46, ex: "80 + 3", ans: 83, prime: true },
-  { id: 47, ex: "90 − 1", ans: 89, prime: true },
-  { id: 48, ex: "100 − 3", ans: 97, prime: true },
+// ── Target cards (phase 1) ──
+// Each level is "the full multiplication table up to N", like learned in school.
+// Targets are every times-table product (factors 2–10) up to the level's board
+// max. Primes are kept (as additions) so the 🎲 surprise tiles stay reachable.
+// No division or subtraction.
+
+/** One card per distinct times-table product (factors 2–10) up to a cap. */
+function timesTableTargets(cap: number, idBase: number): TargetCard[] {
+  const seen = new Set<number>();
+  const cards: TargetCard[] = [];
+  let id = idBase;
+  for (let a = 2; a <= 10; a++) {
+    for (let b = a; b <= 10; b++) {
+      const ans = a * b;
+      if (ans > cap || seen.has(ans)) continue;
+      seen.add(ans);
+      cards.push({ id: id++, ex: `${a} × ${b}`, ans });
+    }
+  }
+  return cards;
+}
+
+/** Long-multiplication cards (2-digit × 1-digit) up to a cap. */
+function longTargets(cap: number, idBase: number): TargetCard[] {
+  const seen = new Set<number>();
+  const cards: TargetCard[] = [];
+  let id = idBase;
+  for (let a = 11; a <= 19; a++) {
+    for (let b = 2; b <= 9; b++) {
+      const ans = a * b;
+      if (ans > cap || seen.has(ans)) continue;
+      seen.add(ans);
+      cards.push({ id: id++, ex: `${a} × ${b}`, ans });
+    }
+  }
+  return cards;
+}
+
+/** Prime targets written as additions (so they carry no division/subtraction). */
+const PRIME_TARGETS: TargetCard[] = [
+  { id: 901, ex: "5 + 6", ans: 11, prime: true },
+  { id: 902, ex: "6 + 7", ans: 13, prime: true },
+  { id: 903, ex: "8 + 9", ans: 17, prime: true },
+  { id: 904, ex: "9 + 10", ans: 19, prime: true },
+  { id: 905, ex: "11 + 12", ans: 23, prime: true },
+  { id: 906, ex: "14 + 15", ans: 29, prime: true },
+  { id: 907, ex: "15 + 16", ans: 31, prime: true },
+  { id: 908, ex: "18 + 19", ans: 37, prime: true },
+  { id: 909, ex: "20 + 21", ans: 41, prime: true },
+  { id: 910, ex: "21 + 22", ans: 43, prime: true },
+  { id: 911, ex: "23 + 24", ans: 47, prime: true },
+  { id: 912, ex: "26 + 27", ans: 53, prime: true },
+  { id: 913, ex: "29 + 30", ans: 59, prime: true },
+  { id: 914, ex: "30 + 31", ans: 61, prime: true },
+  { id: 915, ex: "33 + 34", ans: 67, prime: true },
+  { id: 916, ex: "35 + 36", ans: 71, prime: true },
+  { id: 917, ex: "36 + 37", ans: 73, prime: true },
+  { id: 918, ex: "39 + 40", ans: 79, prime: true },
+  { id: 919, ex: "41 + 42", ans: 83, prime: true },
+  { id: 920, ex: "44 + 45", ans: 89, prime: true },
+  { id: 921, ex: "48 + 49", ans: 97, prime: true },
 ];
 
-export const BEG_CARDS: TargetCard[] = [
-  { id: 101, ex: "5 + 7", ans: 12 },
-  { id: 102, ex: "9 + 5", ans: 14 },
-  { id: 103, ex: "8 + 8", ans: 16 },
-  { id: 104, ex: "9 + 9", ans: 18 },
-  { id: 105, ex: "13 + 7", ans: 20 },
-  { id: 106, ex: "15 + 6", ans: 21 },
-  { id: 107, ex: "20 + 4", ans: 24 },
-  { id: 108, ex: "20 + 5", ans: 25 },
-  { id: 109, ex: "20 + 7", ans: 27 },
-  { id: 110, ex: "20 + 8", ans: 28 },
-  { id: 111, ex: "25 + 5", ans: 30 },
-  { id: 112, ex: "30 + 2", ans: 32 },
-  { id: 113, ex: "30 + 5", ans: 35 },
-  { id: 114, ex: "30 + 6", ans: 36 },
-  { id: 115, ex: "35 + 5", ans: 40 },
-  // 🎲 Primes for age 6-7
-  { id: 116, ex: "5 + 6", ans: 11, prime: true },
-  { id: 117, ex: "6 + 7", ans: 13, prime: true },
-  { id: 118, ex: "8 + 9", ans: 17, prime: true },
-  { id: 119, ex: "10 + 9", ans: 19, prime: true },
-  { id: 120, ex: "12 + 11", ans: 23, prime: true },
-];
+function buildPool(mult: TargetCard[], cap: number): TargetCard[] {
+  return [...mult, ...PRIME_TARGETS].filter((c) => c.ans <= cap);
+}
+
+/** Target-card pool per level — the full times table up to its board + primes. */
+export const TARGETS_BY_LEVEL: Record<Level, TargetCard[]> = {
+  beg: buildPool(timesTableTargets(BOARD_MAX.beg, 100), BOARD_MAX.beg),
+  med: buildPool(timesTableTargets(BOARD_MAX.med, 200), BOARD_MAX.med),
+  adv: buildPool(timesTableTargets(BOARD_MAX.adv, 300), BOARD_MAX.adv),
+  champ: buildPool(timesTableTargets(BOARD_MAX.champ, 400), BOARD_MAX.champ),
+  hero: buildPool(longTargets(BOARD_MAX.hero, 500), BOARD_MAX.hero),
+};
+
+export function targetPoolFor(level: Level): TargetCard[] {
+  return TARGETS_BY_LEVEL[level];
+}
 
 /** Special cards — icon + effect live here; title/text are localized by id. */
 export const LIMIT_C: SpecialCardDef[] = [
@@ -185,6 +189,21 @@ export const SFILL = {
 export function timerTotalFor(level: Level): number {
   return level === "hero" ? 90 : level === "champ" ? 120 : 180;
 }
+
+// ── Pedagogy add-on: factoring (פירוק לגורמים) ──
+// Active only from Advanced up, where numbers are large enough that breaking
+// them into factors is a meaningful challenge rather than a trivial one.
+
+/** Whether the factoring add-on (target challenge + route factor tiles) is on. */
+export function factorBonusActive(level: Level): boolean {
+  return level === "adv" || level === "champ" || level === "hero";
+}
+
+/** Pellets awarded for breaking the target number into a factor pair. */
+export const FACTOR_SOLVE_BONUS = 5;
+
+/** Pellets awarded per factor tile the route walked through. */
+export const FACTOR_TILE_BONUS = 2;
 
 export const VIDEO_KEYS = [
   "tutorial",
