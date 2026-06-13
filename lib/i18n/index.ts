@@ -38,6 +38,9 @@ export interface Dict {
 
   // Instructions
   inst: InstPage[];
+  /** short, child-friendly guide; tailored to a level, or all levels when null */
+  simpleGuide: (level: Level | null) => InstPage[];
+  fullGuideBtn: string;
   back: string;
   next: string;
   gotItDone: string;

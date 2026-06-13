@@ -58,8 +58,11 @@ export default function Welcome({
         })}
       </div>
 
-      <button className="btnout" onClick={actions.goInst}>
+      <button className="btnout" onClick={() => actions.goSimpleGuide(null)}>
         {t.howToPlay}
+      </button>
+      <button className="btnout" onClick={actions.goInst}>
+        {t.fullGuideBtn}
       </button>
       <button className="btnout" onClick={() => actions.openVideo("tutorial")}>
         {t.tutorialVideos}

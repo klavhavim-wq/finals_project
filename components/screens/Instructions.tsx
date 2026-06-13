@@ -2,22 +2,29 @@
 
 import RichText from "../RichText";
 import type { GameActions } from "../useGame";
+import type { Level } from "@/lib/engine/types";
 import type { Dict } from "@/lib/i18n";
 
 export default function Instructions({
   t,
   idx,
   actions,
+  mode,
+  level,
 }: {
   t: Dict;
   idx: number;
   actions: GameActions;
+  mode: "simple" | "full";
+  level: Level | null;
 }) {
-  const page = t.inst[idx];
-  const isLast = idx === t.inst.length - 1;
+  const pages = mode === "simple" ? t.simpleGuide(level) : t.inst;
+  const safeIdx = Math.min(idx, pages.length - 1);
+  const page = pages[safeIdx];
+  const isLast = safeIdx === pages.length - 1;
 
   const nav = (d: number) => {
-    const next = Math.max(0, Math.min(t.inst.length - 1, idx + d));
+    const next = Math.max(0, Math.min(pages.length - 1, safeIdx + d));
     actions.instSet(next);
   };
 
@@ -38,16 +45,16 @@ export default function Instructions({
         <div className="inav">
           <button
             className="iback"
-            style={{ visibility: idx ? "visible" : "hidden" }}
+            style={{ visibility: safeIdx ? "visible" : "hidden" }}
             onClick={() => nav(-1)}
           >
             {t.back}
           </button>
           <div id="idots" style={{ display: "flex", gap: 5 }}>
-            {t.inst.map((_, i) => (
+            {pages.map((_, i) => (
               <div
                 key={i}
-                className={"idot" + (i === idx ? " on" : "")}
+                className={"idot" + (i === safeIdx ? " on" : "")}
                 onClick={() => actions.instSet(i)}
               />
             ))}

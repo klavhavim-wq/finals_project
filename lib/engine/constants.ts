@@ -42,9 +42,9 @@ export const LVL_DOORS: Record<Level, DoorKey[]> = {
  * instead of always spanning 1–100. Width stays 10 columns; rows scale.
  */
 export const BOARD_MAX: Record<Level, number> = {
-  beg: 30,
-  med: 40,
-  adv: 70,
+  beg: 40,
+  med: 60,
+  adv: 80,
   champ: 90,
   hero: 100,
 };

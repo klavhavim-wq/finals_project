@@ -30,7 +30,15 @@ export default function Game({ locale }: { locale: Locale }) {
       {state.screen === "swin" && <Win t={t} state={state} actions={actions} />}
       {state.screen === "sresults" && <Results t={t} actions={actions} />}
       <Modal t={t} state={state} actions={actions} />
-      {state.instOpen && <Instructions t={t} idx={state.instIdx} actions={actions} />}
+      {state.instOpen && (
+        <Instructions
+          t={t}
+          idx={state.instIdx}
+          actions={actions}
+          mode={state.instMode}
+          level={state.instLevel}
+        />
+      )}
     </div>
   );
 }

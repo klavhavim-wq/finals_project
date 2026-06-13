@@ -75,6 +75,10 @@ export function useGame(locale: Locale) {
   }, []);
 
   const goInst = useCallback(() => dispatch({ type: "GO_INST" }), []);
+  const goSimpleGuide = useCallback(
+    (level: Level | null) => dispatch({ type: "GO_SIMPLE_GUIDE", level }),
+    []
+  );
   const closeInst = useCallback(() => dispatch({ type: "CLOSE_INST" }), []);
   const instSet = useCallback((idx: number) => dispatch({ type: "INST_SET", idx }), []);
   const goSetup = useCallback(() => dispatch({ type: "GO_SETUP" }), []);
@@ -198,6 +202,7 @@ export function useGame(locale: Locale) {
     actions: {
       showScreen,
       goInst,
+      goSimpleGuide,
       closeInst,
       instSet,
       goSetup,

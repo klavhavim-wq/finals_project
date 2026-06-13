@@ -157,18 +157,18 @@ export const he: Dict = {
   welcomeSub2b: "👥 1–4 שחקנים \u00a0·\u00a0 ⏱ 20–45 דק׳",
   startGame: "🎮 התחל משחק!",
   chooseLevel: "✨ בחרו רמה כדי להתחיל",
-  demoVideo: "🎬 סרטון הדגמה לרמה",
+  demoVideo: "🎬 סרטון הדגמה",
   howToPlay: "📖 איך משחקים?",
   tutorialVideos: "🎬 סרטוני הסבר",     inst: [
        {
          i: "🎮",
          t: "לוח המשחק",
-         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="300" height="126" viewBox="0 0 228 96" xmlns="http://www.w3.org/2000/svg"><polygon points="48,10 80.9,29 80.9,67 48,86 15.1,67 15.1,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="113.8,10 146.7,29 146.7,67 113.8,86 80.9,67 80.9,29" fill="#F5F3FF" stroke="#C9A882" stroke-width="1.5"/><polygon points="179.6,10 212.5,29 212.5,67 179.6,86 146.7,67 146.7,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><line x1="80.9" y1="29" x2="80.9" y2="67" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/><line x1="146.7" y1="29" x2="146.7" y2="67" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/><text x="48" y="58" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">12</text><text x="113.8" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">13</text><text x="179.6" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="48" y="34" text-anchor="middle" font-size="22">🐕</text><text x="113.8" y="34" text-anchor="middle" font-size="16">🎲</text></svg></div>הלוח מכיל 100 משושים ממוספרים. בין המשושים יש צלעות צבעוניות — אלה ה"דלתות" שלנו! 🚪<br><br>כל צבע = סוג אוכל + רמת קושי.<br><br>🎯 <strong>המטרה:</strong> לצבור כמה שיותר גרגירים לבנק של הכלב! 🐶🦴',
+         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="300" height="126" viewBox="0 0 228 96" xmlns="http://www.w3.org/2000/svg"><polygon points="48,10 80.9,29 80.9,67 48,86 15.1,67 15.1,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="113.8,10 146.7,29 146.7,67 113.8,86 80.9,67 80.9,29" fill="#F5F3FF" stroke="#C9A882" stroke-width="1.5"/><polygon points="179.6,10 212.5,29 212.5,67 179.6,86 146.7,67 146.7,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><line x1="80.9" y1="29" x2="80.9" y2="67" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/><line x1="146.7" y1="29" x2="146.7" y2="67" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/><text x="48" y="58" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">12</text><text x="113.8" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">13</text><text x="179.6" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="48" y="34" text-anchor="middle" font-size="22">🐕</text><text x="113.8" y="34" text-anchor="middle" font-size="16">🎲</text></svg></div>הלוח מכיל משושים ממוספרים — ככל שהרמה גבוהה יותר, הלוח גדול יותר (עד 100). בין המשושים יש צלעות צבעוניות — אלה ה"דלתות" שלנו! 🚪<br><br>כל צבע = סוג אוכל + רמת קושי.<br><br>🎯 <strong>המטרה:</strong> לצבור כמה שיותר גרגירים לבנק של הכלב! 🐶🦴',
        },
        {
          i: "📸",
          t: "מסך המשחק",
-         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0"><img src="/screenshot-he.png" alt="מסך המשחק" style="width:100%;display:block"/></div>ככה נראה המשחק! הנה החלקים העיקריים:<br><br>🎮 <strong>הלוח</strong> (מימין) — 100 משושים ממוספרים. הקווים הצבעוניים בין המשושים הם ה"דלתות" — כל צבע מייצג רמת קושי אחרת.<br><br>🎯 <strong>כרטיס היעד</strong> (במרכז) — תרגיל חשבון שמופיע בכל תור. פותרים אותו ולוחצים על המשושה עם התשובה! יש גם כפתור "רמז" 💡 ו"הראה תשובה".<br><br>👥 <strong>פאנל השחקנים</strong> (משמאל) — רואים את כל השחקנים, מי עכשיו בתור, וכמה גרגירים 🦴 יש לכל אחד.<br><br>🚪 <strong>אגדת דלתות</strong> (בתחתית הסרגל) — לכל צבע: טווח הכפל שלו וכמה נקודות הוא שווה לצעד.',
+         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0"><img src="/screenshot-he.png" alt="מסך המשחק" style="width:100%;display:block"/></div>ככה נראה המשחק! הנה החלקים העיקריים:<br><br>🎮 <strong>הלוח</strong> (מימין) — משושים ממוספרים (הגודל משתנה לפי הרמה). הקווים הצבעוניים בין המשושים הם ה"דלתות" — כל צבע מייצג רמת קושי אחרת.<br><br>🎯 <strong>כרטיס היעד</strong> (במרכז) — תרגיל חשבון שמופיע בכל תור. פותרים אותו ולוחצים על המשושה עם התשובה! יש גם כפתור "רמז" 💡 ו"הראה תשובה".<br><br>👥 <strong>פאנל השחקנים</strong> (משמאל) — רואים את כל השחקנים, מי עכשיו בתור, וכמה גרגירים 🦴 יש לכל אחד.<br><br>🚪 <strong>אגדת דלתות</strong> (בתחתית הסרגל) — לכל צבע: טווח הכפל שלו וכמה נקודות הוא שווה לצעד.',
        },
        {
          i: "🎯",
@@ -221,6 +221,38 @@ export const he: Dict = {
          x: 'מפעילים "משחק שיתופי" בהגדרות.<br>במצב הזה — <strong>כולנו עובדים ביחד!</strong><br><br>✅ כל הגרגירים נכנסים לבנק המשותף 🦴<br>✅ אין שוד — כולנו אחד!<br>✅ מגיעים ל-100 ביחד — <strong>כולנו מנצחים! 🎉</strong><br><br>🐕🐩🐕‍🦺🦮 מתאים לילדים צעירים, לטיפול, ולמשחק משפחתי רגוע.',
        }
      ],
+  fullGuideBtn: "📚 מדריך משחק מלא",
+  simpleGuide: (level) => {
+    const goal = {
+      i: "🎯",
+      t: "המטרה",
+      x: 'עוזרים לכלב לאסוף כמה שיותר גרגירים! 🦴<br><br>בכל תור פותרים תרגיל, מתקדמים על הלוח, ואוספים גרגירים.<br><br>מי שאסף הכי הרבה גרגירים — מנצח! 🏆🐶',
+    };
+    const steps = {
+      i: "🎮",
+      t: "איך משחקים? 3 שלבים",
+      x: '<strong>1.</strong> מקבלים תרגיל ולוחצים על המספר הנכון בלוח. 🔢<br><br><strong>2.</strong> בונים דרך מהכלב עד המספר. 🗺️<br><br><strong>3.</strong> בכל צעד פותרים תרגיל קטן ומתקדמים — וכל צעד שווה גרגירים! 🦴<br><br>טעות? אפשר לנסות שוב, ויש גם רמז 💡',
+    };
+    const LV: Record<string, string> = {
+      beg: '🐾 <strong>מתחילים</strong> — כפל בסיסי (עד 4×4). הלוח קצר ונוח, עם מספרים עד 40. מושלם להתחלה! 😊',
+      med: '⭐ <strong>בינוני</strong> — כפל עד 6. הלוח עם מספרים עד 60.',
+      adv: '🌟 <strong>מתקדם</strong> — כפל עד 8. הלוח עם מספרים עד 80.',
+      champ: '🏆 <strong>אלוף</strong> — כפל 7–9. הלוח עם מספרים עד 90.',
+      hero: '⚡ <strong>גיבור</strong> — כפל ארוך (מספר דו-ספרתי × חד-ספרתי). הלוח המלא, עד 100.',
+    };
+    const levelPage = level
+      ? {
+          i: "📊",
+          t: "הרמה שלכם",
+          x: `${LV[level]}<br><br>כל צעד בלוח שווה גרגירים — ככל שהדלת קשה יותר, כך מקבלים יותר גרגירים! 🦴`,
+        }
+      : {
+          i: "📊",
+          t: "חמש רמות",
+          x: 'במשחק יש 5 רמות, מהקלה לקשה:<br><br>🐾 מתחילים · ⭐ בינוני · 🌟 מתקדם · 🏆 אלוף · ⚡ גיבור<br><br>בוחרים רמה שמתאימה לכם — לכל רמה תרגילים ולוח משלה. תמיד אפשר להחליף! 😊',
+        };
+    return [goal, steps, levelPage];
+  },
   back: "אחורה →",
   next: "← הבא",
   gotItDone: "✅ הבנתי!",
@@ -231,7 +263,7 @@ export const he: Dict = {
   playerPlaceholder: (dog, i) => `${dog} שם שחקן ${i + 1}...`,
   difficulty: "📊 רמת קושי",
   levels: {
-    beg: { icon: "🐾", name: "מתחילים", desc: "כפל ראשון | \u2066(2–4)×(2–4)\u2069" },
+    beg: { icon: "🐾", name: "מתחילים", desc: "כפל בסיסי | \u2066(2–4)×(2–4)\u2069" },
     med: { icon: "⭐", name: "בינוני", desc: "כפל עד 6 | \u2066(3–6)×(3–6)\u2069" },
     adv: { icon: "🌟", name: "מתקדם", desc: "כפל עד 8 | \u2066(5–8)×(5–8)\u2069" },
     champ: { icon: "🏆", name: "אלוף", desc: "כפל \u20667–9\u2069 | 2 דקות" },

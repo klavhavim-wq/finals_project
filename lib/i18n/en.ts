@@ -153,18 +153,18 @@ export const en: Dict = {
   welcomeSub2b: "👥 1–4 players \u00a0·\u00a0 ⏱ 20–45 min",
   startGame: "🎮 Start Game!",
   chooseLevel: "✨ Pick a level to begin",
-  demoVideo: "🎬 Demo video for this level",
+  demoVideo: "🎬 Demo video",
   howToPlay: "📖 How to Play?",
   tutorialVideos: "🎬 Tutorial Videos",     inst: [
        {
          i: "🎮",
          t: "The Game Board",
-         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="300" height="126" viewBox="0 0 228 96" xmlns="http://www.w3.org/2000/svg"><polygon points="48,10 80.9,29 80.9,67 48,86 15.1,67 15.1,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="113.8,10 146.7,29 146.7,67 113.8,86 80.9,67 80.9,29" fill="#F5F3FF" stroke="#C9A882" stroke-width="1.5"/><polygon points="179.6,10 212.5,29 212.5,67 179.6,86 146.7,67 146.7,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><line x1="80.9" y1="29" x2="80.9" y2="67" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/><line x1="146.7" y1="29" x2="146.7" y2="67" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/><text x="48" y="58" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">12</text><text x="113.8" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">13</text><text x="179.6" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="48" y="34" text-anchor="middle" font-size="22">🐕</text><text x="113.8" y="34" text-anchor="middle" font-size="16">🎲</text></svg></div>The board has 100 numbered hexes. Between the hexes you\'ll see colored edges — those are the "doors"! 🚪<br><br>Each color = a food type + difficulty level.<br><br>🎯 <strong>The goal:</strong> Collect as many pellets as you can for your dog\'s bank! 🐶🦴',
+         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="300" height="126" viewBox="0 0 228 96" xmlns="http://www.w3.org/2000/svg"><polygon points="48,10 80.9,29 80.9,67 48,86 15.1,67 15.1,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="113.8,10 146.7,29 146.7,67 113.8,86 80.9,67 80.9,29" fill="#F5F3FF" stroke="#C9A882" stroke-width="1.5"/><polygon points="179.6,10 212.5,29 212.5,67 179.6,86 146.7,67 146.7,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><line x1="80.9" y1="29" x2="80.9" y2="67" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/><line x1="146.7" y1="29" x2="146.7" y2="67" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/><text x="48" y="58" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">12</text><text x="113.8" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">13</text><text x="179.6" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="48" y="34" text-anchor="middle" font-size="22">🐕</text><text x="113.8" y="34" text-anchor="middle" font-size="16">🎲</text></svg></div>The board is filled with numbered hexes — the higher the level, the bigger the board (up to 100). Between the hexes you\'ll see colored edges — those are the "doors"! 🚪<br><br>Each color = a food type + difficulty level.<br><br>🎯 <strong>The goal:</strong> Collect as many pellets as you can for your dog\'s bank! 🐶🦴',
        },
        {
          i: "📸",
          t: "The Game Screen",
-         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0"><img src="/screenshot-en.png" alt="Game screen" style="width:100%;display:block"/></div>This is what the game looks like! Here are the main parts:<br><br>🎮 <strong>The Board</strong> (left side) — 100 numbered hexes. The colored lines between them are the "doors" — each color represents a different difficulty level.<br><br>🎯 <strong>Target Card</strong> (center) — a math exercise that appears each turn. Solve it and click the hex with the answer! There\'s also a "Hint" 💡 button and "Show Answer".<br><br>👥 <strong>Player Panel</strong> (right side) — see all players, whose turn it is, and how many pellets 🦴 each player has.<br><br>🚪 <strong>Door Legend</strong> (bottom of the sidebar) — shows each color, its multiplication range, and how many pellets it earns per step.',
+         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0"><img src="/screenshot-en.png" alt="Game screen" style="width:100%;display:block"/></div>This is what the game looks like! Here are the main parts:<br><br>🎮 <strong>The Board</strong> (left side) — numbered hexes (the size changes with the level). The colored lines between them are the "doors" — each color represents a different difficulty level.<br><br>🎯 <strong>Target Card</strong> (center) — a math exercise that appears each turn. Solve it and click the hex with the answer! There\'s also a "Hint" 💡 button and "Show Answer".<br><br>👥 <strong>Player Panel</strong> (right side) — see all players, whose turn it is, and how many pellets 🦴 each player has.<br><br>🚪 <strong>Door Legend</strong> (bottom of the sidebar) — shows each color, its multiplication range, and how many pellets it earns per step.',
        },
        {
          i: "🎯",
@@ -217,6 +217,38 @@ export const en: Dict = {
          x: 'Enable "Cooperative mode" in settings.<br>In this mode — <strong>everyone works together!</strong><br><br>✅ All pellets go into one shared bank 🦴<br>✅ No stealing — we\'re all one team!<br>✅ Reach 100 together — <strong>everyone wins! 🎉</strong><br><br>🐕🐩🐕‍🦺🦮 Great for young kids, therapy, and family play.',
        }
      ],
+  fullGuideBtn: "📚 Full game guide",
+  simpleGuide: (level) => {
+    const goal = {
+      i: "🎯",
+      t: "The Goal",
+      x: 'Help the dog collect as many pellets as you can! 🦴<br><br>Each turn you solve an exercise, move across the board, and collect pellets.<br><br>Whoever collects the most pellets wins! 🏆🐶',
+    };
+    const steps = {
+      i: "🎮",
+      t: "How to play — 3 steps",
+      x: '<strong>1.</strong> Get an exercise and tap the right number on the board. 🔢<br><br><strong>2.</strong> Build a path from the dog to that number. 🗺️<br><br><strong>3.</strong> At every step solve a little exercise and move — each step earns pellets! 🦴<br><br>Made a mistake? Try again, and there\'s a hint too 💡',
+    };
+    const LV: Record<string, string> = {
+      beg: '🐾 <strong>Beginner</strong> — basic multiplication (up to 4×4). A short, easy board with numbers up to 40. Perfect to start! 😊',
+      med: '⭐ <strong>Intermediate</strong> — multiplication up to 6. Board with numbers up to 60.',
+      adv: '🌟 <strong>Advanced</strong> — multiplication up to 8. Board with numbers up to 80.',
+      champ: '🏆 <strong>Champion</strong> — multiplication 7–9. Board with numbers up to 90.',
+      hero: '⚡ <strong>Hero</strong> — long multiplication (two-digit × one-digit). The full board, up to 100.',
+    };
+    const levelPage = level
+      ? {
+          i: "📊",
+          t: "Your Level",
+          x: `${LV[level]}<br><br>Every step on the board earns pellets — the harder the door, the more pellets you get! 🦴`,
+        }
+      : {
+          i: "📊",
+          t: "Five Levels",
+          x: 'The game has 5 levels, from easy to hard:<br><br>🐾 Beginner · ⭐ Intermediate · 🌟 Advanced · 🏆 Champion · ⚡ Hero<br><br>Pick the level that fits you — each level has its own exercises and board. You can always switch! 😊',
+        };
+    return [goal, steps, levelPage];
+  },
   back: "← Back",
   next: "Next →",
   gotItDone: "Got it! ✅",
@@ -227,7 +259,7 @@ export const en: Dict = {
   playerPlaceholder: (dog, i) => `${dog} Player ${i + 1}...`,
   difficulty: "📊 Difficulty",
   levels: {
-    beg: { icon: "🐾", name: "Beginner", desc: "First multiplication | (2–4)×(2–4)" },
+    beg: { icon: "🐾", name: "Beginner", desc: "Basic multiplication | (2–4)×(2–4)" },
     med: { icon: "⭐", name: "Intermediate", desc: "Tables up to 6 | (3–6)×(3–6)" },
     adv: { icon: "🌟", name: "Advanced", desc: "Tables up to 8 | (5–8)×(5–8)" },
     champ: { icon: "🏆", name: "Champion", desc: "Hard tables 7–9 | 2 min" },

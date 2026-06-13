@@ -420,6 +420,8 @@ export function initState(locale: Locale): GameState {
     modal: null,
     instIdx: 0,
     instOpen: false,
+    instMode: "full",
+    instLevel: null,
     winnerIdx: null,
     coopWin: false,
     awaitNewTurn: false,
@@ -431,6 +433,7 @@ export function initState(locale: Locale): GameState {
 export type Action =
   | { type: "SHOW_SCREEN"; screen: GameState["screen"] }
   | { type: "GO_INST" }
+  | { type: "GO_SIMPLE_GUIDE"; level: Level | null }
   | { type: "CLOSE_INST" }
   | { type: "INST_SET"; idx: number }
   | { type: "GO_SETUP" }
@@ -505,7 +508,10 @@ export function reducer(state: GameState, action: Action): GameState {
       return { ...state, screen: action.screen, modal: null };
 
     case "GO_INST":
-      return { ...state, instOpen: true, instIdx: 0 };
+      return { ...state, instOpen: true, instIdx: 0, instMode: "full" };
+
+    case "GO_SIMPLE_GUIDE":
+      return { ...state, instOpen: true, instIdx: 0, instMode: "simple", instLevel: action.level };
 
     case "CLOSE_INST":
       return { ...state, instOpen: false };

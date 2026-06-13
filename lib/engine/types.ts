@@ -191,6 +191,10 @@ export interface GameState {
   instIdx: number;
   /** instructions shown as an overlay on top of the current screen */
   instOpen: boolean;
+  /** which guide is open: the short simple one or the full detailed one */
+  instMode: "simple" | "full";
+  /** level the simple guide is tailored to (null = all levels / welcome) */
+  instLevel: Level | null;
 
   /** win screen data */
   winnerIdx: number | null;

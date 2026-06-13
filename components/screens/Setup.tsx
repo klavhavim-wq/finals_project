@@ -28,8 +28,8 @@ export default function Setup({
 
   // Which options are relevant for this level.
   const showMc = level === "beg" || level === "med"; // multiple-choice only applies to these levels
-  const showRob = level !== "beg";
-  const showCoop = level !== "beg";
+  const showRob = level !== "beg"; // no rob for Beginner — too competitive for the youngest players
+  const showCoop = true; // cooperative play is available on every level, including Beginner
   const showWinMode = level !== "beg";
 
   const meta = t.levels[level];
@@ -68,11 +68,16 @@ export default function Setup({
       </div>
 
       <div className="lvlactions">
-        <button className="btnout" onClick={actions.goInst}>
+        <button className="btnout" onClick={() => actions.goSimpleGuide(level)}>
           {t.howToPlay}
         </button>
         <button className="btnout" onClick={() => actions.openVideo(level)}>
           {t.demoVideo}
+        </button>
+      </div>
+      <div className="lvlactions">
+        <button className="btnout" onClick={actions.goInst}>
+          {t.fullGuideBtn}
         </button>
       </div>
 
