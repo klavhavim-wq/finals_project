@@ -272,13 +272,13 @@ export const he: Dict = {
 
   tour: (level) => {
     const mathByLevel: Record<string, string> = {
-      beg: "כפל קטן, עד 4×4",
-      med: "כפל עד 6",
-      adv: "כפל עד 8",
-      champ: "כפל 7–9",
+      beg: "לוח הכפל — תשובות עד 40",
+      med: "לוח הכפל — תשובות עד 60",
+      adv: "לוח הכפל — תשובות עד 90",
+      champ: "לוח הכפל — תשובות עד 100",
       hero: "כפל ארוך — מספר דו-ספרתי כפול חד-ספרתי",
     };
-    const topNum: Record<string, number> = { beg: 16, med: 36, adv: 64, champ: 81, hero: 100 };
+    const topNum: Record<string, number> = { beg: 40, med: 60, adv: 90, champ: 100, hero: 100 };
     const timeByLevel: Record<string, string> = {
       beg: "3 דקות",
       med: "3 דקות",
@@ -290,6 +290,7 @@ export const he: Dict = {
       level === "beg" || level === "med"
         ? "התשובות מופיעות ככפתורים — לוחצים על הנכונה."
         : "מקלידים את התשובה ולוחצים «אשר».";
+    const oneDoor = level === "beg"; // Beginner has a single door (Bone)
     return [
       {
         i: "🐕",
@@ -317,9 +318,11 @@ export const he: Dict = {
       },
       {
         i: "🚪",
-        t: "הדלתות הצבעוניות",
+        t: oneDoor ? "הדלת שעוברים בה" : "הדלתות הצבעוניות",
         target: "doors",
-        x: 'הקווים הצבעוניים בין המשושים הם <strong>דלתות</strong> 🚪.<br><br>כל צבע הוא סוג אוכל אחר ותרגיל אחר. כאן רואים אילו דלתות יש ברמה הזו וכמה גרגירים כל אחת שווה — <strong>ככל שהדלת קשה יותר, מקבלים יותר גרגירים!</strong> 🦴',
+        x: oneDoor
+          ? 'הקווים הצבעוניים בין המשושים הם <strong>דלתות</strong> 🚪.<br><br>ברמת מתחילים יש דלת אחת — דלת ה<strong>עצם</strong> 🦴. בכל מעבר פותרים תרגיל קטן ומקבלים גרגיר. ברמות הבאות מתווספים עוד צבעי דלתות — קשות יותר אבל שוות יותר גרגירים!'
+          : 'הקווים הצבעוניים בין המשושים הם <strong>דלתות</strong> 🚪.<br><br>כל צבע הוא סוג אוכל אחר ותרגיל אחר. כאן רואים אילו דלתות יש ברמה הזו וכמה גרגירים כל אחת שווה — <strong>ככל שהדלת קשה יותר, מקבלים יותר גרגירים!</strong> 🦴',
       },
       {
         i: "🐾",

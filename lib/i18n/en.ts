@@ -268,13 +268,13 @@ export const en: Dict = {
 
   tour: (level) => {
     const mathByLevel: Record<string, string> = {
-      beg: "small multiplication, up to 4×4",
-      med: "multiplication up to 6",
-      adv: "multiplication up to 8",
-      champ: "multiplication 7–9",
+      beg: "times table — answers up to 40",
+      med: "times table — answers up to 60",
+      adv: "times table — answers up to 90",
+      champ: "times table — answers up to 100",
       hero: "long multiplication — two-digit × one-digit",
     };
-    const topNum: Record<string, number> = { beg: 16, med: 36, adv: 64, champ: 81, hero: 100 };
+    const topNum: Record<string, number> = { beg: 40, med: 60, adv: 90, champ: 100, hero: 100 };
     const timeByLevel: Record<string, string> = {
       beg: "3 minutes",
       med: "3 minutes",
@@ -286,6 +286,7 @@ export const en: Dict = {
       level === "beg" || level === "med"
         ? "the answers appear as buttons — tap the right one."
         : 'type your answer and press "Confirm".';
+    const oneDoor = level === "beg"; // Beginner has a single door (Bone)
     return [
       {
         i: "🐕",
@@ -313,9 +314,11 @@ export const en: Dict = {
       },
       {
         i: "🚪",
-        t: "The colored doors",
+        t: oneDoor ? "The door you cross" : "The colored doors",
         target: "doors",
-        x: 'The colored lines between hexes are <strong>doors</strong> 🚪.<br><br>Each color is a different food and a different exercise. Here you can see which doors this level has and how many pellets each is worth — <strong>the harder the door, the more pellets you earn!</strong> 🦴',
+        x: oneDoor
+          ? 'The colored lines between hexes are <strong>doors</strong> 🚪.<br><br>On Beginner there is one door — the <strong>Bone</strong> door 🦴. Each time you cross it you solve a small exercise and earn a pellet. Higher levels add more door colors — harder, but worth more pellets!'
+          : 'The colored lines between hexes are <strong>doors</strong> 🚪.<br><br>Each color is a different food and a different exercise. Here you can see which doors this level has and how many pellets each is worth — <strong>the harder the door, the more pellets you earn!</strong> 🦴',
       },
       {
         i: "🐾",
