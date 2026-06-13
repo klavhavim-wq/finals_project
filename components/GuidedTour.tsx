@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import RichText from "./RichText";
 import type { Dict, TourStage, TourTarget } from "@/lib/i18n";
 import type { GameState } from "@/lib/engine/types";
@@ -34,6 +34,50 @@ interface Rect {
   height: number;
 }
 
+const MARGIN = 14;
+
+function clamp(v: number, lo: number, hi: number): number {
+  return Math.max(lo, Math.min(v, hi));
+}
+
+/**
+ * Place the popup beside the highlighted area (in the side with the most room)
+ * so the spotlighted element stays visible. Falls back to above/below, then to
+ * the largest gap clamped into the viewport. Centered when nothing is highlighted.
+ */
+function computeCardStyle(
+  rect: Rect | null,
+  size: { w: number; h: number },
+  vw: number,
+  vh: number
+): React.CSSProperties {
+  const { w, h } = size;
+  if (!rect) {
+    return { left: Math.round((vw - w) / 2), top: Math.round((vh - h) / 2) };
+  }
+  const gapLeft = rect.left;
+  const gapRight = vw - (rect.left + rect.width);
+  const gapTop = rect.top;
+  const gapBottom = vh - (rect.top + rect.height);
+  const needW = w + MARGIN * 2;
+  const needH = h + MARGIN * 2;
+  const vTop = clamp(rect.top + rect.height / 2 - h / 2, MARGIN, vh - h - MARGIN);
+  const hLeft = clamp(rect.left + rect.width / 2 - w / 2, MARGIN, vw - w - MARGIN);
+
+  const candidates = [
+    { fits: gapRight >= needW, room: gapRight, left: rect.left + rect.width + MARGIN, top: vTop },
+    { fits: gapLeft >= needW, room: gapLeft, left: rect.left - w - MARGIN, top: vTop },
+    { fits: gapBottom >= needH, room: gapBottom, left: hLeft, top: rect.top + rect.height + MARGIN },
+    { fits: gapTop >= needH, room: gapTop, left: hLeft, top: rect.top - h - MARGIN },
+  ];
+  const fitting = candidates.filter((c) => c.fits).sort((a, b) => b.room - a.room);
+  const pick = fitting[0] ?? [...candidates].sort((a, b) => b.room - a.room)[0];
+  return {
+    left: Math.round(clamp(pick.left, MARGIN, vw - w - MARGIN)),
+    top: Math.round(clamp(pick.top, MARGIN, vh - h - MARGIN)),
+  };
+}
+
 export default function GuidedTour({
   t,
   state,
@@ -50,6 +94,15 @@ export default function GuidedTour({
   const selector = SELECTORS[step.target];
 
   const [rect, setRect] = useState<Rect | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [cardSize, setCardSize] = useState({ w: 340, h: 300 });
+
+  // Measure the popup so it can be placed beside (not over) the highlighted area.
+  useLayoutEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    setCardSize({ w: el.offsetWidth, h: el.offsetHeight });
+  }, [idx, state.phase]);
 
   // The live phase a given step demonstrates (icons are language-agnostic).
   const stageFor = (i: number): TourStage =>
@@ -103,18 +156,10 @@ export default function GuidedTour({
     actions.tourSet(next);
   };
 
-  // Place the popup so it doesn't sit on top of the highlighted area.
+  // Place the popup beside the highlighted area so both stay visible.
+  const vw = typeof window !== "undefined" ? window.innerWidth : 1200;
   const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-  let cardStyle: React.CSSProperties;
-  if (!rect) {
-    cardStyle = { top: "50%", left: "50%", transform: "translate(-50%,-50%)" };
-  } else if (rect.top + rect.height > vh * 0.62) {
-    // Highlighted area is low on screen → put the card up top.
-    cardStyle = { top: 20, left: "50%", transform: "translateX(-50%)" };
-  } else {
-    // Highlighted area is high/middle → put the card near the bottom.
-    cardStyle = { bottom: 24, left: "50%", transform: "translateX(-50%)" };
-  }
+  const cardStyle = computeCardStyle(rect, cardSize, vw, vh);
 
   return (
     <div className="tour-layer">
@@ -136,7 +181,7 @@ export default function GuidedTour({
         />
       )}
 
-      <div className="tour-card" style={cardStyle}>
+      <div className="tour-card" ref={cardRef} style={cardStyle}>
         <button className="tour-close" onClick={actions.tourEnd} title={t.tourExit}>
           ✕
         </button>
