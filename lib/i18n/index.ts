@@ -67,6 +67,7 @@ export interface Dict {
   tour: (level: Level) => TourStep[];
   demoGameBtn: string;
   demoPlayerName: string;
+  demoHelperName: string;
   tourFinish: string;
   tourExit: string;
 

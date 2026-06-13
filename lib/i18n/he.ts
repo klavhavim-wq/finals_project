@@ -1,5 +1,5 @@
 import type { DoorKey, EffResult } from "../engine/types";
-import type { Dict } from "./index";
+import type { Dict, TourStep } from "./index";
 
 const DOOR_LABELS: Record<DoorKey, string> = {
   blue: "🦴 עצם",
@@ -288,10 +288,11 @@ export const he: Dict = {
     };
     const answerStyle =
       level === "beg" || level === "med"
-        ? "התשובות מופיעות ככפתורים — לוחצים על הנכונה."
-        : "מקלידים את התשובה ולוחצים «אשר».";
+        ? "אפשר ללחוץ על הכפתור עם התשובה הנכונה, <strong>או</strong> ללחוץ ישר על המשושה עם התשובה בלוח."
+        : "אפשר להקליד את התשובה וללחוץ «אשר», <strong>או</strong> ללחוץ ישר על המשושה עם התשובה בלוח.";
     const oneDoor = level === "beg"; // Beginner has a single door (Bone)
-    return [
+    const factorActive = level === "adv" || level === "champ" || level === "hero";
+    const pages: TourStep[] = [
       {
         i: "🐕",
         t: "היי! בואו נלמד לשחק",
@@ -337,10 +338,22 @@ export const he: Dict = {
         x: 'כאן חושבים טוב: 🤔<br><br>• מסלול קצר = פחות תרגילים, אבל גם פחות גרגירים.<br>• דלתות קשות = יותר גרגירים, אבל קשות יותר.<br>בוחרים דרך שמתאימה לכם!<br><br>מוכנים? לוחצים <strong>✅ אשר מסלול</strong>. רוצים לשנות? <strong>🗑 נקה</strong> ומתחילים מחדש.',
       },
       {
+        i: "🧩",
+        t: "פירוק לגורמים",
+        target: "board",
+        x: 'ברמה הזו יש בונוס מיוחד! 🧩<br><br>המשבצות עם <strong>המסגרת הזהובה</strong> הן <strong>גורמים</strong> של היעד (מספרים שמתחלקים בו). אם עוברים עליהן בדרך — מקבלים <strong>+2 גרגירים</strong> על כל אחת! 🦴<br><br>וכשמגיעים ליעד, אפשר לפרק אותו לשני מספרים שכפלם נותן אותו — ולקבל עוד בונוס! 🎉',
+      },
+      {
         i: "🦴",
         t: "שלב 3 — יוצאים לדרך",
         target: "panel",
         x: `עכשיו צועדים, והשעון מתחיל לתקתק ⏱.<br><br>בכל צעד פותרים את התרגיל של הדלת — ${answerStyle} נכון? מתקדמים וצוברים גרגירים! 🦴<br><br>טעות? אפשר לנסות שוב או לבקש רמז 💡. אפשר גם לוותר — מפסידים את התור אבל שומרים את מה שכבר אספתם.`,
+      },
+      {
+        i: "🙋",
+        t: "עוזרים ומרוויחים",
+        target: "panel",
+        x: 'גם כשזה לא התור שלכם — אפשר לעזור! 🙋<br><br>כאן, בזמן שמישהו אחר פותר תרגיל, שחקן אחר יכול ללחוץ על השם שלו, לכתוב את התשובה — ואם צדק, מקבל <strong>+1 גרגיר על העזרה</strong>! 🦴<br><br>ככה כולם נשארים בעניין וחושבים יחד. 🧠',
       },
       {
         i: "✨",
@@ -361,9 +374,12 @@ export const he: Dict = {
         x: 'עכשיו תורכם — בואו נשחק באמת! 🐕🦴',
       },
     ];
+    // The factoring step only applies from Advanced up.
+    return factorActive ? pages : pages.filter((p) => p.i !== "🧩");
   },
   demoGameBtn: "🎬 משחק לדוגמה",
   demoPlayerName: "🐕 הדגמה",
+  demoHelperName: "🐩 חבר",
   tourFinish: "🎮 בואו נשחק!",
   tourExit: "דלג על ההדגמה",
 

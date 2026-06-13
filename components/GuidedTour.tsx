@@ -24,7 +24,9 @@ const SELECTORS: Record<TourTarget, string | null> = {
 const STAGE_BY_ICON: Record<string, TourStage> = {
   "🐾": "route",
   "🧠": "route",
+  "🧩": "route", // factoring: gold factor tiles on the board (phase 2)
   "🦴": "walk",
+  "🙋": "walk", // spectator helping (phase 3 panel)
 };
 
 interface Rect {

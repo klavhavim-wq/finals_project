@@ -1,5 +1,5 @@
 import type { DoorKey, EffResult } from "../engine/types";
-import type { Dict } from "./index";
+import type { Dict, TourStep } from "./index";
 
 const DOOR_LABELS: Record<DoorKey, string> = {
   blue: "🦴 Bone",
@@ -284,10 +284,11 @@ export const en: Dict = {
     };
     const answerStyle =
       level === "beg" || level === "med"
-        ? "the answers appear as buttons — tap the right one."
-        : 'type your answer and press "Confirm".';
+        ? "tap the button with the correct answer, <strong>or</strong> tap the hex with the answer right on the board."
+        : 'type your answer and press "Confirm", <strong>or</strong> tap the hex with the answer right on the board.';
     const oneDoor = level === "beg"; // Beginner has a single door (Bone)
-    return [
+    const factorActive = level === "adv" || level === "champ" || level === "hero";
+    const pages: TourStep[] = [
       {
         i: "🐕",
         t: "Hi! Let's learn to play",
@@ -333,10 +334,22 @@ export const en: Dict = {
         x: 'Here you think it through: 🤔<br><br>• A short route = fewer exercises, but fewer pellets.<br>• Hard doors = more pellets, but harder.<br>Pick the path that suits you!<br><br>Ready? Press <strong>✅ Confirm route</strong>. Want to change it? <strong>🗑 Clear</strong> and start over.',
       },
       {
+        i: "🧩",
+        t: "Factoring",
+        target: "board",
+        x: 'This level has a special bonus! 🧩<br><br>The tiles with a <strong>gold frame</strong> are <strong>factors</strong> of the target (numbers that divide it). Walk over them on the way and you earn <strong>+2 pellets</strong> for each! 🦴<br><br>And when you reach the target, you can break it into two numbers that multiply to it — for an extra bonus! 🎉',
+      },
+      {
         i: "🦴",
         t: "Step 3 — Set off!",
         target: "panel",
         x: `Now you walk, and the clock starts ticking ⏱.<br><br>At each step you solve the door's exercise — ${answerStyle} Correct? You move forward and collect pellets! 🦴<br><br>Mistake? Try again or ask for a hint 💡. You can also give up — you lose the turn but keep what you already collected.`,
+      },
+      {
+        i: "🙋",
+        t: "Help and earn",
+        target: "panel",
+        x: 'Even when it\'s not your turn — you can help! 🙋<br><br>Here, while someone else is solving an exercise, another player can tap their own name, type the answer — and if right, earns <strong>+1 pellet for helping</strong>! 🦴<br><br>That way everyone stays involved and thinks together. 🧠',
       },
       {
         i: "✨",
@@ -357,9 +370,12 @@ export const en: Dict = {
         x: 'Now it\'s your turn — let\'s really play! 🐕🦴',
       },
     ];
+    // The factoring step only applies from Advanced up.
+    return factorActive ? pages : pages.filter((p) => p.i !== "🧩");
   },
   demoGameBtn: "🎬 Demo game",
   demoPlayerName: "🐕 Demo",
+  demoHelperName: "🐩 Friend",
   tourFinish: "🎮 Let's play!",
   tourExit: "Skip the demo",
 

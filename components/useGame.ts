@@ -102,16 +102,20 @@ export function useGame(locale: Locale) {
   // Guided demo: spin up a gentle single-player sample game, then open the tour overlay.
   const startDemo = useCallback(
     (level: Level) => {
+      const dict = getDict(locale);
+      // Two players so the "help on another's turn" feature is actually visible.
+      const mk = (name: string, color: string): Player => ({
+        name,
+        color,
+        tokens: 0,
+        hex: 1,
+        errors: 0,
+        errorLog: [],
+        solvedCount: 0,
+      });
       const players: Player[] = [
-        {
-          name: getDict(locale).demoPlayerName,
-          color: PCOLORS[0],
-          tokens: 0,
-          hex: 1,
-          errors: 0,
-          errorLog: [],
-          solvedCount: 0,
-        },
+        mk(dict.demoPlayerName, PCOLORS[0]),
+        mk(dict.demoHelperName, PCOLORS[1]),
       ];
       const settings: Settings = {
         timer: false,
