@@ -23,7 +23,7 @@ export const DC: Record<DoorKey, Door> = {
       [2, 9],
     ],
     cnt: 2,
-    pts: 20,
+    pts: 12,
     color: "#DC2626",
   },
 };
@@ -35,6 +35,28 @@ export const LVL_DOORS: Record<Level, DoorKey[]> = {
   champ: ["blue", "purple", "yellow", "red"],
   hero: ["blue", "purple", "yellow", "redlong"],
 };
+
+/**
+ * Board size per level — the highest hex number on the board.
+ * Each level's board reaches only as far as its relevant products require,
+ * instead of always spanning 1–100. Width stays 10 columns; rows scale.
+ */
+export const BOARD_MAX: Record<Level, number> = {
+  beg: 30,
+  med: 40,
+  adv: 70,
+  champ: 90,
+  hero: 100,
+};
+
+export function boardMaxFor(level: Level): number {
+  return BOARD_MAX[level];
+}
+
+/** Number of board rows for a level (10 hexes per row). */
+export function boardRowsFor(level: Level): number {
+  return Math.ceil(BOARD_MAX[level] / 10);
+}
 
 export const TARGET_CARDS: TargetCard[] = [
   { id: 1, ex: "3 × 4", ans: 12 },

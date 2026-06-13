@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "dogylishios",
-      "runtimeExecutable": "cmd.exe",
-      "runtimeArgs": ["/c", "npm run dev"],
+      "runtimeExecutable": "npm.cmd",
+      "runtimeArgs": ["run", "dev"],
       "port": 3000
     }
   ]

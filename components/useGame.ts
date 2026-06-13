@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import { DC } from "@/lib/engine/constants";
+import { boardMaxFor, DC } from "@/lib/engine/constants";
 import {
   initState,
   makeChoices,
@@ -78,6 +78,10 @@ export function useGame(locale: Locale) {
   const closeInst = useCallback(() => dispatch({ type: "CLOSE_INST" }), []);
   const instSet = useCallback((idx: number) => dispatch({ type: "INST_SET", idx }), []);
   const goSetup = useCallback(() => dispatch({ type: "GO_SETUP" }), []);
+  const goSetupLevel = useCallback(
+    (level: Level) => dispatch({ type: "GO_SETUP_LEVEL", level }),
+    []
+  );
 
   const startGame = useCallback(
     (players: Player[], level: Level, settings: Settings) => {
@@ -151,9 +155,10 @@ export function useGame(locale: Locale) {
   const forfeitCollect = useCallback(() => dispatch({ type: "FORFEIT_COLLECT" }), []);
 
   const drawCard = useCallback((cardType: CardType) => {
+    const s = stateRef.current;
     const cardId = pickSpecialId(cardType);
     const randData = {
-      hex: Math.floor(Math.random() * 100) + 1,
+      hex: Math.floor(Math.random() * boardMaxFor(s.level)) + 1,
       bool: Math.random() > 0.5,
       targetIdx: Math.floor(Math.random() * 4),
     };
@@ -177,10 +182,6 @@ export function useGame(locale: Locale) {
     (videoKey: string) => dispatch({ type: "OPEN_MODAL", modal: { kind: "video", videoKey } }),
     []
   );
-  const openVideoMenu = useCallback(
-    () => dispatch({ type: "OPEN_MODAL", modal: { kind: "videoMenu" } }),
-    []
-  );
 
   const awardSpectatorBonus = useCallback((playerIdx: number) => {
     dispatch({ type: "SPECTATOR_BONUS", playerIdx });
@@ -200,6 +201,7 @@ export function useGame(locale: Locale) {
       closeInst,
       instSet,
       goSetup,
+      goSetupLevel,
       startGame,
       startP1,
       hexClick,
@@ -221,7 +223,6 @@ export function useGame(locale: Locale) {
       openConfirmEnd,
       openSettingsHelp,
       openVideo,
-      openVideoMenu,
       goResults,
       awardSpectatorBonus,
       openPrimeHex,

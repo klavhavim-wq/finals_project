@@ -156,6 +156,8 @@ export const he: Dict = {
   welcomeSub2a: "📚 לוח הכפל · עובדות יסוד · אסטרטגיה",
   welcomeSub2b: "👥 1–4 שחקנים \u00a0·\u00a0 ⏱ 20–45 דק׳",
   startGame: "🎮 התחל משחק!",
+  chooseLevel: "✨ בחרו רמה כדי להתחיל",
+  demoVideo: "🎬 סרטון הדגמה לרמה",
   howToPlay: "📖 איך משחקים?",
   tutorialVideos: "🎬 סרטוני הסבר",     inst: [
        {
@@ -181,7 +183,7 @@ export const he: Dict = {
        {
          i: "🚪",
          t: "דלתות ונקודות",
-         x: '<div style="display:flex;flex-direction:column;gap:6px;margin:0 0 10px;font-size:.85em"><div style="padding:6px 10px;background:#EFF6FF;border-radius:8px;border-right:4px solid #3B82F6">🦴 <strong style="color:#3B82F6">כחול — עצם</strong>: לוח הכפל עד 4, למשל <span dir="ltr">3 × 4 = 12</span> — <strong>1 גרגיר</strong> לצעד</div><div style="padding:6px 10px;background:#F5F3FF;border-radius:8px;border-right:4px solid #8B5CF6">🐟 <strong style="color:#8B5CF6">סגול — דג</strong>: לוח הכפל עד 6, למשל <span dir="ltr">4 × 5 = 20</span> — <strong>2 גרגירים</strong> לצעד</div><div style="padding:6px 10px;background:#FFFBEB;border-radius:8px;border-right:4px solid #F59E0B">🍗 <strong style="color:#F59E0B">צהוב — כנף</strong>: לוח הכפל עד 8, למשל <span dir="ltr">6 × 7 = 42</span> — <strong>5 גרגירים</strong> לצעד</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-right:4px solid #EF4444">🌭 <strong style="color:#EF4444">אדום — נקניקיה</strong>: לוח הכפל 7–9, למשל <span dir="ltr">8 × 9 = 72</span> — <strong>10 גרגירים</strong> לצעד</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-right:4px solid #DC2626">🥩 <strong style="color:#DC2626">אדום-כהה — סטייק</strong>: כפל ארוך, למשל <span dir="ltr">13 × 4 = 52</span> — <strong>20 גרגירים</strong> לצעד</div></div><em style="font-size:.8em;color:#7C3AED">סטייק — רמת גיבור בלבד!</em><br><br>קשה יותר = יותר גרגירים לבנק! 🐶<div style="margin:12px 0 4px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0;max-width:220px;margin-left:auto;margin-right:auto"><img src="/crop-panel-he.png" alt="דלתות ונקודות" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center">📸 ככה זה נראה בפאנל הצידי</div>',
+         x: '<div style="display:flex;flex-direction:column;gap:6px;margin:0 0 10px;font-size:.85em"><div style="padding:6px 10px;background:#EFF6FF;border-radius:8px;border-right:4px solid #3B82F6">🦴 <strong style="color:#3B82F6">כחול — עצם</strong>: לוח הכפל עד 4, למשל <span dir="ltr">3 × 4 = 12</span> — <strong>1 גרגיר</strong> לצעד</div><div style="padding:6px 10px;background:#F5F3FF;border-radius:8px;border-right:4px solid #8B5CF6">🐟 <strong style="color:#8B5CF6">סגול — דג</strong>: לוח הכפל עד 6, למשל <span dir="ltr">4 × 5 = 20</span> — <strong>2 גרגירים</strong> לצעד</div><div style="padding:6px 10px;background:#FFFBEB;border-radius:8px;border-right:4px solid #F59E0B">🍗 <strong style="color:#F59E0B">צהוב — כנף</strong>: לוח הכפל עד 8, למשל <span dir="ltr">6 × 7 = 42</span> — <strong>5 גרגירים</strong> לצעד</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-right:4px solid #EF4444">🌭 <strong style="color:#EF4444">אדום — נקניקיה</strong>: לוח הכפל 7–9, למשל <span dir="ltr">8 × 9 = 72</span> — <strong>10 גרגירים</strong> לצעד</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-right:4px solid #DC2626">🥩 <strong style="color:#DC2626">אדום-כהה — סטייק</strong>: כפל ארוך, למשל <span dir="ltr">13 × 4 = 52</span> — <strong>12 גרגירים</strong> לצעד</div></div><em style="font-size:.8em;color:#7C3AED">סטייק — רמת גיבור בלבד!</em><br><br>קשה יותר = יותר גרגירים לבנק! 🐶<div style="margin:12px 0 4px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0;max-width:220px;margin-left:auto;margin-right:auto"><img src="/crop-panel-he.png" alt="דלתות ונקודות" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center">📸 ככה זה נראה בפאנל הצידי</div>',
        },
        {
          i: "✅",
@@ -235,7 +237,6 @@ export const he: Dict = {
     champ: { icon: "🏆", name: "אלוף", desc: "כפל \u20667–9\u2069 | 2 דקות" },
     hero: { icon: "⚡", name: "גיבור", desc: "כפל ארוך | \u2066(11–19)×(2–9)\u2069 | \u20661:30\u2069 דקות" },
   },
-  watch: "🎬 צפה",
   options: "🔧 התאמות",
   whatsThis: "מה זה?",
   optTimer: "⏱ טיימר לכל תור",
@@ -398,10 +399,6 @@ export const he: Dict = {
   videoComingSoon: "הסרטון יהיה זמין בקרוב!",
   videoComingSoonHint:
     "כדי לקשר סרטון, ערוך את מערך VIDEOS בקוד<br>והכנס את מזהה YouTube.",
-  videoMenuTitle: "🎬 סרטוני הסבר",
-  videoMenuTutorial: "🎬 טוטוריאל — הסבר על הלוח, הדלתות והכללים",
-  videoMenuGameplay: "🎮 דוגמה למשחק מהיר מלא",
-  videoMenuNote: "סרטונים לפי רמה — זמינים בעמוד ההגדרות ליד כל רמה",
 
   winnerTitle: "מנצח! 🏆",
   winnerSuffix: " 🎉",

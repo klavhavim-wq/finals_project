@@ -10,14 +10,12 @@ const DISMISSABLE = new Set<ModalState["kind"]>([
   "reveal",
   "settingsHelp",
   "video",
-  "videoMenu",
   "confirmEnd",
 ]);
 
-/** Real video files available per locale. Keys map to videoMenu entries. */
+/** Real video files available per locale, keyed by videoKey. */
 const VIDEO_SRC: Record<string, { en: string; he: string }> = {
   tutorial: { en: "/howto-en.mp4", he: "/howto-he.mp4" },
-  gameplay: { en: "/howto-en.mp4", he: "/howto-he.mp4" },
 };
 
 export default function Modal({
@@ -313,38 +311,6 @@ function Body({
           <div className="macts">
             <button className="abt abp" style={{ padding: "9px 18px" }} onClick={() => actions.drawCard("twi")}>
               {t.drawTwistAfterPrime}
-            </button>
-          </div>
-        </>
-      );
-
-    case "videoMenu":
-      return (
-        <>
-          <h2>{t.videoMenuTitle}</h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 12 }}>
-            <button className="abt abl" onClick={() => actions.openVideo("tutorial")}>
-              {t.videoMenuTutorial}
-            </button>
-            <button className="abt abp" onClick={() => actions.openVideo("gameplay")}>
-              {t.videoMenuGameplay}
-            </button>
-          </div>
-          <div
-            style={{
-              borderTop: "1px solid #f3f4f6",
-              margin: "12px 0 8px",
-              paddingTop: 8,
-              fontSize: ".82rem",
-              color: "#9ca3af",
-              textAlign: "center",
-            }}
-          >
-            {t.videoMenuNote}
-          </div>
-          <div className="macts">
-            <button className="abt abgr" style={{ padding: "9px 18px" }} onClick={actions.closeModal}>
-              {t.close}
             </button>
           </div>
         </>

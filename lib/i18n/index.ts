@@ -31,6 +31,8 @@ export interface Dict {
   welcomeSub2a: string;
   welcomeSub2b: string;
   startGame: string;
+  chooseLevel: string;
+  demoVideo: string;
   howToPlay: string;
   tutorialVideos: string;
 
@@ -47,7 +49,6 @@ export interface Dict {
   playerPlaceholder: (dog: string, i: number) => string;
   difficulty: string;
   levels: Record<Level, LabelDesc>;
-  watch: string;
   options: string;
   whatsThis: string;
   optTimer: string;
@@ -136,10 +137,6 @@ export interface Dict {
   videoLabels: Record<string, string>;
   videoComingSoon: string;
   videoComingSoonHint: string;
-  videoMenuTitle: string;
-  videoMenuTutorial: string;
-  videoMenuGameplay: string;
-  videoMenuNote: string;
 
   // Win
   winnerTitle: string;

@@ -1,5 +1,6 @@
 import {
   BEG_CARDS,
+  boardMaxFor,
   DC,
   SPECIAL_BY_ID,
   SPECIAL_POOLS,
@@ -29,7 +30,9 @@ export function pickTargetCard(
   usedCards: number[],
   rand: Rand = Math.random
 ): { card: TargetCard; resetUsed: boolean } {
-  const pool = level === "beg" ? BEG_CARDS : TARGET_CARDS;
+  // Each level's targets must land on its (smaller) board, so cap answers at the board max.
+  const max = boardMaxFor(level);
+  const pool = (level === "beg" ? BEG_CARDS : TARGET_CARDS).filter((c) => c.ans <= max);
   let avail = pool.filter((c) => !usedCards.includes(c.id));
   let resetUsed = false;
   if (!avail.length) {
@@ -431,6 +434,7 @@ export type Action =
   | { type: "CLOSE_INST" }
   | { type: "INST_SET"; idx: number }
   | { type: "GO_SETUP" }
+  | { type: "GO_SETUP_LEVEL"; level: Level }
   | {
       type: "START_GAME";
       players: Player[];
@@ -511,6 +515,9 @@ export function reducer(state: GameState, action: Action): GameState {
 
     case "GO_SETUP":
       return { ...state, screen: "ss" };
+
+    case "GO_SETUP_LEVEL":
+      return { ...state, level: action.level, screen: "ss" };
 
     case "START_GAME": {
       const edgeColors = initEdgeColors(action.level);

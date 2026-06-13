@@ -1,26 +1,18 @@
 "use client";
 
-import { DC, DOGS, PCOLORS, SFILL } from "@/lib/engine/constants";
+import { boardMaxFor, DC, DOGS, PCOLORS, SFILL } from "@/lib/engine/constants";
 import {
-  H,
-  HP,
+  R,
   hCenter,
   hexBaseFill,
   hexSym,
   hNeighbors,
   hVerts,
   isPrime,
-  OO,
-  PAD,
-  R,
-  VP,
-  W,
+  boardSvgSize,
   edgeColor,
 } from "@/lib/engine/hexgrid";
 import type { GameState } from "@/lib/engine/types";
-
-const SVG_W = Math.ceil(9 * HP + OO + W + PAD * 2);
-const SVG_H = Math.ceil(9 * VP + H + PAD * 2);
 
 function fillFor(state: GameState, n: number): string {
   if (state.wrongHex === n) return SFILL.blocked;
@@ -51,8 +43,10 @@ export default function HexBoard({
     state.players.forEach((p, i) => { if (i !== state.cur) otherPlayerHexes.add(p.hex); });
   }
 
+  const boardMax = boardMaxFor(state.level);
+
   const hexes = [];
-  for (let n = 1; n <= 100; n++) {
+  for (let n = 1; n <= boardMax; n++) {
     const { x: cx, y: cy } = hCenter(n);
     const v = hVerts(cx, cy);
     const pts = v.map((p) => p.x.toFixed(1) + "," + p.y.toFixed(1)).join(" ");
@@ -69,7 +63,7 @@ export default function HexBoard({
       const v1 = v[e];
       const v2 = v[(e + 1) % 6];
       const neighbor = nb[e];
-      if (neighbor) {
+      if (neighbor && neighbor <= boardMax) {
         const stroke = DC[edgeColor(state.edgeColors, state.level, n, neighbor)].color;
         edges.push(
           <line
@@ -197,6 +191,8 @@ export default function HexBoard({
         </g>
       );
     });
+
+  const { w: SVG_W, h: SVG_H } = boardSvgSize(state.level);
 
   return (
     <svg

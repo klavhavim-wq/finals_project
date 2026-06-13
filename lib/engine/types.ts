@@ -138,7 +138,6 @@ export type ModalState =
   | { kind: "confirmEnd" }
   | { kind: "settingsHelp" }
   | { kind: "video"; videoKey: string }
-  | { kind: "videoMenu" }
   | { kind: "primeHex"; hex: number };
 
 export interface GameState {

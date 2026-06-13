@@ -152,6 +152,8 @@ export const en: Dict = {
   welcomeSub2a: "📚 Multiplication tables · Number facts · Strategy",
   welcomeSub2b: "👥 1–4 players \u00a0·\u00a0 ⏱ 20–45 min",
   startGame: "🎮 Start Game!",
+  chooseLevel: "✨ Pick a level to begin",
+  demoVideo: "🎬 Demo video for this level",
   howToPlay: "📖 How to Play?",
   tutorialVideos: "🎬 Tutorial Videos",     inst: [
        {
@@ -177,7 +179,7 @@ export const en: Dict = {
        {
          i: "🚪",
          t: "Doors & Points",
-         x: '<div style="display:flex;flex-direction:column;gap:6px;margin:0 0 10px;font-size:.85em"><div style="padding:6px 10px;background:#EFF6FF;border-radius:8px;border-left:4px solid #3B82F6">🦴 <strong style="color:#3B82F6">Blue — Bone</strong>: Tables up to 4, e.g. <span dir="ltr">3 × 4 = 12</span> — <strong>1 pellet</strong> per step</div><div style="padding:6px 10px;background:#F5F3FF;border-radius:8px;border-left:4px solid #8B5CF6">🐟 <strong style="color:#8B5CF6">Purple — Fish</strong>: Tables up to 6, e.g. <span dir="ltr">4 × 5 = 20</span> — <strong>2 pellets</strong> per step</div><div style="padding:6px 10px;background:#FFFBEB;border-radius:8px;border-left:4px solid #F59E0B">🍗 <strong style="color:#F59E0B">Yellow — Wing</strong>: Tables up to 8, e.g. <span dir="ltr">6 × 7 = 42</span> — <strong>5 pellets</strong> per step</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-left:4px solid #EF4444">🌭 <strong style="color:#EF4444">Red — Sausage</strong>: Tables 7–9, e.g. <span dir="ltr">8 × 9 = 72</span> — <strong>10 pellets</strong> per step</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-left:4px solid #DC2626">🥩 <strong style="color:#DC2626">Dark Red — Steak</strong>: Long multiplication, e.g. <span dir="ltr">13 × 4 = 52</span> — <strong>20 pellets</strong> per step</div></div><em style="font-size:.8em;color:#7C3AED">Steak — Hero level only!</em><br><br>Harder = more pellets in the bank! 🐶<div style="margin:12px 0 4px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0;max-width:220px;margin-left:auto;margin-right:auto"><img src="/crop-panel-en.png" alt="Doors &amp; Points" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center">📸 As shown in the side panel</div>',
+         x: '<div style="display:flex;flex-direction:column;gap:6px;margin:0 0 10px;font-size:.85em"><div style="padding:6px 10px;background:#EFF6FF;border-radius:8px;border-left:4px solid #3B82F6">🦴 <strong style="color:#3B82F6">Blue — Bone</strong>: Tables up to 4, e.g. <span dir="ltr">3 × 4 = 12</span> — <strong>1 pellet</strong> per step</div><div style="padding:6px 10px;background:#F5F3FF;border-radius:8px;border-left:4px solid #8B5CF6">🐟 <strong style="color:#8B5CF6">Purple — Fish</strong>: Tables up to 6, e.g. <span dir="ltr">4 × 5 = 20</span> — <strong>2 pellets</strong> per step</div><div style="padding:6px 10px;background:#FFFBEB;border-radius:8px;border-left:4px solid #F59E0B">🍗 <strong style="color:#F59E0B">Yellow — Wing</strong>: Tables up to 8, e.g. <span dir="ltr">6 × 7 = 42</span> — <strong>5 pellets</strong> per step</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-left:4px solid #EF4444">🌭 <strong style="color:#EF4444">Red — Sausage</strong>: Tables 7–9, e.g. <span dir="ltr">8 × 9 = 72</span> — <strong>10 pellets</strong> per step</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-left:4px solid #DC2626">🥩 <strong style="color:#DC2626">Dark Red — Steak</strong>: Long multiplication, e.g. <span dir="ltr">13 × 4 = 52</span> — <strong>12 pellets</strong> per step</div></div><em style="font-size:.8em;color:#7C3AED">Steak — Hero level only!</em><br><br>Harder = more pellets in the bank! 🐶<div style="margin:12px 0 4px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0;max-width:220px;margin-left:auto;margin-right:auto"><img src="/crop-panel-en.png" alt="Doors &amp; Points" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center">📸 As shown in the side panel</div>',
        },
        {
          i: "✅",
@@ -231,7 +233,6 @@ export const en: Dict = {
     champ: { icon: "🏆", name: "Champion", desc: "Hard tables 7–9 | 2 min" },
     hero: { icon: "⚡", name: "Hero", desc: "Long multiplication | (11–19)×(2–9) | 1:30 min" },
   },
-  watch: "🎬 Watch",
   options: "🔧 Options",
   whatsThis: "What's this?",
   optTimer: "⏱ Turn timer",
@@ -388,10 +389,6 @@ export const en: Dict = {
   videoComingSoon: "Video coming soon!",
   videoComingSoonHint:
     "To link a video, edit the VIDEOS object in the code<br>and insert the YouTube video ID.",
-  videoMenuTitle: "🎬 Tutorial Videos",
-  videoMenuTutorial: "🎬 Tutorial — Board layout, doors & rules",
-  videoMenuGameplay: "🎮 Sample quick full game",
-  videoMenuNote: "Level-specific videos available in Settings, next to each level",
 
   winnerTitle: "Winner! 🏆",
   winnerSuffix: " 🎉",

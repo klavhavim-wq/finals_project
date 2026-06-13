@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import LanguageSwitch from "../LanguageSwitch";
 import type { GameActions } from "../useGame";
-import type { Locale } from "@/lib/engine/types";
+import type { Level, Locale } from "@/lib/engine/types";
 import type { Dict } from "@/lib/i18n";
+
+const LEVEL_ORDER: Level[] = ["beg", "med", "adv", "champ", "hero"];
 
 export default function Welcome({
   t,
@@ -15,8 +16,6 @@ export default function Welcome({
   actions: GameActions;
   locale: Locale;
 }) {
-  const [showQuickStart, setShowQuickStart] = useState(false);
-
   return (
     <div id="sw" className="screen active">
       <div
@@ -39,39 +38,30 @@ export default function Welcome({
       <div className="wsub">{t.welcomeSub}</div>
       <div className="wsub2">{t.welcomeSub2a}</div>
       <div className="wsub2">{t.welcomeSub2b}</div>
-      {showQuickStart && (
-        <div
-          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 16 }}
-          onClick={() => setShowQuickStart(false)}
-        >
-          <div
-            style={{ background: "white", borderRadius: 18, padding: "28px 24px", maxWidth: 380, width: "100%", boxShadow: "0 18px 55px rgba(0,0,0,.3)" }}
-            onClick={e => e.stopPropagation()}
-          >
-            <h2 style={{ textAlign: "center", marginBottom: 16, color: "#78350F" }}>{t.quickStartTitle}</h2>
-            <ol style={{ paddingInlineStart: 22, lineHeight: 2.1, color: "#374151" }}>
-              {t.quickStartSteps.map((s, i) => <li key={i}>{s}</li>)}
-            </ol>
+
+      <div className="wchoose">{t.chooseLevel}</div>
+      <div className="lvgrid wlvgrid">
+        {LEVEL_ORDER.map((lv) => {
+          const meta = t.levels[lv];
+          return (
             <button
-              className="btnbig"
-              style={{ width: "100%", marginTop: 20 }}
-              onClick={() => { setShowQuickStart(false); actions.goSetup(); }}
+              key={lv}
+              className="lvb"
+              style={lv === "hero" ? { gridColumn: "1/-1" } : undefined}
+              onClick={() => actions.goSetupLevel(lv)}
             >
-              {t.quickStartGo}
+              <span className="li">{meta.icon}</span>
+              <strong>{meta.name}</strong>
+              <small>{meta.desc}</small>
             </button>
-          </div>
-        </div>
-      )}
-      <button className="btnbig" onClick={actions.goSetup}>
-        {t.startGame}
-      </button>
-      <button className="btnout" onClick={() => setShowQuickStart(true)}>
-        {t.quickStartBtn}
-      </button>
+          );
+        })}
+      </div>
+
       <button className="btnout" onClick={actions.goInst}>
         {t.howToPlay}
       </button>
-      <button className="btnout" onClick={actions.openVideoMenu}>
+      <button className="btnout" onClick={() => actions.openVideo("tutorial")}>
         {t.tutorialVideos}
       </button>
       <button className="btnout" onClick={actions.goResults}>

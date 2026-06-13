@@ -6,19 +6,33 @@ import type { Level, Player, Settings, WinMode } from "@/lib/engine/types";
 import type { GameActions } from "../useGame";
 import type { Dict } from "@/lib/i18n";
 
-const LEVEL_ORDER: Level[] = ["beg", "med", "adv", "champ", "hero"];
 const WINMODE_ORDER: WinMode[] = ["rounds", "first100", "both"];
 
-export default function Setup({ t, actions }: { t: Dict; actions: GameActions }) {
+export default function Setup({
+  t,
+  actions,
+  level,
+}: {
+  t: Dict;
+  actions: GameActions;
+  level: Level;
+}) {
   const [count, setCount] = useState(1);
   const [names, setNames] = useState<string[]>(["", "", "", ""]);
-  const [level, setLevel] = useState<Level>("med");
   const [timer, setTimer] = useState(true);
   const [mc, setMc] = useState(true);
   const [rob, setRob] = useState(true);
   const [coop, setCoop] = useState(false);
   const [freePlay, setFreePlay] = useState(false);
   const [winMode, setWinMode] = useState<WinMode>("rounds");
+
+  // Which options are relevant for this level.
+  const showMc = level === "beg" || level === "med"; // multiple-choice only applies to these levels
+  const showRob = level !== "beg";
+  const showCoop = level !== "beg";
+  const showWinMode = level !== "beg";
+
+  const meta = t.levels[level];
 
   const start = () => {
     const players: Player[] = Array.from({ length: count }, (_, i) => ({
@@ -30,13 +44,37 @@ export default function Setup({ t, actions }: { t: Dict; actions: GameActions })
       errorLog: [],
       solvedCount: 0,
     }));
-    const settings: Settings = { timer, mc, rob, winMode, coop, freePlay };
+    const settings: Settings = {
+      timer,
+      mc: showMc ? mc : false,
+      rob: showRob ? rob : false,
+      winMode: showWinMode ? winMode : "rounds",
+      coop: showCoop ? coop : false,
+      freePlay,
+    };
     actions.startGame(players, level, settings);
   };
 
   return (
     <div id="ss" className="screen active">
       <div className="stitle">{t.setupTitle}</div>
+
+      <div className="scard lvlhead">
+        <span className="lvlhead-icon">{meta.icon}</span>
+        <div className="lvlhead-text">
+          <strong>{meta.name}</strong>
+          <small>{meta.desc}</small>
+        </div>
+      </div>
+
+      <div className="lvlactions">
+        <button className="btnout" onClick={actions.goInst}>
+          {t.howToPlay}
+        </button>
+        <button className="btnout" onClick={() => actions.openVideo(level)}>
+          {t.demoVideo}
+        </button>
+      </div>
 
       <div className="scard">
         <h3>{t.howManyPlayers}</h3>
@@ -78,36 +116,6 @@ export default function Setup({ t, actions }: { t: Dict; actions: GameActions })
       </div>
 
       <div className="scard">
-        <h3>{t.difficulty}</h3>
-        <div className="lvgrid">
-          {LEVEL_ORDER.map((lv) => {
-            const meta = t.levels[lv];
-            return (
-              <button
-                key={lv}
-                className={"lvb" + (level === lv ? " on" : "")}
-                style={lv === "hero" ? { gridColumn: "1/-1" } : undefined}
-                onClick={() => setLevel(lv)}
-              >
-                <span className="li">{meta.icon}</span>
-                <strong>{meta.name}</strong>
-                <small>{meta.desc}</small>
-                <span
-                  className="lvvid"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    actions.openVideo(lv);
-                  }}
-                >
-                  {t.watch}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="scard">
         <div
           style={{
             display: "flex",
@@ -122,36 +130,38 @@ export default function Setup({ t, actions }: { t: Dict; actions: GameActions })
           </button>
         </div>
         <Toggle label={t.optTimer} checked={timer} onChange={setTimer} />
-        <Toggle label={t.optMc} checked={mc} onChange={setMc} />
-        <Toggle label={t.optRob} checked={rob} onChange={setRob} />
-        <Toggle label={t.optCoop} checked={coop} onChange={setCoop} />
+        {showMc && <Toggle label={t.optMc} checked={mc} onChange={setMc} />}
+        {showRob && <Toggle label={t.optRob} checked={rob} onChange={setRob} />}
+        {showCoop && <Toggle label={t.optCoop} checked={coop} onChange={setCoop} />}
         <Toggle label={t.optFreePlay} checked={freePlay} onChange={setFreePlay} />
       </div>
 
-      <div className="scard">
-        <h3>{t.winCondition}</h3>
-        <div className="wmoderow">
-          {WINMODE_ORDER.map((wm) => {
-            const meta = t.winModes[wm];
-            return (
-              <label className="wmodelbl" key={wm}>
-                <input
-                  type="radio"
-                  name="winmode"
-                  value={wm}
-                  checked={winMode === wm}
-                  onChange={() => setWinMode(wm)}
-                />
-                <span className="wmodecard">
-                  <span className="wmi">{meta.icon}</span>
-                  <strong>{meta.name}</strong>
-                  <small>{meta.desc}</small>
-                </span>
-              </label>
-            );
-          })}
+      {showWinMode && (
+        <div className="scard">
+          <h3>{t.winCondition}</h3>
+          <div className="wmoderow">
+            {WINMODE_ORDER.map((wm) => {
+              const wmeta = t.winModes[wm];
+              return (
+                <label className="wmodelbl" key={wm}>
+                  <input
+                    type="radio"
+                    name="winmode"
+                    value={wm}
+                    checked={winMode === wm}
+                    onChange={() => setWinMode(wm)}
+                  />
+                  <span className="wmodecard">
+                    <span className="wmi">{wmeta.icon}</span>
+                    <strong>{wmeta.name}</strong>
+                    <small>{wmeta.desc}</small>
+                  </span>
+                </label>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="sacts">
         <button className="btnout" onClick={() => actions.showScreen("sw")}>
