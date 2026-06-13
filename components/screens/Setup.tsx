@@ -77,11 +77,6 @@ export default function Setup({
         <button className="btnout" onClick={() => actions.goSimpleGuide(level)}>
           {t.howToPlay}
         </button>
-        <button className="btnout" onClick={() => actions.openVideo(level)}>
-          {t.demoVideo}
-        </button>
-      </div>
-      <div className="lvlactions">
         <button className="btnout" onClick={actions.goInst}>
           {t.fullGuideBtn}
         </button>

@@ -64,9 +64,6 @@ export default function Welcome({
       <button className="btnout" onClick={actions.goInst}>
         {t.fullGuideBtn}
       </button>
-      <button className="btnout" onClick={() => actions.openVideo("tutorial")}>
-        {t.tutorialVideos}
-      </button>
       <button className="btnout" onClick={actions.goResults}>
         {t.viewResults}
       </button>
