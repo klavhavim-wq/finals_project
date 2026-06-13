@@ -33,7 +33,7 @@ export const LVL_DOORS: Record<Level, DoorKey[]> = {
   med: ["blue", "purple"],
   adv: ["blue", "purple", "yellow"],
   champ: ["blue", "purple", "yellow", "red"],
-  hero: ["blue", "purple", "yellow", "redlong"],
+  hero: ["blue", "purple", "yellow", "red", "redlong"],
 };
 
 /**
