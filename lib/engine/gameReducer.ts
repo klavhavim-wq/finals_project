@@ -12,11 +12,14 @@ import { edgeColor, hasFactorPair, hexSym, hNeighbors, initEdgeColors, isPrime }
 import type {
   CardType,
   Door,
+  DoorKey,
   EffResult,
   ErrorRecord,
   GameState,
   Level,
   Locale,
+  PendingRoll,
+  Phase,
   Player,
   Settings,
   TargetCard,
@@ -476,7 +479,17 @@ export type Action =
   | { type: "FACTOR_SKIP" }
   | { type: "TOUR_START" }
   | { type: "TOUR_SET"; step: number }
-  | { type: "TOUR_END" };
+  | { type: "TOUR_END" }
+  | {
+      type: "DEMO_STAGE";
+      phase: Phase;
+      targetHex: number | null;
+      path: number[];
+      pathDoors: DoorKey[];
+      pendingRoll: PendingRoll | null;
+      choices: number[] | null;
+      timerOn: boolean;
+    };
 
 function startNewTurnState(s: GameState, card: TargetCard, resetUsed: boolean): GameState {
   return {
@@ -826,6 +839,34 @@ export function reducer(state: GameState, action: Action): GameState {
     case "TOUR_END":
       // Leave the sample game and return to this level's setup screen.
       return { ...state, tourActive: false, tourStep: 0, modal: null, timerRunning: false, screen: "ss" };
+
+    case "DEMO_STAGE": {
+      // Drive the sample game into the phase a tour step is explaining, so the
+      // real board and panel reflect that stage live. Host computes route/roll.
+      const total = timerTotalFor(state.level);
+      return {
+        ...state,
+        phase: action.phase,
+        targetHex: action.targetHex,
+        path: action.path,
+        pathDoors: action.pathDoors,
+        stepIdx: 0,
+        turnPts: 0,
+        boardAns: action.pendingRoll != null,
+        pendingRoll: action.pendingRoll,
+        choices: action.choices,
+        diceSpin: false,
+        mcWrong: null,
+        mcCorrect: null,
+        inputWrong: false,
+        wrongHex: null,
+        wrongAnswerVisible: false,
+        timerSecs: total,
+        timerTotal: total,
+        timerRunning: action.timerOn,
+        modal: null,
+      };
+    }
 
     default:
       return state;

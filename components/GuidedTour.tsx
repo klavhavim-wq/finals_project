@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useState } from "react";
 import RichText from "./RichText";
-import type { Dict, TourTarget } from "@/lib/i18n";
+import type { Dict, TourStage, TourTarget } from "@/lib/i18n";
 import type { GameState } from "@/lib/engine/types";
 import type { GameActions } from "./useGame";
 
@@ -14,6 +14,17 @@ const SELECTORS: Record<TourTarget, string | null> = {
   doors: "#door-legend",
   header: ".ghdr",
   center: null,
+};
+
+/**
+ * Which live phase to drive the sample game into for a step, keyed by its icon
+ * (icons are identical across languages). Route-building steps show phase 2 with
+ * a real route; the "set off" step shows phase 3 with a question and the clock.
+ */
+const STAGE_BY_ICON: Record<string, TourStage> = {
+  "🐾": "route",
+  "🧠": "route",
+  "🦴": "walk",
 };
 
 interface Rect {
@@ -40,6 +51,10 @@ export default function GuidedTour({
 
   const [rect, setRect] = useState<Rect | null>(null);
 
+  // The live phase a given step demonstrates (icons are language-agnostic).
+  const stageFor = (i: number): TourStage =>
+    steps[i]?.stage ?? STAGE_BY_ICON[steps[i]?.i ?? ""] ?? "find";
+
   useLayoutEffect(() => {
     const measure = () => {
       if (!selector) {
@@ -65,15 +80,17 @@ export default function GuidedTour({
       });
     };
     measure();
-    // The floating action panel settles its position in an effect after mount —
+    // The panel's size/position settles after the phase change re-renders —
     // re-measure shortly after so the spotlight lands in the right place.
     const tid = window.setTimeout(measure, 80);
+    const tid2 = window.setTimeout(measure, 220);
     window.addEventListener("resize", measure);
     return () => {
       window.clearTimeout(tid);
+      window.clearTimeout(tid2);
       window.removeEventListener("resize", measure);
     };
-  }, [selector, idx]);
+  }, [selector, idx, state.phase, state.path.length]);
 
   const go = (d: number) => {
     const next = idx + d;
@@ -82,6 +99,7 @@ export default function GuidedTour({
       actions.tourEnd();
       return;
     }
+    actions.demoStage(stageFor(next));
     actions.tourSet(next);
   };
 
@@ -138,7 +156,10 @@ export default function GuidedTour({
               <div
                 key={i}
                 className={"idot" + (i === idx ? " on" : "")}
-                onClick={() => actions.tourSet(i)}
+                onClick={() => {
+                  actions.demoStage(stageFor(i));
+                  actions.tourSet(i);
+                }}
               />
             ))}
           </div>

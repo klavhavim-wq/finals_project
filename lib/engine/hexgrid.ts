@@ -83,6 +83,31 @@ export function isPrime(n: number): boolean {
   return true;
 }
 
+/**
+ * Shortest connected walk from `from` to `to` over adjacent hexes, within the
+ * level's board. Returns the hexes after `from` up to and including `to`
+ * (empty if unreachable). Used by the guided demo to draw a sample route.
+ */
+export function findPath(level: Level, from: number, to: number): number[] {
+  if (from === to) return [];
+  const max = boardMaxFor(level);
+  const prev = new Map<number, number>([[from, -1]]);
+  const queue = [from];
+  while (queue.length) {
+    const cur = queue.shift()!;
+    if (cur === to) break;
+    for (const nb of hNeighbors(cur)) {
+      if (nb == null || nb < 1 || nb > max || prev.has(nb)) continue;
+      prev.set(nb, cur);
+      queue.push(nb);
+    }
+  }
+  if (!prev.has(to)) return [];
+  const path: number[] = [];
+  for (let c = to; c !== from; c = prev.get(c)!) path.push(c);
+  return path.reverse();
+}
+
 /** Proper factor tiles of n that sit on the board: divisors d with 2 ≤ d < n. */
 export function factorTilesOf(n: number, boardMax: number): number[] {
   const out: number[] = [];

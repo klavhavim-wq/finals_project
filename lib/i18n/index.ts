@@ -12,6 +12,9 @@ export interface InstPage {
 /** Which area of the live game a tour step spotlights. */
 export type TourTarget = "board" | "panel" | "sidebar" | "doors" | "header" | "center";
 
+/** Which live phase of the sample game a tour step drives the board into. */
+export type TourStage = "find" | "route" | "walk";
+
 export interface TourStep {
   /** big icon */
   i: string;
@@ -19,6 +22,8 @@ export interface TourStep {
   /** rich HTML body */
   x: string;
   target: TourTarget;
+  /** live phase to show while this step is on screen (default "find") */
+  stage?: TourStage;
 }
 
 export interface LabelDesc {

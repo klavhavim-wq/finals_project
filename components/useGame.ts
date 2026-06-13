@@ -11,7 +11,11 @@ import {
   reducer,
   rollDoor,
 } from "@/lib/engine/gameReducer";
-import type { CardType, GameState, Level, Locale, Player, SessionRecord, Settings } from "@/lib/engine/types";
+import { edgeColor, findPath } from "@/lib/engine/hexgrid";
+import type { CardType, DoorKey, GameState, Level, Locale, Player, SessionRecord, Settings } from "@/lib/engine/types";
+
+/** Which stage of a live sample turn a tour step demonstrates. */
+export type DemoStage = "find" | "route" | "walk";
 
 function usesMC(state: GameState): boolean {
   return state.settings.mc && (state.level === "beg" || state.level === "med");
@@ -64,12 +68,12 @@ export function useGame(locale: Locale) {
     if (state.awaitNewTurn) startP1();
   }, [state.awaitNewTurn, startP1]);
 
-  // Turn timer.
+  // Turn timer. Frozen (shown but not counting down) while the guided demo runs.
   useEffect(() => {
-    if (!state.timerRunning) return;
+    if (!state.timerRunning || state.tourActive) return;
     const id = setInterval(() => dispatch({ type: "TICK" }), 1000);
     return () => clearInterval(id);
-  }, [state.timerRunning]);
+  }, [state.timerRunning, state.tourActive]);
 
   const showScreen = useCallback((screen: GameState["screen"]) => {
     dispatch({ type: "SHOW_SCREEN", screen });
@@ -124,6 +128,55 @@ export function useGame(locale: Locale) {
   );
   const tourSet = useCallback((step: number) => dispatch({ type: "TOUR_SET", step }), []);
   const tourEnd = useCallback(() => dispatch({ type: "TOUR_END" }), []);
+
+  // Move the live sample game into the phase a tour step is explaining, so the
+  // real board, route, panel, and clock reflect that stage as you read about it.
+  const demoStage = useCallback((stage: DemoStage) => {
+    const s = stateRef.current;
+    const startHex = s.players[0]?.hex ?? 1;
+
+    // Stage 1 — finding the target: clean phase-1 board with the target card.
+    if (stage === "find" || !s.card) {
+      dispatch({
+        type: "DEMO_STAGE",
+        phase: 1, targetHex: null, path: [], pathDoors: [],
+        pendingRoll: null, choices: null, timerOn: false,
+      });
+      return;
+    }
+
+    // Build a real sample route from the dog to the target answer.
+    const target = s.card.ans;
+    const path = findPath(s.level, startHex, target);
+    const pathDoors: DoorKey[] = path.map((h, i) =>
+      edgeColor(s.edgeColors, s.level, i === 0 ? startHex : path[i - 1], h)
+    );
+
+    // Stage 2 — planning the route: phase 2 with the route drawn and confirmable.
+    if (stage === "route" || path.length === 0) {
+      dispatch({
+        type: "DEMO_STAGE",
+        phase: 2, targetHex: target, path, pathDoors,
+        pendingRoll: null, choices: null, timerOn: false,
+      });
+      return;
+    }
+
+    // Stage 3 — setting off: phase 3 with a rolled question, answer UI, and clock.
+    const door = DC[pathDoors[0]];
+    const roll = rollDoor(door, {
+      turnUsedExprs: [], lastTurnExprs: [], lastExpr: "",
+      turnHasOne: false, turnHasTen: false,
+    });
+    const usesMc = s.settings.mc && (s.level === "beg" || s.level === "med");
+    dispatch({
+      type: "DEMO_STAGE",
+      phase: 3, targetHex: target, path, pathDoors,
+      pendingRoll: { rolls: roll.rolls, color: pathDoors[0], pts: door.pts, expr: roll.expr, correct: roll.correct },
+      choices: usesMc ? makeChoices(roll.correct, door) : null,
+      timerOn: true,
+    });
+  }, []);
 
   const hexClick = useCallback((n: number) => {
     const s = stateRef.current;
@@ -245,6 +298,7 @@ export function useGame(locale: Locale) {
       startDemo,
       tourSet,
       tourEnd,
+      demoStage,
       startP1,
       hexClick,
       startP2,
