@@ -217,7 +217,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .psdoor.purple{background:#F5F3FF;color:#5B21B6}
 .psdoor.yellow{background:#FFFBEB;color:#B45309}
 .psdoor.red{background:#FEF2F2;color:#B91C1C}
-.psdoor.redlong{background:#FEF2F2;color:#991B1B;font-style:italic}
+.psdoor.redlong{background:#F3F4F6;color:#111827;font-style:italic}
 .pspts{font-size:.8rem;color:#9ca3af;margin-inline-end:auto}
 
 .rsum{background:#f0fdf4;border-radius:8px;padding:7px 10px;font-size:.8rem;color:#065F46;margin:5px 0}
@@ -230,7 +230,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .die.purple{border-color:var(--pu);color:var(--pu)}
 .die.yellow{border-color:var(--ye);color:#B45309}
 .die.red{border-color:var(--rd);color:var(--rd)}
-.die.redlong{border-color:#DC2626;color:#DC2626;font-size:1.1rem}
+.die.redlong{border-color:#111827;color:#111827;font-size:1.1rem}
 .die.spin{animation:dspin .32s ease}
 @keyframes dspin{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(.65)}100%{transform:rotate(360deg) scale(1)}}
 

@@ -26,7 +26,8 @@ export const DC: Record<DoorKey, Door> = {
     ],
     cnt: 2,
     pts: 12,
-    color: "#DC2626",
+    // Black (not dark red) so Steak is unmistakably distinct from the red Sausage door.
+    color: "#111827",
   },
 };
 

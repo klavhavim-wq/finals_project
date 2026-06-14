@@ -16,7 +16,7 @@ const DOOR_TEXT: Record<DoorKey, string> = {
   purple: "#5B21B6",
   yellow: "#B45309",
   red: "#B91C1C",
-  redlong: "#991B1B",
+  redlong: "#111827",
 };
 
 function DoorLegend({ t, state }: { t: Dict; state: GameState }) {
