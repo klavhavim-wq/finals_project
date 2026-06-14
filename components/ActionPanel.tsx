@@ -7,7 +7,9 @@ import type { GameState, Level } from "@/lib/engine/types";
 import type { GameActions } from "./useGame";
 import type { Dict } from "@/lib/i18n";
 
-const LVL_MAX: Record<Level, number> = { beg: 4, med: 6, adv: 8, champ: 9, hero: 9 };
+// A full 1–10 times table on every level: the target-finding step draws from the
+// whole table (factors 2–10) regardless of level, so the helper must cover it.
+const LVL_MAX: Record<Level, number> = { beg: 10, med: 10, adv: 10, champ: 10, hero: 10 };
 
 function MulTable({ max }: { max: number }) {
   const nums = Array.from({ length: max }, (_, i) => i + 1);
@@ -97,7 +99,7 @@ function SpectatorSection({ t, state, actions }: { t: Dict; state: GameState; ac
             {t.spectatorAnswerFor(state.players[claim].name)}
           </div>
           <div className="ansinp">
-            <input type="number" value={inputVal} autoFocus placeholder={t.answerPlaceholder}
+            <input type="number" inputMode="numeric" value={inputVal} autoFocus placeholder={t.answerPlaceholder}
               onChange={e => setInputVal(e.target.value)}
               onKeyDown={e => { if (e.key === "Enter") handleAnswer(); }} />
             <button className="abt abg" onClick={handleAnswer}>✓</button>
@@ -319,6 +321,7 @@ function AnswerInput({
     <div className="ansinp">
       <input
         type="number"
+        inputMode="numeric"
         value={value}
         placeholder={t.answerPlaceholder}
         autoComplete="off"

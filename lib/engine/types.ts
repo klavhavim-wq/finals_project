@@ -16,7 +16,6 @@ export type CardType = "lim" | "bon" | "twi";
 export type Effect =
   | "dblPts"
   | "add10"
-  | "add15"
   | "speedBonus"
   | "stepsBonus"
   | "evenOnly"
@@ -105,7 +104,6 @@ export interface PendingRoll {
 export type EffResult =
   | { eff: "dblPts"; total: number }
   | { eff: "add10"; total: number }
-  | { eff: "add15"; total: number }
   | { eff: "speedBonus"; applied: boolean; total: number }
   | { eff: "stepsBonus"; steps: number; total: number }
   | { eff: "evenOnly"; applied: boolean; total: number }

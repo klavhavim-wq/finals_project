@@ -124,9 +124,11 @@ export function hasFactorPair(n: number): boolean {
 
 export function hexSym(n: number): string {
   if (n % 10 === 0) return "💎";
-  if (n % 10 === 5) return "🚧";
   if (n % 10 === 6) return "🦹";
+  // Primes draw a Twist (checked before the "ends in 5" limit rule so that 5,
+  // the only prime ending in 5, matches the instructions and gets a Twist).
   if (isPrime(n)) return "🎲";
+  if (n % 10 === 5) return "🚧";
   return "";
 }
 

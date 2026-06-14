@@ -75,7 +75,10 @@ export default function HexBoard({
       const v2 = v[(e + 1) % 6];
       const neighbor = nb[e];
       if (neighbor && neighbor <= boardMax) {
-        const stroke = DC[edgeColor(state.edgeColors, state.level, n, neighbor)].color;
+        const dkey = edgeColor(state.edgeColors, state.level, n, neighbor);
+        const stroke = DC[dkey].color;
+        // Steak (redlong) is drawn dashed so it can't be confused with the
+        // solid red Sausage door — distinguishable without relying on hue.
         edges.push(
           <line
             key={e}
@@ -86,6 +89,7 @@ export default function HexBoard({
             stroke={stroke}
             strokeWidth={4.5}
             strokeLinecap="round"
+            strokeDasharray={dkey === "redlong" ? "7 5" : undefined}
           />
         );
       } else {
@@ -125,15 +129,18 @@ export default function HexBoard({
           fill={fillFor(state, n)}
           stroke={
             isUpcomingPath ? "#0891B2"
-            : validNextHexes.has(n) ? "#86EFAC"
+            : validNextHexes.has(n) ? "#16A34A"
             : otherPlayerHexes.has(n) ? "#FB923C"
             : "none"
           }
           strokeWidth={
             isUpcomingPath ? 2.5
-            : validNextHexes.has(n) ? 2
+            : validNextHexes.has(n) ? 2.5
             : otherPlayerHexes.has(n) ? 2.5
             : 0
+          }
+          strokeDasharray={
+            validNextHexes.has(n) && !isUpcomingPath ? "5 3" : undefined
           }
         />
         {edges}
@@ -182,13 +189,13 @@ export default function HexBoard({
           const { x: cx, y: cy } = hCenter(h);
           return (
             <g key={`badge-${h}`} className="svg-badge">
-              <circle cx={(cx + 12).toFixed(1)} cy={(cy - 12).toFixed(1)} r={7} fill="#3B82F6" />
+              <circle cx={(cx + 13).toFixed(1)} cy={(cy - 13).toFixed(1)} r={9} fill="#3B82F6" stroke="white" strokeWidth={1.5} />
               <text
-                x={(cx + 12).toFixed(1)}
-                y={(cy - 12).toFixed(1)}
+                x={(cx + 13).toFixed(1)}
+                y={(cy - 13).toFixed(1)}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fontSize={7}
+                fontSize={10}
                 fill="white"
                 fontWeight={800}
                 pointerEvents="none"

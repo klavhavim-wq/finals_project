@@ -91,6 +91,8 @@ export interface Dict {
   // Game header / panel
   gameTitle: string;
   turn: (name: string) => string;
+  roundLabel: (round: number, total: number) => string;
+  instAria: string;
   defaultPlayerName: (dog: string, i: number) => string;
 
   // Phase 1

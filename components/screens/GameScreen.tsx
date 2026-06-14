@@ -6,9 +6,18 @@ import PlayerCards from "../PlayerCards";
 import ActionPanel from "../ActionPanel";
 import LanguageSwitch from "../LanguageSwitch";
 import { DC, LVL_DOORS } from "@/lib/engine/constants";
-import type { GameState, Locale } from "@/lib/engine/types";
+import type { DoorKey, GameState, Locale } from "@/lib/engine/types";
 import type { GameActions } from "../useGame";
 import type { Dict } from "@/lib/i18n";
+
+/** Darkened door hues that meet contrast for coloured TEXT on white. */
+const DOOR_TEXT: Record<DoorKey, string> = {
+  blue: "#1D4ED8",
+  purple: "#5B21B6",
+  yellow: "#B45309",
+  red: "#B91C1C",
+  redlong: "#991B1B",
+};
 
 function DoorLegend({ t, state }: { t: Dict; state: GameState }) {
   const doors = LVL_DOORS[state.level];
@@ -33,7 +42,7 @@ function DoorLegend({ t, state }: { t: Dict; state: GameState }) {
               display: "flex", alignItems: "center", gap: 8,
               background: dc.color + "18",
               borderRadius: 8, padding: "5px 8px",
-              borderLeft: `4px solid ${dc.color}`,
+              borderInlineStart: `4px solid ${dc.color}`,
             }}>
               <span style={{ fontSize: "1rem", lineHeight: 1 }}>
                 {t.doorLabel(d).split(" ")[0]}
@@ -47,7 +56,7 @@ function DoorLegend({ t, state }: { t: Dict; state: GameState }) {
                 </div>
               </div>
               <span style={{
-                fontWeight: 800, fontSize: ".88rem", color: dc.color,
+                fontWeight: 800, fontSize: ".88rem", color: DOOR_TEXT[d],
                 background: "white", borderRadius: 6,
                 padding: "2px 7px", flexShrink: 0,
                 border: `1.5px solid ${dc.color}`,
@@ -64,6 +73,15 @@ function DoorLegend({ t, state }: { t: Dict; state: GameState }) {
 
 function fmtTime(s: number): string {
   return "⏱ " + Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60);
+}
+
+const PANEL_W = 280;
+/** Keep the floating panel inside the viewport (at least ~80px always visible). */
+function clampPanel(x: number, y: number): { x: number; y: number } {
+  const maxX = window.innerWidth - 80;
+  const minX = -(PANEL_W - 80);
+  const maxY = window.innerHeight - 60;
+  return { x: Math.min(maxX, Math.max(minX, x)), y: Math.min(maxY, Math.max(0, y)) };
 }
 
 const PHASE_ICONS = ["", "🎯", "🗺️", "🐕"];
@@ -121,6 +139,13 @@ export default function GameScreen({
 
   const endPan = () => {
     pan.current.active = false;
+    // If a drag ends over empty space (no click follows), clear the moved flag
+    // after the trailing click fires so it can't swallow the next genuine tap.
+    if (pan.current.moved) {
+      setTimeout(() => {
+        pan.current.moved = false;
+      }, 0);
+    }
   };
 
   const guardedHexClick = (n: number) => {
@@ -143,14 +168,19 @@ export default function GameScreen({
       const wide = window.innerWidth > 820;
       setIsDesktop(wide);
       if (wide) {
-        // Start on the right side of the board, clear of the 274px sidebar
-        setPanelPos({ x: window.innerWidth - 580, y: 70 });
+        // The sidebar sits opposite the reading direction: on the right in LTR,
+        // on the left in RTL. Start the panel clear of it, never over the board.
+        const x = locale === "he" ? 274 + 30 : window.innerWidth - 580;
+        setPanelPos(clampPanel(x, 70));
       }
     }
-    const onResize = () => setIsDesktop(window.innerWidth > 820);
+    const onResize = () => {
+      setIsDesktop(window.innerWidth > 820);
+      setPanelPos((p) => clampPanel(p.x, p.y));
+    };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, []);
+  }, [locale]);
 
   const onHandleDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDesktop) return;
@@ -161,7 +191,7 @@ export default function GameScreen({
   const onHandleMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!fpDrag.current.active || !isDesktop) return;
     e.stopPropagation();
-    setPanelPos({ x: e.clientX - fpDrag.current.ox, y: e.clientY - fpDrag.current.oy });
+    setPanelPos(clampPanel(e.clientX - fpDrag.current.ox, e.clientY - fpDrag.current.oy));
   };
   const onHandleUp = (e: React.PointerEvent<HTMLDivElement>) => {
     fpDrag.current.active = false;
@@ -175,6 +205,9 @@ export default function GameScreen({
         <img src="/logo.jpg" alt={t.logoAlt} className="brand-logo-sm" />
         <span className="ghtitle">{t.gameTitle}</span>
         <span className="ghturn">{t.turn(curName)}</span>
+        {!state.settings.freePlay && state.settings.winMode !== "first100" && (
+          <span className="ghround">{t.roundLabel(Math.min(state.round + 1, 4), 4)}</span>
+        )}
         <div className={timerClass}>
           <div className="tnum">{fmtTime(state.timerSecs)}</div>
           <div className="tbar">
@@ -182,10 +215,10 @@ export default function GameScreen({
           </div>
         </div>
         <LanguageSwitch locale={locale} />
-        <button className="ghbtn" onClick={actions.goInst}>
+        <button className="ghbtn" onClick={actions.goInst} aria-label={t.instAria} title={t.instAria}>
           📖
         </button>
-        <button className="ghbtn" onClick={actions.openConfirmEnd}>
+        <button className="ghbtn" onClick={actions.openConfirmEnd} aria-label={t.endGame} title={t.endGame}>
           ✖
         </button>
       </div>

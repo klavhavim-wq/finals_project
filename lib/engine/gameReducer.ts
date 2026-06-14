@@ -2,6 +2,7 @@ import {
   DC,
   FACTOR_SOLVE_BONUS,
   FACTOR_TILE_BONUS,
+  LVL_DOORS,
   SPECIAL_BY_ID,
   SPECIAL_POOLS,
   factorBonusActive,
@@ -32,7 +33,8 @@ export type Rand = () => number;
 export function pickTargetCard(
   level: Level,
   usedCards: number[],
-  rand: Rand = Math.random
+  rand: Rand = Math.random,
+  preferComposite = false
 ): { card: TargetCard; resetUsed: boolean } {
   // Each level has its own multiplication target pool, already sized to its board.
   const pool = targetPoolFor(level);
@@ -42,7 +44,14 @@ export function pickTargetCard(
     resetUsed = true;
     avail = pool;
   }
-  const card = avail[Math.floor(rand() * avail.length)];
+  // The guided demo asks for a composite target so the factoring step (gold
+  // factor tiles + the "break it into factors" challenge) actually shows.
+  let pickFrom = avail;
+  if (preferComposite) {
+    const comp = avail.filter((c) => hasFactorPair(c.ans));
+    if (comp.length) pickFrom = comp;
+  }
+  const card = pickFrom[Math.floor(rand() * pickFrom.length)];
   return { card, resetUsed };
 }
 
@@ -142,8 +151,14 @@ export function makeChoices(correct: number, door: Door, rand: Rand = Math.rando
   return [...s].sort(() => rand() - 0.5);
 }
 
-export function pickSpecialId(type: CardType, rand: Rand = Math.random): string {
-  const pool = SPECIAL_POOLS[type];
+export function pickSpecialId(type: CardType, level: Level, rand: Rand = Math.random): string {
+  const base = SPECIAL_POOLS[type];
+  // The "3 door types" limit needs 3 door colors to be fair — skip it on levels
+  // that don't have that many doors (Beginner/Intermediate).
+  const pool =
+    type === "lim" && new Set(LVL_DOORS[level]).size < 3
+      ? base.filter((c) => c.eff !== "threeColors")
+      : base;
   return pool[Math.floor(rand() * pool.length)].id;
 }
 
@@ -167,12 +182,10 @@ function applyEffect(
       tp += 10;
       res = { eff: "add10", total: tp };
       break;
-    case "add15":
-      tp += 15;
-      res = { eff: "add15", total: tp };
-      break;
     case "speedBonus":
-      if (state.timerSecs > state.timerTotal / 2) {
+      // Only meaningful when the clock is running; with the timer off there is
+      // no "finished fast" to measure, so the bonus does not apply.
+      if (state.settings.timer && state.timerSecs > state.timerTotal / 2) {
         tp += 20;
         res = { eff: "speedBonus", applied: true, total: tp };
       } else {
@@ -202,8 +215,13 @@ function applyEffect(
       }
       break;
     case "threeColors": {
+      // Require as many door types as the route could realistically use: the
+      // smaller of 3 and the number of door types this level even has, so the
+      // card is never an unavoidable penalty on Beginner/Intermediate boards.
+      const available = new Set(LVL_DOORS[state.level]).size;
+      const need = Math.min(3, available);
       const count = new Set(state.pathDoors).size;
-      if (count < 3) {
+      if (count < need) {
         tp = Math.max(0, Math.floor(tp / 2));
         res = { eff: "threeColors", count, applied: true, total: tp };
       } else {
@@ -212,9 +230,12 @@ function applyEffect(
       break;
     }
     case "noRed": {
-      const count = state.pathDoors.filter((d) => d === "red" || d === "redlong").length;
+      // Charge each red/steak door its own real value (steak is worth more than
+      // sausage), so the deduction matches the pellets actually earned there.
+      const redDoors = state.pathDoors.filter((d) => d === "red" || d === "redlong");
+      const count = redDoors.length;
       if (count > 0) {
-        const lost = count * DC.red.pts;
+        const lost = redDoors.reduce((s, d) => s + DC[d].pts, 0);
         tp = Math.max(0, tp - lost);
         res = { eff: "noRed", count, lost, applied: true, total: tp };
       } else {
@@ -634,6 +655,15 @@ export function reducer(state: GameState, action: Action): GameState {
         path = [...path].reverse();
         pathDoors = [...pathDoors].reverse();
       }
+      // The walk ends at the target, so drop any steps planned beyond it —
+      // they would never be walked and must not inflate the route.
+      if (state.targetHex !== null) {
+        const ti = path.indexOf(state.targetHex);
+        if (ti !== -1 && ti < path.length - 1) {
+          path = path.slice(0, ti + 1);
+          pathDoors = pathDoors.slice(0, ti + 1);
+        }
+      }
       const total = timerTotalFor(state.level);
       return {
         ...state,
@@ -769,7 +799,9 @@ export function reducer(state: GameState, action: Action): GameState {
 
     case "DO_ROB": {
       const t = state.players[action.index];
-      const stolen = Math.min(15, Math.max(2, Math.round(t.tokens * 0.1)));
+      // ~10% of the rival's pellets (2–15), but never more than they actually
+      // have — so robbing a broke rival can't conjure pellets from nothing.
+      const stolen = Math.min(t.tokens, Math.min(15, Math.max(2, Math.round(t.tokens * 0.1))));
       const players = state.players.map((p, i) =>
         i === action.index ? { ...p, tokens: Math.max(0, p.tokens - stolen) } : p
       );

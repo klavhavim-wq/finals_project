@@ -47,7 +47,7 @@ export default function PlayerCards({ t, state }: { t: Dict; state: GameState })
             />
           </div>
           <div
-            style={{ fontSize: ".7rem", color: "#065F46", marginTop: 3, textAlign: "center" }}
+            style={{ fontSize: ".8rem", color: "#065F46", marginTop: 3, textAlign: "center" }}
           >
             {t.sharedProgress(state.sharedTokens)}
           </div>

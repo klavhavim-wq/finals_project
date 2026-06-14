@@ -101,41 +101,39 @@ function formatEff(r: EffResult): string {
     case "dblPts":
       return `🦴×2! סה"כ: <strong>${r.total}</strong> גרגירים`;
     case "add10":
-      return `+10 🦴! סה"כ: <strong>${r.total}</strong>`;
-    case "add15":
-      return `+15 🦴! סה"כ: <strong>${r.total}</strong>`;
+      return `+10 🦴! סה"כ: <strong>${r.total}</strong> גרגירים`;
     case "speedBonus":
       return r.applied
-        ? `+20 🦴 על מהירות! סה"כ: <strong>${r.total}</strong>`
+        ? `+20 🦴 על מהירות! סה"כ: <strong>${r.total}</strong> גרגירים`
         : "לא מהיר מספיק הפעם 😅";
     case "stepsBonus":
-      return `+${r.steps * 2} 🦴 (${r.steps} צעדים × 2)! סה"כ: <strong>${r.total}</strong>`;
+      return `+${r.steps * 2} 🦴 (${r.steps} צעדים × 2)! סה"כ: <strong>${r.total}</strong> גרגירים`;
     case "evenOnly":
       return r.applied
-        ? `הגרגירים לא זוגיים! הורדה 1 🦴 — נשאר: <strong>${r.total}</strong>`
-        : "✅ הגרגירים זוגיים! עובר בשלום";
+        ? `הגרגירים אי-זוגיים — צריך זוגי! −1 🦴 — נשאר: <strong>${r.total}</strong>`
+        : "✅ הגרגירים זוגיים! אפשר להמשיך";
     case "oddOnly":
       return r.applied
-        ? `הגרגירים לא אי-זוגיים! הורדה 1 🦴 — נשאר: <strong>${r.total}</strong>`
-        : "✅ הגרגירים אי-זוגיים! עובר בשלום";
+        ? `הגרגירים זוגיים — צריך אי-זוגי! −1 🦴 — נשאר: <strong>${r.total}</strong>`
+        : "✅ הגרגירים אי-זוגיים! אפשר להמשיך";
     case "threeColors":
       return r.applied
-        ? `רק ${r.count} סוגי אוכל — חצי גרגירים: <strong>${r.total}</strong>`
-        : `✅ ${r.count} סוגי אוכל! עובר בשלום`;
+        ? `רק ${r.count} סוגי אוכל — חצי מהגרגירים: <strong>${r.total}</strong>`
+        : `✅ ${r.count} סוגי אוכל! אפשר להמשיך`;
     case "noRed":
       return r.applied
-        ? `${r.count} נקניקיות! −${r.lost} 🦴 — נשאר: <strong>${r.total}</strong>`
-        : "✅ ללא נקניקיה! עובר בשלום";
+        ? `${r.count} דלתות אדומות! −${r.lost} 🦴 — נשאר: <strong>${r.total}</strong>`
+        : "✅ ללא דלת אדומה! אפשר להמשיך";
     case "shortPath":
       return r.applied
         ? `מסלול ארוך (${r.steps} צעדים) — 75%: <strong>${r.total}</strong> 🦴`
-        : "✅ מסלול קצר! עובר בשלום";
+        : "✅ מסלול קצר! אפשר להמשיך";
     case "extraTurn":
       return "🎉 תור נוסף מגיע לך!";
     case "teleport":
       return `🎲 קפצת למשושה <strong>${r.hex}</strong>! מתחילים תור חדש משם`;
     case "swapHex":
-      return `🔀 החלפת מיקום עם <strong>${r.withName}</strong>! עכשיו אתה על משושה <strong>${r.myNewHex}</strong>`;
+      return `🔀 החלפת מיקום עם <strong>${r.withName}</strong>! עכשיו נמצאים על משושה <strong>${r.myNewHex}</strong>`;
     case "dblOrHalf":
       return r.doubled
         ? `🎉 כפול! סה"כ: <strong>${r.total}</strong> גרגירים`
@@ -178,12 +176,12 @@ export const he: Dict = {
        {
          i: "🗺️",
          t: "שלב 2 — מתכננים מסלול",
-         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="140" height="130" viewBox="-5 0 250 245" xmlns="http://www.w3.org/2000/svg"><polygon points="120,20 207,70 207,170 120,220 33,170 33,70" fill="#FFF8E7" stroke="#C9A882" stroke-width="2"/><line x1="120" y1="20" x2="207" y2="70" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="70" x2="207" y2="170" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="170" x2="120" y2="220" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/><line x1="120" y1="220" x2="33" y2="170" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="170" x2="33" y2="70" stroke="#DC2626" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="70" x2="120" y2="20" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><text x="120" y="120" text-anchor="middle" dominant-baseline="middle" font-size="36" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">42</text></svg></div>לוחצים על משושים לבניית המסלול ליעד.<br>לא לשכוח לסמן גם את משושה היעד עצמו!<br><br>הצבעים של הדלתות מסמנים את רמת הקושי ואת מספר הגרגירים לכל צעד.<br><br>💡 <strong>עזרת כיוון:</strong> בזמן הבנייה, המשושים האפשריים הבאים מסומנים בגבול ירוק על הלוח.',
+         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="140" height="130" viewBox="-5 0 250 245" xmlns="http://www.w3.org/2000/svg"><polygon points="120,20 207,70 207,170 120,220 33,170 33,70" fill="#FFF8E7" stroke="#C9A882" stroke-width="2"/><line x1="120" y1="20" x2="207" y2="70" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="70" x2="207" y2="170" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="170" x2="120" y2="220" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/><line x1="120" y1="220" x2="33" y2="170" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="170" x2="33" y2="70" stroke="#DC2626" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="70" x2="120" y2="20" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><text x="120" y="120" text-anchor="middle" dominant-baseline="middle" font-size="36" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">42</text></svg></div>לוחצים על משושים לבניית המסלול ליעד.<br>לא לשכוח לסמן גם את משושה היעד עצמו!<br><br>הצבעים של הדלתות מסמנים את רמת הקושי ואת מספר הגרגירים לכל צעד.<br><br>💡 <strong>עזרת כיוון:</strong> בזמן הבנייה, המשושים האפשריים הבאים מסומנים בגבול ירוק על הלוח.<br><br><em style="font-size:.85em;color:#64748b">הצבעים בציור הם לדוגמה — אילו דלתות יש בפועל תלוי ברמה.</em>',
        },
        {
          i: "🚪",
-         t: "דלתות ונקודות",
-         x: '<div style="display:flex;flex-direction:column;gap:6px;margin:0 0 10px;font-size:.85em"><div style="padding:6px 10px;background:#EFF6FF;border-radius:8px;border-right:4px solid #3B82F6">🦴 <strong style="color:#3B82F6">כחול — עצם</strong>: לוח הכפל עד 4, למשל <span dir="ltr">3 × 4 = 12</span> — <strong>1 גרגיר</strong> לצעד</div><div style="padding:6px 10px;background:#F5F3FF;border-radius:8px;border-right:4px solid #8B5CF6">🐟 <strong style="color:#8B5CF6">סגול — דג</strong>: לוח הכפל עד 6, למשל <span dir="ltr">4 × 5 = 20</span> — <strong>2 גרגירים</strong> לצעד</div><div style="padding:6px 10px;background:#FFFBEB;border-radius:8px;border-right:4px solid #F59E0B">🍗 <strong style="color:#F59E0B">צהוב — כנף</strong>: לוח הכפל עד 8, למשל <span dir="ltr">6 × 7 = 42</span> — <strong>5 גרגירים</strong> לצעד</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-right:4px solid #EF4444">🌭 <strong style="color:#EF4444">אדום — נקניקיה</strong>: לוח הכפל 7–9, למשל <span dir="ltr">8 × 9 = 72</span> — <strong>10 גרגירים</strong> לצעד</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-right:4px solid #DC2626">🥩 <strong style="color:#DC2626">אדום-כהה — סטייק</strong>: כפל ארוך, למשל <span dir="ltr">13 × 4 = 52</span> — <strong>12 גרגירים</strong> לצעד</div></div><em style="font-size:.8em;color:#7C3AED">סטייק — רמת גיבור בלבד!</em><br><br>קשה יותר = יותר גרגירים לבנק! 🐶<div style="margin:12px 0 4px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0;max-width:220px;margin-left:auto;margin-right:auto"><img src="/crop-panel-he.png" alt="דלתות ונקודות" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center">📸 ככה זה נראה בפאנל הצידי</div>',
+         t: "דלתות וגרגירים",
+         x: '<div style="display:flex;flex-direction:column;gap:6px;margin:0 0 10px;font-size:.85em"><div style="padding:6px 10px;background:#EFF6FF;border-radius:8px;border-right:4px solid #3B82F6">🦴 <strong style="color:#3B82F6">כחול — עצם</strong>: לוח הכפל עד 4, למשל <span dir="ltr">3 × 4 = 12</span> — <strong>1 גרגיר</strong> לצעד</div><div style="padding:6px 10px;background:#F5F3FF;border-radius:8px;border-right:4px solid #8B5CF6">🐟 <strong style="color:#8B5CF6">סגול — דג</strong>: לוח הכפל עד 6, למשל <span dir="ltr">4 × 5 = 20</span> — <strong>2 גרגירים</strong> לצעד</div><div style="padding:6px 10px;background:#FFFBEB;border-radius:8px;border-right:4px solid #F59E0B">🍗 <strong style="color:#B45309">כתום — כנף</strong>: לוח הכפל עד 8, למשל <span dir="ltr">6 × 7 = 42</span> — <strong>5 גרגירים</strong> לצעד</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-right:4px solid #EF4444">🌭 <strong style="color:#EF4444">אדום — נקניקיה</strong>: לוח הכפל 7–9, למשל <span dir="ltr">8 × 9 = 72</span> — <strong>10 גרגירים</strong> לצעד</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-right:4px solid #DC2626">🥩 <strong style="color:#DC2626">אדום-כהה — סטייק</strong>: כפל ארוך, למשל <span dir="ltr">13 × 4 = 52</span> — <strong>12 גרגירים</strong> לצעד</div></div><em style="font-size:.8em;color:#7C3AED">סטייק — רמת גיבור בלבד!</em><br><br>קשה יותר = יותר גרגירים לבנק! 🐶<div style="margin:12px 0 4px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0;max-width:220px;margin-left:auto;margin-right:auto"><img src="/crop-panel-he.png" alt="דלתות ונקודות" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center">📸 ככה זה נראה בפאנל הצידי</div>',
        },
        {
          i: "✅",
@@ -198,7 +196,7 @@ export const he: Dict = {
        {
          i: "⏱",
          t: "הגבלת זמן",
-         x: 'לכל רמה יש הגבלת זמן לתור:<br><br>🐾⭐🌟 <strong>מתחילים / בינוני / מתקדם</strong> — 3 דקות<br>🏆 <strong>אלוף</strong> — 2 דקות<br>⚡ <strong>גיבור</strong> — <span dir="ltr">1:30</span> דקות<br><br>לא סיימתם בזמן? נשארים במקום, <strong>הגרגירים שנצברו נשמרים!</strong> 🦴<br><br>💡 אפשר לכבות את הטיימר בהגדרות.',
+         x: 'לכל רמה יש הגבלת זמן לתור:<br><br>🐾⭐🌟 <strong>מתחילים / בינוני / מתקדם</strong> — 3 דקות<br>🏆 <strong>אלוף</strong> — 2 דקות<br>⚡ <strong>גיבור</strong> — דקה וחצי<br><br>לא סיימתם בזמן? נשארים במקום, <strong>הגרגירים שנצברו נשמרים!</strong> 🦴<br><br>💡 אפשר לכבות את הטיימר בהגדרות.',
        },
        {
          i: "🏆",
@@ -208,7 +206,7 @@ export const he: Dict = {
        {
          i: "✨",
          t: "סימנים מיוחדים על הלוח",
-         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0"><img src="/crop-board-he.png" alt="סימנים בלוח" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center;margin:-4px 0 10px">📸 שימו לב לסמלים על המשושים!</div><strong>💎 מספרים עגולים <span dir="ltr">(10, 20, 30...)</span></strong><br>נחתתם כאן? שלופו קלף בונוס! 🎁<br>אולי תקבלו: כפול גרגירים / תור נוסף / +10 גרגירים<br><br><strong>🚧 מסתיימים ב-5 <span dir="ltr">(15, 25, 35...)</span></strong><br>שלופו קלף הגבלה — אתגר לאיסוף!<br>למשל: "מספר הגרגירים חייב להיות זוגי"<br><br><strong>🦹 מסתיימים ב-6 <span dir="ltr">(16, 26, 36...)</span></strong><br>שוד! ✋ אפשר לגנוב גרגירים מיריב!<br><br><strong>🎲 מספרים ראשוניים <span dir="ltr">(2, 3, 5, 7, 11, 13...)</span></strong><br>מספר שמתחלק רק ב-1 ובעצמו!<br>שלופו קלף טוויסט — הכללים משתנים! 🎲',
+         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0"><img src="/crop-board-he.png" alt="סימנים בלוח" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center;margin:-4px 0 10px">📸 שימו לב לסמלים על המשושים!</div><strong>💎 מספרים עגולים <span dir="ltr">(10, 20, 30...)</span></strong><br>נחתתם כאן? שלופו קלף בונוס! 🎁<br>אולי תקבלו: כפול גרגירים / תור נוסף / +10 גרגירים<br><br><strong>🚧 מסתיימים ב-5 <span dir="ltr">(15, 25, 35...)</span></strong><br>שלופו קלף הגבלה — אתגר לאיסוף!<br>למשל: "מספר הגרגירים חייב להיות זוגי"<br><br><strong>🦹 מסתיימים ב-6 <span dir="ltr">(16, 26, 36...)</span></strong><br>שוד! ✋ אפשר לגנוב גרגירים מיריב (כ-10% מהגרגירים שלו)!<br><br><strong>🎲 מספרים ראשוניים <span dir="ltr">(2, 3, 5, 7, 11, 13...)</span></strong><br>מספר שמתחלק רק ב-1 ובעצמו!<br>שלופו קלף טוויסט — הכללים משתנים! 🎲',
        },
        {
          i: "🧩",
@@ -218,12 +216,12 @@ export const he: Dict = {
        {
          i: "⚙️",
          t: "הגדרות המשחק",
-         x: 'לפני שמתחילים — מגדירים את העדפות המשחק שלנו:<br><br>📊 <strong>רמת קושי</strong> — מתחילים עד גיבור<br>⏱ <strong>טיימר</strong> — מופעל או כבוי<br>🔤 <strong>כפתורי בחירה</strong> — לרמות מתחילים/בינוני<br>🦹 <strong>שוד</strong> — מופעל או כבוי<br>🤝 <strong>שיתופי</strong> — כולם ביחד במקום תחרות<br>🏁 <strong>מטרת המשחק</strong> — איך מנצחים?',
+         x: 'לפני שמתחילים — מגדירים את העדפות המשחק שלנו:<br><br>📊 <strong>רמת קושי</strong> — מתחילים עד גיבור<br>⏱ <strong>טיימר</strong> — מופעל או כבוי<br>🔤 <strong>כפתורי בחירה</strong> — לרמות מתחילים/בינוני<br>🦹 <strong>שוד</strong> — מופעל או כבוי<br>🤝 <strong>שיתופי</strong> — כולם ביחד במקום תחרות<br>🎓 <strong>משחק חופשי</strong> — תרגול בלי ניקוד ובלי מנצח<br>🏁 <strong>מטרת המשחק</strong> — איך מנצחים?',
        },
        {
          i: "🤝",
          t: "ביחד — מצב שיתופי",
-         x: 'מפעילים "משחק שיתופי" בהגדרות.<br>במצב הזה — <strong>כולנו עובדים ביחד!</strong><br><br>✅ כל הגרגירים נכנסים לבנק המשותף 🦴<br>✅ אין שוד — כולנו אחד!<br>✅ מגיעים ל-100 ביחד — <strong>כולנו מנצחים! 🎉</strong><br><br>🐕🐩🐕‍🦺🦮 מתאים לילדים צעירים, לטיפול, ולמשחק משפחתי רגוע.',
+         x: 'מפעילים "משחק שיתופי" בהגדרות.<br>במצב הזה — <strong>כולנו עובדים ביחד!</strong><br><br>✅ כל הגרגירים נכנסים לבנק המשותף 🦴<br>✅ אין שוד — כולנו אחד!<br>✅ אוספים ביחד כמה שיותר — ובסוף <strong>כולנו מנצחים! 🎉</strong> (ואם מגיעים ל-100 — ניצחון מיידי!)<br><br>🐕🐩🐶🦮 מתאים לילדים צעירים, לטיפול, ולמשחק משפחתי רגוע.',
        }
      ],
   fullGuideBtn: "📚 מדריך משחק מלא",
@@ -309,7 +307,7 @@ export const he: Dict = {
         i: "🗺️",
         t: "זה לוח המשחק",
         target: "board",
-        x: `כל משושה הוא מספר. הכלב 🐕 מתחיל למטה, והמטרה היא לטייל על הלוח ולאסוף כמה שיותר גרגירים 🦴.<br><br>ברמה הזו המספרים מגיעים עד <strong>${topNum[level]}</strong>. אפשר לגרור עם העכבר כדי להזיז את הלוח ולראות את כולו.`,
+        x: `כל משושה הוא מספר. הכלב 🐕 מתחיל למטה, והמטרה היא לטייל על הלוח ולאסוף כמה שיותר גרגירים 🦴.<br><br>ברמה הזו המספרים מגיעים עד <strong>${topNum[level]}</strong>. אפשר לגרור או לגלול כדי להזיז את הלוח ולראות את כולו.`,
       },
       {
         i: "🎯",
@@ -393,7 +391,7 @@ export const he: Dict = {
     med: { icon: "⭐", name: "בינוני", desc: "לוח הכפל עד 60" },
     adv: { icon: "🌟", name: "מתקדם", desc: "לוח הכפל עד 90" },
     champ: { icon: "🏆", name: "אלוף", desc: "לוח הכפל עד 100 | 2 דקות" },
-    hero: { icon: "⚡", name: "גיבור", desc: "כפל ארוך | \u2066(11–19)×(2–9)\u2069 | \u20661:30\u2069 דקות" },
+    hero: { icon: "⚡", name: "גיבור", desc: "כפל ארוך | \u2066(11–19)×(2–9)\u2069 | דקה וחצי" },
   },
   options: "🔧 התאמות",
   whatsThis: "מה זה?",
@@ -411,48 +409,50 @@ export const he: Dict = {
 
   gameTitle: "🐕🍖 כשכש-נשנש",
   turn: (name) => `תור: ${name}`,
+  roundLabel: (round, total) => `סיבוב ${round} מתוך ${total}`,
+  instAria: "הסבר ואיך משחקים",
   defaultPlayerName: (dog, i) => `${dog} שחקן ${i + 1}`,
 
   p1Hint:
-    "<strong>שלב 1 — מוצאים יעד 🎯</strong><br>פתור את התרגיל ולחץ על המשושה עם התשובה בלוח!",
+    "<strong>שלב 1 — מוצאים יעד 🎯</strong><br>פתרו את התרגיל ולחצו על המשושה עם התשובה בלוח!",
   targetCardLabel: (id, prime) => `🃏 כרטיס יעד #${id}${prime ? " 🎲 ראשוני!" : ""}`,
   targetExpr: (ex) => `${ex} = ?`,
   targetInstruction: (prime) =>
-    `${prime ? "🔮 מספר ראשוני — קלף טוויסט מחכה!<br>" : ""}לחץ על המשושה בלוח 👆`,
-  showAnswer: "💡 הראה תשובה",
-  wrongHexInline: (n) => `המשושה ${n} לא נכון — נסה שוב! 😊`,
+    `${prime ? "🔮 מספר ראשוני — קלף טוויסט מחכה!<br>" : ""}לחצו על המשושה בלוח 👆`,
+  showAnswer: "💡 הראו תשובה",
+  wrongHexInline: (n) => `המשושה ${n} לא נכון — נסו שוב! 😊`,
   hintBtn: "💜 רמז",
   hintResult: (expr) => calcHintHe(expr),
 
   p2Hint: (target) =>
-    `<strong>שלב 2 — תכנן מסלול 🗺️</strong><br>לחץ על משושים לבניית הדרך.<br>הצלע הצבועה בין שני משושים = רמת הקושי.<br>יעד: <strong>משושה ${target}</strong>`,
-  p2Empty: "לחץ על משושים בלוח לבניית המסלול 👆",
+    `<strong>שלב 2 — תכננו מסלול 🗺️</strong><br>לחצו על משושים לבניית הדרך.<br>הצלע הצבועה בין שני משושים = רמת הקושי.<br>יעד: <strong>משושה ${target}</strong>`,
+  p2Empty: "לחצו על משושים בלוח לבניית המסלול 👆",
   stepHexLabel: (h) => `→ משושה ${h}`,
   doorLabel: (key) => DOOR_LABELS[key],
-  pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | <span dir="ltr">${DOOR_RANGES[key]}</span> | ${pts}נק׳`,
+  pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | <span dir="ltr">${DOOR_RANGES[key]}</span> | ${pts}🦴`,
   possiblePellets: (pts, steps) =>
-    `🍖 <strong>סה"כ אפשרי: ${pts} נקודות</strong> ב-${steps} צעדים`,
+    `🍖 <strong>סה"כ אפשרי: ${pts} גרגירים</strong> ב-${steps} צעדים`,
   routeNotReach: (target) => `⚠️ המסלול לא מגיע למשושה ${target}!`,
-  confirmRoute: "✅ אשר מסלול",
-  clearRoute: "🗑 נקה",
-  newTarget: "← בחר יעד מחדש",
+  confirmRoute: "✅ אשרו מסלול",
+  clearRoute: "🗑 נקו",
+  newTarget: "בחרו יעד מחדש",
 
   p3Hint: (step, total, doorLabel, pts, turnPts) =>
-    `<strong>שלב 3 — יוצאים לדרך! 🐕</strong><br>צעד ${step}/${total} | אוכל: ${doorLabel} | ${pts} 🦴<br>🦴 גרגירים עד כה: <strong>${turnPts}</strong>`,
-  rollFor: (doorLabel) => `🎲 זרוק עבור ${doorLabel}`,
-  orClickHex: "או לחץ על המשושה עם התשובה בלוח 👆",
+    `<strong>שלב 3 — יוצאים לדרך! 🐕</strong><br>צעד <span dir="ltr">${step}/${total}</span> | אוכל: ${doorLabel} | ${pts} 🦴<br>🦴 גרגירים עד כה: <strong>${turnPts}</strong>`,
+  rollFor: (doorLabel) => `🎲 זרקו עבור ${doorLabel}`,
+  orClickHex: "או לחצו על המשושה עם התשובה בלוח 👆",
   answerPlaceholder: "התשובה...",
-  confirmAnswer: "✅ אשר תשובה",
-  wrongTryAgain: "❌ לא נכון! נסה שוב, או חשוף ותפסיד את התור 😊",
-  revealEndsTurn: "💡 חשוף תשובה (מסיים תור)",
+  confirmAnswer: "✅ אשרו תשובה",
+  wrongTryAgain: "❌ לא נכון! נסו שוב, או חשפו ותפסידו את התור 😊",
+  revealEndsTurn: "💡 חשפו תשובה (מסיים תור)",
 
   revealTitle: (ans) => `💡 התשובה: ${ans}`,
-  revealBody: (ans) => `מצא את משושה <strong>${ans}</strong> בלוח ולחץ עליו.`,
+  revealBody: (ans) => `מצאו את משושה <strong>${ans}</strong> בלוח ולחצו עליו.`,
   gotItThumbs: "הבנתי 👍",
   foundTitle: (n) => `✅ כן! משושה ${n} 🎉`,
   foundBody: (sym) =>
     `מצאת את היעד!${sym ? `<br>⚠️ יש סמל ${sym} על המשושה!` : ""}`,
-  planRoute: "👉 תכנן מסלול",
+  planRoute: "👉 תכננו מסלול",
   arrivalTitle: (hex) => `🎉 הגעת ליעד! משושה ${hex}`,
   pelletsThisTurn: (pts) => `🦴 גרגירים שנצברו: <strong>${pts}</strong>`,
   drawBonus: "💎 שלוף בונוס",
@@ -464,34 +464,34 @@ export const he: Dict = {
   cards: {
     lim_even: {
       t: "רק זוגי!",
-      tx: "מספר הגרגירים שלך חייב להיות זוגי.<br>אם לא — תאבד גרגיר אחד 🦴",
+      tx: "מספר הגרגירים שלכם חייב להיות זוגי.<br>אם לא — תאבדו גרגיר אחד 🦴",
     },
     lim_odd: {
       t: "רק אי-זוגי!",
-      tx: "מספר הגרגירים שלך חייב להיות אי-זוגי.<br>אם לא — תאבד גרגיר אחד 🦴",
+      tx: "מספר הגרגירים שלכם חייב להיות אי-זוגי.<br>אם לא — תאבדו גרגיר אחד 🦴",
     },
     lim_three: {
       t: "3 סוגי אוכל",
-      tx: "אם עברת דרך פחות מ-3 סוגי אוכל שונים —<br>תקבל רק חצי מהגרגירים!",
+      tx: "אם עברתם דרך פחות מ-3 סוגי אוכל שונים —<br>תקבלו רק חצי מהגרגירים!",
     },
     lim_nored: {
-      t: "ללא נקניקיה!",
-      tx: "אם השתמשת בנקניקיה בתור הזה —<br>תאבד את הגרגירים שקיבלת ממנה!",
+      t: "ללא דלת אדומה!",
+      tx: "אם עברתם בדלת אדומה (נקניקיה או סטייק) בתור הזה —<br>תאבדו את הגרגירים שצברתם ממנה!",
     },
     lim_short: {
       t: "מסלול קצר",
-      tx: "אם בחרת יותר מ-4 צעדים —<br>תקבל רק 75% מהגרגירים",
+      tx: "אם בחרתם יותר מ-4 צעדים —<br>תקבלו רק 75% מהגרגירים",
     },
-    bon_dbl: { t: "כפול גרגירים! 🦴🦴", tx: "מקבל פי 2 מכל הגרגירים שצברת בתור הזה!" },
-    bon_extra: { t: "תור נוסף! 🎉", tx: "ברכות — מגיע לך תור נוסף!" },
-    bon_speed: { t: "מסלול מהיר ⚡", tx: "סיימת לפני חצי הזמן? מקבל +20 גרגירים!" },
+    bon_dbl: { t: "כפול גרגירים! 🦴🦴", tx: "מקבלים פי 2 מכל הגרגירים שצברתם בתור הזה!" },
+    bon_extra: { t: "תור נוסף! 🎉", tx: "ברכות — מגיע לכם תור נוסף!" },
+    bon_speed: { t: "מסלול מהיר ⚡", tx: "סיימתם לפני חצי הזמן? מקבלים +20 גרגירים!" },
     bon_add10: { t: "+10 גרגירים 🦴", tx: "רק על הגעה ליעד — +10 גרגירים נוספים! 🦴" },
-    bon_steps: { t: "צעדים שווים 🐾", tx: "מקבל +2 גרגירים על כל צעד שהלכת!" },
-    twi_extra: { t: "תור נוסף! 🔄", tx: "קיבלת מזל — תור נוסף!" },
-    twi_teleport: { t: "קפיצה! 🎲", tx: "כוח המשושה הראשוני מקפיץ אותך למקום אחר על הלוח!" },
-    twi_swap: { t: "החלפת מיקום! 🔀", tx: "מתחלפים! אתה ושחקן אחר מחליפים מיקומים על הלוח." },
+    bon_steps: { t: "צעדים שווים 🐾", tx: "מקבלים +2 גרגירים על כל צעד שהלכתם!" },
+    twi_extra: { t: "תור נוסף! 🔄", tx: "קיבלתם מזל — תור נוסף!" },
+    twi_teleport: { t: "קפיצה! 🎲", tx: "כוח המשושה הראשוני מקפיץ אתכם למקום אחר על הלוח!" },
+    twi_swap: { t: "החלפת מיקום! 🔀", tx: "מתחלפים! אתם ושחקן אחר מחליפים מיקומים על הלוח." },
     twi_dblOrHalf: { t: "כפול או חצי? 🎲", tx: "גורל מכריע: <strong>כפול גרגירים</strong> — או <strong>חצי מהם</strong>. 50/50!" },
-    twi_give5: { t: "נדיב! 🤝", tx: "מוציאים עד 5 גרגירים מהבנק שלך ומוסרים לשחקן עם הכי מעט גרגירים." },
+    twi_give5: { t: "נדיב! 🤝", tx: "מוציאים עד 5 גרגירים מהבנק שלכם ומוסרים לשחקן עם הכי מעט גרגירים." },
   },
   formatEff,
   extraTurnBtn: "🔄 תור נוסף!",
@@ -499,14 +499,14 @@ export const he: Dict = {
   robTarget: (name, tokens) => `${name} (${tokens}🦴)`,
   skip: "דלג",
   robResultTitle: "🦹 גנבת גרגירים!",
-  robResultBody: (stolen, name) => `לקחת ${stolen}🦴 מ-${name}! ням ням 😋`,
+  robResultBody: (stolen, name) => `לקחתם ${stolen}🦴 מ-${name}! ניאם ניאם 😋`,
   forfeitTitle: (correct) => `💡 התשובה: ${correct}`,
   forfeitBody: (hex, turnPts) =>
-    `הדלת נסגרת. התור נגמר.<br>נשארת במשושה <strong>${hex}</strong>.<br>🦴 גרגירים שנצברו: <strong>${turnPts}</strong> — נשמרים בבנק!`,
+    `הדלת נסגרת. התור נגמר.<br>נשארים במשושה <strong>${hex}</strong>.<br>🦴 גרגירים שנצברו: <strong>${turnPts}</strong> — נשמרים בבנק!`,
   saveNext: "🦴 שמור ועבור לתור הבא",
   timeoutTitle: "⏱ הזמן נגמר!",
   timeoutBody: (hex) =>
-    `נשאר במשושה ${hex}. הגרגירים שנצברו עד כה נשמרים! 🦴`,
+    `נשארים במשושה ${hex}. הגרגירים שנצברו עד כה נשמרים! 🦴`,
   confirmEndTitle: "✖ לסיים?",
   confirmEndBody: "כל ההתקדמות תאבד.",
   cancel: "ביטול",
@@ -518,13 +518,13 @@ export const he: Dict = {
     <div style="display:flex;flex-direction:column;gap:11px;margin-top:10px">
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>⏱ טיימר לכל תור</strong>
-        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">כשמופעל — יש לכל שחקן 3 דקות לסיים תור (2 דקות ברמת אלוף, 1:30 בגיבור). גרגירים שנצברו לפני שהזמן נגמר — <strong>נשמרים!</strong><br>💡 כבה אותו עם ילדים קטנים, כשמתרגלים ראשונה, או במשחק שיתופי רגוע.</p>
+        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">כשמופעל — יש לכל שחקן 3 דקות לסיים תור (2 דקות ברמת אלוף, דקה וחצי בגיבור). גרגירים שנצברו לפני שהזמן נגמר — <strong>נשמרים!</strong><br>💡 כבו אותו עם ילדים קטנים, כשמתרגלים בפעם הראשונה, או במשחק שיתופי רגוע.</p>
       </div>
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>🏁 מטרת המשחק</strong>
         <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">
         <strong>🔄 4 סיבובים</strong> — כולם משחקים 4 סיבובים ומי שצבר הכי הרבה מנצח. משחק קצוב ומאוזן.<br>
-        <strong>🎯 ראשון ל-100</strong> — המשחק נמשך עד שמישהו מגיע ל-100 גרגירים ומנצח מיידית. מתאים לשחקנים חזקים ומשחקים ארוכים.<br>
+        <strong>🎯 ראשון ל-100</strong> — המשחק נמשך עד שמישהו מגיע ל-100 גרגירים ומנצח מיידית (ואם אף אחד לא הגיע ל-100 תוך 10 סיבובים — המוביל מנצח). מתאים לשחקנים חזקים ומשחקים ארוכים.<br>
         <strong>⚡ גם וגם</strong> — 4 סיבובים, אבל אם מישהו הגיע ל-100 לפני הסוף — מנצח מיידית. הבחירה הכי גמישה!</p>
       </div>
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
@@ -578,8 +578,8 @@ export const he: Dict = {
   sharedProgress: (shared) => `🦴 ${shared}/100 לניצחון!`,
   hexLabel: (h) => `📍 משושה ${h}`,
 
-  doorLegendTitle: "🚪 דלתות ונקודות",
-  doorLegendPts: (pts) => `${pts}נק'`,
+  doorLegendTitle: "🚪 דלתות וגרגירים",
+  doorLegendPts: (pts) => `${pts}🦴`,
 
   helpCardBtn: "לוח כפל",
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import RichText from "../RichText";
 import type { GameActions } from "../useGame";
 import type { Level } from "@/lib/engine/types";
@@ -23,6 +24,15 @@ export default function Instructions({
   const page = pages[safeIdx];
   const isLast = safeIdx === pages.length - 1;
 
+  const { closeInst } = actions;
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeInst();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [closeInst]);
+
   const nav = (d: number) => {
     const next = Math.max(0, Math.min(pages.length - 1, safeIdx + d));
     actions.instSet(next);
@@ -35,8 +45,8 @@ export default function Instructions({
         if (e.target === e.currentTarget) actions.closeInst();
       }}
     >
-      <div className="ibox">
-        <button className="mclose" onClick={actions.closeInst}>
+      <div className="ibox" role="dialog" aria-modal="true">
+        <button className="mclose" onClick={actions.closeInst} aria-label={t.close}>
           ✕
         </button>
         <div className="iicon">{page.i}</div>

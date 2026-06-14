@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import RichText from "./RichText";
 import type { Dict, TourStage, TourTarget } from "@/lib/i18n";
 import type { GameState } from "@/lib/engine/types";
@@ -121,6 +121,9 @@ export default function GuidedTour({
         setRect(null);
         return;
       }
+      // Bring the spotlighted element into view before measuring so the popup
+      // isn't placed over empty space when the target is below the fold.
+      el.scrollIntoView({ block: "nearest", inline: "nearest" });
       const r = el.getBoundingClientRect();
       if (r.width === 0 && r.height === 0) {
         setRect(null);
@@ -158,6 +161,15 @@ export default function GuidedTour({
     actions.tourSet(next);
   };
 
+  const { tourEnd } = actions;
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") tourEnd();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [tourEnd]);
+
   // Place the popup beside the highlighted area so both stay visible.
   const vw = typeof window !== "undefined" ? window.innerWidth : 1200;
   const vh = typeof window !== "undefined" ? window.innerHeight : 800;
@@ -183,8 +195,8 @@ export default function GuidedTour({
         />
       )}
 
-      <div className="tour-card" ref={cardRef} style={cardStyle}>
-        <button className="tour-close" onClick={actions.tourEnd} title={t.tourExit}>
+      <div className="tour-card" ref={cardRef} style={cardStyle} role="dialog" aria-modal="true">
+        <button className="tour-close" onClick={actions.tourEnd} title={t.tourExit} aria-label={t.tourExit}>
           ✕
         </button>
         <div className="tour-ico">{step.i}</div>

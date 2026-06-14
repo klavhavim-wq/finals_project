@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RichText from "./RichText";
 import { FACTOR_SOLVE_BONUS, FACTOR_TILE_BONUS, SPECIAL_BY_ID } from "@/lib/engine/constants";
 import type { GameState, ModalState } from "@/lib/engine/types";
@@ -29,8 +29,22 @@ export default function Modal({
   actions: GameActions;
 }) {
   const modal = state.modal;
+  const dismissable = modal ? DISMISSABLE.has(modal.kind) : false;
+  const modalRef = useRef<HTMLDivElement>(null);
+  const { closeModal } = actions;
+
+  // Move focus into the dialog on open, and close dismissable dialogs on Escape.
+  useEffect(() => {
+    if (!modal) return;
+    modalRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && dismissable) closeModal();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [modal?.kind, dismissable, closeModal]);
+
   if (!modal) return null;
-  const dismissable = DISMISSABLE.has(modal.kind);
 
   return (
     <div
@@ -39,9 +53,9 @@ export default function Modal({
         if (dismissable && e.target === e.currentTarget) actions.closeModal();
       }}
     >
-      <div className="modal">
+      <div className="modal" ref={modalRef} role="dialog" aria-modal="true" tabIndex={-1}>
         {dismissable && (
-          <button className="mclose" onClick={actions.closeModal}>
+          <button className="mclose" onClick={actions.closeModal} aria-label={t.close}>
             ✕
           </button>
         )}
@@ -374,6 +388,7 @@ function FactorChallenge({
           >
             <input
               type="number"
+              inputMode="numeric"
               value={a}
               autoFocus
               placeholder="?"
@@ -384,6 +399,7 @@ function FactorChallenge({
             <span style={{ fontSize: "1.3rem", fontWeight: 800, color: "#6b7280" }}>×</span>
             <input
               type="number"
+              inputMode="numeric"
               value={b}
               placeholder="?"
               onChange={(e) => setB(e.target.value)}

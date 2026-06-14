@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root{
-  --bl:#3B82F6;--pu:#8B5CF6;--ye:#F59E0B;--rd:#EF4444;--gr:#10B981;
+  --bl:#3B82F6;--pu:#7C3AED;--ye:#F59E0B;--rd:#EF4444;--gr:#10B981;
   --honey:#FFF8E7;--shadow:0 4px 16px rgba(0,0,0,.13);--rad:14px;
 }
 
@@ -123,7 +123,8 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 [data-locale="he"] #sg{background:#EDE0D4}
 .ghdr{display:flex;align-items:center;gap:7px;background:white;padding:7px 11px;box-shadow:0 2px 8px rgba(0,0,0,.1);flex-shrink:0;flex-wrap:wrap}
 .ghtitle{font-size:1.05rem;font-weight:800;color:#78350F;margin-inline-start:auto}
-.ghturn{font-size:.82rem;background:#FFFBEB;border-radius:18px;padding:5px 12px;font-weight:600;color:#78350F}
+.ghturn{font-size:.82rem;background:#FFFBEB;border-radius:18px;padding:5px 12px;font-weight:600;color:#78350F;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ghround{font-size:.82rem;background:#EDE9FE;border-radius:18px;padding:5px 12px;font-weight:700;color:#5B21B6;white-space:nowrap;flex-shrink:0}
 .ghtimer{display:none;flex-direction:column;align-items:center;gap:3px;background:#FFFDE7;border:3px solid #FBBF24;border-radius:16px;padding:6px 14px;min-width:88px}
 .ghtimer.show{display:flex}
 .ghtimer .tnum{font-size:1.3rem;font-weight:900;color:#92400E;letter-spacing:.5px}
@@ -152,7 +153,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 /* HIVE CONTAINER */
 .hivewrap{flex:1;background:white;border-radius:var(--rad);padding:8px;box-shadow:var(--shadow);overflow:auto;display:flex;align-items:safe center;justify-content:safe center;min-height:0;cursor:grab;touch-action:pan-x pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .hivewrap:active{cursor:grabbing}
-#hsvg{flex:none}
+#hsvg{flex:none;max-width:100%;height:auto}
 #hive-svg{display:block}
 .hex-group{cursor:pointer}
 .hex-group:hover polygon{filter:brightness(.92)}
@@ -167,9 +168,9 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 
 .pcard{background:white;border-radius:var(--rad);padding:13px 16px;box-shadow:var(--shadow);border-inline-end:4px solid #e5e7eb;transition:all .3s}
 .pcard.cur{border-inline-end-color:var(--ye);box-shadow:0 4px 18px rgba(245,158,11,.25)}
-.pchead{display:flex;justify-content:space-between;align-items:center}
-.pcname{font-weight:700;font-size:1.05rem}
-.pchon{font-weight:900;font-size:1.2rem;color:var(--ye)}
+.pchead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pcname{font-weight:700;font-size:1.05rem;min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pchon{font-weight:900;font-size:1.2rem;color:#B45309;flex-shrink:0}
 .pcpos{font-size:.82rem;color:#9ca3af;margin-top:3px}
 
 .apanel{background:white;border-radius:var(--rad);padding:13px 15px;box-shadow:var(--shadow);flex:1}
@@ -210,14 +211,14 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .pathlist{display:flex;flex-direction:column;gap:4px;max-height:150px;overflow-y:auto;margin:6px 0}
 .pstep{display:flex;align-items:center;gap:5px;background:#f9fafb;border-radius:7px;padding:4px 7px}
 .psnum{width:18px;height:18px;border-radius:50%;background:var(--bl);color:white;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.pshex{font-size:.78rem;font-weight:600;flex:1;color:#374151}
-.psdoor{font-size:.75rem;padding:2px 6px;border-radius:5px;font-weight:700}
+.pshex{font-size:.82rem;font-weight:600;flex:1;color:#374151}
+.psdoor{font-size:.8rem;padding:2px 6px;border-radius:5px;font-weight:700}
 .psdoor.blue{background:#EFF6FF;color:#1D4ED8}
 .psdoor.purple{background:#F5F3FF;color:#5B21B6}
 .psdoor.yellow{background:#FFFBEB;color:#B45309}
 .psdoor.red{background:#FEF2F2;color:#B91C1C}
 .psdoor.redlong{background:#FEF2F2;color:#991B1B;font-style:italic}
-.pspts{font-size:.7rem;color:#9ca3af;margin-inline-end:auto}
+.pspts{font-size:.8rem;color:#9ca3af;margin-inline-end:auto}
 
 .rsum{background:#f0fdf4;border-radius:8px;padding:7px 10px;font-size:.8rem;color:#065F46;margin:5px 0}
 .rsum-big{background:#FEF9C3;border:2px solid #FBBF24;border-radius:10px;padding:10px 13px;font-size:.95rem;color:#78350F;text-align:center;font-weight:600}

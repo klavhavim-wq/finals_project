@@ -27,21 +27,27 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
 
   const downloadCSV = () => {
     const lines: string[] = [];
+    const he = t.dir === "rtl";
+    const yn = (v: boolean | undefined) => (v ? (he ? "כן" : "Yes") : he ? "לא" : "No");
 
-    lines.push("--- סיכום משחקים ---");
-    lines.push("תאריך,מזהה,רמה,שיתופי,טיימר,בחירה,שוד,תנאי_ניצחון,מנצח,גרגירים_משותפים");
+    lines.push(he ? "--- סיכום משחקים ---" : "--- Game Summary ---");
+    lines.push(
+      he
+        ? "תאריך,מזהה,רמה,שיתופי,טיימר,בחירה,שוד,תנאי_ניצחון,מנצח,גרגירים_משותפים"
+        : "Date,ID,Level,Cooperative,Timer,Choice,Steal,WinCondition,Winner,SharedPellets"
+    );
     for (const s of sessions) {
       const st = s.settings;
       lines.push([
-        formatDate(s.date), s.id, s.level, s.coop ? "כן" : "לא",
-        st?.timer ? "כן" : "לא", st?.mc ? "כן" : "לא", st?.rob ? "כן" : "לא", st?.winMode ?? "",
-        s.winnerName ?? (s.coop ? "כולם" : ""), s.sharedTokens ?? "",
+        formatDate(s.date), s.id, t.levels[s.level].name, yn(s.coop),
+        yn(st?.timer), yn(st?.mc), yn(st?.rob), st?.winMode ?? "",
+        s.winnerName ?? (s.coop ? (he ? "כולם" : "Everyone") : ""), s.sharedTokens ?? "",
       ].join(","));
     }
 
     lines.push("");
-    lines.push("--- תוצאות שחקנים ---");
-    lines.push("תאריך,מזהה_משחק,שחקן,ניקוד,שגיאות");
+    lines.push(he ? "--- תוצאות שחקנים ---" : "--- Player Results ---");
+    lines.push(he ? "תאריך,מזהה_משחק,שחקן,ניקוד,שגיאות" : "Date,GameID,Player,Score,Errors");
     for (const s of sessions) {
       for (const p of s.players) {
         lines.push([formatDate(s.date), s.id, p.name, p.tokens, p.errors ?? 0].join(","));
@@ -49,14 +55,18 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
     }
 
     lines.push("");
-    lines.push("--- יומן שגיאות ---");
-    lines.push("תאריך,מזהה_משחק,שחקן,שלב,תרגיל,תשובה_נכונה,תשובה_שגויה");
+    lines.push(he ? "--- יומן שגיאות ---" : "--- Error Log ---");
+    lines.push(
+      he
+        ? "תאריך,מזהה_משחק,שחקן,שלב,תרגיל,תשובה_נכונה,תשובה_שגויה"
+        : "Date,GameID,Player,Phase,Exercise,Correct,Wrong"
+    );
     for (const s of sessions) {
       for (const p of s.players) {
         for (const e of p.errorLog ?? []) {
           lines.push([
             formatDate(s.date), s.id, p.name,
-            e.phase === 1 ? "שלב1-יעד" : "שלב3-דרך",
+            e.phase === 1 ? (he ? "שלב1-יעד" : "Phase1-Target") : he ? "שלב3-דרך" : "Phase3-Route",
             e.expr, e.correct, e.wrong,
           ].join(","));
         }

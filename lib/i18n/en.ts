@@ -97,15 +97,13 @@ function formatEff(r: EffResult): string {
     case "dblPts":
       return `🦴×2! Total: <strong>${r.total}</strong> pellets`;
     case "add10":
-      return `+10 🦴! Total: <strong>${r.total}</strong>`;
-    case "add15":
-      return `+15 🦴! Total: <strong>${r.total}</strong>`;
+      return `+10 🦴! Total: <strong>${r.total}</strong> pellets`;
     case "speedBonus":
       return r.applied
-        ? `+20 🦴 for speed! Total: <strong>${r.total}</strong>`
+        ? `+20 🦴 for speed! Total: <strong>${r.total}</strong> pellets`
         : "Not fast enough this time 😅";
     case "stepsBonus":
-      return `+${r.steps * 2} 🦴 (${r.steps} steps × 2)! Total: <strong>${r.total}</strong>`;
+      return `+${r.steps * 2} 🦴 (${r.steps} steps × 2)! Total: <strong>${r.total}</strong> pellets`;
     case "evenOnly":
       return r.applied
         ? `Pellets not even! −1 🦴 — remaining: <strong>${r.total}</strong>`
@@ -116,12 +114,12 @@ function formatEff(r: EffResult): string {
         : "✅ Pellets are odd! All good";
     case "threeColors":
       return r.applied
-        ? `Only ${r.count} door types — half pellets: <strong>${r.total}</strong>`
-        : `✅ ${r.count} door types! All good`;
+        ? `Only ${r.count} food types — half your pellets: <strong>${r.total}</strong>`
+        : `✅ ${r.count} food types! All good`;
     case "noRed":
       return r.applied
-        ? `${r.count} sausage door(s)! −${r.lost} 🦴 — remaining: <strong>${r.total}</strong>`
-        : "✅ No sausage! All good";
+        ? `${r.count} red door(s)! −${r.lost} 🦴 — remaining: <strong>${r.total}</strong>`
+        : "✅ No red door! All good";
     case "shortPath":
       return r.applied
         ? `Long route (${r.steps} steps) — 75%: <strong>${r.total}</strong> 🦴`
@@ -149,7 +147,7 @@ export const en: Dict = {
   logoAlt: "Dafi & The Dogs",
   title: "Dogylishios 🐕🍖",
   welcomeSub: "Help the dog store pellets in the bank! 🦴",
-  welcomeSub2a: "📚 Multiplication tables · Number facts · Strategy",
+  welcomeSub2a: "📚 Times tables · Number facts · Strategy",
   welcomeSub2b: "👥 1–4 players \u00a0·\u00a0 ⏱ 20–45 min",
   startGame: "🎮 Start Game!",
   chooseLevel: "✨ Pick a level to begin",
@@ -174,12 +172,12 @@ export const en: Dict = {
        {
          i: "🗺️",
          t: "Step 2 — Plan Your Route",
-         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="140" height="130" viewBox="-5 0 250 245" xmlns="http://www.w3.org/2000/svg"><polygon points="120,20 207,70 207,170 120,220 33,170 33,70" fill="#FFF8E7" stroke="#C9A882" stroke-width="2"/><line x1="120" y1="20" x2="207" y2="70" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="70" x2="207" y2="170" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="170" x2="120" y2="220" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/><line x1="120" y1="220" x2="33" y2="170" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="170" x2="33" y2="70" stroke="#DC2626" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="70" x2="120" y2="20" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><text x="120" y="120" text-anchor="middle" dominant-baseline="middle" font-size="36" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">42</text></svg></div>Click hexes to build your route to the target.<br>Don\'t forget to mark the target hex too!<br><br>The door colors show the exercise difficulty and how many pellets each step earns.<br><br>💡 <strong>Direction guide:</strong> While building, the next valid hexes are highlighted with a green border on the board.',
+         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="140" height="130" viewBox="-5 0 250 245" xmlns="http://www.w3.org/2000/svg"><polygon points="120,20 207,70 207,170 120,220 33,170 33,70" fill="#FFF8E7" stroke="#C9A882" stroke-width="2"/><line x1="120" y1="20" x2="207" y2="70" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="70" x2="207" y2="170" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round"/><line x1="207" y1="170" x2="120" y2="220" stroke="#F59E0B" stroke-width="14" stroke-linecap="round"/><line x1="120" y1="220" x2="33" y2="170" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="170" x2="33" y2="70" stroke="#DC2626" stroke-width="14" stroke-linecap="round"/><line x1="33" y1="70" x2="120" y2="20" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/><text x="120" y="120" text-anchor="middle" dominant-baseline="middle" font-size="36" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">42</text></svg></div>Click hexes to build your route to the target.<br>Don\'t forget to mark the target hex too!<br><br>The door colors show the exercise difficulty and how many pellets each step earns.<br><br>💡 <strong>Direction guide:</strong> While building, the next valid hexes are highlighted with a green border on the board.<br><br><em style="font-size:.85em;color:#64748b">The colors in this picture are just an example — which doors you actually get depends on the level.</em>',
        },
        {
          i: "🚪",
-         t: "Doors & Points",
-         x: '<div style="display:flex;flex-direction:column;gap:6px;margin:0 0 10px;font-size:.85em"><div style="padding:6px 10px;background:#EFF6FF;border-radius:8px;border-left:4px solid #3B82F6">🦴 <strong style="color:#3B82F6">Blue — Bone</strong>: Tables up to 4, e.g. <span dir="ltr">3 × 4 = 12</span> — <strong>1 pellet</strong> per step</div><div style="padding:6px 10px;background:#F5F3FF;border-radius:8px;border-left:4px solid #8B5CF6">🐟 <strong style="color:#8B5CF6">Purple — Fish</strong>: Tables up to 6, e.g. <span dir="ltr">4 × 5 = 20</span> — <strong>2 pellets</strong> per step</div><div style="padding:6px 10px;background:#FFFBEB;border-radius:8px;border-left:4px solid #F59E0B">🍗 <strong style="color:#F59E0B">Yellow — Wing</strong>: Tables up to 8, e.g. <span dir="ltr">6 × 7 = 42</span> — <strong>5 pellets</strong> per step</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-left:4px solid #EF4444">🌭 <strong style="color:#EF4444">Red — Sausage</strong>: Tables 7–9, e.g. <span dir="ltr">8 × 9 = 72</span> — <strong>10 pellets</strong> per step</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-left:4px solid #DC2626">🥩 <strong style="color:#DC2626">Dark Red — Steak</strong>: Long multiplication, e.g. <span dir="ltr">13 × 4 = 52</span> — <strong>12 pellets</strong> per step</div></div><em style="font-size:.8em;color:#7C3AED">Steak — Hero level only!</em><br><br>Harder = more pellets in the bank! 🐶<div style="margin:12px 0 4px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0;max-width:220px;margin-left:auto;margin-right:auto"><img src="/crop-panel-en.png" alt="Doors &amp; Points" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center">📸 As shown in the side panel</div>',
+         t: "Doors & Pellets",
+         x: '<div style="display:flex;flex-direction:column;gap:6px;margin:0 0 10px;font-size:.85em"><div style="padding:6px 10px;background:#EFF6FF;border-radius:8px;border-left:4px solid #3B82F6">🦴 <strong style="color:#3B82F6">Blue — Bone</strong>: Tables up to 4, e.g. <span dir="ltr">3 × 4 = 12</span> — <strong>1 pellet</strong> per step</div><div style="padding:6px 10px;background:#F5F3FF;border-radius:8px;border-left:4px solid #8B5CF6">🐟 <strong style="color:#8B5CF6">Purple — Fish</strong>: Tables up to 6, e.g. <span dir="ltr">4 × 5 = 20</span> — <strong>2 pellets</strong> per step</div><div style="padding:6px 10px;background:#FFFBEB;border-radius:8px;border-left:4px solid #F59E0B">🍗 <strong style="color:#B45309">Orange — Wing</strong>: Tables up to 8, e.g. <span dir="ltr">6 × 7 = 42</span> — <strong>5 pellets</strong> per step</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-left:4px solid #EF4444">🌭 <strong style="color:#EF4444">Red — Sausage</strong>: Tables 7–9, e.g. <span dir="ltr">8 × 9 = 72</span> — <strong>10 pellets</strong> per step</div><div style="padding:6px 10px;background:#FEF2F2;border-radius:8px;border-left:4px solid #DC2626">🥩 <strong style="color:#DC2626">Dark Red — Steak</strong>: Long multiplication, e.g. <span dir="ltr">13 × 4 = 52</span> — <strong>12 pellets</strong> per step</div></div><em style="font-size:.8em;color:#7C3AED">Steak — Hero level only!</em><br><br>Harder = more pellets in the bank! 🐶<div style="margin:12px 0 4px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0;max-width:220px;margin-left:auto;margin-right:auto"><img src="/crop-panel-en.png" alt="Doors &amp; Points" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center">📸 As shown in the side panel</div>',
        },
        {
          i: "✅",
@@ -194,7 +192,7 @@ export const en: Dict = {
        {
          i: "⏱",
          t: "Time Limits",
-         x: 'Each difficulty level has a time limit per turn:<br><br>🐾⭐🌟 <strong>Beginner / Medium / Advanced</strong> — 3 minutes<br>🏆 <strong>Champion</strong> — 2 minutes<br>⚡ <strong>Hero</strong> — <span dir="ltr">1:30</span> minutes<br><br>Did not finish in time? You stay in place, <strong>pellets earned so far are saved!</strong> 🦴<br><br>💡 You can turn off the timer in the settings.',
+         x: 'Each difficulty level has a time limit per turn:<br><br>🐾⭐🌟 <strong>Beginner / Intermediate / Advanced</strong> — 3 minutes<br>🏆 <strong>Champion</strong> — 2 minutes<br>⚡ <strong>Hero</strong> — <span dir="ltr">1:30</span> min<br><br>Did not finish in time? You stay in place, <strong>pellets earned so far are saved!</strong> 🦴<br><br>💡 You can turn off the timer in the settings.',
        },
        {
          i: "🏆",
@@ -204,7 +202,7 @@ export const en: Dict = {
        {
          i: "✨",
          t: "Special Symbols on the Board",
-         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0"><img src="/crop-board-en.png" alt="Board symbols" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center;margin:-4px 0 10px">📸 Notice the symbols on the hexes!</div><strong>💎 Round numbers (10, 20, 30...)</strong><br>Landed here? Draw a Bonus card! 🎁<br>You might get: double pellets / extra turn / +10 pellets<br><br><strong>🚧 Numbers ending in 5 (15, 25, 35...)</strong><br>Draw a Limit card — a challenge for collecting!<br>Example: "Your pellets must be even"<br><br><strong>🦹 Numbers ending in 6 (16, 26, 36...)</strong><br>Steal! ✋ You can steal pellets from a rival!<br><br><strong>🎲 Prime numbers (2, 3, 5, 7, 11, 13...)</strong><br>A number that can only be divided by 1 and itself!<br>Draw a Twist card — the rules change! 🎲',
+         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0"><img src="/crop-board-en.png" alt="Board symbols" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center;margin:-4px 0 10px">📸 Notice the symbols on the hexes!</div><strong>💎 Round numbers (10, 20, 30...)</strong><br>Landed here? Draw a Bonus card! 🎁<br>You might get: double pellets / extra turn / +10 pellets<br><br><strong>🚧 Numbers ending in 5 (15, 25, 35...)</strong><br>Draw a Limit card — a challenge for collecting!<br>Example: "Your pellets must be even"<br><br><strong>🦹 Numbers ending in 6 (16, 26, 36...)</strong><br>Steal! ✋ You can steal pellets from a rival (about 10% of theirs)!<br><br><strong>🎲 Prime numbers (2, 3, 5, 7, 11, 13...)</strong><br>A number that can only be divided by 1 and itself!<br>Draw a Twist card — the rules change! 🎲',
        },
        {
          i: "🧩",
@@ -214,12 +212,12 @@ export const en: Dict = {
        {
          i: "⚙️",
          t: "Game Settings",
-         x: 'Before you start — set your game preferences:<br><br>📊 <strong>Difficulty level</strong> — Beginner to Hero<br>⏱ <strong>Timer</strong> — on or off<br>🔤 <strong>Choice buttons</strong> — for Beginner/Medium levels<br>🦹 <strong>Steal</strong> — on or off<br>🤝 <strong>Cooperative</strong> — play together instead of competing<br>🏁 <strong>Win condition</strong> — how do you win?',
+         x: 'Before you start — set your game preferences:<br><br>📊 <strong>Difficulty level</strong> — Beginner to Hero<br>⏱ <strong>Timer</strong> — on or off<br>🔤 <strong>Choice buttons</strong> — for Beginner/Intermediate levels<br>🦹 <strong>Steal</strong> — on or off<br>🤝 <strong>Cooperative</strong> — play together instead of competing<br>🎓 <strong>Free Play</strong> — practice with no score or winner<br>🏁 <strong>Win condition</strong> — how do you win?',
        },
        {
          i: "🤝",
          t: "Together — Cooperative Mode",
-         x: 'Enable "Cooperative mode" in settings.<br>In this mode — <strong>everyone works together!</strong><br><br>✅ All pellets go into one shared bank 🦴<br>✅ No stealing — we\'re all one team!<br>✅ Reach 100 together — <strong>everyone wins! 🎉</strong><br><br>🐕🐩🐕‍🦺🦮 Great for young kids, therapy, and family play.',
+         x: 'Enable "Cooperative mode" in settings.<br>In this mode — <strong>everyone works together!</strong><br><br>✅ All pellets go into one shared bank 🦴<br>✅ No stealing — we\'re all one team!<br>✅ Collect together — <strong>everyone wins at the end! 🎉</strong> (reach 100 for an instant win!)<br><br>🐕🐩🐶🦮 Great for young kids, therapy, and family play.',
        }
      ],
   fullGuideBtn: "📚 Full game guide",
@@ -280,7 +278,7 @@ export const en: Dict = {
       med: "3 minutes",
       adv: "3 minutes",
       champ: "2 minutes",
-      hero: "a minute and a half",
+      hero: "1:30 min",
     };
     const answerStyle =
       level === "beg" || level === "med"
@@ -305,7 +303,7 @@ export const en: Dict = {
         i: "🗺️",
         t: "This is the game board",
         target: "board",
-        x: `Every hex is a number. The dog 🐕 starts at the bottom, and the goal is to travel across the board and collect as many pellets as you can 🦴.<br><br>On this level the numbers go up to <strong>${topNum[level]}</strong>. You can drag with the mouse to move the board and see all of it.`,
+        x: `Every hex is a number. The dog 🐕 starts at the bottom, and the goal is to travel across the board and collect as many pellets as you can 🦴.<br><br>On this level the numbers go up to <strong>${topNum[level]}</strong>. You can drag or scroll to move the board and see all of it.`,
       },
       {
         i: "🎯",
@@ -407,6 +405,8 @@ export const en: Dict = {
 
   gameTitle: "🐕🍖 Dogylishios",
   turn: (name) => `Turn: ${name}`,
+  roundLabel: (round, total) => `Round ${round} of ${total}`,
+  instAria: "Help & how to play",
   defaultPlayerName: (dog, i) => `${dog} Player ${i + 1}`,
 
   p1Hint:
@@ -425,9 +425,9 @@ export const en: Dict = {
   p2Empty: "Click hexes on the board to build the route 👆",
   stepHexLabel: (h) => `→ Hex ${h}`,
   doorLabel: (key) => DOOR_LABELS[key],
-  pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | ${DOOR_RANGES[key]} | ${pts}pts`,
+  pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | ${DOOR_RANGES[key]} | ${pts}🦴`,
   possiblePellets: (pts, steps) =>
-    `🍖 <strong>Total possible: ${pts} points</strong> in ${steps} steps`,
+    `🍖 <strong>Total possible: ${pts} pellets</strong> in ${steps} steps`,
   routeNotReach: (target) => `⚠️ Route doesn't reach Hex ${target}!`,
   confirmRoute: "✅ Confirm Route",
   clearRoute: "🗑 Clear",
@@ -443,7 +443,7 @@ export const en: Dict = {
   revealEndsTurn: "💡 Reveal Answer (ends turn)",
 
   revealTitle: (ans) => `💡 The Answer: ${ans}`,
-  revealBody: (ans) => `Find hex <strong>${ans}</strong> on the board and click it.`,
+  revealBody: (ans) => `Find Hex <strong>${ans}</strong> on the board and click it.`,
   gotItThumbs: "Got it 👍",
   foundTitle: (n) => `✅ Yes! Hex ${n} 🎉`,
   foundBody: (sym) =>
@@ -461,12 +461,12 @@ export const en: Dict = {
     lim_even: { t: "Even Only!", tx: "Your pellet total must be even. Otherwise — lose 1 pellet 🦴" },
     lim_odd: { t: "Odd Only!", tx: "Your pellet total must be odd. Otherwise — lose 1 pellet 🦴" },
     lim_three: {
-      t: "3 Door Types",
-      tx: "If you used fewer than 3 different door types —<br>you get only half your pellets!",
+      t: "3 Food Types",
+      tx: "If you used fewer than 3 different food types —<br>you get only half your pellets!",
     },
     lim_nored: {
-      t: "No Sausage Door!",
-      tx: "If you used a sausage door this turn —<br>you lose those points!",
+      t: "No Red Door!",
+      tx: "If you crossed a red door (sausage or steak) this turn —<br>you lose the pellets you earned from it!",
     },
     lim_short: {
       t: "Short Route",
@@ -475,7 +475,7 @@ export const en: Dict = {
     bon_dbl: { t: "Double Pellets! 🦴🦴", tx: "Get ×2 all the pellets you earned this turn!" },
     bon_extra: { t: "Extra Turn! 🎉", tx: "Congratulations — you get an extra turn!" },
     bon_speed: { t: "Speed Route ⚡", tx: "Finished in less than half the time? Get +20 pellets!" },
-    bon_add10: { t: "+10 Bonus", tx: "Just for reaching the target — +10 extra pellets! 🦴" },
+    bon_add10: { t: "+10 Pellets 🦴", tx: "Just for reaching the target — +10 extra pellets! 🦴" },
     bon_steps: { t: "Step Bonus 🐾", tx: "Get +2 pellets for every step you walked!" },
     twi_extra: { t: "Extra Turn! 🔄", tx: "Lucky you — an extra turn!" },
     twi_teleport: { t: "Jump! 🎲", tx: "The prime hex's power flings you to a new spot on the board!" },
@@ -514,7 +514,7 @@ export const en: Dict = {
         <strong>🏁 Win Condition</strong>
         <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">
         <strong>🔄 4 Rounds</strong> — Everyone plays 4 full rounds; most pellets wins. Balanced and time-limited.<br>
-        <strong>🎯 First to 100</strong> — Game continues until a player hits 100 pellets for an instant win. Great for longer sessions.<br>
+        <strong>🎯 First to 100</strong> — Game continues until a player hits 100 pellets for an instant win (if no one reaches 100 within 10 rounds, the leader wins). Great for longer sessions.<br>
         <strong>⚡ Both</strong> — 4 rounds max, but hitting 100 first wins immediately. The most flexible option!</p>
       </div>
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
@@ -565,11 +565,11 @@ export const en: Dict = {
   downloadResults: "⬇ Export CSV",
 
   sharedBank: "🤝 Shared Bank",
-  sharedProgress: (shared) => `${shared}/100 🎯`,
+  sharedProgress: (shared) => `🦴 ${shared}/100 to win!`,
   hexLabel: (h) => `📍 Hex ${h}`,
 
-  doorLegendTitle: "🚪 Doors & Points",
-  doorLegendPts: (pts) => `${pts}pt`,
+  doorLegendTitle: "🚪 Doors & Pellets",
+  doorLegendPts: (pts) => `${pts}🦴`,
 
   helpCardBtn: "Times Table",
 

@@ -12,7 +12,9 @@ export const DOGS = ["🐕", "🐩", "🐶", "🦮"];
 /** Door config — min/max range maps to cognitive difficulty families. Labels are localized. */
 export const DC: Record<DoorKey, Door> = {
   blue: { key: "blue", min: 2, max: 4, cnt: 2, pts: 1, color: "#3B82F6" },
-  purple: { key: "purple", min: 3, max: 6, cnt: 2, pts: 2, color: "#8B5CF6" },
+  // Indigo (not light violet) so blue and purple doors stay distinguishable,
+  // including for blue-yellow colour-vision deficiency.
+  purple: { key: "purple", min: 3, max: 6, cnt: 2, pts: 2, color: "#7C3AED" },
   yellow: { key: "yellow", min: 5, max: 8, cnt: 2, pts: 5, color: "#F59E0B" },
   red: { key: "red", min: 7, max: 9, cnt: 2, pts: 10, color: "#EF4444" },
   // Hero level — long multiplication: 2-digit × 1-digit

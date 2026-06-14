@@ -59,7 +59,8 @@ export function useGame(locale: Locale) {
 
   const startP1 = useCallback(() => {
     const s = stateRef.current;
-    const { card, resetUsed } = pickTargetCard(s.level, s.usedCards);
+    // During the guided demo, prefer a composite target so the factoring step works.
+    const { card, resetUsed } = pickTargetCard(s.level, s.usedCards, Math.random, s.tourActive);
     dispatch({ type: "START_P1", card, resetUsed });
   }, []);
 
@@ -248,7 +249,7 @@ export function useGame(locale: Locale) {
 
   const drawCard = useCallback((cardType: CardType) => {
     const s = stateRef.current;
-    const cardId = pickSpecialId(cardType);
+    const cardId = pickSpecialId(cardType, s.level);
     const randData = {
       hex: Math.floor(Math.random() * boardMaxFor(s.level)) + 1,
       bool: Math.random() > 0.5,
