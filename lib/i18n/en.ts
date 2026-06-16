@@ -197,7 +197,7 @@ export const en: Dict = {
        {
          i: "🏆",
          t: "How to Win?",
-         x: 'You can choose in the settings:<br><br>🔄 <strong>4 Rounds</strong> — Everyone plays 4 rounds, whoever collected the most pellets wins!<br><br>🎯 <strong>First to 100</strong> — Reach 100 pellets? Instant win! 🎉<br><br>⚡ <strong>Both</strong> — 4 rounds, but if someone reaches 100 first — instant win!<br><br>Choose before you start. ⚙️',
+         x: 'You can choose in the settings:<br><br>🔄 <strong>4 Rounds</strong> — Everyone plays 4 rounds, whoever collected the most pellets wins!<br><br>🎯 <strong>First to 100</strong> — Reach 100 pellets? Instant win! 🎉<br><br>⚡ <strong>Both</strong> — 4 rounds, but if someone reaches 100 first — instant win!<br><br><em style="font-size:.85em;color:#64748b">On Beginner and Intermediate the game is always 4 rounds; «First to 100» and «Both» are available from Advanced up.</em><br><br>Choose before you start. ⚙️',
        },
        {
          i: "✨",
@@ -212,7 +212,7 @@ export const en: Dict = {
        {
          i: "⚙️",
          t: "Game Settings",
-         x: 'Before you start — set your game preferences:<br><br>📊 <strong>Difficulty level</strong> — Beginner to Hero<br>⏱ <strong>Timer</strong> — on or off<br>🔤 <strong>Choice buttons</strong> — for Beginner/Intermediate levels<br>🦹 <strong>Steal</strong> — on or off<br>🤝 <strong>Cooperative</strong> — play together instead of competing<br>🎓 <strong>Free Play</strong> — practice with no score or winner<br>🏁 <strong>Win condition</strong> — how do you win?',
+         x: 'Before you start — set your game preferences:<br><br>📊 <strong>Difficulty level</strong> — Beginner to Hero<br>⏱ <strong>Timer</strong> — on or off<br>🔤 <strong>Choice buttons</strong> — for Beginner/Intermediate levels<br>🦹 <strong>Steal</strong> — on or off<br>🤝 <strong>Cooperative</strong> — play together instead of competing<br>🎯 <strong>Focus mode</strong> — no special tiles, fewer distractions<br>🎓 <strong>Free Play</strong> — practice with no score or winner<br>🏁 <strong>Win condition</strong> — how do you win?',
        },
        {
          i: "🤝",
