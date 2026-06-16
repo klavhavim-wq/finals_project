@@ -171,7 +171,7 @@ export const he: Dict = {
        {
          i: "🎯",
          t: "שלב 1 — מוצאים את היעד",
-         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0;max-width:300px;margin-left:auto;margin-right:auto"><img src="/crop-target-he.png" alt="כרטיס היעד" style="width:100%;display:block"/></div>שולפים כרטיס יעד עם תרגיל חשבון, למשל: <strong><span dir="ltr">6 × 4 = ?</span></strong><br><br>פותרים בראש 🧠 ולוחצים על המשושה עם התשובה (24) בלוח!<br><br>טעות? <strong>אפשר לנסות שוב כמה פעמים שרוצים!</strong> 😊<br>רוצים עזרה? אפשר לבחור רמז 💡, או ללחוץ "הראה תשובה".<br><br>ℹ️ <strong>בשלב הזה אין הגבלת זמן!</strong>',
+         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0;max-width:300px;margin-left:auto;margin-right:auto"><img src="/crop-target-he.png" alt="כרטיס היעד" style="width:100%;display:block"/></div>שולפים כרטיס יעד עם תרגיל חשבון, למשל: <strong><span dir="ltr" style="white-space:nowrap">6 × 4 = ?</span></strong><br><br>פותרים בראש 🧠 ולוחצים על המשושה עם התשובה (24) בלוח!<br><br>טעות? <strong>אפשר לנסות שוב כמה פעמים שרוצים!</strong> 😊<br>רוצים עזרה? אפשר לבחור רמז 💡, או ללחוץ "הראה תשובה".<br><br>ℹ️ <strong>בשלב הזה אין הגבלת זמן!</strong>',
        },
        {
          i: "🗺️",
@@ -206,7 +206,7 @@ export const he: Dict = {
        {
          i: "✨",
          t: "סימנים מיוחדים על הלוח",
-         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0"><img src="/crop-board-he.png" alt="סימנים בלוח" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center;margin:-4px 0 10px">📸 שימו לב לסמלים על המשושים!</div><strong>💎 מספרים עגולים <span dir="ltr">(10, 20, 30...)</span></strong><br>נחתתם כאן? שלפו קלף בונוס! 🎁<br>אולי תקבלו: כפול גרגירים / תור נוסף / +10 גרגירים<br><br><strong>🚧 מסתיימים ב-5 <span dir="ltr">(15, 25, 35...)</span></strong><br>שלפו קלף הגבלה — אתגר לאיסוף!<br>למשל: "מספר הגרגירים חייב להיות זוגי"<br><br><strong>🦹 מסתיימים ב-6 <span dir="ltr">(16, 26, 36...)</span></strong><br>שוד! ✋ אפשר לגנוב גרגירים מיריב (כ-10% מהגרגירים שלו)!<br><br><strong>🎲 מספרים ראשוניים <span dir="ltr">(2, 3, 5, 7, 11, 13...)</span></strong><br>מספר שמתחלק רק ב-1 ובעצמו!<br>שלפו קלף טוויסט — הכללים משתנים! 🎲',
+         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0"><img src="/crop-board-he.png" alt="סימנים בלוח" style="width:100%;display:block"/></div><div style="font-size:.78em;color:#64748b;text-align:center;margin:-4px 0 10px">📸 שימו לב לסמלים על המשושים!</div><strong>💎 מספרים עגולים <span dir="ltr" style="white-space:nowrap">(10, 20, 30...)</span></strong><br>נחתתם כאן? שלפו קלף בונוס! 🎁<br>אולי תקבלו: כפול גרגירים / תור נוסף / +10 גרגירים<br><br><strong>🚧 מסתיימים ב-5 <span dir="ltr" style="white-space:nowrap">(15, 25, 35...)</span></strong><br>שלפו קלף הגבלה — אתגר לאיסוף!<br>למשל: "מספר הגרגירים חייב להיות זוגי"<br><br><strong>🦹 מסתיימים ב-6 <span dir="ltr" style="white-space:nowrap">(16, 26, 36...)</span></strong><br>שוד! ✋ אפשר לגנוב גרגירים מיריב (כ-10% מהגרגירים שלו)!<br><br><strong>🎲 מספרים ראשוניים <span dir="ltr" style="white-space:nowrap">(2, 3, 5, 7, 11, 13...)</span></strong><br>מספר שמתחלק רק ב-1 ובעצמו!<br>שלפו קלף טוויסט — הכללים משתנים! 🎲',
        },
        {
          i: "🧩",

@@ -167,7 +167,7 @@ export const en: Dict = {
        {
          i: "🎯",
          t: "Step 1 — Find the Target",
-         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0;max-width:300px;margin-left:auto;margin-right:auto"><img src="/crop-target-en.png" alt="Target Card" style="width:100%;display:block"/></div>Draw a target card with a math problem, for example: <strong>6 × 4 = ?</strong><br><br>Solve it in your head 🧠 and click the hex with the answer (24) on the board!<br><br>Wrong? <strong>You can try again as many times as you want!</strong> 😊<br>Need help? You can choose a hint 💡, or click "Show Answer".<br><br>ℹ️ <strong>This step has NO time limit!</strong>',
+         x: '<div style="margin:0 0 10px;border-radius:12px;overflow:hidden;border:2px solid #e2e8f0;max-width:300px;margin-left:auto;margin-right:auto"><img src="/crop-target-en.png" alt="Target Card" style="width:100%;display:block"/></div>Draw a target card with a math problem, for example: <strong><span dir="ltr" style="white-space:nowrap">6 × 4 = ?</span></strong><br><br>Solve it in your head 🧠 and click the hex with the answer (24) on the board!<br><br>Wrong? <strong>You can try again as many times as you want!</strong> 😊<br>Need help? You can choose a hint 💡, or click "Show Answer".<br><br>ℹ️ <strong>This step has NO time limit!</strong>',
        },
        {
          i: "🗺️",
