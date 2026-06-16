@@ -30,6 +30,8 @@ export interface LabelDesc {
   icon: string;
   name: string;
   desc: string;
+  /** Optional short board-only label, used on the welcome screen level tiles. */
+  board?: string;
 }
 
 export interface CardCopy {
