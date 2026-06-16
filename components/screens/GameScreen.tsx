@@ -35,8 +35,10 @@ function DoorLegend({ t, state }: { t: Dict; state: GameState }) {
         {unique.map(d => {
           const dc = DC[d];
           const range = dc.ranges
-            ? `${dc.ranges[0][0]}–${dc.ranges[0][1]} × ${dc.ranges[1][0]}–${dc.ranges[1][1]}`
-            : `${dc.min}–${dc.max}`;
+            ? `×(${dc.ranges[0][0]}–${dc.ranges[0][1]} × ${dc.ranges[1][0]}–${dc.ranges[1][1]})`
+            : dc.band
+            ? `(${dc.band[0]}–${dc.band[1]})`
+            : `×(${dc.min}–${dc.max})`;
           return (
             <div key={d} style={{
               display: "flex", alignItems: "center", gap: 8,
@@ -52,7 +54,7 @@ function DoorLegend({ t, state }: { t: Dict; state: GameState }) {
                   {t.doorLabel(d).split(" ").slice(1).join(" ")}
                 </div>
                 <div style={{ fontSize: ".74rem", color: "#6b7280", direction: "ltr", unicodeBidi: "embed", lineHeight: 1.3 }}>
-                  ×({range})
+                  {range}
                 </div>
               </div>
               <span style={{
