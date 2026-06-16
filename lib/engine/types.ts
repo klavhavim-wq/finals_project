@@ -67,11 +67,14 @@ export interface TrialRecord {
 
 export interface Door {
   key: DoorKey;
-  /** symmetric dice range (blue/purple/yellow/red) */
+  /** symmetric dice range (legacy fallback) */
   min?: number;
   max?: number;
   /** asymmetric ranges per die (hero / redlong) */
   ranges?: [number, number][];
+  /** product-band mode: any factor pair a≤b within `fac` whose product is in `band` */
+  fac?: [number, number];
+  band?: [number, number];
   cnt: number;
   pts: number;
   color: string;

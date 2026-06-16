@@ -107,46 +107,50 @@ export interface RollResult {
   expr: string;
 }
 
+/** All factor pairs a≤b within a band door's factor range whose product is in band. */
+function pairsInBand(door: Door): [number, number][] {
+  const [f0, f1] = door.fac!;
+  const [p0, p1] = door.band!;
+  const out: [number, number][] = [];
+  for (let a = f0; a <= f1; a++)
+    for (let b = a; b <= f1; b++) {
+      const p = a * b;
+      if (p >= p0 && p <= p1) out.push([a, b]);
+    }
+  return out;
+}
+
 export function rollDoor(door: Door, guards: RollGuards, rand: Rand = Math.random): RollResult {
-  let rolls: number[] = [];
-  let correct = 0;
-  let expr = "";
+  const bandPairs = door.band ? pairsInBand(door) : null;
+  const gen = (): RollResult => {
+    if (door.ranges) {
+      const r = door.ranges.map(([mn, mx]) => Math.floor(rand() * (mx - mn + 1)) + mn);
+      return { rolls: r, correct: r.reduce((a, b) => a * b, 1), expr: r.join(" × ") };
+    }
+    if (bandPairs) {
+      const [a, b] = bandPairs[Math.floor(rand() * bandPairs.length)];
+      return { rolls: [a, b], correct: a * b, expr: `${a} × ${b}` };
+    }
+    const min = door.min!;
+    const max = door.max!;
+    const r = Array.from({ length: door.cnt }, () => Math.floor(rand() * (max - min + 1)) + min);
+    return { rolls: r, correct: r.reduce((a, b) => a * b, 1), expr: [...r].sort((a, b) => a - b).join(" × ") };
+  };
+
+  let { rolls, correct, expr } = gen();
   let tries = 0;
   for (;;) {
-    if (door.ranges) {
-      rolls = door.ranges.map(([mn, mx]) => Math.floor(rand() * (mx - mn + 1)) + mn);
-      correct = rolls.reduce((a, b) => a * b, 1);
-      expr = rolls.join(" × ");
-    } else {
-      const min = door.min!;
-      const max = door.max!;
-      rolls = Array.from({ length: door.cnt }, () => Math.floor(rand() * (max - min + 1)) + min);
-      correct = rolls.reduce((a, b) => a * b, 1);
-      expr = [...rolls].sort((a, b) => a - b).join(" × ");
-    }
     tries++;
     if (tries > 40) break;
-    if (guards.turnUsedExprs.includes(expr)) continue;
-    if (guards.lastTurnExprs.includes(expr)) continue;
-    if (expr === guards.lastExpr) continue;
-    if (rolls.includes(1) && guards.turnHasOne) continue;
-    if (correct % 10 === 0 && guards.turnHasTen) continue;
+    if (guards.turnUsedExprs.includes(expr)) { ({ rolls, correct, expr } = gen()); continue; }
+    if (guards.lastTurnExprs.includes(expr)) { ({ rolls, correct, expr } = gen()); continue; }
+    if (expr === guards.lastExpr) { ({ rolls, correct, expr } = gen()); continue; }
+    if (rolls.includes(1) && guards.turnHasOne) { ({ rolls, correct, expr } = gen()); continue; }
+    if (correct % 10 === 0 && guards.turnHasTen) { ({ rolls, correct, expr } = gen()); continue; }
     break;
   }
   // Guarantee no consecutive repeat even when the broader guards are exhausted.
-  for (let i = 0; expr === guards.lastExpr && i < 20; i++) {
-    if (door.ranges) {
-      rolls = door.ranges.map(([mn, mx]) => Math.floor(rand() * (mx - mn + 1)) + mn);
-      correct = rolls.reduce((a, b) => a * b, 1);
-      expr = rolls.join(" × ");
-    } else {
-      const min = door.min!;
-      const max = door.max!;
-      rolls = Array.from({ length: door.cnt }, () => Math.floor(rand() * (max - min + 1)) + min);
-      correct = rolls.reduce((a, b) => a * b, 1);
-      expr = [...rolls].sort((a, b) => a - b).join(" × ");
-    }
-  }
+  for (let i = 0; expr === guards.lastExpr && i < 20; i++) ({ rolls, correct, expr } = gen());
   return { rolls, correct, expr };
 }
 
@@ -157,6 +161,8 @@ function doorProducts(door: Door): number[] {
     for (let a = mn1; a <= mx1; a++)
       for (let b = mn2; b <= mx2; b++)
         prods.add(a * b);
+  } else if (door.band) {
+    for (const [a, b] of pairsInBand(door)) prods.add(a * b);
   } else {
     const min = door.min!, max = door.max!;
     for (let a = min; a <= max; a++)
@@ -177,6 +183,8 @@ export function makeChoices(correct: number, door: Door, rand: Rand = Math.rando
   // Fallback for large doors: add nearby valid values if still not enough
   const maxProd = door.ranges
     ? door.ranges.reduce((a, [, mx]) => a * mx, 1)
+    : door.band
+    ? door.band[1]
     : Math.pow(door.max!, door.cnt);
   let tries = 0;
   while (s.size < 4 && tries < 40) {

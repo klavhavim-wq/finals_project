@@ -11,12 +11,15 @@ export const DOGS = ["🐕", "🐩", "🐶", "🦮"];
 
 /** Door config — min/max range maps to cognitive difficulty families. Labels are localized. */
 export const DC: Record<DoorKey, Door> = {
-  blue: { key: "blue", min: 2, max: 4, cnt: 2, pts: 1, color: "#3B82F6" },
+  // Product-band doors: each asks any factor pair (a≤b) within `fac` whose product
+  // lands in `band`. This keeps each door's difficulty while widening the variety
+  // of facts practised far beyond the old fixed dice ranges.
+  blue: { key: "blue", fac: [2, 9], band: [4, 20], cnt: 2, pts: 1, color: "#3B82F6" },
   // Indigo (not light violet) so blue and purple doors stay distinguishable,
   // including for blue-yellow colour-vision deficiency.
-  purple: { key: "purple", min: 3, max: 6, cnt: 2, pts: 2, color: "#7C3AED" },
-  yellow: { key: "yellow", min: 5, max: 8, cnt: 2, pts: 5, color: "#F59E0B" },
-  red: { key: "red", min: 7, max: 9, cnt: 2, pts: 10, color: "#EF4444" },
+  purple: { key: "purple", fac: [2, 9], band: [10, 40], cnt: 2, pts: 2, color: "#7C3AED" },
+  yellow: { key: "yellow", fac: [3, 9], band: [24, 64], cnt: 2, pts: 5, color: "#F59E0B" },
+  red: { key: "red", fac: [6, 9], band: [42, 81], cnt: 2, pts: 10, color: "#EF4444" },
   // Hero level — long multiplication: 2-digit × 1-digit
   redlong: {
     key: "redlong",
