@@ -948,11 +948,17 @@ function commitStep(state: GameState): GameState {
       turnPts += factorTiles * FACTOR_TILE_BONUS;
     }
     const common: GameState = { ...base, turnPts, timerRunning: false, extraTurn: false };
+    const sym = hexSym(hex);
+    // Prime (Twist) hexes go straight to the prime-number explanation — skip the
+    // separate "Draw Twist" arrival popup so there's only one window, not two.
+    if (sym === "🎲") {
+      return { ...common, modal: { kind: "primeHex", hex } };
+    }
     // Composite targets get an optional "break it into factors" challenge first.
     if (factorBonusActive(state.level) && hasFactorPair(hex)) {
-      return { ...common, modal: { kind: "factor", hex, turnPts, sym: hexSym(hex), factorTiles } };
+      return { ...common, modal: { kind: "factor", hex, turnPts, sym, factorTiles } };
     }
-    return { ...common, modal: { kind: "arrival", hex, turnPts, sym: hexSym(hex), factorTiles } };
+    return { ...common, modal: { kind: "arrival", hex, turnPts, sym, factorTiles } };
   }
   return base;
 }
