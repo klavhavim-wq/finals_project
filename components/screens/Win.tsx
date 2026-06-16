@@ -1,19 +1,22 @@
 "use client";
 
 import { DOGS } from "@/lib/engine/constants";
-import type { GameState } from "@/lib/engine/types";
+import type { GameState, TrialRecord } from "@/lib/engine/types";
 import type { GameActions } from "../useGame";
 import { MEDALS, type Dict } from "@/lib/i18n";
+import { statsForPlayer } from "@/lib/stats";
 
 const COINS = ["🦴", "🌭", "🍗", "🐟", "🥩", "🎾", "🦴", "🍖", "🦴", "🌭", "🍗", "🐾", "🦴", "🍗", "🥩", "🐾"];
 
 export default function Win({
   t,
   state,
+  trials,
   actions,
 }: {
   t: Dict;
   state: GameState;
+  trials: TrialRecord[];
   actions: GameActions;
 }) {
   const coop = state.coopWin;
@@ -74,6 +77,28 @@ export default function Win({
           ))
         )}
       </div>
+      {trials.length > 0 && (
+        <div className="wscores" style={{ marginTop: 10 }}>
+          <div className="wsrow" style={{ fontWeight: 800, color: "#0891B2" }}>
+            <span>{t.statTitle}</span>
+            <span />
+          </div>
+          {state.players.map((p, i) => {
+            const st = statsForPlayer(trials, p.name);
+            return (
+              <div className="wsrow" key={i}>
+                <span>
+                  {DOGS[i]} {p.name}
+                </span>
+                <span style={{ display: "flex", gap: 10, alignItems: "center", fontSize: ".85rem", color: "#374151" }}>
+                  <span>{t.statAccuracy(st.correct, st.total)}</span>
+                  <span>{st.medianRtSec !== null ? t.statSpeed(st.medianRtSec.toFixed(1)) : t.statNoData}</span>
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
       <div style={{ fontSize: ".8rem", color: "#6b7280", textAlign: "center", marginTop: 10 }}>
         {t.resultsSaved}
       </div>

@@ -36,6 +36,35 @@ export interface ErrorRecord {
   wrong: number;
 }
 
+/**
+ * One row per answer attempt — the research-grade chronometric log.
+ * Built in the host (useGame) where timing lives, so the reducer stays pure.
+ */
+export interface TrialRecord {
+  /** ISO timestamp of the answer */
+  ts: string;
+  player: string;
+  level: Level;
+  /** which stage produced the question */
+  phase: "find" | "walk" | "factor";
+  /** "target" for find; door key for walk; "factor" for factoring */
+  qType: string;
+  expr: string;
+  answer: number;
+  response: number;
+  correct: boolean;
+  /** attempt number within this item (1 = first try) */
+  attempt: number;
+  /** response time in ms (attempt 1: from presentation; later: from previous answer) */
+  rtMs: number;
+  /** how the answer was entered */
+  mode: "mc" | "typed" | "hex";
+  hintUsed: boolean;
+  revealed: boolean;
+  timerOn: boolean;
+  timeLeftMs: number;
+}
+
 export interface Door {
   key: DoorKey;
   /** symmetric dice range (blue/purple/yellow/red) */
@@ -69,6 +98,8 @@ export interface Settings {
   winMode: WinMode;
   coop: boolean;
   freePlay: boolean;
+  /** Calm mode: hide the special tiles (bonus/limit/rob/twist) for a low-distraction run. */
+  focus: boolean;
 }
 
 export interface Player {
@@ -90,6 +121,12 @@ export interface SessionRecord {
   players: { name: string; tokens: number; errors: number; errorLog?: ErrorRecord[] }[];
   winnerName: string | null;
   sharedTokens?: number;
+  /** research metadata + chronometric log */
+  participant?: string;
+  condition?: string;
+  startedAt?: string;
+  endedAt?: string;
+  trials?: TrialRecord[];
 }
 
 export interface PendingRoll {

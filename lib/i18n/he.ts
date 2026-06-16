@@ -399,6 +399,7 @@ export const he: Dict = {
   optMc: "🔤 כפתורי בחירה (מתחילים/בינוני)",
   optRob: "🦹 מנגנון שוד",
   optCoop: "🤝 משחק שיתופי — אוספים ביחד!",
+  optFocus: "🎯 מצב מיקוד — בלי משבצות מיוחדות (פחות הסחות)",
   winCondition: "🏁 מטרת המשחק",
   winModes: {
     rounds: { icon: "🔄", name: "4 סיבובים", desc: "הכי הרבה גרגירים לאחר 4 סיבובים" },
@@ -609,6 +610,18 @@ export const he: Dict = {
   freeSolvedCount: (n) => `✅ ${n}`,
 
   p2CoopHint: "💡 שיתוף פעולה: כל הגרגירים נכנסים לבנק המשותף!",
+
+  researchTitle: "🔬 מחקר (לא חובה)",
+  researchHint: "למילוי כשאוספים נתונים — נשמר עם תוצאות המשחק לצורך ניתוח.",
+  participantLabel: "קוד נבדק",
+  conditionLabel: "תנאי / קבוצה",
+  participantPlaceholder: "למשל S07",
+  conditionPlaceholder: "למשל כלב / ביקורת",
+
+  statTitle: "🧠 שליפה",
+  statAccuracy: (correct, total) => `דיוק: ${correct}/${total}`,
+  statSpeed: (sec) => `זמן ממוצע: ${sec} שׂנ׳`,
+  statNoData: "—",
 
   quickStartBtn: "🚀 התחל מהר!",
   quickStartTitle: "⚡ 3 שלבים פשוטים",

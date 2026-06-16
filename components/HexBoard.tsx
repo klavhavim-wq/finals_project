@@ -62,8 +62,9 @@ export default function HexBoard({
     const v = hVerts(cx, cy);
     const pts = v.map((p) => p.x.toFixed(1) + "," + p.y.toFixed(1)).join(" ");
     const nb = hNeighbors(n);
-    const prime = isPrime(n);
-    const sym = hexSym(n);
+    // Calm mode hides the special-tile symbols and the prime highlight.
+    const prime = !state.settings.focus && isPrime(n);
+    const sym = state.settings.focus ? "" : hexSym(n);
     const tcol = prime ? "#7C3AED" : "#78350F";
     const fw = prime ? 900 : 700;
     const pathIdx = state.path.indexOf(n);

@@ -19,19 +19,25 @@ export default function Setup({
 }) {
   const [count, setCount] = useState(1);
   const [names, setNames] = useState<string[]>(["", "", "", ""]);
-  const [timer, setTimer] = useState(true);
+  const [participant, setParticipant] = useState("");
+  const [condition, setCondition] = useState("");
+  // Timer defaults off for Beginner (gentlest for the youngest / first-time players).
+  const [timer, setTimer] = useState(level !== "beg");
   const [mc, setMc] = useState(true);
   // Steal defaults off for Beginner (gentlest for the youngest players), on elsewhere.
   const [rob, setRob] = useState(level !== "beg");
   const [coop, setCoop] = useState(false);
   const [freePlay, setFreePlay] = useState(false);
+  const [focus, setFocus] = useState(false);
   const [winMode, setWinMode] = useState<WinMode>("rounds");
 
   // Which options are relevant for this level.
   const showMc = level === "beg" || level === "med"; // multiple-choice only applies to these levels
   const showRob = true; // every level can toggle steal; Beginner defaults it off
   const showCoop = true; // cooperative play is available on every level, including Beginner
-  const showWinMode = level !== "beg";
+  // "First to 100" is only reachable from Advanced up; below that it would drag on
+  // and fall back to the leader, so only Rounds is offered on Beginner/Intermediate.
+  const showWinMode = level === "adv" || level === "champ" || level === "hero";
 
   const meta = t.levels[level];
 
@@ -52,8 +58,9 @@ export default function Setup({
       winMode: showWinMode ? winMode : "rounds",
       coop: showCoop ? coop : false,
       freePlay,
+      focus,
     };
-    actions.startGame(players, level, settings);
+    actions.startGame(players, level, settings, participant, condition);
   };
 
   return (
@@ -139,6 +146,7 @@ export default function Setup({
         {showMc && <Toggle label={t.optMc} checked={mc} onChange={setMc} />}
         {showRob && <Toggle label={t.optRob} checked={rob} onChange={setRob} />}
         {showCoop && <Toggle label={t.optCoop} checked={coop} onChange={setCoop} />}
+        <Toggle label={t.optFocus} checked={focus} onChange={setFocus} />
         <Toggle label={t.optFreePlay} checked={freePlay} onChange={setFreePlay} />
       </div>
 
@@ -168,6 +176,33 @@ export default function Setup({
           </div>
         </div>
       )}
+
+      <div className="scard">
+        <h3 style={{ marginBottom: 4 }}>{t.researchTitle}</h3>
+        <div style={{ fontSize: ".8rem", color: "#6b7280", marginBottom: 8 }}>{t.researchHint}</div>
+        <div className="pnrows">
+          <div className="pnrow">
+            <span style={{ fontSize: ".82rem", color: "#6b7280", minWidth: 86 }}>{t.participantLabel}</span>
+            <input
+              type="text"
+              value={participant}
+              placeholder={t.participantPlaceholder}
+              maxLength={24}
+              onChange={(e) => setParticipant(e.target.value)}
+            />
+          </div>
+          <div className="pnrow">
+            <span style={{ fontSize: ".82rem", color: "#6b7280", minWidth: 86 }}>{t.conditionLabel}</span>
+            <input
+              type="text"
+              value={condition}
+              placeholder={t.conditionPlaceholder}
+              maxLength={24}
+              onChange={(e) => setCondition(e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
 
       <div className="sacts">
         <button className="btnout" onClick={() => actions.showScreen("sw")}>

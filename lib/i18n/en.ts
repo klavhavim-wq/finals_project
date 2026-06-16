@@ -395,6 +395,7 @@ export const en: Dict = {
   optMc: "🔤 Choice buttons (Beginner/Intermediate)",
   optRob: "🦹 Steal mechanic",
   optCoop: "🤝 Cooperative — collect together!",
+  optFocus: "🎯 Focus mode — no special tiles (fewer distractions)",
   winCondition: "🏁 Win Condition",
   winModes: {
     rounds: { icon: "🔄", name: "4 Rounds", desc: "Most pellets after 4 rounds wins" },
@@ -599,6 +600,18 @@ export const en: Dict = {
   freeSolvedCount: (n) => `✅ ${n}`,
 
   p2CoopHint: "💡 Cooperative: all pellets go into the shared bank!",
+
+  researchTitle: "🔬 Research (optional)",
+  researchHint: "Fill in when collecting data — saved with the game results for analysis.",
+  participantLabel: "Participant",
+  conditionLabel: "Condition / group",
+  participantPlaceholder: "e.g. S07",
+  conditionPlaceholder: "e.g. dog / control",
+
+  statTitle: "🧠 Retrieval",
+  statAccuracy: (correct, total) => `Accuracy: ${correct}/${total}`,
+  statSpeed: (sec) => `Avg time: ${sec}s`,
+  statNoData: "—",
 
   quickStartBtn: "🚀 Quick Start!",
   quickStartTitle: "⚡ 3 Simple Steps",

@@ -13,7 +13,7 @@ import { getDict } from "@/lib/i18n";
 import type { Locale } from "@/lib/engine/types";
 
 export default function Game({ locale }: { locale: Locale }) {
-  const { state, actions } = useGame(locale);
+  const { state, trials, actions } = useGame(locale);
   const t = getDict(locale);
 
   return (
@@ -28,7 +28,7 @@ export default function Game({ locale }: { locale: Locale }) {
       {state.screen === "sg" && (
         <GameScreen t={t} state={state} actions={actions} locale={locale} />
       )}
-      {state.screen === "swin" && <Win t={t} state={state} actions={actions} />}
+      {state.screen === "swin" && <Win t={t} state={state} trials={trials} actions={actions} />}
       {state.screen === "sresults" && <Results t={t} actions={actions} />}
       <Modal t={t} state={state} actions={actions} />
       {state.instOpen && (

@@ -5,6 +5,7 @@ import type { SessionRecord } from "@/lib/engine/types";
 import type { GameActions } from "../useGame";
 import { DOGS } from "@/lib/engine/constants";
 import { MEDALS, type Dict } from "@/lib/i18n";
+import { statsForPlayer } from "@/lib/stats";
 
 const LS_KEY = "kaskash_sessions";
 
@@ -29,17 +30,22 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
     const lines: string[] = [];
     const he = t.dir === "rtl";
     const yn = (v: boolean | undefined) => (v ? (he ? "כן" : "Yes") : he ? "לא" : "No");
+    // Quote values that could contain a comma so columns never shift.
+    const csv = (v: string | number | undefined | null) => {
+      const s = v === undefined || v === null ? "" : String(v);
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
 
     lines.push(he ? "--- סיכום משחקים ---" : "--- Game Summary ---");
     lines.push(
       he
-        ? "תאריך,מזהה,רמה,שיתופי,טיימר,בחירה,שוד,תנאי_ניצחון,מנצח,גרגירים_משותפים"
-        : "Date,ID,Level,Cooperative,Timer,Choice,Steal,WinCondition,Winner,SharedPellets"
+        ? "תאריך,מזהה,נבדק,תנאי,רמה,שיתופי,טיימר,בחירה,שוד,תנאי_ניצחון,מנצח,גרגירים_משותפים"
+        : "Date,ID,Participant,Condition,Level,Cooperative,Timer,Choice,Steal,WinCondition,Winner,SharedPellets"
     );
     for (const s of sessions) {
       const st = s.settings;
       lines.push([
-        formatDate(s.date), s.id, t.levels[s.level].name, yn(s.coop),
+        formatDate(s.date), s.id, csv(s.participant), csv(s.condition), t.levels[s.level].name, yn(s.coop),
         yn(st?.timer), yn(st?.mc), yn(st?.rob), st?.winMode ?? "",
         s.winnerName ?? (s.coop ? (he ? "כולם" : "Everyone") : ""), s.sharedTokens ?? "",
       ].join(","));
@@ -47,10 +53,18 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
 
     lines.push("");
     lines.push(he ? "--- תוצאות שחקנים ---" : "--- Player Results ---");
-    lines.push(he ? "תאריך,מזהה_משחק,שחקן,ניקוד,שגיאות" : "Date,GameID,Player,Score,Errors");
+    lines.push(
+      he
+        ? "תאריך,מזהה_משחק,שחקן,ניקוד,שגיאות,דיוק_אחוז,נכונים,סהכ_פריטים,זמן_חציוני_שׂנ"
+        : "Date,GameID,Player,Score,Errors,Accuracy_pct,Correct,Items,MedianRT_sec"
+    );
     for (const s of sessions) {
       for (const p of s.players) {
-        lines.push([formatDate(s.date), s.id, p.name, p.tokens, p.errors ?? 0].join(","));
+        const stat = statsForPlayer(s.trials, p.name);
+        lines.push([
+          formatDate(s.date), s.id, csv(p.name), p.tokens, p.errors ?? 0,
+          stat.accuracyPct, stat.correct, stat.total, stat.medianRtSec ?? "",
+        ].join(","));
       }
     }
 
@@ -65,11 +79,30 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
       for (const p of s.players) {
         for (const e of p.errorLog ?? []) {
           lines.push([
-            formatDate(s.date), s.id, p.name,
+            formatDate(s.date), s.id, csv(p.name),
             e.phase === 1 ? (he ? "שלב1-יעד" : "Phase1-Target") : he ? "שלב3-דרך" : "Phase3-Route",
-            e.expr, e.correct, e.wrong,
+            csv(e.expr), e.correct, e.wrong,
           ].join(","));
         }
+      }
+    }
+
+    // Trial-level chronometric log — one row per answer attempt (with response time).
+    lines.push("");
+    lines.push(he ? "--- מענים (זמני תגובה) ---" : "--- Trials (response times) ---");
+    lines.push(
+      he
+        ? "מזהה_משחק,נבדק,תנאי,שחקן,רמה,שלב,סוג,תרגיל,תשובה,מענה,נכון,ניסיון,זמן_מילישניות,אופן,רמז,חשיפה,טיימר,זמן_שנותר_מילישניות,חותמת_זמן"
+        : "GameID,Participant,Condition,Player,Level,Phase,Type,Expr,Answer,Response,Correct,Attempt,RT_ms,Mode,Hint,Reveal,Timer,TimeLeft_ms,Timestamp"
+    );
+    for (const s of sessions) {
+      for (const tr of s.trials ?? []) {
+        lines.push([
+          s.id, csv(s.participant), csv(s.condition), csv(tr.player), tr.level,
+          tr.phase, tr.qType, csv(tr.expr), tr.answer, tr.response,
+          tr.correct ? 1 : 0, tr.attempt, tr.rtMs, tr.mode,
+          tr.hintUsed ? 1 : 0, tr.revealed ? 1 : 0, tr.timerOn ? 1 : 0, tr.timeLeftMs, tr.ts,
+        ].join(","));
       }
     }
 
@@ -155,7 +188,10 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
                   </div>
                 )}
 
-                {sorted.map((p, i) => (
+                {sorted.map((p, i) => {
+                  const stat = statsForPlayer(session.trials, p.name);
+                  const hasStats = stat.total > 0;
+                  return (
                   <div
                     key={i}
                     style={{
@@ -184,6 +220,12 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
 
                     {/* Stats */}
                     <span style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      {hasStats && (
+                        <span style={{ fontSize: ".78rem", color: "#0891B2", fontWeight: 600 }}>
+                          {t.statAccuracy(stat.correct, stat.total)}
+                          {stat.medianRtSec !== null ? ` · ${t.statSpeed(stat.medianRtSec.toFixed(1))}` : ""}
+                        </span>
+                      )}
                       {!session.coop && (
                         <span
                           style={{
@@ -201,7 +243,8 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
                       )}
                     </span>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           );

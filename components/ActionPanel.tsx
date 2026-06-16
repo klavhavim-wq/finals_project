@@ -141,7 +141,7 @@ function Phase1({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
       {hintVisible ? (
         <RichText className="hintbox" html={t.hintResult(card.ex)} />
       ) : (
-        <button className="abt abp" onClick={() => setHintVisible(true)}>
+        <button className="abt abp" onClick={() => { actions.noteHint(); setHintVisible(true); }}>
           {t.hintBtn}
         </button>
       )}

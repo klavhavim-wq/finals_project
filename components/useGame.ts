@@ -12,7 +12,7 @@ import {
   rollDoor,
 } from "@/lib/engine/gameReducer";
 import { edgeColor, findPath } from "@/lib/engine/hexgrid";
-import type { CardType, DoorKey, GameState, Level, Locale, Player, SessionRecord, Settings } from "@/lib/engine/types";
+import type { CardType, DoorKey, GameState, Level, Locale, Player, SessionRecord, Settings, TrialRecord } from "@/lib/engine/types";
 
 /** Which stage of a live sample turn a tour step demonstrates. */
 export type DemoStage = "find" | "route" | "walk";
@@ -32,6 +32,76 @@ export function useGame(locale: Locale) {
     stateRef.current = state;
   }, [state]);
 
+  // ── Chronometric logging (lives here, in the host, so the reducer stays pure) ──
+  const trialLogRef = useRef<TrialRecord[]>([]);
+  const itemRef = useRef<
+    | null
+    | {
+        t0: number;
+        lastAt: number;
+        phase: "find" | "walk" | "factor";
+        qType: string;
+        expr: string;
+        answer: number;
+        attempt: number;
+        hintUsed: boolean;
+        revealed: boolean;
+      }
+  >(null);
+  const gameStartRef = useRef<string>("");
+  const researchRef = useRef<{ participant: string; condition: string }>({
+    participant: "",
+    condition: "",
+  });
+
+  /** Mark the moment a question becomes readable (starts the response-time clock). */
+  const presentItem = useCallback(
+    (phase: "find" | "walk" | "factor", qType: string, expr: string, answer: number) => {
+      const now = performance.now();
+      itemRef.current = { t0: now, lastAt: now, phase, qType, expr, answer, attempt: 1, hintUsed: false, revealed: false };
+    },
+    []
+  );
+
+  /** Record one answer attempt with its response time. Skipped during the guided tour. */
+  const recordTrial = useCallback(
+    (response: number, correct: boolean, mode: "mc" | "typed" | "hex") => {
+      const it = itemRef.current;
+      const s = stateRef.current;
+      if (!it || s.tourActive) return;
+      const now = performance.now();
+      const rt = it.attempt === 1 ? now - it.t0 : now - it.lastAt;
+      trialLogRef.current.push({
+        ts: new Date().toISOString(),
+        player: s.players[s.cur]?.name ?? "",
+        level: s.level,
+        phase: it.phase,
+        qType: it.qType,
+        expr: it.expr,
+        answer: it.answer,
+        response,
+        correct,
+        attempt: it.attempt,
+        rtMs: Math.round(rt),
+        mode,
+        hintUsed: it.hintUsed,
+        revealed: it.revealed,
+        timerOn: s.settings.timer,
+        timeLeftMs: Math.max(0, s.timerSecs * 1000),
+      });
+      if (correct) itemRef.current = null;
+      else {
+        it.attempt += 1;
+        it.lastAt = now;
+      }
+    },
+    []
+  );
+
+  const noteHint = useCallback(() => {
+    if (itemRef.current) itemRef.current.hintUsed = true;
+  }, []);
+
   // Auto-save session to localStorage when game ends.
   const savedThisGame = useRef(false);
   useEffect(() => {
@@ -47,6 +117,11 @@ export function useGame(locale: Locale) {
         players: s.players.map((p) => ({ name: p.name, tokens: p.tokens, errors: p.errors, errorLog: p.errorLog })),
         winnerName: s.coopWin ? null : s.winnerIdx !== null ? s.players[s.winnerIdx].name : null,
         sharedTokens: s.settings.coop ? s.sharedTokens : undefined,
+        participant: researchRef.current.participant || undefined,
+        condition: researchRef.current.condition || undefined,
+        startedAt: gameStartRef.current || undefined,
+        endedAt: new Date().toISOString(),
+        trials: trialLogRef.current.slice(),
       };
       try {
         const existing: SessionRecord[] = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
@@ -61,8 +136,9 @@ export function useGame(locale: Locale) {
     const s = stateRef.current;
     // During the guided demo, prefer a composite target so the factoring step works.
     const { card, resetUsed } = pickTargetCard(s.level, s.usedCards, Math.random, s.tourActive);
+    presentItem("find", "target", card.ex, card.ans);
     dispatch({ type: "START_P1", card, resetUsed });
-  }, []);
+  }, [presentItem]);
 
   // Begin a fresh turn whenever the engine requests one.
   useEffect(() => {
@@ -94,7 +170,11 @@ export function useGame(locale: Locale) {
   );
 
   const startGame = useCallback(
-    (players: Player[], level: Level, settings: Settings) => {
+    (players: Player[], level: Level, settings: Settings, participant = "", condition = "") => {
+      trialLogRef.current = [];
+      itemRef.current = null;
+      gameStartRef.current = new Date().toISOString();
+      researchRef.current = { participant: participant.trim(), condition: condition.trim() };
       dispatch({ type: "START_GAME", players, level, settings });
     },
     []
@@ -125,6 +205,7 @@ export function useGame(locale: Locale) {
         winMode: "rounds",
         coop: false,
         freePlay: false,
+        focus: false,
       };
       dispatch({ type: "START_GAME", players, level, settings });
       dispatch({ type: "TOUR_START" });
@@ -185,6 +266,12 @@ export function useGame(locale: Locale) {
 
   const hexClick = useCallback((n: number) => {
     const s = stateRef.current;
+    // Log target-finding clicks (phase 1) and board-answer clicks (phase 3).
+    if (s.phase === 1 && s.card) {
+      recordTrial(n, n === s.card.ans, "hex");
+    } else if (s.phase === 3 && s.boardAns && s.pendingRoll) {
+      recordTrial(n, n === s.pendingRoll.correct, "hex");
+    }
     dispatch({ type: "HEX_CLICK", n });
     if (s.phase === 1) {
       if (s.card && n !== s.card.ans) {
@@ -200,12 +287,15 @@ export function useGame(locale: Locale) {
         setTimeout(() => dispatch({ type: "CLEAR_WRONG_HEX" }), 520);
       }
     }
-  }, []);
+  }, [recordTrial]);
 
   const startP2 = useCallback(() => dispatch({ type: "START_P2" }), []);
   const clearPath = useCallback(() => dispatch({ type: "CLEAR_PATH" }), []);
   const confirmPath = useCallback(() => dispatch({ type: "CONFIRM_PATH" }), []);
-  const revealTarget = useCallback(() => dispatch({ type: "REVEAL_TARGET" }), []);
+  const revealTarget = useCallback(() => {
+    if (itemRef.current) itemRef.current.revealed = true;
+    dispatch({ type: "REVEAL_TARGET" });
+  }, []);
 
   const rollDice = useCallback((step: number) => {
     const s = stateRef.current;
@@ -218,33 +308,39 @@ export function useGame(locale: Locale) {
       turnHasTen: s.turnHasTen,
     });
     const choices = usesMC(s) ? makeChoices(roll.correct, door) : null;
+    presentItem("walk", s.pathDoors[step], roll.expr, roll.correct);
     dispatch({ type: "ROLL_DICE", step, roll, choices });
     setTimeout(() => dispatch({ type: "STOP_SPIN" }), 380);
-  }, []);
+  }, [presentItem]);
 
   const mcAnswer = useCallback((chosen: number) => {
     const s = stateRef.current;
     const correct = s.pendingRoll?.correct;
+    recordTrial(chosen, chosen === correct, "mc");
     dispatch({ type: "MC_ANSWER", chosen });
     if (chosen === correct) {
       setTimeout(() => dispatch({ type: "COMMIT_STEP" }), 420);
     } else {
       setTimeout(() => dispatch({ type: "CLEAR_ANSWER_FLASH" }), 420);
     }
-  }, []);
+  }, [recordTrial]);
 
   const inputAnswer = useCallback((value: number) => {
     const s = stateRef.current;
     const correct = s.pendingRoll?.correct;
+    recordTrial(value, value === correct, "typed");
     dispatch({ type: "INPUT_ANSWER", value });
     if (value === correct) {
       setTimeout(() => dispatch({ type: "COMMIT_STEP" }), 420);
     } else {
       setTimeout(() => dispatch({ type: "CLEAR_ANSWER_FLASH" }), 520);
     }
-  }, []);
+  }, [recordTrial]);
 
-  const openForfeit = useCallback(() => dispatch({ type: "OPEN_FORFEIT" }), []);
+  const openForfeit = useCallback(() => {
+    if (itemRef.current) itemRef.current.revealed = true;
+    dispatch({ type: "OPEN_FORFEIT" });
+  }, []);
   const forfeitCollect = useCallback(() => dispatch({ type: "FORFEIT_COLLECT" }), []);
 
   const drawCard = useCallback((cardType: CardType) => {
@@ -291,7 +387,9 @@ export function useGame(locale: Locale) {
 
   return {
     state,
+    trials: trialLogRef.current,
     actions: {
+      noteHint,
       showScreen,
       goInst,
       goSimpleGuide,

@@ -30,6 +30,33 @@ export type Rand = () => number;
 
 // ── Pure RNG helpers (called by the host with Math.random; reducer stays pure) ──
 
+/**
+ * A randomly chosen factor pair that represents `ans`, within the level's factor
+ * domain. Lets the same product appear as different decompositions (24 → 3×8 or
+ * 4×6). Returns null if no valid pair exists. Display only — the answer is `ans`.
+ */
+function altFactorPair(ans: number, level: Level, rand: Rand): string | null {
+  const pairs: [number, number][] = [];
+  if (level === "hero") {
+    for (let a = 11; a <= 19; a++) {
+      if (ans % a === 0) {
+        const b = ans / a;
+        if (b >= 2 && b <= 9) pairs.push([a, b]);
+      }
+    }
+  } else {
+    for (let a = 2; a <= 10; a++) {
+      if (ans % a === 0) {
+        const b = ans / a;
+        if (b >= a && b <= 10) pairs.push([a, b]);
+      }
+    }
+  }
+  if (!pairs.length) return null;
+  const [a, b] = pairs[Math.floor(rand() * pairs.length)];
+  return `${a} × ${b}`;
+}
+
 export function pickTargetCard(
   level: Level,
   usedCards: number[],
@@ -50,8 +77,19 @@ export function pickTargetCard(
   if (preferComposite) {
     const comp = avail.filter((c) => hasFactorPair(c.ans));
     if (comp.length) pickFrom = comp;
+  } else if (level === "beg" || level === "med") {
+    // Keep the find step mostly multiplication at the easiest levels: primes
+    // (which are shown as additions) still appear, just less often.
+    const mult = avail.filter((c) => !c.prime);
+    if (mult.length && rand() < 0.7) pickFrom = mult;
   }
-  const card = pickFrom[Math.floor(rand() * pickFrom.length)];
+  let card = pickFrom[Math.floor(rand() * pickFrom.length)];
+  // Vary which factor pair is shown for a product, so it is not always the same
+  // single decomposition. Display only — the answer (card.ans) is unchanged.
+  if (!card.prime) {
+    const ex = altFactorPair(card.ans, level, rand);
+    if (ex) card = { ...card, ex };
+  }
   return { card, resetUsed };
 }
 
@@ -411,7 +449,7 @@ export function initState(locale: Locale): GameState {
     players: [],
     cur: 0,
     level: "med",
-    settings: { timer: true, mc: true, rob: true, winMode: "both", coop: false, freePlay: false },
+    settings: { timer: true, mc: true, rob: true, winMode: "both", coop: false, freePlay: false, focus: false },
     round: 0,
     sharedTokens: 0,
     phase: 0,
@@ -948,7 +986,9 @@ function commitStep(state: GameState): GameState {
       turnPts += factorTiles * FACTOR_TILE_BONUS;
     }
     const common: GameState = { ...base, turnPts, timerRunning: false, extraTurn: false };
-    const sym = hexSym(hex);
+    // Calm mode hides the special tiles, so arrivals never trigger bonus/limit/
+    // rob/twist draws — the factoring challenge (pure math) still applies.
+    const sym = state.settings.focus ? "" : hexSym(hex);
     // Prime (Twist) hexes go straight to the prime-number explanation — skip the
     // separate "Draw Twist" arrival popup so there's only one window, not two.
     if (sym === "🎲") {
