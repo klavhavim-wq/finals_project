@@ -119,6 +119,21 @@ export default function HexBoard({
           .join(" ")
       : null;
 
+    // The "you can step here next" hint, drawn as an inset ring AFTER the door
+    // edges so it stays visible on center hexes (a plain outline would be hidden
+    // under the colored door lines that surround a fully-bordered hex).
+    const nextRing =
+      validNextHexes.has(n) && !isUpcomingPath
+        ? v
+            .map(
+              (p) =>
+                (cx + (p.x - cx) * 0.72).toFixed(1) +
+                "," +
+                (cy + (p.y - cy) * 0.72).toFixed(1)
+            )
+            .join(" ")
+        : null;
+
     hexes.push(
       <g
         key={n}
@@ -130,18 +145,13 @@ export default function HexBoard({
           fill={fillFor(state, n)}
           stroke={
             isUpcomingPath ? "#0891B2"
-            : validNextHexes.has(n) ? "#16A34A"
             : otherPlayerHexes.has(n) ? "#FB923C"
             : "none"
           }
           strokeWidth={
             isUpcomingPath ? 2.5
-            : validNextHexes.has(n) ? 2.5
             : otherPlayerHexes.has(n) ? 2.5
             : 0
-          }
-          strokeDasharray={
-            validNextHexes.has(n) && !isUpcomingPath ? "5 3" : undefined
           }
         />
         {edges}
@@ -152,6 +162,16 @@ export default function HexBoard({
             stroke="#D97706"
             strokeWidth={2}
             strokeDasharray="4 3"
+            pointerEvents="none"
+          />
+        )}
+        {nextRing && (
+          <polygon
+            points={nextRing}
+            fill="none"
+            stroke="#16A34A"
+            strokeWidth={2.5}
+            strokeDasharray="5 3"
             pointerEvents="none"
           />
         )}
