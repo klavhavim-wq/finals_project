@@ -233,11 +233,11 @@ export const en: Dict = {
       x: '<strong>1.</strong> Get an exercise and tap the right number on the board. 🔢<br><br><strong>2.</strong> Build a path from the dog to that number. 🗺️<br><br><strong>3.</strong> At every step solve a little exercise and move — each step earns pellets! 🦴<br><br>Made a mistake? Try again, and there\'s a hint too 💡',
     };
     const LV: Record<string, string> = {
-      beg: '🐾 <strong>Beginner</strong> — the times tables up to 40. A short, friendly board with numbers up to 40. Perfect to start! 😊',
-      med: '⭐ <strong>Intermediate</strong> — times tables up to 60. Board with numbers up to 60.',
-      adv: '🌟 <strong>Advanced</strong> — times tables up to 90. Board with numbers up to 90.',
-      champ: '🏆 <strong>Champion</strong> — times tables up to 100. Board with numbers up to 100.',
-      hero: '⚡ <strong>Hero</strong> — long multiplication (two-digit × one-digit). The full board, up to 100.',
+      beg: '🐾 <strong>Beginner</strong> — find numbers up to 40 on the board. Along the way you cross the blue door and solve easy exercises — products up to 20. Perfect to start! 😊',
+      med: '⭐ <strong>Intermediate</strong> — find numbers up to 60. The door exercises along the way go up to 40.',
+      adv: '🌟 <strong>Advanced</strong> — find numbers up to 90. The door exercises along the way go up to 64.',
+      champ: '🏆 <strong>Champion</strong> — find numbers up to 100. The door exercises along the way go up to 81.',
+      hero: '⚡ <strong>Hero</strong> — long multiplication (two-digit × one-digit), on the full board up to 100.',
     };
     const levelPage = level
       ? {
@@ -383,10 +383,10 @@ export const en: Dict = {
   playerPlaceholder: (dog, i) => `${dog} Player ${i + 1}...`,
   difficulty: "📊 Difficulty",
   levels: {
-    beg: { icon: "🐾", name: "Beginner", desc: "Times tables up to 40" },
-    med: { icon: "⭐", name: "Intermediate", desc: "Times tables up to 60" },
-    adv: { icon: "🌟", name: "Advanced", desc: "Times tables up to 90" },
-    champ: { icon: "🏆", name: "Champion", desc: "Times tables up to 100 | 2 min" },
+    beg: { icon: "🐾", name: "Beginner", desc: "Board to 40 · on the way to 20" },
+    med: { icon: "⭐", name: "Intermediate", desc: "Board to 60 · on the way to 40" },
+    adv: { icon: "🌟", name: "Advanced", desc: "Board to 90 · on the way to 64" },
+    champ: { icon: "🏆", name: "Champion", desc: "Board to 100 · on the way to 81 | 2 min" },
     hero: { icon: "⚡", name: "Hero", desc: "Long multiplication | (11–19)×(2–9) | 1:30 min" },
   },
   options: "🔧 Options",
