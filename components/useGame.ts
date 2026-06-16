@@ -49,10 +49,6 @@ export function useGame(locale: Locale) {
       }
   >(null);
   const gameStartRef = useRef<string>("");
-  const researchRef = useRef<{ participant: string; condition: string }>({
-    participant: "",
-    condition: "",
-  });
 
   /** Mark the moment a question becomes readable (starts the response-time clock). */
   const presentItem = useCallback(
@@ -117,8 +113,6 @@ export function useGame(locale: Locale) {
         players: s.players.map((p) => ({ name: p.name, tokens: p.tokens, errors: p.errors, errorLog: p.errorLog })),
         winnerName: s.coopWin ? null : s.winnerIdx !== null ? s.players[s.winnerIdx].name : null,
         sharedTokens: s.settings.coop ? s.sharedTokens : undefined,
-        participant: researchRef.current.participant || undefined,
-        condition: researchRef.current.condition || undefined,
         startedAt: gameStartRef.current || undefined,
         endedAt: new Date().toISOString(),
         trials: trialLogRef.current.slice(),
@@ -170,11 +164,10 @@ export function useGame(locale: Locale) {
   );
 
   const startGame = useCallback(
-    (players: Player[], level: Level, settings: Settings, participant = "", condition = "") => {
+    (players: Player[], level: Level, settings: Settings) => {
       trialLogRef.current = [];
       itemRef.current = null;
       gameStartRef.current = new Date().toISOString();
-      researchRef.current = { participant: participant.trim(), condition: condition.trim() };
       dispatch({ type: "START_GAME", players, level, settings });
     },
     []

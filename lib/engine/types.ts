@@ -124,9 +124,7 @@ export interface SessionRecord {
   players: { name: string; tokens: number; errors: number; errorLog?: ErrorRecord[] }[];
   winnerName: string | null;
   sharedTokens?: number;
-  /** research metadata + chronometric log */
-  participant?: string;
-  condition?: string;
+  /** chronometric log */
   startedAt?: string;
   endedAt?: string;
   trials?: TrialRecord[];

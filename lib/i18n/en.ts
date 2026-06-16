@@ -146,7 +146,7 @@ export const en: Dict = {
 
   logoAlt: "Dafi & The Dogs",
   title: "Dogylishios 🐕🍖",
-  welcomeSub: "Help the dog store pellets in the bank! 🦴",
+  welcomeSub: "Help the dog collect treats and pellets and fill its bank! 🦴",
   welcomeSub2a: "📚 Times tables · Number facts · Strategy",
   welcomeSub2b: "👥 1–4 players \u00a0·\u00a0 ⏱ 20–45 min",
   startGame: "🎮 Start Game!",
@@ -378,10 +378,10 @@ export const en: Dict = {
   playerPlaceholder: (dog, i) => `${dog} Player ${i + 1}...`,
   difficulty: "📊 Difficulty",
   levels: {
-    beg: { icon: "🐾", name: "Beginner", desc: "Board to 40 · on the way to 20", board: "Board to 40" },
-    med: { icon: "⭐", name: "Intermediate", desc: "Board to 60 · on the way to 40", board: "Board to 60" },
-    adv: { icon: "🌟", name: "Advanced", desc: "Board to 90 · on the way to 64", board: "Board to 90" },
-    champ: { icon: "🏆", name: "Champion", desc: "Board to 100 · on the way to 81 | 2 min", board: "Board to 100" },
+    beg: { icon: "🐾", name: "Beginner", desc: "Board to 40 · products to 20", board: "Board to 40" },
+    med: { icon: "⭐", name: "Intermediate", desc: "Board to 60 · products to 40", board: "Board to 60" },
+    adv: { icon: "🌟", name: "Advanced", desc: "Board to 90 · products to 64", board: "Board to 90" },
+    champ: { icon: "🏆", name: "Champion", desc: "Board to 100 · products to 81 | 2 min", board: "Board to 100" },
     hero: { icon: "⚡", name: "Hero", desc: "Long multiplication | (11–19)×(2–9) | 1:30 min", board: "Long multiplication" },
   },
   options: "🔧 Options",
@@ -599,13 +599,6 @@ export const en: Dict = {
   freeSolvedCount: (n) => `✅ ${n}`,
 
   p2CoopHint: "💡 Cooperative: all pellets go into the shared bank!",
-
-  researchTitle: "🔬 Research (optional)",
-  researchHint: "Fill in when collecting data — saved with the game results for analysis.",
-  participantLabel: "Participant",
-  conditionLabel: "Condition / group",
-  participantPlaceholder: "e.g. S07",
-  conditionPlaceholder: "e.g. dog / control",
 
   statTitle: "🧠 Retrieval",
   statAccuracy: (correct, total) => `Accuracy: ${correct}/${total}`,

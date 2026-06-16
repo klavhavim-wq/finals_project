@@ -39,14 +39,14 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
     lines.push(he ? "--- סיכום משחקים ---" : "--- Game Summary ---");
     lines.push(
       he
-        ? "תאריך,מזהה,נבדק,תנאי,רמה,שיתופי,טיימר,בחירה,שוד,תנאי_ניצחון,מנצח,גרגירים_משותפים"
-        : "Date,ID,Participant,Condition,Level,Cooperative,Timer,Choice,Steal,WinCondition,Winner,SharedPellets"
+        ? "תאריך,מזהה,רמה,שיתופי,טיימר,בחירה,שוד,מיקוד,משחק_חופשי,תנאי_ניצחון,מנצח,גרגירים_משותפים"
+        : "Date,ID,Level,Cooperative,Timer,Choice,Steal,Focus,FreePlay,WinCondition,Winner,SharedPellets"
     );
     for (const s of sessions) {
       const st = s.settings;
       lines.push([
-        formatDate(s.date), s.id, csv(s.participant), csv(s.condition), t.levels[s.level].name, yn(s.coop),
-        yn(st?.timer), yn(st?.mc), yn(st?.rob), st?.winMode ?? "",
+        formatDate(s.date), s.id, t.levels[s.level].name, yn(s.coop),
+        yn(st?.timer), yn(st?.mc), yn(st?.rob), yn(st?.focus), yn(st?.freePlay), st?.winMode ?? "",
         s.winnerName ?? (s.coop ? (he ? "כולם" : "Everyone") : ""), s.sharedTokens ?? "",
       ].join(","));
     }
@@ -92,13 +92,13 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
     lines.push(he ? "--- מענים (זמני תגובה) ---" : "--- Trials (response times) ---");
     lines.push(
       he
-        ? "מזהה_משחק,נבדק,תנאי,שחקן,רמה,שלב,סוג,תרגיל,תשובה,מענה,נכון,ניסיון,זמן_מילישניות,אופן,רמז,חשיפה,טיימר,זמן_שנותר_מילישניות,חותמת_זמן"
-        : "GameID,Participant,Condition,Player,Level,Phase,Type,Expr,Answer,Response,Correct,Attempt,RT_ms,Mode,Hint,Reveal,Timer,TimeLeft_ms,Timestamp"
+        ? "מזהה_משחק,שחקן,רמה,שלב,סוג,תרגיל,תשובה,מענה,נכון,ניסיון,זמן_מילישניות,אופן,רמז,חשיפה,טיימר,זמן_שנותר_מילישניות,חותמת_זמן"
+        : "GameID,Player,Level,Phase,Type,Expr,Answer,Response,Correct,Attempt,RT_ms,Mode,Hint,Reveal,Timer,TimeLeft_ms,Timestamp"
     );
     for (const s of sessions) {
       for (const tr of s.trials ?? []) {
         lines.push([
-          s.id, csv(s.participant), csv(s.condition), csv(tr.player), tr.level,
+          s.id, csv(tr.player), tr.level,
           tr.phase, tr.qType, csv(tr.expr), tr.answer, tr.response,
           tr.correct ? 1 : 0, tr.attempt, tr.rtMs, tr.mode,
           tr.hintUsed ? 1 : 0, tr.revealed ? 1 : 0, tr.timerOn ? 1 : 0, tr.timeLeftMs, tr.ts,

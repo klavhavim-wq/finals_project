@@ -150,7 +150,7 @@ export const he: Dict = {
 
   logoAlt: "דפי והכלבים",
   title: "כשכש-נשנש 🐕🍖",
-  welcomeSub: "עזרו לכלב לצבור גרגירים בבנק שלו! 🦴",
+  welcomeSub: "עזרו לכלב לצבור מטעמים וגרגירים ולמלא את הבנק שלו! 🦴",
   welcomeSub2a: "📚 לוח הכפל · עובדות יסוד · אסטרטגיה",
   welcomeSub2b: "👥 1–4 שחקנים \u00a0·\u00a0 ⏱ 20–45 דק׳",
   startGame: "🎮 התחל משחק!",
@@ -382,10 +382,10 @@ export const he: Dict = {
   playerPlaceholder: (dog, i) => `${dog} שם שחקן ${i + 1}...`,
   difficulty: "📊 רמת קושי",
   levels: {
-    beg: { icon: "🐾", name: "מתחילים", desc: "לוח עד 40 · בדרך עד 20", board: "לוח עד 40" },
-    med: { icon: "⭐", name: "בינוני", desc: "לוח עד 60 · בדרך עד 40", board: "לוח עד 60" },
-    adv: { icon: "🌟", name: "מתקדם", desc: "לוח עד 90 · בדרך עד 64", board: "לוח עד 90" },
-    champ: { icon: "🏆", name: "אלוף", desc: "לוח עד 100 · בדרך עד 81 | 2 דקות", board: "לוח עד 100" },
+    beg: { icon: "🐾", name: "מתחילים", desc: "לוח עד 40 · מכפלות עד 20", board: "לוח עד 40" },
+    med: { icon: "⭐", name: "בינוני", desc: "לוח עד 60 · מכפלות עד 40", board: "לוח עד 60" },
+    adv: { icon: "🌟", name: "מתקדם", desc: "לוח עד 90 · מכפלות עד 64", board: "לוח עד 90" },
+    champ: { icon: "🏆", name: "אלוף", desc: "לוח עד 100 · מכפלות עד 81 | 2 דקות", board: "לוח עד 100" },
     hero: { icon: "⚡", name: "גיבור", desc: "כפל ארוך | \u2066(11–19)×(2–9)\u2069 | דקה וחצי", board: "כפל ארוך" },
   },
   options: "🔧 התאמות",
@@ -609,13 +609,6 @@ export const he: Dict = {
   freeSolvedCount: (n) => `✅ ${n}`,
 
   p2CoopHint: "💡 שיתוף פעולה: כל הגרגירים נכנסים לבנק המשותף!",
-
-  researchTitle: "🔬 מחקר (לא חובה)",
-  researchHint: "למילוי כשאוספים נתונים — נשמר עם תוצאות המשחק לצורך ניתוח.",
-  participantLabel: "קוד נבדק",
-  conditionLabel: "תנאי / קבוצה",
-  participantPlaceholder: "למשל S07",
-  conditionPlaceholder: "למשל כלב / ביקורת",
 
   statTitle: "🧠 שליפה",
   statAccuracy: (correct, total) => `דיוק: ${correct}/${total}`,

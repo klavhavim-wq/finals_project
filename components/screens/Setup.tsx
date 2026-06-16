@@ -19,8 +19,6 @@ export default function Setup({
 }) {
   const [count, setCount] = useState(1);
   const [names, setNames] = useState<string[]>(["", "", "", ""]);
-  const [participant, setParticipant] = useState("");
-  const [condition, setCondition] = useState("");
   // Timer defaults off for Beginner (gentlest for the youngest / first-time players).
   const [timer, setTimer] = useState(level !== "beg");
   const [mc, setMc] = useState(true);
@@ -60,7 +58,7 @@ export default function Setup({
       freePlay,
       focus,
     };
-    actions.startGame(players, level, settings, participant, condition);
+    actions.startGame(players, level, settings);
   };
 
   return (
@@ -176,33 +174,6 @@ export default function Setup({
           </div>
         </div>
       )}
-
-      <div className="scard">
-        <h3 style={{ marginBottom: 4 }}>{t.researchTitle}</h3>
-        <div style={{ fontSize: ".8rem", color: "#6b7280", marginBottom: 8 }}>{t.researchHint}</div>
-        <div className="pnrows">
-          <div className="pnrow">
-            <span style={{ fontSize: ".82rem", color: "#6b7280", minWidth: 86 }}>{t.participantLabel}</span>
-            <input
-              type="text"
-              value={participant}
-              placeholder={t.participantPlaceholder}
-              maxLength={24}
-              onChange={(e) => setParticipant(e.target.value)}
-            />
-          </div>
-          <div className="pnrow">
-            <span style={{ fontSize: ".82rem", color: "#6b7280", minWidth: 86 }}>{t.conditionLabel}</span>
-            <input
-              type="text"
-              value={condition}
-              placeholder={t.conditionPlaceholder}
-              maxLength={24}
-              onChange={(e) => setCondition(e.target.value)}
-            />
-          </div>
-        </div>
-      </div>
 
       <div className="sacts">
         <button className="btnout" onClick={() => actions.showScreen("sw")}>

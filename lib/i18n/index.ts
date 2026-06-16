@@ -230,14 +230,6 @@ export interface Dict {
   // Phase 2 coop hint
   p2CoopHint: string;
 
-  // Research metadata (optional, for the study)
-  researchTitle: string;
-  researchHint: string;
-  participantLabel: string;
-  conditionLabel: string;
-  participantPlaceholder: string;
-  conditionPlaceholder: string;
-
   // Skill metrics (chronometric)
   statTitle: string;
   statAccuracy: (correct: number, total: number) => string;
