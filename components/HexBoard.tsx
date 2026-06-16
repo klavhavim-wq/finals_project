@@ -38,9 +38,13 @@ export default function HexBoard({
     const tip = state.path.length > 0
       ? state.path[state.path.length - 1]
       : state.players[state.cur].hex;
-    hNeighbors(tip).forEach(n => { if (n !== null) validNextHexes.add(n); });
-    state.path.forEach(h => validNextHexes.delete(h));
-    validNextHexes.delete(state.players[state.cur].hex);
+    // Once the route reaches the target, it's the final step — don't suggest any
+    // "next" hexes, so it's clear the target is the end of the walk.
+    if (tip !== state.targetHex) {
+      hNeighbors(tip).forEach(n => { if (n !== null) validNextHexes.add(n); });
+      state.path.forEach(h => validNextHexes.delete(h));
+      validNextHexes.delete(state.players[state.cur].hex);
+    }
     state.players.forEach((p, i) => { if (i !== state.cur) otherPlayerHexes.add(p.hex); });
   }
 
