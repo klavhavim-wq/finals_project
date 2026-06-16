@@ -36,15 +36,15 @@ function mulHintHe(a: number, b: number): string {
   }
   if (a === 9 || b === 9) {
     const x = a === 9 ? b : a;
-    return `💜 רמז: ×9 = ×10 פחות פעם אחת — ${ltr(`${x} × 10 = <strong>${x * 10}</strong>`)} ← פחות ${x} = ?`;
+    return `💜 רמז: כפל ב-9 = כפל ב-10 פחות פעם אחת — ${ltr(`${x} × 10 = <strong>${x * 10}</strong>`)}, ואז ${ltr(`− ${x} = ?`)}`;
   }
   if (a >= 10) {
     const t = Math.floor(a / 10) * 10, o = a % 10;
-    return `💜 רמז: פרקו את ${a} ל-${t}+${o}:<br>${ltr(`(${t} × ${b}) + (${o} × ${b}) = ?`)}`;
+    return `💜 רמז: פרקו את ${a} ל-${ltr(`${t}+${o}`)}:<br>${ltr(`(${t} × ${b}) + (${o} × ${b}) = ?`)}`;
   }
   if (b >= 10) {
     const t = Math.floor(b / 10) * 10, o = b % 10;
-    return `💜 רמז: פרקו את ${b} ל-${t}+${o}:<br>${ltr(`(${a} × ${t}) + (${a} × ${o}) = ?`)}`;
+    return `💜 רמז: פרקו את ${b} ל-${ltr(`${t}+${o}`)}:<br>${ltr(`(${a} × ${t}) + (${a} × ${o}) = ?`)}`;
   }
   const [s, g] = a <= b ? [a, b] : [b, a];
   if (g <= 4) {
@@ -59,12 +59,12 @@ function calcHintHe(expr: string): string {
   if (mParts.length >= 2 && mParts.every(p => /^\d+$/.test(p.trim()))) {
     const nums = mParts.map(p => parseInt(p.trim()));
     if (nums.length === 2) return mulHintHe(nums[0], nums[1]);
-    return `💜 רמז: ${ltr(`${nums[0]} × ${nums[1]} = <strong>${nums[0] * nums[1]}</strong>`)}, ואז × ${nums[2]} = ?`;
+    return `💜 רמז: ${ltr(`${nums[0]} × ${nums[1]} = <strong>${nums[0] * nums[1]}</strong>`)}, ואז ${ltr(`× ${nums[2]} = ?`)}`;
   }
   const dM = expr.match(/^(\d+)\s*÷\s*(\d+)$/);
   if (dM) {
     const [a, b] = [+dM[1], +dM[2]];
-    if (b === 2) return `💜 רמז: ÷2 = חצי — מה זה חצי מ-${a}?`;
+    if (b === 2) return `💜 רמז: לחלק ב-2 זה חצי — מה חצי מ-${a}?`;
     return `💜 רמז: ${ltr(`${b} × ? = ${a}`)} — מה המספר החסר?`;
   }
   const sM = expr.match(/^(\d+)\s*[−-]\s*(\d+)$/);
@@ -89,7 +89,7 @@ function calcHintHe(expr: string): string {
     const toNext = nextRound - big;
     const leftover = small - toNext;
     if (toNext > 0 && leftover > 0)
-      return `💜 רמז: ${ltr(`${big} + ${toNext} = <strong>${nextRound}</strong>`)}... ועוד ${leftover} = ?`;
+      return `💜 רמז: ${ltr(`${big} + ${toNext} = <strong>${nextRound}</strong>`)}, ואז עוד ${ltr(`${leftover} = ?`)}`;
     const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
     return `💜 רמז: התחילו מ-${big}: ${ltr(`${steps}, ?`)}`;
   }
