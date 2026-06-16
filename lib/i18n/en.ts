@@ -291,7 +291,7 @@ export const en: Dict = {
         i: "🐕",
         t: "Hi! Let's learn to play",
         target: "center",
-        x: 'This is a <strong>demo game</strong> — we\'ll go through every part of the board, the options, and how to play, step by step. 😊<br><br>Tap <strong>"Next"</strong> to continue, or ✕ to leave any time.',
+        x: 'This is a <strong>guided tour</strong> — we\'ll go through every part of the board, the options, and how to play, step by step. 😊<br><br>Tap <strong>"Next"</strong> to continue, or ✕ to leave any time.',
       },
       {
         i: "📋",
@@ -371,11 +371,11 @@ export const en: Dict = {
     // The factoring step only applies from Advanced up.
     return factorActive ? pages : pages.filter((p) => p.i !== "🧩");
   },
-  demoGameBtn: "🎬 Demo game",
+  demoGameBtn: "🧭 Guided tour",
   demoPlayerName: "🐕 Demo",
   demoHelperName: "🐩 Friend",
   tourFinish: "🎮 Let's play!",
-  tourExit: "Skip the demo",
+  tourExit: "Skip the tour",
 
   setupTitle: "⚙️ Game Settings",
   howManyPlayers: "👥 How many players?",

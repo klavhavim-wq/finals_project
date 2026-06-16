@@ -295,7 +295,7 @@ export const he: Dict = {
         i: "🐕",
         t: "היי! בואו נלמד לשחק",
         target: "center",
-        x: 'זה <strong>משחק לדוגמה</strong> — נעבור יחד על כל חלקי הלוח, האפשרויות, ואיך משחקים, שלב אחרי שלב. 😊<br><br>לוחצים על <strong>«הבא»</strong> כדי להתקדם, או על ✕ כדי לצאת בכל רגע.',
+        x: 'זה <strong>סיור מודרך</strong> — נעבור יחד על כל חלקי הלוח, האפשרויות, ואיך משחקים, שלב אחרי שלב. 😊<br><br>לוחצים על <strong>«הבא»</strong> כדי להתקדם, או על ✕ כדי לצאת בכל רגע.',
       },
       {
         i: "📋",
@@ -375,11 +375,11 @@ export const he: Dict = {
     // The factoring step only applies from Advanced up.
     return factorActive ? pages : pages.filter((p) => p.i !== "🧩");
   },
-  demoGameBtn: "🎬 משחק לדוגמה",
+  demoGameBtn: "🧭 סיור מודרך",
   demoPlayerName: "🐕 הדגמה",
   demoHelperName: "🐩 חבר",
   tourFinish: "🎮 בואו נשחק!",
-  tourExit: "דלג על ההדגמה",
+  tourExit: "דלג על הסיור",
 
   setupTitle: "⚙️ הגדרות משחק",
   howManyPlayers: "👥 כמה שחקנים?",
