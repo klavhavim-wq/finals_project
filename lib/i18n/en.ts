@@ -614,5 +614,36 @@ export const en: Dict = {
   ],
   quickStartGo: "🎮 Let's Play!",
 
+  quickLaunchBtn: "⚡ Quick Launch",
+  qlTitle: "⚡ Quick Launch",
+  qlSub: "Pick a level and how many players, then tap a setup to start playing right away.",
+  qlLevelLabel: "📊 Level",
+  qlPlayersLabel: "👥 Players",
+  qlReviewNote: "🧠 In Quick Launch the game remembers each player's mistakes and brings them back for extra practice.",
+  qlAdvanced: "⚙️ Advanced settings",
+  qlStart: (presetName) => `▶ Start: ${presetName}`,
+  presets: {
+    focus: {
+      icon: "🎯",
+      name: "Focused Practice",
+      desc: "Calm board, no timer, still scored — full attention on the math.",
+    },
+    free: {
+      icon: "🎓",
+      name: "Free Practice",
+      desc: "No score, no winner, no pressure — just count the exercises solved.",
+    },
+    calm: {
+      icon: "🤝",
+      name: "Calm & Together",
+      desc: "Cooperative, gentle, low-distraction — everyone on one team.",
+    },
+    full: {
+      icon: "🎮",
+      name: "Full Game",
+      desc: "The complete experience — timer, steal, surprises and all.",
+    },
+  },
+
   phaseLabels: ["Find Target", "Plan", "Go!"],
 };

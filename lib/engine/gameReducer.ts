@@ -22,6 +22,7 @@ import type {
   PendingRoll,
   Phase,
   Player,
+  ReviewFact,
   Settings,
   TargetCard,
 } from "./types";
@@ -152,6 +153,116 @@ export function rollDoor(door: Door, guards: RollGuards, rand: Rand = Math.rando
   // Guarantee no consecutive repeat even when the broader guards are exhausted.
   for (let i = 0; expr === guards.lastExpr && i < 20; i++) ({ rolls, correct, expr } = gen());
   return { rolls, correct, expr };
+}
+
+// ── Review mode: remember missed facts, re-serve them for spaced practice ──
+// Selection lives here as pure helpers (the host supplies the player's fact pool
+// and Math.random). The host decides *whether* to consult them per pick; these
+// return null when nothing in the pool fits, so the caller falls back to a fresh
+// random question. The reducer itself stays pure and unaware of the pool.
+
+/** Parse "a × b" into a numeric factor pair (multiplication facts only). */
+export function parseFactors(expr: string): [number, number] | null {
+  const parts = expr.split("×").map((p) => p.trim());
+  if (parts.length !== 2) return null;
+  const a = Number(parts[0]);
+  const b = Number(parts[1]);
+  if (!Number.isFinite(a) || !Number.isFinite(b)) return null;
+  return [a, b];
+}
+
+/** Canonical key for a fact, so the same pair (in any order) dedups. */
+export function factKey(a: number, b: number): string {
+  return `${Math.min(a, b)}x${Math.max(a, b)}`;
+}
+
+/** Weighted-random pick from a list (by `.weight`); null if empty. */
+function weightedPick<T extends { weight: number }>(items: T[], rand: Rand): T | null {
+  if (!items.length) return null;
+  const total = items.reduce((s, it) => s + Math.max(1, it.weight), 0);
+  let r = rand() * total;
+  for (const it of items) {
+    r -= Math.max(1, it.weight);
+    if (r <= 0) return it;
+  }
+  return items[items.length - 1];
+}
+
+/**
+ * A target card built from one of the player's missed facts, if any fit this
+ * level's board. Lets the find step re-test a product the player struggled with.
+ */
+export function pickReviewTarget(
+  level: Level,
+  facts: ReviewFact[],
+  usedCards: number[],
+  rand: Rand = Math.random
+): { card: TargetCard; resetUsed: boolean } | null {
+  if (!facts.length) return null;
+  const pool = targetPoolFor(level);
+  // Keep only facts whose product is a real target on this board, preferring
+  // ones not just shown this round.
+  const eligible = facts
+    .map((f) => ({ f, base: pool.find((c) => c.ans === f.ans && !c.prime) }))
+    .filter((x): x is { f: ReviewFact; base: TargetCard } => !!x.base);
+  const fresh = eligible.filter((x) => !usedCards.includes(x.base.id));
+  const choose = fresh.length ? fresh : eligible;
+  const hit = weightedPick(choose.map((x) => ({ ...x, weight: x.f.weight })), rand);
+  if (!hit) return null;
+  // Show the exact expression the player missed.
+  const card: TargetCard = { ...hit.base, ex: hit.f.expr };
+  return { card, resetUsed: false };
+}
+
+/**
+ * A door roll built from one of the player's missed facts that fits this door
+ * and the turn's no-repeat guards; null if none fit.
+ */
+export function pickReviewRoll(
+  door: Door,
+  facts: ReviewFact[],
+  guards: RollGuards,
+  rand: Rand = Math.random
+): RollResult | null {
+  if (!facts.length) return null;
+  const fits = (a: number, b: number): RollResult | null => {
+    let x = a, y = b;
+    if (door.ranges) {
+      const [[mn1, mx1], [mn2, mx2]] = door.ranges;
+      // Order the pair to match the door's asymmetric ranges (e.g. 13 × 4).
+      const tryOrder = (p: number, q: number) =>
+        p >= mn1 && p <= mx1 && q >= mn2 && q <= mx2;
+      if (tryOrder(a, b)) { x = a; y = b; }
+      else if (tryOrder(b, a)) { x = b; y = a; }
+      else return null;
+    } else if (door.band) {
+      const [f0, f1] = door.fac!;
+      const [p0, p1] = door.band!;
+      const prod = a * b;
+      if (a < f0 || a > f1 || b < f0 || b > f1 || prod < p0 || prod > p1) return null;
+      [x, y] = a <= b ? [a, b] : [b, a];
+    } else {
+      return null;
+    }
+    const expr = `${x} × ${y}`;
+    if (guards.turnUsedExprs.includes(expr)) return null;
+    if (guards.lastTurnExprs.includes(expr)) return null;
+    if (expr === guards.lastExpr) return null;
+    if ([x, y].includes(1) && guards.turnHasOne) return null;
+    const correct = x * y;
+    if (correct % 10 === 0 && guards.turnHasTen) return null;
+    return { rolls: [x, y], correct, expr };
+  };
+  const candidates = facts
+    .map((f) => {
+      const pair = parseFactors(f.expr);
+      if (!pair) return null;
+      const rr = fits(pair[0], pair[1]);
+      return rr ? { rr, weight: f.weight } : null;
+    })
+    .filter((x): x is { rr: RollResult; weight: number } => !!x);
+  const hit = weightedPick(candidates, rand);
+  return hit ? hit.rr : null;
 }
 
 function doorProducts(door: Door): number[] {
@@ -457,7 +568,7 @@ export function initState(locale: Locale): GameState {
     players: [],
     cur: 0,
     level: "med",
-    settings: { timer: true, mc: true, rob: true, winMode: "both", coop: false, freePlay: false, focus: false },
+    settings: { timer: true, mc: true, rob: true, winMode: "both", coop: false, freePlay: false, focus: false, review: false },
     round: 0,
     sharedTokens: 0,
     phase: 0,
@@ -510,6 +621,7 @@ export type Action =
   | { type: "INST_SET"; idx: number }
   | { type: "GO_SETUP" }
   | { type: "GO_SETUP_LEVEL"; level: Level }
+  | { type: "GO_QUICK" }
   | {
       type: "START_GAME";
       players: Player[];
@@ -611,6 +723,9 @@ export function reducer(state: GameState, action: Action): GameState {
 
     case "GO_SETUP_LEVEL":
       return { ...state, level: action.level, screen: "ss" };
+
+    case "GO_QUICK":
+      return { ...state, screen: "sq", modal: null };
 
     case "START_GAME": {
       const edgeColors = initEdgeColors(action.level);

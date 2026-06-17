@@ -6,7 +6,10 @@ export type Level = "beg" | "med" | "adv" | "champ" | "hero";
 
 export type WinMode = "rounds" | "first100" | "both";
 
-export type Screen = "sw" | "si" | "ss" | "sg" | "swin" | "sresults";
+/** Quick-launch presets — one-tap setups for common scenarios. */
+export type PresetId = "focus" | "full" | "calm" | "free";
+
+export type Screen = "sw" | "si" | "ss" | "sq" | "sg" | "swin" | "sresults";
 
 /** 0 = not in game; 1 = find target; 2 = plan route; 3 = execute */
 export type Phase = 0 | 1 | 2 | 3;
@@ -103,6 +106,20 @@ export interface Settings {
   freePlay: boolean;
   /** Calm mode: hide the special tiles (bonus/limit/rob/twist) for a low-distraction run. */
   focus: boolean;
+  /** Remember a player's missed facts and re-serve them for spaced practice. */
+  review: boolean;
+}
+
+/** A math fact a player got wrong, kept for spaced re-practice (review mode). */
+export interface ReviewFact {
+  /** normalised factor key, e.g. "4x13" (min×max) — dedups pairs of the same fact */
+  key: string;
+  /** the expression as it was shown, e.g. "7 × 8" */
+  expr: string;
+  /** the correct answer (the product) */
+  ans: number;
+  /** how strongly it's still due for review; counts down on correct, up on wrong */
+  weight: number;
 }
 
 export interface Player {

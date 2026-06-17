@@ -57,6 +57,14 @@ export default function Welcome({
       <div className="wsub2">{t.welcomeSub2a}</div>
       <div className="wsub2">{t.welcomeSub2b}</div>
 
+      <button
+        className="btnbig"
+        style={{ margin: "14px auto 4px", maxWidth: 360 }}
+        onClick={actions.goQuick}
+      >
+        {t.quickLaunchBtn}
+      </button>
+
       <div className="wchoose">{t.chooseLevel}</div>
       <div className="lvgrid wlvgrid">
         {LEVEL_ORDER.map((lv) => {

@@ -2,6 +2,8 @@ import type {
   Door,
   DoorKey,
   Level,
+  PresetId,
+  Settings,
   SpecialCardDef,
   TargetCard,
 } from "./types";
@@ -220,3 +222,29 @@ export const VIDEO_KEYS = [
   "champ",
   "hero",
 ] as const;
+
+// ── Quick-launch presets ──
+// One-tap setups for common scenarios. Labels/icons are localized (see i18n);
+// here we keep only the settings each preset applies. The quick screen lets the
+// facilitator pick level + player count first, then tap a preset to start.
+// `winMode`/`mc` are sanitised against the chosen level at start (same rules as
+// the regular setup screen), so a preset is always valid for any level.
+
+/** Default difficulty a preset opens on (the facilitator can change it first). */
+export const PRESET_DEFAULT_LEVEL: Level = "med";
+
+/** Order presets appear on the quick-launch screen. */
+export const PRESET_ORDER: PresetId[] = ["focus", "free", "calm", "full"];
+
+/** The settings each quick-launch preset applies. */
+export const PRESETS: Record<PresetId, Settings> = {
+  // Focused practice — minimal distraction, no time pressure, still scored for
+  // motivation; remembers and re-serves missed facts.
+  focus: { timer: false, mc: true, rob: false, winMode: "rounds", coop: false, freePlay: false, focus: true, review: true },
+  // Free practice — no score, no winner, no pressure; pure repetition.
+  free: { timer: false, mc: true, rob: false, winMode: "rounds", coop: false, freePlay: true, focus: true, review: true },
+  // Calm & together — cooperative, gentle, low-distraction.
+  calm: { timer: false, mc: true, rob: false, winMode: "rounds", coop: true, freePlay: false, focus: true, review: true },
+  // Full game — the complete, rich experience with every mechanic on.
+  full: { timer: true, mc: false, rob: true, winMode: "both", coop: false, freePlay: false, focus: false, review: true },
+};

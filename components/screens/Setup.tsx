@@ -57,6 +57,9 @@ export default function Setup({
       coop: showCoop ? coop : false,
       freePlay,
       focus,
+      // The standard setup never turns review on — it lives in Quick Launch only,
+      // so the regular game's behaviour is unchanged.
+      review: false,
     };
     actions.startGame(players, level, settings);
   };

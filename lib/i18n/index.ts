@@ -1,4 +1,4 @@
-import type { DoorKey, EffResult, Level, Locale, WinMode } from "../engine/types";
+import type { DoorKey, EffResult, Level, Locale, PresetId, WinMode } from "../engine/types";
 import { en } from "./en";
 import { he } from "./he";
 
@@ -241,6 +241,17 @@ export interface Dict {
   quickStartTitle: string;
   quickStartSteps: [string, string, string];
   quickStartGo: string;
+
+  // Quick launch (preset screen)
+  quickLaunchBtn: string;
+  qlTitle: string;
+  qlSub: string;
+  qlLevelLabel: string;
+  qlPlayersLabel: string;
+  qlReviewNote: string;
+  qlAdvanced: string;
+  qlStart: (presetName: string) => string;
+  presets: Record<PresetId, LabelDesc>;
 
   // Phase labels (for the action panel header)
   phaseLabels: [string, string, string];

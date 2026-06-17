@@ -4,15 +4,19 @@ import { useCallback, useEffect, useReducer, useRef } from "react";
 import { boardMaxFor, DC, PCOLORS } from "@/lib/engine/constants";
 import { getDict } from "@/lib/i18n";
 import {
+  factKey,
   initState,
   makeChoices,
+  parseFactors,
+  pickReviewRoll,
+  pickReviewTarget,
   pickSpecialId,
   pickTargetCard,
   reducer,
   rollDoor,
 } from "@/lib/engine/gameReducer";
 import { edgeColor, findPath } from "@/lib/engine/hexgrid";
-import type { CardType, DoorKey, GameState, Level, Locale, Player, SessionRecord, Settings, TrialRecord } from "@/lib/engine/types";
+import type { CardType, DoorKey, GameState, Level, Locale, Player, ReviewFact, SessionRecord, Settings, TrialRecord } from "@/lib/engine/types";
 
 /** Which stage of a live sample turn a tour step demonstrates. */
 export type DemoStage = "find" | "route" | "walk";
@@ -22,6 +26,7 @@ function usesMC(state: GameState): boolean {
 }
 
 const LS_KEY = "kaskash_sessions";
+const LS_REVIEW = "kaskash_review";
 
 export function useGame(locale: Locale) {
   const [state, dispatch] = useReducer(reducer, locale, initState);
@@ -31,6 +36,58 @@ export function useGame(locale: Locale) {
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
+
+  // ── Review mode: each player's remembered missed facts, kept across games ──
+  // Keyed by player name and persisted to localStorage, so a child's hard facts
+  // carry over from one session to the next. Only read/written when the active
+  // game has review mode on (the quick-launch presets) — the standard game never
+  // touches it, so its behaviour is unchanged.
+  const reviewRef = useRef<Map<string, ReviewFact[]>>(new Map());
+  const loadReview = useCallback(() => {
+    try {
+      const raw = JSON.parse(localStorage.getItem(LS_REVIEW) || "{}") as Record<string, ReviewFact[]>;
+      reviewRef.current = new Map(Object.entries(raw));
+    } catch {
+      reviewRef.current = new Map();
+    }
+  }, []);
+  const saveReview = useCallback(() => {
+    try {
+      localStorage.setItem(LS_REVIEW, JSON.stringify(Object.fromEntries(reviewRef.current)));
+    } catch {}
+  }, []);
+  /** Record a missed multiplication fact for a player (review mode). */
+  const noteWrongFact = useCallback((name: string, expr: string, ans: number) => {
+    const pair = parseFactors(expr);
+    if (!pair) return; // only drill clean "a × b" facts (skip prime additions, etc.)
+    const key = factKey(pair[0], pair[1]);
+    const list = reviewRef.current.get(name) ?? [];
+    const found = list.find((f) => f.key === key);
+    if (found) {
+      found.weight = Math.min(found.weight + 1, 5);
+      found.expr = expr;
+      found.ans = ans;
+    } else {
+      list.push({ key, expr, ans, weight: 2 });
+    }
+    reviewRef.current.set(name, list);
+    saveReview();
+  }, [saveReview]);
+  /** A correct answer relaxes (and eventually retires) a remembered fact. */
+  const noteRightFact = useCallback((name: string, expr: string) => {
+    const pair = parseFactors(expr);
+    if (!pair) return;
+    const key = factKey(pair[0], pair[1]);
+    const list = reviewRef.current.get(name);
+    if (!list) return;
+    const found = list.find((f) => f.key === key);
+    if (!found) return;
+    found.weight -= 1;
+    if (found.weight <= 0) {
+      reviewRef.current.set(name, list.filter((f) => f.key !== key));
+    }
+    saveReview();
+  }, [saveReview]);
 
   // ── Chronometric logging (lives here, in the host, so the reducer stays pure) ──
   const trialLogRef = useRef<TrialRecord[]>([]);
@@ -85,13 +142,21 @@ export function useGame(locale: Locale) {
         timerOn: s.settings.timer,
         timeLeftMs: Math.max(0, s.timerSecs * 1000),
       });
+      // Review mode: remember misses and relax on correct (find/walk facts only).
+      if (s.settings.review) {
+        const name = s.players[s.cur]?.name ?? "";
+        if (name && (it.phase === "find" || it.phase === "walk")) {
+          if (correct) noteRightFact(name, it.expr);
+          else noteWrongFact(name, it.expr, it.answer);
+        }
+      }
       if (correct) itemRef.current = null;
       else {
         it.attempt += 1;
         it.lastAt = now;
       }
     },
-    []
+    [noteRightFact, noteWrongFact]
   );
 
   const noteHint = useCallback(() => {
@@ -129,7 +194,16 @@ export function useGame(locale: Locale) {
   const startP1 = useCallback(() => {
     const s = stateRef.current;
     // During the guided demo, prefer a composite target so the factoring step works.
-    const { card, resetUsed } = pickTargetCard(s.level, s.usedCards, Math.random, s.tourActive);
+    let picked = pickTargetCard(s.level, s.usedCards, Math.random, s.tourActive);
+    // Review mode: about half the time, re-test a fact this player missed before.
+    if (s.settings.review && !s.tourActive) {
+      const facts = reviewRef.current.get(s.players[s.cur]?.name ?? "") ?? [];
+      if (facts.length && Math.random() < 0.5) {
+        const rev = pickReviewTarget(s.level, facts, s.usedCards, Math.random);
+        if (rev) picked = rev;
+      }
+    }
+    const { card, resetUsed } = picked;
     presentItem("find", "target", card.ex, card.ans);
     dispatch({ type: "START_P1", card, resetUsed });
   }, [presentItem]);
@@ -162,15 +236,18 @@ export function useGame(locale: Locale) {
     (level: Level) => dispatch({ type: "GO_SETUP_LEVEL", level }),
     []
   );
+  const goQuick = useCallback(() => dispatch({ type: "GO_QUICK" }), []);
 
   const startGame = useCallback(
     (players: Player[], level: Level, settings: Settings) => {
       trialLogRef.current = [];
       itemRef.current = null;
       gameStartRef.current = new Date().toISOString();
+      // Pull in each player's remembered mistakes so review mode can re-serve them.
+      loadReview();
       dispatch({ type: "START_GAME", players, level, settings });
     },
-    []
+    [loadReview]
   );
 
   // Guided demo: spin up a gentle single-player sample game, then open the tour overlay.
@@ -199,6 +276,7 @@ export function useGame(locale: Locale) {
         coop: false,
         freePlay: false,
         focus: false,
+        review: false,
       };
       dispatch({ type: "START_GAME", players, level, settings });
       dispatch({ type: "TOUR_START" });
@@ -293,13 +371,22 @@ export function useGame(locale: Locale) {
   const rollDice = useCallback((step: number) => {
     const s = stateRef.current;
     const door = DC[s.pathDoors[step]];
-    const roll = rollDoor(door, {
+    const guards = {
       turnUsedExprs: s.turnUsedExprs,
       lastTurnExprs: s.lastTurnExprs,
       lastExpr: s.lastExpr,
       turnHasOne: s.turnHasOne,
       turnHasTen: s.turnHasTen,
-    });
+    };
+    let roll = rollDoor(door, guards);
+    // Review mode: about half the time, re-serve a missed fact that fits this door.
+    if (s.settings.review && !s.tourActive) {
+      const facts = reviewRef.current.get(s.players[s.cur]?.name ?? "") ?? [];
+      if (facts.length && Math.random() < 0.5) {
+        const rev = pickReviewRoll(door, facts, guards);
+        if (rev) roll = rev;
+      }
+    }
     const choices = usesMC(s) ? makeChoices(roll.correct, door) : null;
     presentItem("walk", s.pathDoors[step], roll.expr, roll.correct);
     dispatch({ type: "ROLL_DICE", step, roll, choices });
@@ -390,6 +477,7 @@ export function useGame(locale: Locale) {
       instSet,
       goSetup,
       goSetupLevel,
+      goQuick,
       startGame,
       startDemo,
       tourSet,
