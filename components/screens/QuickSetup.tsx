@@ -55,6 +55,22 @@ export default function QuickSetup({
         <div className="stitle" style={{ textAlign: "center" }}>{t.qlTitle}</div>
         <div className="qlsub">{t.qlSub}</div>
 
+        <div className="scard qllearn">
+          <h3>{t.qlLearnLabel}</h3>
+          <button
+            className="btnbig demo-cta qllearn-btn"
+            onClick={() => actions.startDemo(level)}
+          >
+            {t.demoGameBtn}
+          </button>
+          <button
+            className="btnout qllearn-btn"
+            onClick={() => actions.goSimpleGuide(level)}
+          >
+            {t.howToPlay}
+          </button>
+        </div>
+
         <div className="scard">
           <h3>{t.qlLevelLabel}</h3>
           <div className="qllvls">
