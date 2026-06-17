@@ -631,6 +631,7 @@ export const he: Dict = {
   qlPlayersLabel: "👥 משחקים",
   qlReviewNote: "🧠 בהפעלה המהירה המשחק זוכר את הטעויות של כל שחקן ומחזיר אותן לתרגול נוסף.",
   qlAdvanced: "⚙️ הגדרות מתקדמות",
+  qlPickSetup: "👇 בחרו סוג משחק כדי להתחיל",
   qlStart: (presetName) => `▶ התחלה: ${presetName}`,
   presets: {
     focus: {

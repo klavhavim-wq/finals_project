@@ -621,6 +621,7 @@ export const en: Dict = {
   qlPlayersLabel: "👥 Players",
   qlReviewNote: "🧠 In Quick Launch the game remembers each player's mistakes and brings them back for extra practice.",
   qlAdvanced: "⚙️ Advanced settings",
+  qlPickSetup: "👇 Pick a setup to start playing",
   qlStart: (presetName) => `▶ Start: ${presetName}`,
   presets: {
     focus: {

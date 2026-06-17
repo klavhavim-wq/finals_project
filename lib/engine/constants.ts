@@ -44,6 +44,25 @@ export const LVL_DOORS: Record<Level, DoorKey[]> = {
   hero: ["blue", "purple", "yellow", "red", "redlong"],
 };
 
+/** Colour of the door a level adds — used to tint that level's tiles/borders. */
+export function addedDoorColor(level: Level): string {
+  const doors = LVL_DOORS[level];
+  return DC[doors[doors.length - 1]].color;
+}
+
+/**
+ * Readable (darkened) text shade for each level's name, matching the colour of
+ * the door that level adds — legible on white where the raw door colour is too
+ * light.
+ */
+export const LEVEL_TEXT_COLOR: Record<Level, string> = {
+  beg: "#185FA5", // blue
+  med: "#534AB7", // purple
+  adv: "#854F0B", // amber/yellow
+  champ: "#A32D2D", // red
+  hero: "#111827", // black
+};
+
 /**
  * Board size per level — the highest hex number on the board.
  * Each level's board reaches only as far as its relevant products require,

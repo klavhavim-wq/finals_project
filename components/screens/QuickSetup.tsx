@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import {
+  addedDoorColor,
   DOGS,
+  LEVEL_TEXT_COLOR,
   PCOLORS,
   PRESETS,
   PRESET_DEFAULT_LEVEL,
@@ -49,99 +51,99 @@ export default function QuickSetup({
 
   return (
     <div id="sq" className="screen active">
-      <div className="stitle">{t.qlTitle}</div>
-      <div
-        className="scard"
-        style={{ textAlign: "center", color: "#4b5563", fontSize: ".92rem", lineHeight: 1.6 }}
-      >
-        {t.qlSub}
-      </div>
+      <div className="qlwrap">
+        <div className="stitle" style={{ textAlign: "center" }}>{t.qlTitle}</div>
+        <div className="qlsub">{t.qlSub}</div>
 
-      <div className="scard">
-        <h3>{t.qlLevelLabel}</h3>
-        <div className="cntrow" style={{ flexWrap: "wrap", gap: 8 }}>
-          {LEVEL_ORDER.map((lv) => (
-            <button
-              key={lv}
-              className={"cntb" + (level === lv ? " on" : "")}
-              style={{ width: "auto", padding: "8px 14px", fontSize: ".95rem", fontWeight: 700 }}
-              onClick={() => setLevel(lv)}
-            >
-              {t.levels[lv].icon} {t.levels[lv].name}
-            </button>
-          ))}
+        <div className="scard">
+          <h3>{t.qlLevelLabel}</h3>
+          <div className="qllvls">
+            {LEVEL_ORDER.map((lv) => {
+              const color = addedDoorColor(lv);
+              const selected = level === lv;
+              return (
+                <button
+                  key={lv}
+                  className={"qllvl" + (selected ? " on" : "")}
+                  style={{
+                    borderColor: color,
+                    background: selected ? color : "#fff",
+                    color: selected ? "#fff" : LEVEL_TEXT_COLOR[lv],
+                  }}
+                  onClick={() => setLevel(lv)}
+                >
+                  <span className="qli">{t.levels[lv].icon}</span>
+                  {t.levels[lv].name}
+                </button>
+              );
+            })}
+          </div>
+          <div className="qllvldesc">{t.levels[level].desc}</div>
         </div>
-        <div style={{ fontSize: ".82rem", color: "#6b7280", marginTop: 8 }}>
-          {t.levels[level].desc}
-        </div>
-      </div>
 
-      <div className="scard">
-        <h3>{t.qlPlayersLabel}</h3>
-        <div className="cntrow">
-          {[1, 2, 3, 4].map((n) => (
-            <button
-              key={n}
-              className={"cntb" + (count === n ? " on" : "")}
-              onClick={() => setCount(n)}
-            >
-              {n}
-            </button>
-          ))}
+        <div className="scard">
+          <h3>{t.qlPlayersLabel}</h3>
+          <div className="cntrow">
+            {[1, 2, 3, 4].map((n) => (
+              <button
+                key={n}
+                className={"cntb" + (count === n ? " on" : "")}
+                onClick={() => setCount(n)}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+          <div style={{ fontSize: ".82rem", color: "#6b7280", margin: "10px 0 4px" }}>
+            {t.playerNamesLabel}
+          </div>
+          <div className="pnrows">
+            {Array.from({ length: count }, (_, i) => (
+              <div className="pnrow" key={i}>
+                <div className="pndot" style={{ background: PCOLORS[i] }} />
+                <input
+                  type="text"
+                  value={names[i]}
+                  placeholder={t.playerPlaceholder(DOGS[i], i)}
+                  maxLength={18}
+                  style={{ fontSize: "1rem", fontWeight: 600 }}
+                  onChange={(e) =>
+                    setNames((prev) => {
+                      const copy = [...prev];
+                      copy[i] = e.target.value;
+                      return copy;
+                    })
+                  }
+                />
+              </div>
+            ))}
+          </div>
         </div>
-        <div style={{ fontSize: ".82rem", color: "#6b7280", margin: "8px 0 4px" }}>
-          {t.playerNamesLabel}
+
+        <div className="qllabel">{t.qlPickSetup}</div>
+        <div className="lvgrid qlpresets">
+          {PRESET_ORDER.map((pid) => {
+            const p = t.presets[pid];
+            return (
+              <button key={pid} className="lvb qlpreset" onClick={() => start(pid)}>
+                <span className="li">{p.icon}</span>
+                <strong>{p.name}</strong>
+                <small>{p.desc}</small>
+              </button>
+            );
+          })}
         </div>
-        <div className="pnrows">
-          {Array.from({ length: count }, (_, i) => (
-            <div className="pnrow" key={i}>
-              <div className="pndot" style={{ background: PCOLORS[i] }} />
-              <input
-                type="text"
-                value={names[i]}
-                placeholder={t.playerPlaceholder(DOGS[i], i)}
-                maxLength={18}
-                style={{ fontSize: "1rem", fontWeight: 600 }}
-                onChange={(e) =>
-                  setNames((prev) => {
-                    const copy = [...prev];
-                    copy[i] = e.target.value;
-                    return copy;
-                  })
-                }
-              />
-            </div>
-          ))}
+
+        <div className="qlnote">{t.qlReviewNote}</div>
+
+        <div className="sacts">
+          <button className="btnout" onClick={() => actions.showScreen("sw")}>
+            {t.back}
+          </button>
+          <button className="btnout" onClick={() => actions.goSetupLevel(level)}>
+            {t.qlAdvanced}
+          </button>
         </div>
-      </div>
-
-      <div className="lvgrid">
-        {PRESET_ORDER.map((pid) => {
-          const p = t.presets[pid];
-          return (
-            <button key={pid} className="lvb" onClick={() => start(pid)}>
-              <span className="li">{p.icon}</span>
-              <strong>{p.name}</strong>
-              <small>{p.desc}</small>
-            </button>
-          );
-        })}
-      </div>
-
-      <div
-        className="scard"
-        style={{ textAlign: "center", color: "#7C3AED", fontSize: ".85rem", lineHeight: 1.6 }}
-      >
-        {t.qlReviewNote}
-      </div>
-
-      <div className="sacts">
-        <button className="btnout" onClick={() => actions.showScreen("sw")}>
-          {t.back}
-        </button>
-        <button className="btnout" onClick={() => actions.goSetupLevel(level)}>
-          {t.qlAdvanced}
-        </button>
       </div>
     </div>
   );

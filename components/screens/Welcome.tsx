@@ -1,29 +1,12 @@
 "use client";
 
 import LanguageSwitch from "../LanguageSwitch";
-import { DC, LVL_DOORS } from "@/lib/engine/constants";
+import { addedDoorColor, LEVEL_TEXT_COLOR } from "@/lib/engine/constants";
 import type { GameActions } from "../useGame";
 import type { Level, Locale } from "@/lib/engine/types";
 import type { Dict } from "@/lib/i18n";
 
 const LEVEL_ORDER: Level[] = ["beg", "med", "adv", "champ", "hero"];
-
-// Readable (darkened) text shade for each level's name, matching the colour of
-// the door that level adds. Borders use the door's own colour straight from the
-// engine; the name uses a darker shade so it stays legible on white.
-const TILE_LABEL: Record<Level, string> = {
-  beg: "#185FA5", // blue
-  med: "#534AB7", // purple
-  adv: "#854F0B", // amber/yellow
-  champ: "#A32D2D", // red
-  hero: "#111827", // black
-};
-
-/** Colour of the door added at this level — used to tint its welcome-screen tile. */
-function addedDoorColor(level: Level): string {
-  const doors = LVL_DOORS[level];
-  return DC[doors[doors.length - 1]].color;
-}
 
 export default function Welcome({
   t,
@@ -80,7 +63,7 @@ export default function Welcome({
               onClick={() => actions.goSetupLevel(lv)}
             >
               <span className="li">{meta.icon}</span>
-              <strong style={{ color: TILE_LABEL[lv] }}>{meta.name}</strong>
+              <strong style={{ color: LEVEL_TEXT_COLOR[lv] }}>{meta.name}</strong>
               <small>{meta.board ?? meta.desc}</small>
             </button>
           );
