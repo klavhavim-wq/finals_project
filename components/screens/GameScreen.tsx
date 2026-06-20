@@ -135,7 +135,7 @@ export default function GameScreen({
             onPointerUp={endPan}
             onPointerLeave={endPan}
           >
-            <HexBoard state={state} onHexClick={guardedHexClick} portrait={!isDesktop} />
+            <HexBoard state={state} onHexClick={guardedHexClick} />
           </div>
         </div>
 
