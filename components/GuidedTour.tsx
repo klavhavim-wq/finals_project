@@ -11,6 +11,7 @@ const SELECTORS: Record<TourTarget, string | null> = {
   board: ".hivewrap",
   panel: ".phasewin, .phasedock",
   sidebar: ".sq-bank",
+  helper: ".sq-helper",
   doors: ".hivewrap",
   header: ".ghdr",
   center: null,

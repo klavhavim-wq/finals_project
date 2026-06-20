@@ -357,8 +357,8 @@ export const en: Dict = {
       {
         i: "🙋",
         t: "Help and earn",
-        target: "panel",
-        x: 'Even when it\'s not your turn — you can help! 🙋<br><br>Here, while someone else is solving an exercise, another player can tap their own name, type the answer — and if right, earns <strong>+1 pellet for helping</strong>! 🦴<br><br>That way everyone stays involved and thinks together. 🧠',
+        target: "helper",
+        x: 'Even when it\'s not your turn — you can help! 🙋<br><br>Over here on the side, while someone else is solving an exercise, another player can tap their own name, type the answer — and if right, earns <strong>+1 pellet for helping</strong>! 🦴<br><br>That way everyone stays involved and thinks together. 🧠',
       },
       {
         i: "✨",

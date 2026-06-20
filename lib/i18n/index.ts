@@ -10,7 +10,7 @@ export interface InstPage {
 }
 
 /** Which area of the live game a tour step spotlights. */
-export type TourTarget = "board" | "panel" | "sidebar" | "doors" | "header" | "center";
+export type TourTarget = "board" | "panel" | "sidebar" | "helper" | "doors" | "header" | "center";
 
 /** Which live phase of the sample game a tour step drives the board into. */
 export type TourStage = "find" | "route" | "walk";
