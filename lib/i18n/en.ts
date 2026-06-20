@@ -312,7 +312,7 @@ export const en: Dict = {
         target: "board",
         stage: "find",
         interact: "find",
-        x: "Let's try for real! Solve the exercise below and tap the hex with the answer on the board. 👆<br><br>Not sure? Just tap «Next» to keep going.",
+        x: "Let's try for real! Solve the exercise below and tap the hex with the answer on the board. 👆<br><br>Not sure? Ask for a hint 💡 or reveal the answer — you can't skip an exercise.",
       },
       {
         i: "🚪",
@@ -329,10 +329,18 @@ export const en: Dict = {
         x: 'Once you found the target, build a route from the dog to it — tap hex after hex. Each hex must touch the previous one.<br><br>The color of the line you cross decides which exercise will be there. 🗺️',
       },
       {
+        i: "🧾",
+        t: "Route details",
+        target: "routedetail",
+        stage: "route",
+        x: 'On the side you get the <strong>full route breakdown</strong>: each step, which door you cross, and how many pellets it is worth. 🦴<br><br>That way you can compare paths and choose wisely.',
+      },
+      {
         i: "🧠",
         t: "Strategy & confirming",
         target: "panel",
-        x: 'Here you think it through: 🤔<br><br>• A short route = fewer exercises, but fewer pellets.<br>• Hard doors = more pellets, but harder.<br>Pick the path that suits you!<br><br>Ready? Press <strong>✅ Confirm route</strong>. Want to change it? <strong>🗑 Clear</strong> and start over.',
+        stage: "route",
+        x: 'The top bar shows the <strong>total pellets</strong> you can collect on this route. 🍖<br><br>A short route = fewer exercises but fewer pellets; hard doors = more pellets. Pick the path that suits you!<br><br>Ready? <strong>✅ Confirm route</strong>. Want to change it? <strong>🗑 Clear</strong>.',
       },
       {
         i: "🧩",
@@ -352,7 +360,7 @@ export const en: Dict = {
         target: "panel",
         stage: "walk",
         interact: "answer",
-        x: "Now solve the door's exercise and choose the answer. 🦴<br><br>Not sure? Just tap «Next» to keep going.",
+        x: "Now solve the door's exercise and choose the answer. 🦴<br><br>Not sure? Ask for a hint 💡, or reveal the answer if you must (the dog stops, but the pellets you already collected are kept). You can't skip an exercise.",
       },
       {
         i: "🙋",
@@ -435,7 +443,7 @@ export const en: Dict = {
   hintResult: (expr) => calcHintEn(expr),
 
   p2Hint: (target) =>
-    `<strong>Step 2 — Plan Your Route 🗺️</strong><br>Click hexes to build your path.<br>Colored edge between hexes = door difficulty.<br>Target: <strong>Hex ${target}</strong>`,
+    `🎯 Target: <strong>hex ${target}</strong> · tap neighbouring hexes to build the path 🗺️`,
   p2Empty: "Click hexes on the board to build the route 👆",
   stepHexLabel: (h) => `→ Hex ${h}`,
   doorLabel: (key) => DOOR_LABELS[key],

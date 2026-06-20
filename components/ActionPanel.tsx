@@ -101,14 +101,18 @@ function Phase1({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
 
 function Phase2({ t, state, actions }: { t: Dict; state: GameState; actions: GameActions }) {
   const steps = state.path.length;
+  const pts = state.pathDoors.reduce((s, d) => s + DC[d].pts, 0);
   const hasTarget = state.targetHex !== null && state.path.includes(state.targetHex);
 
-  // The route reads off the board (each hex painted in its door colour) and the
-  // step-by-step detail + total live in the side bar, so this docked bar keeps
-  // only the guidance and the controls.
+  // The route reads off the board (each hex painted in its door colour); the
+  // step-by-step breakdown lives in the side bar. This docked bar keeps the
+  // guidance, the running pellet total, and the controls.
   return (
     <div>
       <RichText className="aphint" html={t.p2Hint(state.targetHex ?? 0)} />
+      {steps > 0 && (
+        <RichText className="rsum rsum-big pd-total" html={t.possiblePellets(pts, steps)} />
+      )}
       {steps > 0 && !hasTarget && (
         <div className="wrongbox">{t.routeNotReach(state.targetHex ?? 0)}</div>
       )}

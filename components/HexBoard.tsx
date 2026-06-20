@@ -246,6 +246,53 @@ export default function HexBoard({
         })
       : null;
 
+  // Once the route is confirmed (walk stage), the chosen hexes are redrawn on
+  // top as a "raised" ribbon — a drop shadow + a thick door-coloured border —
+  // so the route the dog walks stands clearly apart from the rest of the board.
+  const raisedPath =
+    state.phase === 3
+      ? state.path.map((h, i) => {
+          const { x: cx, y: cy } = hCenter(h);
+          const v = hVerts(cx, cy);
+          const pts = v.map((p) => p.x.toFixed(1) + "," + p.y.toFixed(1)).join(" ");
+          const door = state.pathDoors[i];
+          const doorColor = DC[door]?.color ?? "#9CA3AF";
+          const fill = tint(doorColor, i < state.stepIdx ? 0.62 : 0.4);
+          const prime = !state.settings.focus && isPrime(h);
+          const sym = state.settings.focus ? "" : hexSym(h);
+          const tcol = prime ? "#7C3AED" : "#78350F";
+          return (
+            <g key={`raise-${h}`} pointerEvents="none">
+              <polygon
+                points={pts}
+                fill={fill}
+                stroke={doorColor}
+                strokeWidth={4.5}
+                strokeLinejoin="round"
+                filter="url(#route-raise)"
+              />
+              <text
+                x={cx.toFixed(1)}
+                y={(cy - (sym ? 9 : 0)).toFixed(1)}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize={sym ? 19 : 25}
+                fontWeight={prime ? 900 : 700}
+                fill={tcol}
+                fontFamily="Arial,sans-serif"
+              >
+                {h}
+              </text>
+              {sym && (
+                <text x={cx.toFixed(1)} y={(cy + 13).toFixed(1)} textAnchor="middle" dominantBaseline="middle" fontSize={13}>
+                  {sym}
+                </text>
+              )}
+            </g>
+          );
+        })
+      : null;
+
   const tokens = [...state.players.map((p, i) => ({ p, i }))]
     .sort((a, b) => {
       if (a.p.hex !== b.p.hex) return a.p.hex - b.p.hex;
@@ -280,7 +327,13 @@ export default function HexBoard({
       height={SVG_H}
       style={{ display: "block" }}
     >
+      <defs>
+        <filter id="route-raise" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="3" stdDeviation="2.6" floodColor="#1f2937" floodOpacity="0.4" />
+        </filter>
+      </defs>
       {hexes}
+      {raisedPath}
       {badges}
       {tokens}
     </svg>

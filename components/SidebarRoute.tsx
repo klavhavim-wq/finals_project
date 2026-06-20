@@ -15,7 +15,6 @@ export default function SidebarRoute({ t, state }: { t: Dict; state: GameState }
   if (state.phase !== 2) return null;
 
   const steps = state.path.length;
-  const pts = state.pathDoors.reduce((s, d) => s + DC[d].pts, 0);
 
   return (
     <div className="sq sq-route">
@@ -23,22 +22,19 @@ export default function SidebarRoute({ t, state }: { t: Dict; state: GameState }
       {steps === 0 ? (
         <div className="route-empty">{t.p2Empty}</div>
       ) : (
-        <>
-          <div className="pathlist">
-            {state.path.map((h, i) => {
-              const d = state.pathDoors[i];
-              const dclass = d === "redlong" ? "redlong" : d;
-              return (
-                <div className="pstep" key={i}>
-                  <div className="psnum">{i + 1}</div>
-                  <div className="pshex">{t.stepHexLabel(h)}</div>
-                  <RichText className={"psdoor " + dclass} html={t.pathDoorLabel(d, DC[d].pts)} />
-                </div>
-              );
-            })}
-          </div>
-          <RichText className="rsum rsum-big" html={t.possiblePellets(pts, steps)} />
-        </>
+        <div className="pathlist">
+          {state.path.map((h, i) => {
+            const d = state.pathDoors[i];
+            const dclass = d === "redlong" ? "redlong" : d;
+            return (
+              <div className="pstep" key={i}>
+                <div className="psnum">{i + 1}</div>
+                <div className="pshex">{t.stepHexLabel(h)}</div>
+                <RichText className={"psdoor " + dclass} html={t.pathDoorLabel(d, DC[d].pts)} />
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );

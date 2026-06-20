@@ -12,6 +12,7 @@ const SELECTORS: Record<TourTarget, string | null> = {
   panel: ".phasewin, .phasedock",
   sidebar: ".sq-bank",
   helper: ".sq-helper",
+  routedetail: ".sq-route",
   doors: ".hivewrap",
   header: ".ghdr",
   center: null,
