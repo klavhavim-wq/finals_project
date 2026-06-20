@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { DOGS } from "@/lib/engine/constants";
 import type { GameState } from "@/lib/engine/types";
 import type { GameActions } from "./useGame";
 import type { Dict } from "@/lib/i18n";
@@ -60,7 +61,7 @@ export default function SidebarHelper({
                 className="abt abgr helper-name"
                 onClick={() => { setClaim(i); setInputVal(""); }}
               >
-                {p.name}
+                {DOGS[i]} {p.name}
               </button>
             ))}
           </div>

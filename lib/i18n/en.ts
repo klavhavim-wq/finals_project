@@ -396,7 +396,7 @@ export const en: Dict = {
     return factorActive ? pages : pages.filter((p) => p.i !== "🧩");
   },
   demoGameBtn: "🧭 Guided tour",
-  demoPlayerName: "🐕 Demo",
+  demoPlayerName: "Demo",
   demoHelperName: "🐩 Friend",
   tourFinish: "🎮 Let's play!",
   tourExit: "Skip the tour",
@@ -434,7 +434,7 @@ export const en: Dict = {
   turn: (name) => `Turn: ${name}`,
   roundLabel: (round, total) => `Round ${round} of ${total}`,
   instAria: "Help & how to play",
-  defaultPlayerName: (dog, i) => `${dog} Player ${i + 1}`,
+  defaultPlayerName: (_dog, i) => `Player ${i + 1}`,
 
   p1Hint:
     "<strong>Step 1 — Find the Target 🎯</strong><br>Solve the equation and click the hex with the answer on the board!",
@@ -626,6 +626,7 @@ export const en: Dict = {
   helperRevealBtn: "👁 Reveal the friend's answer",
   helperAnswerReveal: (ans) => `💡 Friend's answer: ${ans}`,
   bankBtnLabel: "🏦 The Bank",
+  bankTab: "Bank",
 
   helpCardBtn: "Times Table",
 

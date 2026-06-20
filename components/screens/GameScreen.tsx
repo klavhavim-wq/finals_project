@@ -8,6 +8,7 @@ import SidebarRoute from "../SidebarRoute";
 import SidebarHelper from "../SidebarHelper";
 import ActionPanel from "../ActionPanel";
 import LanguageSwitch from "../LanguageSwitch";
+import { DOGS } from "@/lib/engine/constants";
 import type { GameState, Locale } from "@/lib/engine/types";
 import type { GameActions } from "../useGame";
 import type { Dict } from "@/lib/i18n";
@@ -114,7 +115,7 @@ export default function GameScreen({
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.jpg" alt={t.logoAlt} className="brand-logo-sm" />
         <span className="ghtitle">{t.gameTitle}</span>
-        <span className="ghturn">{t.turn(curName)}</span>
+        <span className="ghturn">{t.turn(`${DOGS[state.cur]} ${curName}`)}</span>
         {!state.settings.freePlay && state.settings.winMode !== "first100" && (
           <span className="ghround">{t.roundLabel(Math.min(state.round + 1, 4), 4)}</span>
         )}
@@ -124,11 +125,6 @@ export default function GameScreen({
             <div className="tfill" style={{ width: pct + "%" }} />
           </div>
         </div>
-        {!isDesktop && (
-          <button className="ghbtn ghbank" onClick={() => setBankOpen((v) => !v)} aria-label={t.bankBtnLabel} title={t.bankBtnLabel}>
-            {t.bankBtnLabel}
-          </button>
-        )}
         <LanguageSwitch locale={locale} />
         <button className="ghbtn" onClick={actions.goInst} aria-label={t.instAria} title={t.instAria}>
           📖
@@ -154,6 +150,20 @@ export default function GameScreen({
             <HexBoard state={state} onHexClick={guardedHexClick} />
           </div>
         </div>
+
+        {/* Mobile: a bold tab stuck to the screen edge opens the side panel
+            (bank, route, helper). Lives on the edge, not in the top bar. */}
+        {!isDesktop && !bankOpen && (
+          <button
+            className="bank-tab"
+            onClick={() => setBankOpen(true)}
+            aria-label={t.bankBtnLabel}
+            title={t.bankBtnLabel}
+          >
+            <span className="bank-tab-ico">🏦</span>
+            <span className="bank-tab-lbl">{t.bankTab}</span>
+          </button>
+        )}
 
         {/* Side bar: bank + door legend + route detail + helper.
             Fixed column on desktop, a slide-in drawer on mobile. */}

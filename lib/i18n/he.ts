@@ -396,7 +396,7 @@ export const he: Dict = {
     return factorActive ? pages : pages.filter((p) => p.i !== "🧩");
   },
   demoGameBtn: "🧭 סיור מודרך",
-  demoPlayerName: "🐕 הדגמה",
+  demoPlayerName: "הדגמה",
   demoHelperName: "🐩 חבר",
   tourFinish: "🎮 בואו נשחק!",
   tourExit: "דלג על הסיור",
@@ -434,7 +434,7 @@ export const he: Dict = {
   turn: (name) => `תור: ${name}`,
   roundLabel: (round, total) => `סיבוב ${round} מתוך ${total}`,
   instAria: "הסבר ואיך משחקים",
-  defaultPlayerName: (dog, i) => `${dog} שחקן ${i + 1}`,
+  defaultPlayerName: (_dog, i) => `שחקן ${i + 1}`,
 
   p1Hint:
     "<strong>שלב 1 — מוצאים יעד 🎯</strong><br>פתרו את התרגיל ולחצו על המשושה עם התשובה בלוח!",
@@ -632,6 +632,7 @@ export const he: Dict = {
   helperRevealBtn: "👁 חשפו את התשובה של החבר",
   helperAnswerReveal: (ans) => `💡 התשובה של החבר: ${ans}`,
   bankBtnLabel: "🏦 הבנק",
+  bankTab: "בנק",
 
   helpCardBtn: "לוח כפל",
 

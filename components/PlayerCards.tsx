@@ -1,6 +1,6 @@
 "use client";
 
-import { DC, DOOR_ICON, LVL_DOORS, PCOLORS, PELLET } from "@/lib/engine/constants";
+import { DC, DOGS, DOOR_ICON, LVL_DOORS, PCOLORS, PELLET } from "@/lib/engine/constants";
 import type { DoorKey, FoodTally, GameState } from "@/lib/engine/types";
 import type { Dict } from "@/lib/i18n";
 
@@ -104,7 +104,7 @@ export default function PlayerCards({ t, state }: { t: Dict; state: GameState })
             <div className="pchead">
               <div className="pcname" style={{ color: p.color }}>
                 {isCur ? "▶ " : ""}
-                {p.name}
+                <span className="pcdog">{DOGS[i]}</span> {p.name}
               </div>
               {!coop && (
                 state.settings.freePlay
