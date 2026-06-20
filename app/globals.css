@@ -190,6 +190,12 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 @keyframes tpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 .ghbtn{background:none;border:2px solid #e5e7eb;border-radius:18px;padding:5px 12px;font-size:.82rem;cursor:pointer;font-weight:600;color:#6b7280;transition:all .15s}
 .ghbtn:hover{border-color:#d97706;color:#d97706}
+/* The 🏦 button opens the side panel (bank, route detail, helper) on a phone.
+   Make it a filled amber button so it stands out from the plain outline buttons
+   and is easy for a child to spot and tap. */
+.ghbank{background:linear-gradient(135deg,#F59E0B,#D97706);border-color:#D97706;color:white;
+  font-size:1.05rem;padding:6px 13px;box-shadow:0 2px 9px rgba(245,158,11,.45)}
+.ghbank:hover{background:linear-gradient(135deg,#FBBF24,#D97706);border-color:#B45309;color:white}
 
 .gbody{display:flex;gap:9px;padding:9px;flex:1;overflow:hidden;min-height:0}
 @media(max-width:820px){
@@ -285,11 +291,12 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   #sg.board-canvas{height:100dvh;min-height:0;overflow:hidden}
   .board-canvas .gstage{padding:6px;gap:0}
   .board-canvas .gstage-main{gap:6px}
-  .board-canvas .hivewrap{flex:1;height:auto;min-height:0;overflow:auto;align-items:safe center;justify-content:flex-start}
-  /* Mobile only: never let the 10-column board shrink below a comfortable tap
-     size. On wide-enough screens (tablets) it still fits to width; on narrow
-     phones it holds this minimum and the wrap pans instead. */
-  .board-canvas .hivewrap #hsvg{min-width:500px}
+  /* Mobile: the whole board always fits the screen. It scales down to its area
+     so every hex stays visible at once — no panning, no parts cut off. For kids
+     the board should never hide behind a scroll. */
+  .board-canvas .hivewrap{flex:1;height:auto;min-height:0;overflow:hidden;padding:3px;
+    align-items:safe center;justify-content:safe center}
+  .board-canvas .hivewrap #hsvg{width:100%;height:100%;max-width:100%;max-height:100%;min-width:0}
 }
 
 /* Side bar: fixed column on desktop; a slide-in drawer on mobile */
