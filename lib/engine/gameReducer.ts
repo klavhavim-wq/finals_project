@@ -885,7 +885,9 @@ export function reducer(state: GameState, action: Action): GameState {
         turnHasTen: state.turnHasTen || correct % 10 === 0,
         lastExpr: expr,
         pendingRoll: { rolls, color: col, pts: dc.pts, expr, correct },
-        boardAns: true,
+        // Answers in the walk stage are typed or chosen from cards — not tapped
+        // on the board — so the board never enters answer mode here.
+        boardAns: false,
         choices: action.choices,
         diceSpin: true,
         wrongAnswerVisible: false,

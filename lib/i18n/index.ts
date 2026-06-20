@@ -223,6 +223,21 @@ export interface Dict {
   boardBannerRoute: (target: number) => string;
   boardBannerWalk: string;
 
+  /** per-stage floating windows over the board */
+  winFindTitle: string;
+  winRouteTitle: string;
+  winWalkTitle: string;
+  /** walk-stage progress line */
+  progStep: (step: number, total: number) => string;
+  progEarned: (n: number) => string;
+  progLeft: (steps: number, pellets: number) => string;
+  progDogAt: (hex: number) => string;
+  /** side-bar helper-friend feature */
+  helperTitle: string;
+  helperWaiting: string;
+  /** mobile bank drawer button */
+  bankBtnLabel: string;
+
   // Help card
   helpCardBtn: string;
 

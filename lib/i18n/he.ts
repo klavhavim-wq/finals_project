@@ -610,6 +610,17 @@ export const he: Dict = {
   boardBannerRoute: (target) => `🗺️ בנו מסלול עד משושה ${target} — ואז חזרו ל«התרגיל» לאישור`,
   boardBannerWalk: "🐕 לחצו על המשושה עם התשובה, או פתרו ב«התרגיל»",
 
+  winFindTitle: "🎯 מצאו את היעד",
+  winRouteTitle: "🗺️ המסלול שלכם",
+  winWalkTitle: "🐕 בדרך!",
+  progStep: (step, total) => `צעד ${step}/${total}`,
+  progEarned: (n) => `נצברו ${n}🦴`,
+  progLeft: (steps, pellets) => `נשארו ${steps} צעדים · ≈${pellets}🦴`,
+  progDogAt: (hex) => `🐕 משושה ${hex}`,
+  helperTitle: "🙋 חברים עוזרים",
+  helperWaiting: "כשהשחקן הפעיל יקבל תרגיל — תוכלו לעזור ולהרוויח גרגיר!",
+  bankBtnLabel: "🏦 הבנק",
+
   helpCardBtn: "לוח כפל",
 
   spectatorPrompt: "מישהו אחר יודע? לחץ על שמך:",

@@ -600,6 +600,17 @@ export const en: Dict = {
   boardBannerRoute: (target) => `🗺️ Build a route to hex ${target} — then go back to «Exercise» to confirm`,
   boardBannerWalk: "🐕 Tap the hex with the answer, or solve in «Exercise»",
 
+  winFindTitle: "🎯 Find the target",
+  winRouteTitle: "🗺️ Your route",
+  winWalkTitle: "🐕 On the way!",
+  progStep: (step, total) => `Step ${step}/${total}`,
+  progEarned: (n) => `Earned ${n}🦴`,
+  progLeft: (steps, pellets) => `${steps} steps left · ≈${pellets}🦴`,
+  progDogAt: (hex) => `🐕 hex ${hex}`,
+  helperTitle: "🙋 Friends help",
+  helperWaiting: "When the active player gets an exercise — you can help and earn a pellet!",
+  bankBtnLabel: "🏦 The Bank",
+
   helpCardBtn: "Times Table",
 
   spectatorPrompt: "Does anyone else know? Click your name:",

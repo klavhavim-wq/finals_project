@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import RichText from "./RichText";
-import { DC, factorBonusActive } from "@/lib/engine/constants";
+import { DC, DOOR_ICON } from "@/lib/engine/constants";
 import type { GameState, Level } from "@/lib/engine/types";
 import type { GameActions } from "./useGame";
 import type { Dict } from "@/lib/i18n";
@@ -49,63 +49,6 @@ function HelpCard({ t, level }: { t: Dict; level: Level }) {
         {open ? "✖ " : "🔢 "}{t.helpCardBtn}
       </button>
       {open && <MulTable max={max} />}
-    </div>
-  );
-}
-
-function SpectatorSection({ t, state, actions }: { t: Dict; state: GameState; actions: GameActions }) {
-  const [claim, setClaim] = useState<number | null>(null);
-  const [inputVal, setInputVal] = useState("");
-  const [feedback, setFeedback] = useState<"ok" | "no" | null>(null);
-
-  const otherPlayers = state.players.map((p, i) => ({ p, i })).filter(({ i }) => i !== state.cur);
-  if (otherPlayers.length === 0 || !state.pendingRoll) return null;
-
-  const handleAnswer = () => {
-    if (claim === null) return;
-    const v = parseInt(inputVal, 10);
-    if (isNaN(v)) return;
-    if (v === state.pendingRoll!.correct) {
-      actions.awardSpectatorBonus(claim);
-      setFeedback("ok");
-      setTimeout(() => { setFeedback(null); setClaim(null); setInputVal(""); }, 1500);
-    } else {
-      setFeedback("no");
-      setTimeout(() => { setFeedback(null); setClaim(null); setInputVal(""); }, 800);
-    }
-  };
-
-  return (
-    <div style={{ marginTop: 10, borderTop: "1px dashed #d1d5db", paddingTop: 8 }}>
-      <div style={{ fontSize: ".76rem", color: "#9ca3af", marginBottom: 5 }}>{t.spectatorPrompt}</div>
-      {feedback === "ok" ? (
-        <div style={{ color: "#10B981", fontWeight: 700, fontSize: ".88rem" }}>
-          {t.spectatorCorrect(state.players[claim!].name)}
-        </div>
-      ) : feedback === "no" ? (
-        <div style={{ color: "#EF4444", fontWeight: 700, fontSize: ".88rem" }}>{t.spectatorWrong}</div>
-      ) : claim === null ? (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-          {otherPlayers.map(({ p, i }) => (
-            <button key={i} className="abt abgr" style={{ fontSize: ".82rem", padding: "4px 10px" }}
-              onClick={() => { setClaim(i); setInputVal(""); }}>
-              {p.name}
-            </button>
-          ))}
-        </div>
-      ) : (
-        <div>
-          <div style={{ fontSize: ".8rem", color: "#374151", marginBottom: 4 }}>
-            {t.spectatorAnswerFor(state.players[claim].name)}
-          </div>
-          <div className="ansinp">
-            <input type="number" inputMode="numeric" value={inputVal} autoFocus placeholder={t.answerPlaceholder}
-              onChange={e => setInputVal(e.target.value)}
-              onKeyDown={e => { if (e.key === "Enter") handleAnswer(); }} />
-            <button className="abt abg" onClick={handleAnswer}>✓</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -161,35 +104,16 @@ function Phase2({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
   const pts = state.pathDoors.reduce((s, d) => s + DC[d].pts, 0);
   const hasTarget = state.targetHex !== null && state.path.includes(state.targetHex);
 
+  // The route now reads straight off the board (each hex is painted in its door
+  // colour), so the window stays minimal: the running total, and the controls.
   return (
     <div>
       <RichText className="aphint" html={t.p2Hint(state.targetHex ?? 0)} />
-      {factorBonusActive(state.level) && state.targetHex !== null && (
-        <RichText
-          html={t.factorHuntHint(state.targetHex)}
-          style={{ fontSize: ".8rem", color: "#92400E", background: "#FFFBEB", padding: "6px 10px", borderRadius: 8, margin: "6px 0", border: "1px dashed #D97706" }}
-        />
-      )}
       {steps === 0 ? (
         <div style={{ fontSize: ".85rem", color: "#9ca3af", padding: 10, textAlign: "center" }}>
           {t.p2Empty}
         </div>
       ) : (
-        <div className="pathlist">
-          {state.path.map((h, i) => {
-            const d = state.pathDoors[i];
-            const dclass = d === "redlong" ? "redlong" : d;
-            return (
-              <div className="pstep" key={i}>
-                <div className="psnum">{i + 1}</div>
-                <div className="pshex">{t.stepHexLabel(h)}</div>
-                <RichText className={"psdoor " + dclass} html={t.pathDoorLabel(d, DC[d].pts)} />
-              </div>
-            );
-          })}
-        </div>
-      )}
-      {steps > 0 && (
         <RichText className="rsum rsum-big" html={t.possiblePellets(pts, steps)} />
       )}
       {steps > 0 && !hasTarget && (
@@ -217,6 +141,24 @@ function Phase2({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
   );
 }
 
+function TurnProgress({ t, state }: { t: Dict; state: GameState }) {
+  const total = state.path.length;
+  const step = Math.min(state.stepIdx + 1, total);
+  const remainingSteps = total - state.stepIdx;
+  const remainingPellets = state.pathDoors
+    .slice(state.stepIdx)
+    .reduce((s, d) => s + DC[d].pts, 0);
+  const hex = state.players[state.cur]?.hex ?? 0;
+  return (
+    <div className="turnprog">
+      <span className="tp-chip">{t.progStep(step, total)}</span>
+      <span className="tp-chip tp-earn">{t.progEarned(state.turnPts)}</span>
+      <span className="tp-chip">{t.progLeft(remainingSteps, remainingPellets)}</span>
+      <span className="tp-chip tp-dog">{t.progDogAt(hex)}</span>
+    </div>
+  );
+}
+
 function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: GameActions }) {
   const step = state.stepIdx;
   const col = state.pathDoors[step];
@@ -229,10 +171,12 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
 
   return (
     <div>
-      <RichText
-        className="aphint"
-        html={t.p3Hint(step + 1, state.path.length, t.doorLabel(col), dc.pts, state.turnPts)}
-      />
+      <TurnProgress t={t} state={state} />
+      <div className="p3-door" style={{ borderColor: dc.color, color: dc.color }}>
+        <span className="p3-door-ico">{DOOR_ICON[col]}</span>
+        <RichText html={t.doorLabel(col).split(" ").slice(1).join(" ")} />
+        <span className="p3-door-val">{t.pelletsUnit(dc.pts)}</span>
+      </div>
       <button
         className="abt abl p3-roll-btn"
         onClick={() => actions.rollDice(step)}
@@ -252,9 +196,6 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
               ))}
             </div>
             <div className="mathex">{state.pendingRoll.expr} = ?</div>
-          </div>
-          <div className="orchex-hint">
-            {t.orClickHex}
           </div>
 
           {state.choices ? (
@@ -290,9 +231,6 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
                 {t.revealEndsTurn}
               </button>
             </div>
-          )}
-          {!state.mcCorrect && state.players.length > 1 && (
-            <SpectatorSection t={t} state={state} actions={actions} />
           )}
         </div>
       )}

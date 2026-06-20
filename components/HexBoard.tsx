@@ -15,11 +15,25 @@ import {
 } from "@/lib/engine/hexgrid";
 import type { GameState } from "@/lib/engine/types";
 
+/** Mix a #rrggbb colour toward white. t=1 → full colour, t=0 → white. */
+function tint(hex: string, t: number): string {
+  const c = hex.replace("#", "");
+  const r = parseInt(c.slice(0, 2), 16);
+  const g = parseInt(c.slice(2, 4), 16);
+  const b = parseInt(c.slice(4, 6), 16);
+  const mix = (x: number) => Math.round(255 + (x - 255) * t);
+  return `rgb(${mix(r)},${mix(g)},${mix(b)})`;
+}
+
 function fillFor(state: GameState, n: number): string {
   if (state.wrongHex === n) return SFILL.blocked;
   const pathIdx = state.path.indexOf(n);
   if (pathIdx !== -1) {
-    return pathIdx < state.stepIdx ? SFILL.done : SFILL.path;
+    // Each hex on the route is painted in the colour of the door used to reach
+    // it, so the planned/walked path reads straight off the board. Walked steps
+    // are a touch stronger than the ones still ahead.
+    const doorColor = DC[state.pathDoors[pathIdx]]?.color ?? "#9CA3AF";
+    return tint(doorColor, pathIdx < state.stepIdx ? 0.5 : 0.3);
   }
   if (state.targetHex === n) return SFILL.target;
   return hexBaseFill(n);
