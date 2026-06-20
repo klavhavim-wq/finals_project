@@ -13,7 +13,7 @@ const SELECTORS: Record<TourTarget, string | null> = {
   sidebar: ".sq-bank",
   helper: ".sq-helper",
   routedetail: ".sq-route",
-  doors: ".hivewrap",
+  doors: "#door-legend",
   header: ".ghdr",
   center: null,
 };

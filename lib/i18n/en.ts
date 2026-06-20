@@ -182,7 +182,7 @@ export const en: Dict = {
        {
          i: "🐕",
          t: "Step 3 — Off You Go!",
-         x: 'Your dog jumps on the board and starts moving! 🐾<br><br>Each step:<br>1️⃣ Press "Roll" 🎲<br>2️⃣ Get a multiplication problem based on the door color<br>3️⃣ Answer by clicking a hex, typing, or using choice buttons<br><br>✅ Correct → the dog moves forward + pellets! 🦴<br>❌ Wrong → try again — no limit!<br>💡 Reveal answer → the dog stops, <strong>pellets earned so far are saved!</strong> 🦴<br><br>🔢 <strong>Need help?</strong> Press the "Times Table" button at the bottom of the panel at any time.<br><br>🙋 <strong>Other players can help!</strong> While the active player is solving — any other player clicks their name and tries to answer. Whoever is right earns +1 pellet! 🦴',
+         x: 'Your dog jumps on the board and starts moving! 🐾<br><br>Each step:<br>1️⃣ Press "Roll" 🎲<br>2️⃣ Get a multiplication problem based on the door color<br>3️⃣ Answer by typing or using choice buttons<br><br>✅ Correct → the dog moves forward + pellets! 🦴<br>❌ Wrong → try again — no limit!<br>💡 Reveal answer → the dog stops, <strong>pellets earned so far are saved!</strong> 🦴<br><br>🔢 <strong>Need help?</strong> Press the "Times Table" button at the bottom of the panel at any time.<br><br>🙋 <strong>Other players can help!</strong> While the active player is solving — any other player clicks their name and tries to answer. Whoever is right earns +1 pellet! 🦴',
        },
        {
          i: "⏱",
@@ -277,8 +277,8 @@ export const en: Dict = {
     };
     const answerStyle =
       level === "beg" || level === "med"
-        ? "tap the button with the correct answer, <strong>or</strong> tap the hex with the answer right on the board."
-        : 'type your answer and press "Confirm", <strong>or</strong> tap the hex with the answer right on the board.';
+        ? "tap the button with the correct answer."
+        : 'type your answer and press "Confirm".';
     const oneDoor = level === "beg"; // Beginner has a single door (Bone)
     const factorActive = level === "adv" || level === "champ" || level === "hero";
     const pages: TourStep[] = [
@@ -319,8 +319,8 @@ export const en: Dict = {
         t: oneDoor ? "The door you cross" : "The colored doors",
         target: "doors",
         x: oneDoor
-          ? 'The colored lines between hexes are <strong>doors</strong> 🚪.<br><br>On Beginner there is one door — the <strong>Biscuit</strong> door 🍪. Each time you cross it you solve a small exercise and earn a pellet. Higher levels add more door colors — harder, but worth more pellets!'
-          : 'The colored lines between hexes are <strong>doors</strong> 🚪.<br><br>Each color is a different food and a different exercise. Here you can see which doors this level has and how many pellets each is worth — <strong>the harder the door, the more pellets you earn!</strong> 🦴',
+          ? 'The colored lines between the hexes on the board are <strong>doors</strong> 🚪.<br><br>On Beginner there is one door — the <strong>Biscuit</strong> door 🍪. <strong>Here on the side</strong> you can see it: which exercise you cross and how many pellets it is worth. Each time you cross it you solve a small exercise and earn a pellet. Higher levels add more door colors — harder, but worth more pellets!'
+          : 'The colored lines between the hexes on the board are <strong>doors</strong> 🚪, and each color is a different food and exercise.<br><br><strong>Here on the side</strong> you can see all the doors for this level — which exercise hides in each and how many pellets it is worth. <strong>The harder the door, the more pellets you earn!</strong> 🦴',
       },
       {
         i: "🐾",
