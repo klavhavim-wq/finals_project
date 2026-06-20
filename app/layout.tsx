@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Rubik } from "next/font/google";
 import "./globals.css";
 
@@ -8,6 +8,12 @@ const rubik = Rubik({
   variable: "--font-rubik",
   display: "swap",
 });
+
+// The game is a bright, light game — tell the browser so its "force dark" mode
+// doesn't darken and muddy the board colours.
+export const viewport: Viewport = {
+  colorScheme: "light",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
@@ -33,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={rubik.variable}>
+    <html lang="en" className={rubik.variable} style={{ colorScheme: "light" }}>
       <body>
         {children}
         <footer

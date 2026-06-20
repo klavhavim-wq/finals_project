@@ -71,10 +71,20 @@ export default function GameScreen({
   const [isDesktop, setIsDesktop] = useState(true);
   const [bankOpen, setBankOpen] = useState(false);
   useEffect(() => {
-    const onResize = () => setIsDesktop(window.innerWidth > 820);
+    // Use the side-by-side (wide) layout on big screens AND in landscape on a
+    // phone — so the board uses the full height and the side panel stays visible,
+    // instead of a tiny board squashed under a thick top bar.
+    const onResize = () => {
+      const w = window.innerWidth, h = window.innerHeight;
+      setIsDesktop(w > 820 || (w >= 640 && w > h));
+    };
     onResize();
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+    };
   }, []);
   // Close the mobile drawer whenever the stage changes.
   useEffect(() => { setBankOpen(false); }, [state.phase]);
@@ -116,7 +126,7 @@ export default function GameScreen({
         </div>
         {!isDesktop && (
           <button className="ghbtn ghbank" onClick={() => setBankOpen((v) => !v)} aria-label={t.bankBtnLabel} title={t.bankBtnLabel}>
-            🏦
+            {t.bankBtnLabel}
           </button>
         )}
         <LanguageSwitch locale={locale} />

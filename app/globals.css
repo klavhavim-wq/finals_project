@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
 :root{
+  /* The game is designed as a bright, light game. Declaring a light colour
+     scheme stops phone browsers (Samsung Internet, Chrome "auto dark") from
+     force-darkening the page, which otherwise muddies all the board colours. */
+  color-scheme:light;
   --bl:#3B82F6;--pu:#7C3AED;--ye:#F59E0B;--rd:#EF4444;--gr:#10B981;
   --honey:#FFF8E7;--shadow:0 4px 16px rgba(0,0,0,.13);--rad:14px;
 }
@@ -194,7 +198,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
    Make it a filled amber button so it stands out from the plain outline buttons
    and is easy for a child to spot and tap. */
 .ghbank{background:linear-gradient(135deg,#F59E0B,#D97706);border-color:#D97706;color:white;
-  font-size:1.05rem;padding:6px 13px;box-shadow:0 2px 9px rgba(245,158,11,.45)}
+  font-size:.85rem;font-weight:800;padding:6px 13px;box-shadow:0 2px 9px rgba(245,158,11,.45)}
 .ghbank:hover{background:linear-gradient(135deg,#FBBF24,#D97706);border-color:#B45309;color:white}
 
 .gbody{display:flex;gap:9px;padding:9px;flex:1;overflow:hidden;min-height:0}
@@ -297,6 +301,14 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   .board-canvas .hivewrap{flex:1;height:auto;min-height:0;overflow:hidden;padding:3px;
     align-items:safe center;justify-content:safe center}
   .board-canvas .hivewrap #hsvg{width:100%;height:100%;max-width:100%;max-height:100%;min-width:0}
+}
+
+/* Phone landscape: the board and the side panel sit side by side so the board
+   uses the full height (much bigger) instead of being squashed under a thick top
+   bar. The side panel (bank, route, helper) becomes always-visible here. */
+@media(max-width:820px) and (orientation:landscape){
+  .board-canvas .gstage{gap:6px}
+  .board-canvas .gsidebar:not(.drawer){width:min(280px,40vw)}
 }
 
 /* Side bar: fixed column on desktop; a slide-in drawer on mobile */
