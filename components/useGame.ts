@@ -265,6 +265,7 @@ export function useGame(locale: Locale) {
         errors: 0,
         errorLog: [],
         solvedCount: 0,
+        foods: {},
       });
       const players: Player[] = [
         mk(dict.demoPlayerName, PCOLORS[0]),

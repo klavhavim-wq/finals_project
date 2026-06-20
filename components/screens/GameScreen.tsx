@@ -3,90 +3,62 @@
 import { useEffect, useRef, useState } from "react";
 import HexBoard from "../HexBoard";
 import PlayerCards from "../PlayerCards";
+import StepPrize from "../StepPrize";
 import ActionPanel from "../ActionPanel";
 import LanguageSwitch from "../LanguageSwitch";
-import { DC, LVL_DOORS } from "@/lib/engine/constants";
-import type { DoorKey, GameState, Locale } from "@/lib/engine/types";
+import type { GameState, Locale } from "@/lib/engine/types";
 import type { GameActions } from "../useGame";
 import type { Dict } from "@/lib/i18n";
-
-/** Darkened door hues that meet contrast for coloured TEXT on white. */
-const DOOR_TEXT: Record<DoorKey, string> = {
-  blue: "#1D4ED8",
-  purple: "#5B21B6",
-  yellow: "#B45309",
-  red: "#B91C1C",
-  redlong: "#111827",
-};
-
-function DoorLegend({ t, state }: { t: Dict; state: GameState }) {
-  const doors = LVL_DOORS[state.level];
-  const unique = [...new Set(doors)];
-  return (
-    <div id="door-legend" style={{
-      padding: "10px 12px", background: "white",
-      borderRadius: 14, boxShadow: "0 2px 8px rgba(0,0,0,.07)",
-      marginTop: 8,
-    }}>
-      <div style={{ fontWeight: 700, color: "#9ca3af", fontSize: ".7rem", textTransform: "uppercase", letterSpacing: ".05em", marginBottom: 8 }}>
-        {t.doorLegendTitle}
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-        {unique.map(d => {
-          const dc = DC[d];
-          const range = dc.ranges
-            ? `×(${dc.ranges[0][0]}–${dc.ranges[0][1]} × ${dc.ranges[1][0]}–${dc.ranges[1][1]})`
-            : dc.band
-            ? `(${dc.band[0]}–${dc.band[1]})`
-            : `×(${dc.min}–${dc.max})`;
-          return (
-            <div key={d} style={{
-              display: "flex", alignItems: "center", gap: 8,
-              background: dc.color + "18",
-              borderRadius: 8, padding: "5px 8px",
-              borderInlineStart: `4px solid ${dc.color}`,
-            }}>
-              <span style={{ fontSize: "1rem", lineHeight: 1 }}>
-                {t.doorLabel(d).split(" ")[0]}
-              </span>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontWeight: 700, fontSize: ".82rem", color: "#1f2937", lineHeight: 1.2 }}>
-                  {t.doorLabel(d).split(" ").slice(1).join(" ")}
-                </div>
-                <div style={{ fontSize: ".74rem", color: "#6b7280", direction: "ltr", unicodeBidi: "embed", lineHeight: 1.3 }}>
-                  {range}
-                </div>
-              </div>
-              <span style={{
-                fontWeight: 800, fontSize: ".88rem", color: DOOR_TEXT[d],
-                background: "white", borderRadius: 6,
-                padding: "2px 7px", flexShrink: 0,
-                border: `1.5px solid ${dc.color}`,
-              }}>
-                {t.doorLegendPts(dc.pts)}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
 
 function fmtTime(s: number): string {
   return "⏱ " + Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60);
 }
 
-const PANEL_W = 280;
-/** Keep the floating panel inside the viewport (at least ~80px always visible). */
-function clampPanel(x: number, y: number): { x: number; y: number } {
-  const maxX = window.innerWidth - 80;
-  const minX = -(PANEL_W - 80);
-  const maxY = window.innerHeight - 60;
-  return { x: Math.min(maxX, Math.max(minX, x)), y: Math.min(maxY, Math.max(0, y)) };
+const PHASE_ICONS = ["", "🎯", "🗺️", "🐕"];
+
+/** The 1 → 2 → 3 step strip that sits on top of the command square. */
+function PhaseStrip({ t, state }: { t: Dict; state: GameState }) {
+  return (
+    <div className="phasestrip">
+      {([1, 2, 3] as const).map((i) => (
+        <div
+          key={i}
+          className={
+            "phasestep" +
+            (i === state.phase ? " cur" : i < state.phase ? " done" : "")
+          }
+        >
+          {PHASE_ICONS[i]} {t.phaseLabels[i - 1]}
+        </div>
+      ))}
+    </div>
+  );
 }
 
-const PHASE_ICONS = ["", "🎯", "🗺️", "🐕"];
+/** Slim contextual banner shown on the mobile board screen so the player knows
+ *  what to do while looking at the board. */
+function BoardBanner({ t, state }: { t: Dict; state: GameState }) {
+  let body: React.ReactNode = null;
+  if (state.phase === 1 && state.card) {
+    body = (
+      <>
+        <span className="bbn-ex">{t.targetExpr(state.card.ex)}</span>
+        <span className="bbn-sub">{t.boardBannerFind}</span>
+      </>
+    );
+  } else if (state.phase === 2) {
+    body = <span className="bbn-sub">{t.boardBannerRoute(state.targetHex ?? 0)}</span>;
+  } else if (state.phase === 3) {
+    body = (
+      <>
+        {state.pendingRoll && <span className="bbn-ex">{state.pendingRoll.expr} = ?</span>}
+        <span className="bbn-sub">{t.boardBannerWalk}</span>
+      </>
+    );
+  }
+  if (!body) return null;
+  return <div className="boardbanner">{body}</div>;
+}
 
 export default function GameScreen({
   t,
@@ -114,16 +86,8 @@ export default function GameScreen({
     if (e.pointerType !== "mouse" || e.button !== 0) return;
     const el = scrollRef.current;
     if (!el) return;
-    pan.current = {
-      active: true,
-      moved: false,
-      x: e.clientX,
-      y: e.clientY,
-      l: el.scrollLeft,
-      t: el.scrollTop,
-    };
+    pan.current = { active: true, moved: false, x: e.clientX, y: e.clientY, l: el.scrollLeft, t: el.scrollTop };
   };
-
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const p = pan.current;
     if (!p.active) return;
@@ -138,18 +102,12 @@ export default function GameScreen({
       scrollRef.current.scrollTop = p.t - dy;
     }
   };
-
   const endPan = () => {
     pan.current.active = false;
-    // If a drag ends over empty space (no click follows), clear the moved flag
-    // after the trailing click fires so it can't swallow the next genuine tap.
     if (pan.current.moved) {
-      setTimeout(() => {
-        pan.current.moved = false;
-      }, 0);
+      setTimeout(() => { pan.current.moved = false; }, 0);
     }
   };
-
   const guardedHexClick = (n: number) => {
     if (pan.current.moved) {
       pan.current.moved = false;
@@ -158,50 +116,42 @@ export default function GameScreen({
     actions.hexClick(n);
   };
 
-  // Floating panel drag
-  const [isDesktop, setIsDesktop] = useState(false);
-  const [panelPos, setPanelPos] = useState({ x: 15, y: 65 });
-  const fpDrag = useRef({ active: false, ox: 0, oy: 0 });
-  const initializedRef = useRef(false);
-
+  // Desktop vs mobile, and which mobile screen is showing.
+  const [isDesktop, setIsDesktop] = useState(true);
+  const [mobileView, setMobileView] = useState<"play" | "board">("play");
   useEffect(() => {
-    if (!initializedRef.current) {
-      initializedRef.current = true;
-      const wide = window.innerWidth > 820;
-      setIsDesktop(wide);
-      if (wide) {
-        // The sidebar sits opposite the reading direction: on the right in LTR,
-        // on the left in RTL. Start the panel clear of it, never over the board.
-        const x = locale === "he" ? 274 + 30 : window.innerWidth - 580;
-        setPanelPos(clampPanel(x, 70));
-      }
-    }
-    const onResize = () => {
-      setIsDesktop(window.innerWidth > 820);
-      setPanelPos((p) => clampPanel(p.x, p.y));
-    };
+    const onResize = () => setIsDesktop(window.innerWidth > 820);
+    onResize();
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [locale]);
+  }, []);
 
-  const onHandleDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDesktop) return;
-    fpDrag.current = { active: true, ox: e.clientX - panelPos.x, oy: e.clientY - panelPos.y };
-    e.currentTarget.setPointerCapture(e.pointerId);
-    e.stopPropagation();
-  };
-  const onHandleMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!fpDrag.current.active || !isDesktop) return;
-    e.stopPropagation();
-    setPanelPos(clampPanel(e.clientX - fpDrag.current.ox, e.clientY - fpDrag.current.oy));
-  };
-  const onHandleUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    fpDrag.current.active = false;
-    e.stopPropagation();
-  };
+  // The two-screen split is active only during real play on a phone (the guided
+  // tour keeps everything stacked so its spotlights always find their target).
+  const split = !isDesktop && !state.tourActive;
+
+  // Smart default: finding the target and planning the route need the board;
+  // solving the door exercise happens on the play screen.
+  useEffect(() => {
+    if (!split) return;
+    if (state.phase === 1 || state.phase === 2) setMobileView("board");
+  }, [state.phase, split]);
+
+  // Watch the dog move right after a correct answer, then come back to solve.
+  useEffect(() => {
+    if (!split || state.phase !== 3) return;
+    if (state.mcCorrect != null) setMobileView("board");
+  }, [state.mcCorrect, state.phase, split]);
+  useEffect(() => {
+    if (!split || state.phase !== 3) return;
+    if (state.pendingRoll == null && !state.modal) setMobileView("play");
+  }, [state.pendingRoll, state.modal, state.phase, split]);
+
+  const showBoard = !split || mobileView === "board";
+  const showPlay = !split || mobileView === "play";
 
   return (
-    <div id="sg" className="screen active">
+    <div id="sg" className={"screen active" + (split ? " split-mode" : "")}>
       <div className="ghdr">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.jpg" alt={t.logoAlt} className="brand-logo-sm" />
@@ -224,56 +174,51 @@ export default function GameScreen({
           ✖
         </button>
       </div>
-      <div className="gbody">
-        <div
-          ref={scrollRef}
-          className="hivewrap"
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={endPan}
-          onPointerLeave={endPan}
-        >
-          <HexBoard state={state} onHexClick={guardedHexClick} />
-        </div>
 
-        {/* Action panel — floats on desktop, flows in sidebar on mobile */}
-        <div
-          className={"floatpanel" + (isDesktop ? " float-active" : "")}
-          style={isDesktop ? { left: panelPos.x, top: panelPos.y } : undefined}
-        >
-          <div
-            className="floatpanel-handle"
-            onPointerDown={onHandleDown}
-            onPointerMove={onHandleMove}
-            onPointerUp={onHandleUp}
+      {split && (
+        <div className="mtabs">
+          <button
+            className={"mtab" + (mobileView === "play" ? " on" : "")}
+            onClick={() => setMobileView("play")}
           >
-            <div style={{ display: "flex", gap: 4, flex: 1 }}>
-              {([1, 2, 3] as const).map((i) => (
-                <div
-                  key={i}
-                  style={{
-                    flex: 1, textAlign: "center", fontSize: ".68rem",
-                    fontWeight: i === state.phase ? 800 : 500,
-                    background: i === state.phase ? "#FDE68A" : i < state.phase ? "#d1fae5" : "transparent",
-                    color: i === state.phase ? "#92400E" : i < state.phase ? "#065F46" : "#b45309",
-                    borderRadius: 6, padding: "2px 3px", transition: "all .2s",
-                  }}
-                >
-                  {PHASE_ICONS[i]} {t.phaseLabels[i - 1]}
-                </div>
-              ))}
-            </div>
-            {isDesktop && <span className="fp-grip">⠿</span>}
-          </div>
-          <div className="floatpanel-body">
-            <ActionPanel t={t} state={state} actions={actions} />
-          </div>
+            {t.tabPlay}
+          </button>
+          <button
+            className={"mtab" + (mobileView === "board" ? " on" : "")}
+            onClick={() => setMobileView("board")}
+          >
+            {t.tabBoard}
+          </button>
         </div>
+      )}
 
-        <div className="sidebar">
-          <PlayerCards t={t} state={state} />
-          <DoorLegend t={t} state={state} />
-        </div>
+      <div className={"gbody" + (split ? " split" : "")}>
+        {showBoard && (
+          <div
+            ref={scrollRef}
+            className="hivewrap"
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={endPan}
+            onPointerLeave={endPan}
+          >
+            {split && <BoardBanner t={t} state={state} />}
+            <HexBoard state={state} onHexClick={guardedHexClick} portrait={split && mobileView === "board"} />
+          </div>
+        )}
+
+        {showPlay && (
+          <div className="gsidebar">
+            <PlayerCards t={t} state={state} />
+            <StepPrize t={t} state={state} />
+            <div className="sq sq-command">
+              <PhaseStrip t={t} state={state} />
+              <div className="sq-command-body">
+                <ActionPanel t={t} state={state} actions={actions} />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

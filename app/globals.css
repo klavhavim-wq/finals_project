@@ -174,12 +174,20 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 
 .gbody{display:flex;gap:9px;padding:9px;flex:1;overflow:hidden;min-height:0}
 @media(max-width:820px){
-  /* Let the page grow & scroll vertically instead of cramming into 100vh */
+  /* Non-split (guided tour): let the page grow & scroll vertically */
   #sg{height:auto;min-height:100vh;overflow:visible}
   .gbody{flex-direction:column;overflow:visible;flex:none}
-  /* Scale the whole board to fit the screen width — no internal scroll; page scrolls to the panel */
-  .hivewrap{flex:none;height:auto;overflow:visible;touch-action:auto;padding:6px}
+  /* Scale the whole board to fit the screen width — page scrolls to the panel */
+  .gbody:not(.split) .hivewrap{flex:none;height:auto;overflow:visible;touch-action:auto;padding:6px}
   .hivewrap #hsvg{width:100%;height:auto}
+
+  /* Two-screen split (real play on a phone): fixed app shell, one pane at a time */
+  #sg.split-mode{height:100dvh;min-height:0;overflow:hidden}
+  .gbody.split{flex:1;min-height:0;overflow:hidden;flex-direction:column;padding:6px}
+  .gbody.split .gsidebar{width:100%;height:100%;overflow-y:auto}
+  .gbody.split .hivewrap{flex:1;height:auto;min-height:0;overflow:auto;touch-action:pan-x pan-y;
+    flex-direction:column;align-items:center;justify-content:flex-start}
+  .gbody.split .sq-command{flex:none}
 }
 
 /* HIVE CONTAINER */
@@ -194,16 +202,65 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .answer-mode .hivewrap{box-shadow:0 0 0 3px var(--gr),var(--shadow)}
 .answer-mode .hex-group{cursor:crosshair}
 
-/* SIDEBAR */
-.sidebar{width:274px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;overflow-y:auto}
-@media(max-width:820px){.sidebar{width:100%;flex-direction:row;flex-wrap:wrap;overflow:visible}}
+/* ── SIDEBAR: the three fixed squares (bank / step prize / command) ── */
+.gsidebar{width:316px;flex-shrink:0;display:flex;flex-direction:column;gap:9px;overflow-y:auto;min-height:0}
 
-.pcard{background:white;border-radius:var(--rad);padding:13px 16px;box-shadow:var(--shadow);border-inline-end:4px solid #e5e7eb;transition:all .3s}
-.pcard.cur{border-inline-end-color:var(--ye);box-shadow:0 4px 18px rgba(245,158,11,.25)}
+/* A square card — the shared shell for the three areas */
+.sq{background:white;border-radius:var(--rad);box-shadow:var(--shadow);padding:11px 13px}
+.sq-title{font-weight:800;color:#92400E;font-size:.92rem;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.sq-command{flex:1;min-height:0;display:flex;flex-direction:column}
+.sq-command-body{flex:1;min-height:0;overflow-y:auto}
+
+/* ── MOBILE TABS (two-screen split) ── */
+.mtabs{display:flex;gap:6px;padding:6px 8px 0;flex-shrink:0}
+.mtab{flex:1;padding:10px 6px;border:2px solid #FDE68A;background:#FFFBEB;border-radius:12px 12px 0 0;
+  font-family:inherit;font-weight:800;font-size:.95rem;color:#92400E;cursor:pointer;border-bottom:none;opacity:.6;transition:all .15s}
+.mtab.on{background:white;opacity:1;box-shadow:0 -2px 8px rgba(0,0,0,.07)}
+
+/* ── BANK (square A) ── */
+.pcard{background:white;border-radius:var(--rad);padding:9px 12px;border:1.5px solid #f3f4f6;border-inline-end:4px solid #e5e7eb;transition:all .3s;margin-bottom:6px}
+.pcard:last-child{margin-bottom:0}
+.pcard.cur{border-inline-end-color:var(--ye);box-shadow:0 4px 18px rgba(245,158,11,.22)}
 .pchead{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.pcname{font-weight:700;font-size:1.05rem;min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pchon{font-weight:900;font-size:1.2rem;color:#B45309;flex-shrink:0}
-.pcpos{font-size:.82rem;color:#9ca3af;margin-top:3px}
+.pcname{font-weight:700;font-size:1rem;min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pcdog{font-size:1.1rem}
+.pchon{font-weight:900;font-size:1.3rem;color:#B45309;flex-shrink:0;white-space:nowrap}
+.pcpos{font-size:.78rem;color:#9ca3af;margin-top:2px}
+.bank-foods{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.bank-foods.empty{color:#cbb89c;font-size:.74rem;font-style:italic;margin-top:4px}
+.bank-food{display:inline-flex;align-items:center;gap:2px;border:1.5px solid;border-radius:999px;padding:1px 7px 1px 5px;font-weight:800;font-size:.84rem;color:#374151}
+.bank-food-ico{font-size:.95rem;line-height:1}
+.bank-food-cnt{color:#1f2937}
+
+/* ── STEP PRIZE / FOOD MENU (square B) ── */
+.prize-hero{display:flex;align-items:center;gap:12px;border:2.5px solid;border-radius:13px;padding:10px 12px;margin-bottom:9px}
+.prize-hero-food{font-size:2.6rem;line-height:1;flex-shrink:0}
+.prize-hero-info{min-width:0}
+.prize-hero-name{font-weight:800;font-size:1.05rem;line-height:1.1}
+.prize-kibbles{display:flex;flex-wrap:wrap;gap:1px;margin:3px 0}
+.prize-kibbles .kibble{font-size:.95rem;line-height:1}
+.prize-hero-worth{font-weight:800;color:#1f2937;font-size:.92rem}
+.prize-menu{display:flex;flex-direction:column;gap:5px}
+.prizerow{display:flex;align-items:center;gap:8px;background:#fafafa;border-radius:9px;padding:5px 8px;border-inline-start:4px solid #ccc}
+.prizerow.active{box-shadow:0 1px 6px rgba(0,0,0,.1)}
+.prizerow-ico{font-size:1.35rem;line-height:1;flex-shrink:0}
+.prizerow-mid{flex:1;min-width:0}
+.prizerow-name{font-weight:700;font-size:.86rem;color:#1f2937;line-height:1.1}
+.prizerow-range{font-size:.72rem;color:#9ca3af}
+.prizerow-val{flex-shrink:0;font-weight:800;font-size:.9rem;background:white;border:1.5px solid;border-radius:8px;padding:2px 8px;white-space:nowrap}
+
+/* ── PHASE STRIP (top of command square) ── */
+.phasestrip{display:flex;gap:4px;margin-bottom:9px}
+.phasestep{flex:1;text-align:center;font-size:.7rem;font-weight:600;border-radius:7px;padding:4px 3px;background:transparent;color:#b45309;transition:all .2s}
+.phasestep.cur{background:#FDE68A;color:#92400E;font-weight:800}
+.phasestep.done{background:#d1fae5;color:#065F46}
+
+/* ── BOARD BANNER (mobile board screen) ── */
+.boardbanner{position:sticky;top:0;z-index:5;background:linear-gradient(135deg,#FFFBEB,#FEF3C7);
+  border:2px solid #FDE68A;border-radius:12px;padding:7px 12px;margin:0 auto 8px;width:100%;
+  display:flex;flex-direction:column;align-items:center;gap:1px;text-align:center}
+.bbn-ex{font-size:1.5rem;font-weight:900;color:#1e1b4b;direction:ltr;unicode-bidi:isolate}
+.bbn-sub{font-size:.82rem;font-weight:600;color:#92400E}
 
 .apanel{background:white;border-radius:var(--rad);padding:13px 15px;box-shadow:var(--shadow);flex:1}
 .aphdots{display:flex;gap:5px;margin-bottom:11px}

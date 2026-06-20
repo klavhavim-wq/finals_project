@@ -122,6 +122,9 @@ export interface ReviewFact {
   weight: number;
 }
 
+/** How many of each food (door type) a player has banked, for the bank breakdown. */
+export type FoodTally = Partial<Record<DoorKey, number>>;
+
 export interface Player {
   name: string;
   color: string;
@@ -130,6 +133,8 @@ export interface Player {
   errors: number;
   errorLog: ErrorRecord[];
   solvedCount: number;
+  /** Foods banked over the whole game, by door type (the bank breakdown). */
+  foods: FoodTally;
 }
 
 export interface SessionRecord {
@@ -212,6 +217,10 @@ export interface GameState {
   pathDoors: DoorKey[];
   stepIdx: number;
   turnPts: number;
+  /** foods earned during the current walk, banked at end of turn */
+  turnFoods: FoodTally;
+  /** shared foods bank (cooperative mode) */
+  sharedFoods: FoodTally;
 
   timerSecs: number;
   timerTotal: number;

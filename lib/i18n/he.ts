@@ -2,7 +2,7 @@ import type { DoorKey, EffResult } from "../engine/types";
 import type { Dict, TourStep } from "./index";
 
 const DOOR_LABELS: Record<DoorKey, string> = {
-  blue: "🦴 עצם",
+  blue: "🍪 ביסקוויט",
   purple: "🐟 דג",
   yellow: "🍗 כנף",
   red: "🌭 נקניקיה",
@@ -176,7 +176,7 @@ export const he: Dict = {
        {
          i: "🚪",
          t: "דלתות וגרגירים",
-         x: '<div style="display:flex;flex-direction:column;gap:7px;margin:0 0 10px;font-size:.85em"><div style="padding:7px 11px;background:#EFF6FF;border-radius:8px;border-right:4px solid #3B82F6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#3B82F6">🦴 כחול — עצם</strong><span style="flex-shrink:0;background:#3B82F6;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">1 גרגיר לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">4–20</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">3 × 4 = 12</span></div></div><div style="padding:7px 11px;background:#F5F3FF;border-radius:8px;border-right:4px solid #8B5CF6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#8B5CF6">🐟 סגול — דג</strong><span style="flex-shrink:0;background:#7C3AED;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">2 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">10–40</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">4 × 5 = 20</span></div></div><div style="padding:7px 11px;background:#FFFBEB;border-radius:8px;border-right:4px solid #F59E0B"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#B45309">🍗 כתום — כנף</strong><span style="flex-shrink:0;background:#B45309;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">5 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">24–64</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">6 × 7 = 42</span></div></div><div style="padding:7px 11px;background:#FEF2F2;border-radius:8px;border-right:4px solid #EF4444"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#EF4444">🌭 אדום — נקניקיה</strong><span style="flex-shrink:0;background:#EF4444;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">10 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">42–81</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">8 × 9 = 72</span></div></div><div style="padding:7px 11px;background:#F3F4F6;border-radius:8px;border-right:4px solid #111827"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#111827">🥩 שחור — סטייק</strong><span style="flex-shrink:0;background:#111827;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">12 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">כפל ארוך · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">13 × 4 = 52</span></div></div></div><em style="font-size:.8em;color:#7C3AED">סטייק — רמת גיבור בלבד!</em><br><br>קשה יותר = יותר גרגירים לבנק! 🐶',
+         x: '<div style="display:flex;flex-direction:column;gap:7px;margin:0 0 10px;font-size:.85em"><div style="padding:7px 11px;background:#EFF6FF;border-radius:8px;border-right:4px solid #3B82F6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#3B82F6">🍪 כחול — ביסקוויט</strong><span style="flex-shrink:0;background:#3B82F6;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">1 גרגיר לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">4–20</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">3 × 4 = 12</span></div></div><div style="padding:7px 11px;background:#F5F3FF;border-radius:8px;border-right:4px solid #8B5CF6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#8B5CF6">🐟 סגול — דג</strong><span style="flex-shrink:0;background:#7C3AED;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">2 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">10–40</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">4 × 5 = 20</span></div></div><div style="padding:7px 11px;background:#FFFBEB;border-radius:8px;border-right:4px solid #F59E0B"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#B45309">🍗 כתום — כנף</strong><span style="flex-shrink:0;background:#B45309;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">5 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">24–64</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">6 × 7 = 42</span></div></div><div style="padding:7px 11px;background:#FEF2F2;border-radius:8px;border-right:4px solid #EF4444"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#EF4444">🌭 אדום — נקניקיה</strong><span style="flex-shrink:0;background:#EF4444;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">10 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">42–81</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">8 × 9 = 72</span></div></div><div style="padding:7px 11px;background:#F3F4F6;border-radius:8px;border-right:4px solid #111827"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#111827">🥩 שחור — סטייק</strong><span style="flex-shrink:0;background:#111827;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">12 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">כפל ארוך · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">13 × 4 = 52</span></div></div></div><em style="font-size:.8em;color:#7C3AED">סטייק — רמת גיבור בלבד!</em><br><br>קשה יותר = יותר גרגירים לבנק! 🐶',
        },
        {
          i: "✅",
@@ -323,7 +323,7 @@ export const he: Dict = {
         t: oneDoor ? "הדלת שעוברים בה" : "הדלתות הצבעוניות",
         target: "doors",
         x: oneDoor
-          ? 'הקווים הצבעוניים בין המשושים הם <strong>דלתות</strong> 🚪.<br><br>ברמת מתחילים יש דלת אחת — דלת ה<strong>עצם</strong> 🦴. בכל מעבר פותרים תרגיל קטן ומקבלים גרגיר. ברמות הבאות מתווספים עוד צבעי דלתות — קשות יותר אבל שוות יותר גרגירים!'
+          ? 'הקווים הצבעוניים בין המשושים הם <strong>דלתות</strong> 🚪.<br><br>ברמת מתחילים יש דלת אחת — דלת ה<strong>ביסקוויט</strong> 🍪. בכל מעבר פותרים תרגיל קטן ומקבלים גרגיר. ברמות הבאות מתווספים עוד צבעי דלתות — קשות יותר אבל שוות יותר גרגירים!'
           : 'הקווים הצבעוניים בין המשושים הם <strong>דלתות</strong> 🚪.<br><br>כל צבע הוא סוג אוכל אחר ותרגיל אחר. כאן רואים אילו דלתות יש ברמה הזו וכמה גרגירים כל אחת שווה — <strong>ככל שהדלת קשה יותר, מקבלים יותר גרגירים!</strong> 🦴',
       },
       {
@@ -598,6 +598,17 @@ export const he: Dict = {
 
   doorLegendTitle: "🚪 דלתות וגרגירים",
   doorLegendPts: (pts) => `${pts}🦴`,
+
+  bankTitle: "🏦 הבנק — מה אספנו",
+  stepPrizeTitle: "🎁 הפרס בצעד הזה",
+  foodMenuTitle: "🍽️ כמה שווה כל אוכל",
+  pelletsUnit: (n) => `${n} ${n === 1 ? "גרגיר" : "גרגירים"}`,
+  bankEmpty: "עדיין לא אספנו אוכל",
+  tabPlay: "🎯 התרגיל",
+  tabBoard: "🗺️ הלוח",
+  boardBannerFind: "🎯 פתרו את התרגיל ולחצו על המשושה עם התשובה",
+  boardBannerRoute: (target) => `🗺️ בנו מסלול עד משושה ${target} — ואז חזרו ל«התרגיל» לאישור`,
+  boardBannerWalk: "🐕 לחצו על המשושה עם התשובה, או פתרו ב«התרגיל»",
 
   helpCardBtn: "לוח כפל",
 

@@ -9,8 +9,8 @@ import type { GameActions } from "./useGame";
 /** Which on-screen element each tour step spotlights. */
 const SELECTORS: Record<TourTarget, string | null> = {
   board: ".hivewrap",
-  panel: ".floatpanel",
-  sidebar: ".sidebar",
+  panel: ".sq-command",
+  sidebar: ".sq-bank",
   doors: "#door-legend",
   header: ".ghdr",
   center: null,

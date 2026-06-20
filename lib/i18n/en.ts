@@ -2,7 +2,7 @@ import type { DoorKey, EffResult } from "../engine/types";
 import type { Dict, TourStep } from "./index";
 
 const DOOR_LABELS: Record<DoorKey, string> = {
-  blue: "🦴 Bone",
+  blue: "🍪 Biscuit",
   purple: "🐟 Fish",
   yellow: "🍗 Wing",
   red: "🌭 Sausage",
@@ -172,7 +172,7 @@ export const en: Dict = {
        {
          i: "🚪",
          t: "Doors & Pellets",
-         x: '<div style="display:flex;flex-direction:column;gap:7px;margin:0 0 10px;font-size:.85em"><div style="padding:7px 11px;background:#EFF6FF;border-radius:8px;border-left:4px solid #3B82F6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#3B82F6">🦴 Blue — Bone</strong><span style="flex-shrink:0;background:#3B82F6;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">1 pellet / step</span></div><div style="margin-top:4px;color:#475569">Products 4–20 · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">3 × 4 = 12</span></div></div><div style="padding:7px 11px;background:#F5F3FF;border-radius:8px;border-left:4px solid #8B5CF6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#8B5CF6">🐟 Purple — Fish</strong><span style="flex-shrink:0;background:#7C3AED;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">2 pellets / step</span></div><div style="margin-top:4px;color:#475569">Products 10–40 · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">4 × 5 = 20</span></div></div><div style="padding:7px 11px;background:#FFFBEB;border-radius:8px;border-left:4px solid #F59E0B"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#B45309">🍗 Orange — Wing</strong><span style="flex-shrink:0;background:#B45309;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">5 pellets / step</span></div><div style="margin-top:4px;color:#475569">Products 24–64 · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">6 × 7 = 42</span></div></div><div style="padding:7px 11px;background:#FEF2F2;border-radius:8px;border-left:4px solid #EF4444"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#EF4444">🌭 Red — Sausage</strong><span style="flex-shrink:0;background:#EF4444;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">10 pellets / step</span></div><div style="margin-top:4px;color:#475569">Products 42–81 · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">8 × 9 = 72</span></div></div><div style="padding:7px 11px;background:#F3F4F6;border-radius:8px;border-left:4px solid #111827"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#111827">🥩 Black — Steak</strong><span style="flex-shrink:0;background:#111827;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">12 pellets / step</span></div><div style="margin-top:4px;color:#475569">Long multiplication · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">13 × 4 = 52</span></div></div></div><em style="font-size:.8em;color:#7C3AED">Steak — Hero level only!</em><br><br>Harder = more pellets in the bank! 🐶',
+         x: '<div style="display:flex;flex-direction:column;gap:7px;margin:0 0 10px;font-size:.85em"><div style="padding:7px 11px;background:#EFF6FF;border-radius:8px;border-left:4px solid #3B82F6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#3B82F6">🍪 Blue — Biscuit</strong><span style="flex-shrink:0;background:#3B82F6;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">1 pellet / step</span></div><div style="margin-top:4px;color:#475569">Products 4–20 · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">3 × 4 = 12</span></div></div><div style="padding:7px 11px;background:#F5F3FF;border-radius:8px;border-left:4px solid #8B5CF6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#8B5CF6">🐟 Purple — Fish</strong><span style="flex-shrink:0;background:#7C3AED;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">2 pellets / step</span></div><div style="margin-top:4px;color:#475569">Products 10–40 · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">4 × 5 = 20</span></div></div><div style="padding:7px 11px;background:#FFFBEB;border-radius:8px;border-left:4px solid #F59E0B"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#B45309">🍗 Orange — Wing</strong><span style="flex-shrink:0;background:#B45309;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">5 pellets / step</span></div><div style="margin-top:4px;color:#475569">Products 24–64 · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">6 × 7 = 42</span></div></div><div style="padding:7px 11px;background:#FEF2F2;border-radius:8px;border-left:4px solid #EF4444"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#EF4444">🌭 Red — Sausage</strong><span style="flex-shrink:0;background:#EF4444;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">10 pellets / step</span></div><div style="margin-top:4px;color:#475569">Products 42–81 · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">8 × 9 = 72</span></div></div><div style="padding:7px 11px;background:#F3F4F6;border-radius:8px;border-left:4px solid #111827"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#111827">🥩 Black — Steak</strong><span style="flex-shrink:0;background:#111827;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">12 pellets / step</span></div><div style="margin-top:4px;color:#475569">Long multiplication · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">13 × 4 = 52</span></div></div></div><em style="font-size:.8em;color:#7C3AED">Steak — Hero level only!</em><br><br>Harder = more pellets in the bank! 🐶',
        },
        {
          i: "✅",
@@ -319,7 +319,7 @@ export const en: Dict = {
         t: oneDoor ? "The door you cross" : "The colored doors",
         target: "doors",
         x: oneDoor
-          ? 'The colored lines between hexes are <strong>doors</strong> 🚪.<br><br>On Beginner there is one door — the <strong>Bone</strong> door 🦴. Each time you cross it you solve a small exercise and earn a pellet. Higher levels add more door colors — harder, but worth more pellets!'
+          ? 'The colored lines between hexes are <strong>doors</strong> 🚪.<br><br>On Beginner there is one door — the <strong>Biscuit</strong> door 🍪. Each time you cross it you solve a small exercise and earn a pellet. Higher levels add more door colors — harder, but worth more pellets!'
           : 'The colored lines between hexes are <strong>doors</strong> 🚪.<br><br>Each color is a different food and a different exercise. Here you can see which doors this level has and how many pellets each is worth — <strong>the harder the door, the more pellets you earn!</strong> 🦴',
       },
       {
@@ -588,6 +588,17 @@ export const en: Dict = {
 
   doorLegendTitle: "🚪 Doors & Pellets",
   doorLegendPts: (pts) => `${pts}🦴`,
+
+  bankTitle: "🏦 The Bank — what we collected",
+  stepPrizeTitle: "🎁 This step's prize",
+  foodMenuTitle: "🍽️ What each food is worth",
+  pelletsUnit: (n) => `${n} ${n === 1 ? "pellet" : "pellets"}`,
+  bankEmpty: "No food collected yet",
+  tabPlay: "🎯 Exercise",
+  tabBoard: "🗺️ Board",
+  boardBannerFind: "🎯 Solve the exercise and tap the hex with the answer",
+  boardBannerRoute: (target) => `🗺️ Build a route to hex ${target} — then go back to «Exercise» to confirm`,
+  boardBannerWalk: "🐕 Tap the hex with the answer, or solve in «Exercise»",
 
   helpCardBtn: "Times Table",
 

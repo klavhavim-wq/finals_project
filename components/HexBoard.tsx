@@ -28,9 +28,12 @@ function fillFor(state: GameState, n: number): string {
 export default function HexBoard({
   state,
   onHexClick,
+  portrait = false,
 }: {
   state: GameState;
   onHexClick: (n: number) => void;
+  /** Rotate the whole board to portrait (numbers stay upright) — used on mobile. */
+  portrait?: boolean;
 }) {
   const validNextHexes = new Set<number>();
   const otherPlayerHexes = new Set<number>();
@@ -181,25 +184,27 @@ export default function HexBoard({
         )}
         <text
           x={cx.toFixed(1)}
-          y={(cy - (sym ? 6 : 0)).toFixed(1)}
+          y={(cy - (sym ? 9 : 0)).toFixed(1)}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize={13}
+          fontSize={sym ? 19 : 25}
           fontWeight={fw}
           fill={tcol}
           pointerEvents="none"
           fontFamily="Arial,sans-serif"
+          transform={portrait ? `rotate(-90 ${cx.toFixed(1)} ${(cy - (sym ? 9 : 0)).toFixed(1)})` : undefined}
         >
           {n}
         </text>
         {sym && (
           <text
             x={cx.toFixed(1)}
-            y={(cy + 11).toFixed(1)}
+            y={(cy + 13).toFixed(1)}
             textAnchor="middle"
             dominantBaseline="middle"
-            fontSize={12}
+            fontSize={13}
             pointerEvents="none"
+            transform={portrait ? `rotate(-90 ${cx.toFixed(1)} ${(cy + 13).toFixed(1)})` : undefined}
           >
             {sym}
           </text>
@@ -224,6 +229,7 @@ export default function HexBoard({
                 fill="white"
                 fontWeight={800}
                 pointerEvents="none"
+                transform={portrait ? `rotate(-90 ${(cx + 13).toFixed(1)} ${(cy - 13).toFixed(1)})` : undefined}
               >
                 {i + 1}
               </text>
@@ -249,7 +255,7 @@ export default function HexBoard({
           pointerEvents="none"
         >
           <circle r={17} fill="white" fillOpacity={0.93} stroke={PCOLORS[i]} strokeWidth={3} />
-          <text fontSize={24} textAnchor="middle" dominantBaseline="middle">
+          <text fontSize={24} textAnchor="middle" dominantBaseline="middle" transform={portrait ? "rotate(-90)" : undefined}>
             {DOGS[i]}
           </text>
         </g>
@@ -257,6 +263,27 @@ export default function HexBoard({
     });
 
   const { w: SVG_W, h: SVG_H } = boardSvgSize(state.level);
+
+  if (portrait) {
+    // Rotate the whole board 90° so its long (10-column) axis runs vertically —
+    // a tall, phone-friendly portrait layout. Numbers/dogs are counter-rotated
+    // above so they stay upright for the reader.
+    return (
+      <svg
+        id="hsvg"
+        viewBox={`0 0 ${SVG_H} ${SVG_W}`}
+        width={SVG_H}
+        height={SVG_W}
+        style={{ display: "block" }}
+      >
+        <g transform={`translate(${SVG_H} 0) rotate(90)`}>
+          {hexes}
+          {badges}
+          {tokens}
+        </g>
+      </svg>
+    );
+  }
 
   return (
     <svg

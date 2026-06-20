@@ -48,6 +48,7 @@ export default function Setup({
       errors: 0,
       errorLog: [],
       solvedCount: 0,
+      foods: {},
     }));
     const settings: Settings = {
       timer,

@@ -16,6 +16,7 @@ import type {
   DoorKey,
   EffResult,
   ErrorRecord,
+  FoodTally,
   GameState,
   Level,
   Locale,
@@ -26,6 +27,15 @@ import type {
   Settings,
   TargetCard,
 } from "./types";
+
+/** Add two food tallies (door-type → count) together. */
+function mergeFoods(a: FoodTally, b: FoodTally): FoodTally {
+  const out: FoodTally = { ...a };
+  (Object.keys(b) as DoorKey[]).forEach((k) => {
+    out[k] = (out[k] ?? 0) + (b[k] ?? 0);
+  });
+  return out;
+}
 
 export type Rand = () => number;
 
@@ -494,7 +504,9 @@ function wins100(s: GameState): boolean {
 function bankPoints(s: GameState): Player[] {
   if (s.settings.coop) return s.players;
   return s.players.map((p, i) =>
-    i === s.cur ? { ...p, tokens: p.tokens + s.turnPts } : p
+    i === s.cur
+      ? { ...p, tokens: p.tokens + s.turnPts, foods: mergeFoods(p.foods, s.turnFoods) }
+      : p
   );
 }
 
@@ -512,8 +524,10 @@ function collect(s: GameState, samePlayer: boolean): GameState {
 
   let players = s.players;
   let sharedTokens = s.sharedTokens;
+  let sharedFoods = s.sharedFoods;
   if (s.settings.coop) {
     sharedTokens += s.turnPts;
+    sharedFoods = mergeFoods(s.sharedFoods, s.turnFoods);
   } else {
     players = bankPoints(s);
   }
@@ -521,6 +535,7 @@ function collect(s: GameState, samePlayer: boolean): GameState {
     ...s,
     players,
     sharedTokens,
+    sharedFoods,
     modal: null,
     timerRunning: false,
   };
@@ -578,6 +593,8 @@ export function initState(locale: Locale): GameState {
     pathDoors: [],
     stepIdx: 0,
     turnPts: 0,
+    turnFoods: {},
+    sharedFoods: {},
     timerSecs: 180,
     timerTotal: 180,
     timerRunning: false,
@@ -682,6 +699,7 @@ function startNewTurnState(s: GameState, card: TargetCard, resetUsed: boolean): 
     pathDoors: [],
     stepIdx: 0,
     turnPts: 0,
+    turnFoods: {},
     boardAns: false,
     extraTurn: false,
     lastTurnExprs: s.turnUsedExprs,
@@ -735,13 +753,15 @@ export function reducer(state: GameState, action: Action): GameState {
       return {
         ...state,
         screen: "sg",
-        players: action.players.map(p => ({ ...p, errorLog: p.errorLog ?? [], solvedCount: p.solvedCount ?? 0 })),
+        players: action.players.map(p => ({ ...p, errorLog: p.errorLog ?? [], solvedCount: p.solvedCount ?? 0, foods: p.foods ?? {} })),
         level: action.level,
         settings: action.settings,
         cur: 0,
         round: 0,
         usedCards: [],
         sharedTokens: 0,
+        sharedFoods: {},
+        turnFoods: {},
         edgeColors,
         turnUsedExprs: [],
         lastTurnExprs: [],
@@ -841,6 +861,7 @@ export function reducer(state: GameState, action: Action): GameState {
         phase: 3,
         stepIdx: 0,
         turnPts: 0,
+        turnFoods: {},
         boardAns: false,
         timerSecs: total,
         timerTotal: total,
@@ -1057,6 +1078,7 @@ export function reducer(state: GameState, action: Action): GameState {
         pathDoors: action.pathDoors,
         stepIdx: 0,
         turnPts: 0,
+        turnFoods: {},
         boardAns: action.pendingRoll != null,
         pendingRoll: action.pendingRoll,
         choices: action.choices,
@@ -1084,10 +1106,13 @@ function markCorrect(state: GameState): GameState {
   const players = state.players.map((p, i) =>
     i === state.cur ? { ...p, hex: h } : p
   );
+  const door = state.pendingRoll.color;
+  const turnFoods = mergeFoods(state.turnFoods, { [door]: 1 });
   return {
     ...state,
     boardAns: false,
     turnPts: state.turnPts + state.pendingRoll.pts,
+    turnFoods,
     players,
     mcCorrect: state.pendingRoll.correct,
     wrongAnswerVisible: false,

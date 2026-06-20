@@ -11,6 +11,26 @@ import type {
 export const PCOLORS = ["#EF4444", "#3B82F6", "#10B981", "#8B5CF6"];
 export const DOGS = ["🐕", "🐩", "🐶", "🦮"];
 
+/**
+ * The single thing you collect: a pellet (גרגיר). This bone icon is the score
+ * unit everywhere — bank, win screen, results. Foods (doors) are just worth a
+ * different number of pellets; no food uses this icon, so the two never clash.
+ */
+export const PELLET = "🦴";
+
+/**
+ * Food icon per door — language-agnostic, used by the board, the bank, and the
+ * "this step's prize" panel. The easiest (blue) door is a Biscuit, not a Bone,
+ * so it stays visually distinct from the pellet score unit.
+ */
+export const DOOR_ICON: Record<DoorKey, string> = {
+  blue: "🍪",
+  purple: "🐟",
+  yellow: "🍗",
+  red: "🌭",
+  redlong: "🥩",
+};
+
 /** Door config — min/max range maps to cognitive difficulty families. Labels are localized. */
 export const DC: Record<DoorKey, Door> = {
   // Product-band doors: each asks any factor pair (a≤b) within `fac` whose product

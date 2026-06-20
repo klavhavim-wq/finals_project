@@ -205,6 +205,24 @@ export interface Dict {
   doorLegendTitle: string;
   doorLegendPts: (pts: number) => string;
 
+  // Game squares (bank / step prize / food menu / mobile views)
+  bankTitle: string;
+  /** title of the "this step's prize" square while walking */
+  stepPrizeTitle: string;
+  /** title of the food-values menu shown when not walking */
+  foodMenuTitle: string;
+  /** "N pellets" — the worth of a food */
+  pelletsUnit: (n: number) => string;
+  /** shown in the bank before any food is collected */
+  bankEmpty: string;
+  /** mobile two-screen tab labels */
+  tabPlay: string;
+  tabBoard: string;
+  /** slim banner shown on the mobile board screen, per phase */
+  boardBannerFind: string;
+  boardBannerRoute: (target: number) => string;
+  boardBannerWalk: string;
+
   // Help card
   helpCardBtn: string;
 
