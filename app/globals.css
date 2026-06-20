@@ -272,6 +272,9 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .helper-ok{color:#10B981;font-weight:800;font-size:.92rem}
 .helper-no{color:#EF4444;font-weight:800;font-size:.92rem}
 .helper-cancel{margin-top:6px}
+/* active player's "a friend solved it — reveal the answer" prompt */
+.helper-solved{background:#F5F3FF;border:1.5px dashed #C4B5FD;border-radius:10px;padding:8px 10px;margin:7px 0}
+.helper-solved-note{font-size:.86rem;color:#5B21B6;font-weight:700;margin-bottom:7px;text-align:center}
 
 /* ── MOBILE TABS (two-screen split) ── */
 .mtabs{display:flex;gap:6px;padding:6px 8px 0;flex-shrink:0}

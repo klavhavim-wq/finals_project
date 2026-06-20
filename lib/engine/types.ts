@@ -242,6 +242,9 @@ export interface GameState {
   /** transient UI: feedback on board, mc/input answer state */
   wrongHex: number | null;
   wrongAnswerVisible: boolean;
+  /** name of a watching friend who just answered the open question correctly,
+   *  so the active player can choose to reveal that answer (the solution) */
+  helperSolvedBy: string | null;
   mcWrong: number | null;
   mcCorrect: number | null;
   inputWrong: boolean;

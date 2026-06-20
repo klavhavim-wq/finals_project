@@ -235,6 +235,10 @@ export interface Dict {
   /** side-bar helper-friend feature */
   helperTitle: string;
   helperWaiting: string;
+  /** shown to the active player after a friend answers correctly */
+  helperSolvedNote: (name: string) => string;
+  helperRevealBtn: string;
+  helperAnswerReveal: (ans: number) => string;
   /** mobile bank drawer button */
   bankBtnLabel: string;
 

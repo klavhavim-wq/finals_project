@@ -610,6 +610,7 @@ export function initState(locale: Locale): GameState {
     turnHasTen: false,
     wrongHex: null,
     wrongAnswerVisible: false,
+    helperSolvedBy: null,
     mcWrong: null,
     mcCorrect: null,
     inputWrong: false,
@@ -715,6 +716,7 @@ function startNewTurnState(s: GameState, card: TargetCard, resetUsed: boolean): 
     inputWrong: false,
     wrongHex: null,
     wrongAnswerVisible: false,
+    helperSolvedBy: null,
     diceSpin: false,
     timerRunning: false,
     modal: null,
@@ -863,6 +865,7 @@ export function reducer(state: GameState, action: Action): GameState {
         turnPts: 0,
         turnFoods: {},
         boardAns: false,
+        helperSolvedBy: null,
         timerSecs: total,
         timerTotal: total,
         timerRunning: state.settings.timer,
@@ -891,6 +894,7 @@ export function reducer(state: GameState, action: Action): GameState {
         choices: action.choices,
         diceSpin: true,
         wrongAnswerVisible: false,
+        helperSolvedBy: null,
         mcWrong: null,
         mcCorrect: null,
         inputWrong: false,
@@ -1006,13 +1010,14 @@ export function reducer(state: GameState, action: Action): GameState {
     }
 
     case "SPECTATOR_BONUS": {
+      const helperSolvedBy = state.players[action.playerIdx]?.name ?? null;
       if (state.settings.coop) {
-        return { ...state, sharedTokens: state.sharedTokens + 1 };
+        return { ...state, sharedTokens: state.sharedTokens + 1, helperSolvedBy };
       }
       const players = state.players.map((p, i) =>
         i === action.playerIdx ? { ...p, tokens: p.tokens + 1 } : p
       );
-      return { ...state, players };
+      return { ...state, players, helperSolvedBy };
     }
 
     case "OPEN_MODAL":
@@ -1090,6 +1095,7 @@ export function reducer(state: GameState, action: Action): GameState {
         inputWrong: false,
         wrongHex: null,
         wrongAnswerVisible: false,
+        helperSolvedBy: null,
         timerSecs: total,
         timerTotal: total,
         timerRunning: action.timerOn,
@@ -1118,6 +1124,7 @@ function markCorrect(state: GameState): GameState {
     players,
     mcCorrect: state.pendingRoll.correct,
     wrongAnswerVisible: false,
+    helperSolvedBy: null,
     mcWrong: null,
     inputWrong: false,
     wrongHex: null,
@@ -1137,6 +1144,7 @@ function commitStep(state: GameState): GameState {
     inputWrong: false,
     diceSpin: false,
     wrongAnswerVisible: false,
+    helperSolvedBy: null,
   };
   if (movedHex === state.targetHex || stepIdx >= state.path.length) {
     const hex = state.targetHex!;

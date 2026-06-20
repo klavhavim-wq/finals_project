@@ -619,6 +619,9 @@ export const he: Dict = {
   progDogAt: (hex) => `🐕 משושה ${hex}`,
   helperTitle: "🙋 חברים עוזרים",
   helperWaiting: "כשהשחקן הפעיל יקבל תרגיל — תוכלו לעזור ולהרוויח גרגיר!",
+  helperSolvedNote: (name) => `🙋 ${name} פתר/ה נכון! אפשר לחשוף את התשובה.`,
+  helperRevealBtn: "👁 חשפו את התשובה של החבר",
+  helperAnswerReveal: (ans) => `💡 התשובה של החבר: ${ans}`,
   bankBtnLabel: "🏦 הבנק",
 
   helpCardBtn: "לוח כפל",

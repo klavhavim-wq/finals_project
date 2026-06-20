@@ -609,6 +609,9 @@ export const en: Dict = {
   progDogAt: (hex) => `🐕 hex ${hex}`,
   helperTitle: "🙋 Friends help",
   helperWaiting: "When the active player gets an exercise — you can help and earn a pellet!",
+  helperSolvedNote: (name) => `🙋 ${name} got it right! You can reveal the answer.`,
+  helperRevealBtn: "👁 Reveal the friend's answer",
+  helperAnswerReveal: (ans) => `💡 Friend's answer: ${ans}`,
   bankBtnLabel: "🏦 The Bank",
 
   helpCardBtn: "Times Table",

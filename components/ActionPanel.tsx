@@ -163,6 +163,7 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
   const step = state.stepIdx;
   const col = state.pathDoors[step];
   const [hintVisible, setHintVisible] = useState(false);
+  const [helperReveal, setHelperReveal] = useState(false);
 
   if (!col) return null;
   const dc = DC[col];
@@ -214,6 +215,19 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
             </div>
           ) : (
             <AnswerInput t={t} wrong={state.inputWrong} onSubmit={actions.inputAnswer} />
+          )}
+
+          {state.helperSolvedBy && !state.mcCorrect && (
+            helperReveal ? (
+              <div className="hintbox">{t.helperAnswerReveal(state.pendingRoll.correct)}</div>
+            ) : (
+              <div className="helper-solved">
+                <div className="helper-solved-note">{t.helperSolvedNote(state.helperSolvedBy)}</div>
+                <button className="abt abp" onClick={() => setHelperReveal(true)}>
+                  {t.helperRevealBtn}
+                </button>
+              </div>
+            )
           )}
 
           {(hintVisible || state.wrongAnswerVisible) ? (
