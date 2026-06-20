@@ -221,14 +221,14 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   border:2px solid #FDE68A;padding:9px 13px}
 .phasedock-title{font-weight:800;color:#92400E;font-size:.92rem;margin-bottom:7px;
   display:flex;align-items:center;gap:5px}
-/* find: a slim row — the target card inline with its action buttons */
+/* find: a slim row — the target card (label / exercise / hint each on its own
+   line) sits beside its action buttons */
 .pd-find .phasedock-body > div{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 12px}
 .pd-find .aphint{display:none}
-.pd-find .tcard{flex:0 1 auto;min-width:200px;max-width:480px;margin:0;padding:8px 18px;
-  display:flex;align-items:center;justify-content:center;gap:3px 13px;flex-wrap:wrap}
-.pd-find .tclbl{margin:0;font-size:.74rem;opacity:.85}
-.pd-find .tcex{font-size:1.45rem;margin:0}
-.pd-find .tcinst{font-size:.78rem;opacity:.9}
+.pd-find .tcard{flex:0 1 auto;min-width:200px;max-width:480px;margin:0;padding:7px 18px}
+.pd-find .tclbl{margin:0 0 2px;font-size:.74rem;opacity:.9}
+.pd-find .tcex{font-size:1.5rem;margin:2px 0}
+.pd-find .tcinst{font-size:.8rem;opacity:.92}
 .pd-find .abt{width:auto;flex:0 0 auto;margin:0}
 .pd-find .hintbox,.pd-find .wrongbox{flex:1 1 100%;margin:0}
 .pd-find .phasedock-body > div > div:last-child{flex:1 1 100%;border:none;padding:0;margin:2px 0 0;text-align:center}
