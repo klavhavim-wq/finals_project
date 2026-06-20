@@ -194,12 +194,21 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 @keyframes tpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 .ghbtn{background:none;border:2px solid #e5e7eb;border-radius:18px;padding:5px 12px;font-size:.82rem;cursor:pointer;font-weight:600;color:#6b7280;transition:all .15s}
 .ghbtn:hover{border-color:#d97706;color:#d97706}
-/* The 🏦 button opens the side panel (bank, route detail, helper) on a phone.
-   Make it a filled amber button so it stands out from the plain outline buttons
-   and is easy for a child to spot and tap. */
-.ghbank{background:linear-gradient(135deg,#F59E0B,#D97706);border-color:#D97706;color:white;
-  font-size:.85rem;font-weight:800;padding:6px 13px;box-shadow:0 2px 9px rgba(245,158,11,.45)}
-.ghbank:hover{background:linear-gradient(135deg,#FBBF24,#D97706);border-color:#B45309;color:white}
+/* Mobile: a bold tab on the screen edge that opens the side panel (bank, route,
+   helper). It lives on the edge — not in the top bar — so it's easy to spot and
+   reach with a thumb. A gentle pulse draws the eye to it. */
+.bank-tab{position:fixed;inset-inline-end:0;top:50%;z-index:160;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  background:linear-gradient(160deg,#FBBF24,#D97706);color:white;
+  font-family:inherit;font-weight:800;font-size:.72rem;letter-spacing:.4px;
+  border:none;border-radius:16px 0 0 16px;padding:11px 7px 11px 9px;
+  box-shadow:-3px 3px 14px rgba(180,83,9,.45);cursor:pointer;
+  animation:bankTabPulse 2.4s ease-in-out infinite}
+.bank-tab-ico{font-size:1.55rem;line-height:1}
+.bank-tab-lbl{line-height:1}
+[dir="rtl"] .bank-tab{border-radius:0 16px 16px 0;box-shadow:3px 3px 14px rgba(180,83,9,.45)}
+@keyframes bankTabPulse{0%,100%{transform:translateY(-50%) scale(1)}50%{transform:translateY(-50%) scale(1.06)}}
+@media(prefers-reduced-motion:reduce){.bank-tab{animation:none;transform:translateY(-50%)}}
 
 .gbody{display:flex;gap:9px;padding:9px;flex:1;overflow:hidden;min-height:0}
 @media(max-width:820px){

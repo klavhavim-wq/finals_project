@@ -241,6 +241,8 @@ export interface Dict {
   helperAnswerReveal: (ans: number) => string;
   /** mobile bank drawer button */
   bankBtnLabel: string;
+  /** short label for the mobile side-edge bank tab */
+  bankTab: string;
 
   // Help card
   helpCardBtn: string;
