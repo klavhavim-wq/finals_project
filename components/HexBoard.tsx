@@ -30,10 +30,11 @@ function fillFor(state: GameState, n: number): string {
   const pathIdx = state.path.indexOf(n);
   if (pathIdx !== -1) {
     // Each hex on the route is painted in the colour of the door used to reach
-    // it, so the planned/walked path reads straight off the board. Walked steps
-    // are a touch stronger than the ones still ahead.
+    // it, so the planned/walked path reads straight off the board. The fill is
+    // kept clearly saturated (the board itself is neutral) so the chosen route
+    // stands out at a glance; walked steps are a touch stronger than those ahead.
     const doorColor = DC[state.pathDoors[pathIdx]]?.color ?? "#9CA3AF";
-    return tint(doorColor, pathIdx < state.stepIdx ? 0.5 : 0.3);
+    return tint(doorColor, pathIdx < state.stepIdx ? 0.62 : 0.4);
   }
   if (state.targetHex === n) return SFILL.target;
   return hexBaseFill(n);

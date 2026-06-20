@@ -221,12 +221,18 @@ export const SPECIAL_POOLS = {
 } as const;
 
 /** Hex fill states. */
+// Board base fills are deliberately kept in a calm, low-saturation warm-neutral
+// family (parchment / sand / stone). They must NOT borrow the door hues
+// (blue / purple / amber / red), because the planned route paints its hexes in
+// those very door colours — sharing the hue made the route blend into the board.
+// The special-tile type is still carried by its emoji symbol; the fill only adds
+// a faint warm/cool nudge so the route's saturated colour clearly stands apart.
 export const SFILL = {
-  normal: "#FFF8E7",
-  bonus: "#FFFBEB",
-  limit: "#FEF2F2",
-  rob: "#FCE7F3",
-  twist: "#F5F3FF",
+  normal: "#FCF6E9", // warm parchment — ordinary hex
+  bonus: "#F7EFD6", // faint sand/gold — 💎 bonus tile
+  limit: "#ECEAE3", // light warm stone — 🚧 limit tile
+  rob: "#F1E8DF", // soft taupe — 🦹 robber tile
+  twist: "#E9E7EC", // faint cool grey — 🎲 twist tile (primes)
   target: "#FEF08A",
   path: "#A5F3FC",
   done: "#D1FAE5",
