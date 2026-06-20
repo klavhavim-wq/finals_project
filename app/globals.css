@@ -46,14 +46,25 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .btnout:hover{border-color:var(--ye);background:#FFFBEB}
 
 /* ── INSTRUCTIONS (overlay) ── */
-.inst-overlay{position:fixed;inset:0;z-index:210;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(30,27,75,.5);overflow-y:auto;animation:mIn .2s ease}
-.ibox{position:relative;background:white;border-radius:22px;padding:28px 28px 20px;max-width:520px;width:100%;box-shadow:0 18px 55px rgba(0,0,0,.3);text-align:center}
-.iicon{font-size:68px;margin-bottom:10px}
+.inst-overlay{position:fixed;inset:0;z-index:210;display:flex;align-items:flex-start;justify-content:center;padding:12px;background:rgba(30,27,75,.5);overflow-y:auto;animation:mIn .2s ease}
+/* Centre the box when it fits; if the screen is too short, the overlay scrolls
+   (align-items:flex-start + margin:auto pins the box to the top once it's taller
+   than the screen, so you can always scroll down to the nav — nothing hidden). */
+.ibox{position:relative;margin:auto;background:white;border-radius:22px;padding:24px 26px 16px;max-width:520px;width:100%;box-shadow:0 18px 55px rgba(0,0,0,.3);text-align:center}
+.iicon{font-size:60px;margin-bottom:8px}
 .ititl{font-size:1.5rem;font-weight:800;color:#1e1b4b;margin-bottom:8px}
-.itext{font-size:1rem;color:#374151;line-height:1.7;margin-bottom:18px}
+.itext{font-size:1rem;color:#374151;line-height:1.7;margin-bottom:14px}
 .itext svg{display:block;margin:0 auto}
 .itext [dir="ltr"]{unicode-bidi:bidi-override}
-.inav{display:flex;gap:10px;justify-content:center;align-items:center}
+.inav{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.inav > button{flex:0 0 auto;white-space:nowrap;order:1}
+#idots{order:2;flex:1 0 100%;flex-wrap:wrap;justify-content:center;margin-top:2px}
+/* Short screens: shrink the chrome so more pages fit with no scroll at all */
+@media(max-height:600px){
+  .iicon{font-size:40px;margin-bottom:4px}
+  .ititl{font-size:1.25rem;margin-bottom:5px}
+  .ibox{padding:16px 20px 12px}
+}
 .idot{width:9px;height:9px;border-radius:50%;background:#d1d5db;cursor:pointer;transition:all .2s}
 .idot.on{background:var(--pu);transform:scale(1.3)}
 .ibtn{background:var(--pu);color:white;border:none;border-radius:18px;padding:9px 22px;font-size:.95rem;font-weight:700;cursor:pointer}
@@ -68,7 +79,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 @keyframes tourGlow{0%,100%{box-shadow:0 0 0 4px #FDE68A,0 0 0 9999px rgba(15,23,42,.62),0 0 26px 8px rgba(253,224,138,.55)}
   50%{box-shadow:0 0 0 5px #FBBF24,0 0 0 9999px rgba(15,23,42,.62),0 0 34px 12px rgba(251,191,36,.8)}}
 .tour-card{position:fixed;background:white;border-radius:20px;padding:16px 20px 12px;
-  width:min(340px, calc(100vw - 28px));max-height:72vh;overflow-y:auto;
+  width:min(340px, calc(100vw - 28px));max-height:calc(100dvh - 24px);overflow:hidden auto;
   box-shadow:0 18px 55px rgba(0,0,0,.35);text-align:center;animation:popIn .25s ease}
 .tour-close{position:absolute;top:8px;inset-inline-end:10px;background:none;border:none;
   font-size:1.05rem;color:#9ca3af;cursor:pointer;line-height:1}
@@ -76,7 +87,11 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .tour-titl{font-size:1.14rem;font-weight:800;color:#1e1b4b;margin-bottom:6px}
 .tour-text{font-size:.9rem;color:#374151;line-height:1.55;margin-bottom:12px}
 .tour-text [dir="ltr"]{unicode-bidi:bidi-override}
-.tour-nav{display:flex;gap:10px;justify-content:space-between;align-items:center}
+.tour-nav{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+/* buttons stay whole on the top row; the progress dots drop to their own
+   full-width row below, so the nav never overflows the card sideways */
+.tour-nav > button{flex:0 0 auto;white-space:nowrap;order:1}
+.tour-nav > div{order:2;flex:1 0 100%;flex-wrap:wrap;justify-content:center;margin-top:4px}
 .demo-cta{background:linear-gradient(135deg,#8B5CF6,#EC4899)}
 .tour-card{pointer-events:auto}
 .tour-try{display:flex;flex-direction:column;align-items:center;gap:4px;margin:0 0 12px;
