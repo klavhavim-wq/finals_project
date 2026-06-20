@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import HexBoard from "../HexBoard";
 import PlayerCards from "../PlayerCards";
+import StepPrize from "../StepPrize";
+import SidebarRoute from "../SidebarRoute";
 import SidebarHelper from "../SidebarHelper";
 import ActionPanel from "../ActionPanel";
 import LanguageSwitch from "../LanguageSwitch";
@@ -13,17 +15,6 @@ import type { Dict } from "@/lib/i18n";
 function fmtTime(s: number): string {
   return "⏱ " + Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60);
 }
-
-/** Keep a dragged window inside the viewport (at least ~120px always reachable). */
-function clamp(x: number, y: number, w: number): { x: number; y: number } {
-  if (typeof window === "undefined") return { x, y };
-  const maxX = window.innerWidth - 120;
-  const minX = -(w - 120);
-  const maxY = window.innerHeight - 80;
-  return { x: Math.min(maxX, Math.max(minX, x)), y: Math.min(maxY, Math.max(0, y)) };
-}
-
-const WIN_W = 320;
 
 export default function GameScreen({
   t,
@@ -88,34 +79,11 @@ export default function GameScreen({
   // Close the mobile drawer whenever the stage changes.
   useEffect(() => { setBankOpen(false); }, [state.phase]);
 
-  // ── Phase-1 draggable window ──
-  const [winPos, setWinPos] = useState<{ x: number; y: number } | null>(null);
-  const drag = useRef({ active: false, ox: 0, oy: 0 });
-  // Reset the find window to a sensible spot at the start of each find stage.
-  useEffect(() => {
-    if (state.phase === 1) {
-      const x = typeof window !== "undefined" ? Math.max(12, (window.innerWidth - WIN_W) / 2) : 40;
-      setWinPos(clamp(x, 74, WIN_W));
-    } else {
-      setWinPos(null);
-    }
-  }, [state.phase, state.card?.id]);
-
-  const onDragDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!winPos) return;
-    drag.current = { active: true, ox: e.clientX - winPos.x, oy: e.clientY - winPos.y };
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
-  const onDragMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!drag.current.active) return;
-    setWinPos(clamp(e.clientX - drag.current.ox, e.clientY - drag.current.oy, WIN_W));
-  };
-  const onDragUp = () => { drag.current.active = false; };
-
-  const winTitle =
-    state.phase === 1 ? t.winFindTitle :
-    state.phase === 2 ? t.winRouteTitle :
-    state.phase === 3 ? t.winWalkTitle : "";
+  // Find (1) and route (2) stages dock a fixed bar above the board so it never
+  // covers the hexes. The walk stage (3) — where you don't tap the board —
+  // shows a centered window over it.
+  const docked = state.phase === 1 || state.phase === 2;
+  const dockTitle = state.phase === 1 ? t.winFindTitle : t.winRouteTitle;
 
   return (
     <div id="sg" className="screen active board-canvas">
@@ -148,45 +116,48 @@ export default function GameScreen({
       </div>
 
       <div className="gstage">
-        <div
-          ref={scrollRef}
-          className="hivewrap"
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={endPan}
-          onPointerLeave={endPan}
-        >
-          <HexBoard state={state} onHexClick={guardedHexClick} portrait={!isDesktop} />
+        <div className="gstage-main">
+          {/* Fixed bar above the board for the find & route stages */}
+          {docked && (
+            <div className={"phasedock " + (state.phase === 1 ? "pd-find" : "pd-route")}>
+              <div className="phasedock-title">{dockTitle}</div>
+              <div className="phasedock-body">
+                <ActionPanel t={t} state={state} actions={actions} />
+              </div>
+            </div>
+          )}
+
+          <div
+            ref={scrollRef}
+            className="hivewrap"
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={endPan}
+            onPointerLeave={endPan}
+          >
+            <HexBoard state={state} onHexClick={guardedHexClick} portrait={!isDesktop} />
+          </div>
         </div>
 
-        {/* Side bar: bank + helper. Fixed on desktop, a slide-in drawer on mobile. */}
+        {/* Side bar: bank + door legend + route detail + helper.
+            Fixed column on desktop, a slide-in drawer on mobile. */}
         {!isDesktop && bankOpen && <div className="drawer-backdrop" onClick={() => setBankOpen(false)} />}
         <aside className={"gsidebar" + (!isDesktop ? " drawer" : "") + (bankOpen ? " open" : "")}>
           {!isDesktop && (
             <button className="drawer-close" onClick={() => setBankOpen(false)} aria-label={t.close}>✕</button>
           )}
           <PlayerCards t={t} state={state} />
+          <StepPrize t={t} state={state} />
+          <SidebarRoute t={t} state={state} />
           <SidebarHelper t={t} state={state} actions={actions} />
         </aside>
       </div>
 
-      {/* Per-stage floating window over the board */}
-      {state.phase >= 1 && state.phase <= 3 && (
-        <div
-          className={
-            "phasewin " +
-            (state.phase === 1 ? "pw-find" : state.phase === 2 ? "pw-route" : "pw-walk")
-          }
-          style={state.phase === 1 && winPos ? { left: winPos.x, top: winPos.y } : undefined}
-        >
-          <div
-            className="phasewin-head"
-            onPointerDown={state.phase === 1 ? onDragDown : undefined}
-            onPointerMove={state.phase === 1 ? onDragMove : undefined}
-            onPointerUp={state.phase === 1 ? onDragUp : undefined}
-          >
-            <span className="phasewin-title">{winTitle}</span>
-            {state.phase === 1 && <span className="phasewin-grip">⠿</span>}
+      {/* Walk stage: centered window over the board (no board answering here) */}
+      {state.phase === 3 && (
+        <div className="phasewin pw-walk">
+          <div className="phasewin-head">
+            <span className="phasewin-title">{t.winWalkTitle}</span>
           </div>
           <div className="phasewin-body">
             <ActionPanel t={t} state={state} actions={actions} />

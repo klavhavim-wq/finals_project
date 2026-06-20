@@ -9,7 +9,7 @@ import type { GameActions } from "./useGame";
 /** Which on-screen element each tour step spotlights. */
 const SELECTORS: Record<TourTarget, string | null> = {
   board: ".hivewrap",
-  panel: ".phasewin",
+  panel: ".phasewin, .phasedock",
   sidebar: ".sq-bank",
   doors: ".hivewrap",
   header: ".ghdr",

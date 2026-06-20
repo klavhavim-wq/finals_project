@@ -211,12 +211,42 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .sq-command{flex:1;min-height:0;display:flex;flex-direction:column}
 .sq-command-body{flex:1;min-height:0;overflow-y:auto}
 
-/* ── BOARD-CANVAS LAYOUT (board behind, per-stage floating windows over it) ── */
+/* ── BOARD-CANVAS LAYOUT (board + a docked bar above it on find/route) ── */
 .gstage{display:flex;flex:1;min-height:0;gap:9px;padding:9px;overflow:hidden;position:relative}
-.gstage .hivewrap{flex:1}
+.gstage-main{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;gap:9px}
+.gstage-main .hivewrap{flex:1;min-height:0}
+
+/* docked bar that sits in a clear row above the board (find & route stages) */
+.phasedock{flex:none;background:white;border-radius:14px;box-shadow:var(--shadow);
+  border:2px solid #FDE68A;padding:9px 13px}
+.phasedock-title{font-weight:800;color:#92400E;font-size:.92rem;margin-bottom:7px;
+  display:flex;align-items:center;gap:5px}
+/* find: a slim row — the target card inline with its action buttons */
+.pd-find .phasedock-body > div{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 12px}
+.pd-find .aphint{display:none}
+.pd-find .tcard{flex:0 1 auto;min-width:200px;max-width:480px;margin:0;padding:8px 18px;
+  display:flex;align-items:center;justify-content:center;gap:3px 13px;flex-wrap:wrap}
+.pd-find .tclbl{margin:0;font-size:.74rem;opacity:.85}
+.pd-find .tcex{font-size:1.45rem;margin:0}
+.pd-find .tcinst{font-size:.78rem;opacity:.9}
+.pd-find .abt{width:auto;flex:0 0 auto;margin:0}
+.pd-find .hintbox,.pd-find .wrongbox{flex:1 1 100%;margin:0}
+.pd-find .phasedock-body > div > div:last-child{flex:1 1 100%;border:none;padding:0;margin:2px 0 0;text-align:center}
+/* route: one clear horizontal row — guidance on top, controls beneath */
+.pd-route .phasedock-body > div{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.pd-route .aphint{flex:1 1 100%;margin-bottom:2px}
+.pd-route .wrongbox,.pd-route .phasedock-body p{flex:1 1 100%;margin:0}
+.pd-route .abt{width:auto;flex:1 1 150px;margin-bottom:0}
+
+/* route detail card in the side bar */
+.sq-route .pathlist{max-height:220px;margin:0 0 6px}
+.sq-route .rsum-big{margin:0}
+.route-empty{font-size:.85rem;color:#9ca3af;padding:8px 4px;text-align:center;line-height:1.4}
+
 @media(max-width:820px){
   #sg.board-canvas{height:100dvh;min-height:0;overflow:hidden}
   .board-canvas .gstage{padding:6px;gap:0}
+  .board-canvas .gstage-main{gap:6px}
   .board-canvas .hivewrap{flex:1;height:auto;min-height:0;overflow:auto;align-items:center;justify-content:flex-start}
 }
 
@@ -239,17 +269,9 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .phasewin-title{flex:1}
 .phasewin-grip{font-size:1.2rem;opacity:.45;color:#B45309;letter-spacing:-1px}
 .phasewin-body{padding:12px 14px;overflow-y:auto}
-/* find: draggable card, board stays usable below */
-.pw-find{width:320px;max-width:calc(100vw - 24px);left:12px;top:84px}
-.pw-find .phasewin-head{cursor:grab}
-.pw-find .phasewin-head:active{cursor:grabbing}
-/* route: docked at the bottom, board visible & tappable above */
-.pw-route{left:50%;transform:translateX(-50%);bottom:14px;width:344px;max-width:calc(100vw - 20px)}
 /* walk: centered, covers the board (no board answering here) */
 .pw-walk{left:50%;top:50%;transform:translate(-50%,-50%);width:384px;max-width:calc(100vw - 20px)}
 @media(max-width:820px){
-  .pw-find{width:min(94vw,340px)}
-  .pw-route{bottom:8px;width:calc(100vw - 14px)}
   .pw-walk{width:calc(100vw - 14px);max-height:82vh}
 }
 
