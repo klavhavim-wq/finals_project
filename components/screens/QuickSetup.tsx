@@ -45,6 +45,7 @@ export default function QuickSetup({
       errors: 0,
       errorLog: [],
       solvedCount: 0,
+      foods: {},
     }));
     actions.startGame(players, level, settings);
   };
@@ -83,7 +84,6 @@ export default function QuickSetup({
                   className={"qllvl" + (selected ? " on" : "")}
                   style={{
                     borderColor: color,
-                    borderWidth: selected ? "3.5px" : "2.5px",
                     background: "#fff",
                     color: LEVEL_TEXT_COLOR[lv],
                   }}
