@@ -24,6 +24,8 @@ export interface TourStep {
   target: TourTarget;
   /** live phase to show while this step is on screen (default "find") */
   stage?: TourStage;
+  /** if set, this step asks the player to really do the action (a hands-on taste) */
+  interact?: "find" | "answer";
 }
 
 export interface LabelDesc {
@@ -72,6 +74,10 @@ export interface Dict {
   demoHelperName: string;
   tourFinish: string;
   tourExit: string;
+  /** shown when the player completes a hands-on tour step */
+  tourSolved: string;
+  /** prompt prefix shown above the live exercise in a hands-on tour step */
+  tourYourTurn: string;
 
   // Setup
   setupTitle: string;

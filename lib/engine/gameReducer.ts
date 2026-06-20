@@ -608,6 +608,8 @@ export function initState(locale: Locale): GameState {
     awaitNewTurn: false,
     tourActive: false,
     tourStep: 0,
+    tourReturn: "ss",
+    tourInteract: null,
   };
 }
 
@@ -656,9 +658,10 @@ export type Action =
   | { type: "OPEN_PRIME_HEX"; hex: number }
   | { type: "FACTOR_SOLVED" }
   | { type: "FACTOR_SKIP" }
-  | { type: "TOUR_START" }
+  | { type: "TOUR_START"; origin: GameState["screen"] }
   | { type: "TOUR_SET"; step: number }
   | { type: "TOUR_END" }
+  | { type: "SET_TOUR_INTERACT"; mode: "find" | "answer" | null }
   | {
       type: "DEMO_STAGE";
       phase: Phase;
@@ -758,6 +761,11 @@ export function reducer(state: GameState, action: Action): GameState {
       const n = action.n;
       if (state.phase === 1) {
         if (state.card && n === state.card.ans) {
+          // During the guided tour the tour drives the flow — register the hit
+          // quietly (no "found" popup) so the tour can react and move on.
+          if (state.tourActive) {
+            return { ...state, targetHex: n, wrongHex: null, modal: null };
+          }
           return {
             ...state,
             targetHex: n,
@@ -1024,14 +1032,18 @@ export function reducer(state: GameState, action: Action): GameState {
     }
 
     case "TOUR_START":
-      return { ...state, tourActive: true, tourStep: 0 };
+      return { ...state, tourActive: true, tourStep: 0, tourInteract: null, tourReturn: action.origin };
 
     case "TOUR_SET":
       return { ...state, tourStep: action.step };
 
+    case "SET_TOUR_INTERACT":
+      return { ...state, tourInteract: action.mode };
+
     case "TOUR_END":
-      // Leave the sample game and return to this level's setup screen.
-      return { ...state, tourActive: false, tourStep: 0, modal: null, timerRunning: false, screen: "ss" };
+      // Leave the sample game and return to wherever the tour was launched from
+      // (the quick-launch screen or the setup screen).
+      return { ...state, tourActive: false, tourStep: 0, tourInteract: null, modal: null, timerRunning: false, screen: state.tourReturn };
 
     case "DEMO_STAGE": {
       // Drive the sample game into the phase a tour step is explaining, so the

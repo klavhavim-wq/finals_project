@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import RichText from "./RichText";
 import type { Dict, TourStage, TourTarget } from "@/lib/i18n";
 import type { GameState } from "@/lib/engine/types";
@@ -94,10 +94,16 @@ export default function GuidedTour({
   const step = steps[idx];
   const isLast = idx === steps.length - 1;
   const selector = SELECTORS[step.target];
+  const interact = step.interact ?? null;
 
   const [rect, setRect] = useState<Rect | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const [cardSize, setCardSize] = useState({ w: 340, h: 300 });
+  const [solved, setSolved] = useState(false);
+
+  // Live exercise the player should solve in a hands-on step.
+  const liveExpr =
+    interact === "find" ? state.card?.ex : interact === "answer" ? state.pendingRoll?.expr : null;
 
   // Measure the popup so it can be placed beside (not over) the highlighted area.
   useLayoutEffect(() => {
@@ -161,6 +167,42 @@ export default function GuidedTour({
     actions.tourSet(next);
   };
 
+  // Stable "advance one step" for the auto-advance timer (doesn't churn on render).
+  const idxRef = useRef(idx);
+  idxRef.current = idx;
+  const stepsRef = useRef(steps);
+  stepsRef.current = steps;
+  const { setTourInteract, demoStage, tourSet, tourEnd: endTour } = actions;
+  const advance = useCallback(() => {
+    const i = idxRef.current;
+    const st = stepsRef.current;
+    const next = i + 1;
+    if (next >= st.length) {
+      endTour();
+      return;
+    }
+    const stg = st[next]?.stage ?? STAGE_BY_ICON[st[next]?.i ?? ""] ?? "find";
+    demoStage(stg);
+    tourSet(next);
+  }, [demoStage, tourSet, endTour]);
+
+  // Tell the engine whether this step needs the player to really act, and reset
+  // the "solved" celebration when the step changes.
+  useEffect(() => {
+    setSolved(false);
+    setTourInteract(interact);
+  }, [idx, interact, setTourInteract]);
+
+  // Detect that the player completed the hands-on action, then move on.
+  useEffect(() => {
+    if (!interact) return;
+    const done = interact === "find" ? state.targetHex != null : state.mcCorrect != null;
+    if (!done) return;
+    setSolved(true);
+    const id = window.setTimeout(advance, 1400);
+    return () => window.clearTimeout(id);
+  }, [interact, state.targetHex, state.mcCorrect, advance]);
+
   const { tourEnd } = actions;
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -177,10 +219,14 @@ export default function GuidedTour({
 
   return (
     <div className="tour-layer">
-      {/* Blocks interaction with the live sample game behind the tour. */}
+      {/* Blocks interaction with the live sample game — except during a hands-on
+          step, where the player needs to click the real board/panel. */}
       <div
         className="tour-blocker"
-        style={{ background: rect ? "transparent" : "rgba(15,23,42,.6)" }}
+        style={{
+          background: rect ? "transparent" : "rgba(15,23,42,.6)",
+          pointerEvents: interact ? "none" : "auto",
+        }}
       />
 
       {rect && (
@@ -202,6 +248,17 @@ export default function GuidedTour({
         <div className="tour-ico">{step.i}</div>
         <div className="tour-titl">{step.t}</div>
         <RichText className="tour-text" html={step.x} />
+        {interact &&
+          (solved ? (
+            <div className="tour-try done">{t.tourSolved}</div>
+          ) : (
+            liveExpr && (
+              <div className="tour-try">
+                <span className="tour-try-lbl">{t.tourYourTurn}</span>
+                <span className="mathex tour-try-ex">{liveExpr} = ?</span>
+              </div>
+            )
+          ))}
         <div className="tour-nav">
           <button
             className="iback"

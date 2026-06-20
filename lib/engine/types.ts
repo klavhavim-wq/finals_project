@@ -260,4 +260,8 @@ export interface GameState {
   /** guided demo tour: overlay of step-by-step popups over a live sample game */
   tourActive: boolean;
   tourStep: number;
+  /** screen to return to when the tour ends (where it was launched from) */
+  tourReturn: Screen;
+  /** when set, the current tour step asks the player to really do this action */
+  tourInteract: "find" | "answer" | null;
 }

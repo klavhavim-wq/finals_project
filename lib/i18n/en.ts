@@ -307,6 +307,14 @@ export const en: Dict = {
         x: `Here you get an exercise (${mathByLevel[level]}).<br><br>Solve it and tap the hex with the answer on the board. 🔢<br><br>Need help? There's a <strong>💜 Hint</strong> button, you can <strong>Show the answer</strong>, and there's a <strong>times-table</strong> helper too.`,
       },
       {
+        i: "🖐️",
+        t: "Your turn — find it!",
+        target: "board",
+        stage: "find",
+        interact: "find",
+        x: "Let's try for real! Solve the exercise below and tap the hex with the answer on the board. 👆<br><br>Not sure? Just tap «Next» to keep going.",
+      },
+      {
         i: "🚪",
         t: oneDoor ? "The door you cross" : "The colored doors",
         target: "doors",
@@ -337,6 +345,14 @@ export const en: Dict = {
         t: "Step 3 — Set off!",
         target: "panel",
         x: `Now you walk, and the clock starts ticking ⏱.<br><br>At each step you solve the door's exercise — ${answerStyle} Correct? You move forward and collect pellets! 🦴<br><br>Mistake? Try again or ask for a hint 💡. You can also give up — you lose the turn but keep what you already collected.`,
+      },
+      {
+        i: "🖐️",
+        t: "Your turn — open a door!",
+        target: "panel",
+        stage: "walk",
+        interact: "answer",
+        x: "Now solve the door's exercise and choose the answer. 🦴<br><br>Not sure? Just tap «Next» to keep going.",
       },
       {
         i: "🙋",
@@ -371,6 +387,8 @@ export const en: Dict = {
   demoHelperName: "🐩 Friend",
   tourFinish: "🎮 Let's play!",
   tourExit: "Skip the tour",
+  tourSolved: "✅ Nice! You got it 🎉",
+  tourYourTurn: "👉 Your turn — solve it:",
 
   setupTitle: "⚙️ Game Settings",
   howManyPlayers: "👥 How many players?",

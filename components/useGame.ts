@@ -253,6 +253,8 @@ export function useGame(locale: Locale) {
   // Guided demo: spin up a gentle single-player sample game, then open the tour overlay.
   const startDemo = useCallback(
     (level: Level) => {
+      // Remember where we came from so the tour returns there when it ends.
+      const origin = stateRef.current.screen;
       const dict = getDict(locale);
       // Two players so the "help on another's turn" feature is actually visible.
       const mk = (name: string, color: string): Player => ({
@@ -279,12 +281,16 @@ export function useGame(locale: Locale) {
         review: false,
       };
       dispatch({ type: "START_GAME", players, level, settings });
-      dispatch({ type: "TOUR_START" });
+      dispatch({ type: "TOUR_START", origin });
     },
     [locale]
   );
   const tourSet = useCallback((step: number) => dispatch({ type: "TOUR_SET", step }), []);
   const tourEnd = useCallback(() => dispatch({ type: "TOUR_END" }), []);
+  const setTourInteract = useCallback(
+    (mode: "find" | "answer" | null) => dispatch({ type: "SET_TOUR_INTERACT", mode }),
+    []
+  );
 
   // Move the live sample game into the phase a tour step is explaining, so the
   // real board, route, panel, and clock reflect that stage as you read about it.
@@ -353,7 +359,8 @@ export function useGame(locale: Locale) {
       setTimeout(() => dispatch({ type: "CLEAR_WRONG_HEX" }), 500);
     } else if (s.phase === 3 && s.boardAns && s.pendingRoll) {
       if (n === s.pendingRoll.correct) {
-        setTimeout(() => dispatch({ type: "COMMIT_STEP" }), 420);
+        // During the guided tour the tour drives the flow — don't auto-advance.
+        if (!s.tourActive) setTimeout(() => dispatch({ type: "COMMIT_STEP" }), 420);
       } else {
         setTimeout(() => dispatch({ type: "CLEAR_WRONG_HEX" }), 520);
       }
@@ -399,7 +406,7 @@ export function useGame(locale: Locale) {
     recordTrial(chosen, chosen === correct, "mc");
     dispatch({ type: "MC_ANSWER", chosen });
     if (chosen === correct) {
-      setTimeout(() => dispatch({ type: "COMMIT_STEP" }), 420);
+      if (!s.tourActive) setTimeout(() => dispatch({ type: "COMMIT_STEP" }), 420);
     } else {
       setTimeout(() => dispatch({ type: "CLEAR_ANSWER_FLASH" }), 420);
     }
@@ -411,7 +418,7 @@ export function useGame(locale: Locale) {
     recordTrial(value, value === correct, "typed");
     dispatch({ type: "INPUT_ANSWER", value });
     if (value === correct) {
-      setTimeout(() => dispatch({ type: "COMMIT_STEP" }), 420);
+      if (!s.tourActive) setTimeout(() => dispatch({ type: "COMMIT_STEP" }), 420);
     } else {
       setTimeout(() => dispatch({ type: "CLEAR_ANSWER_FLASH" }), 520);
     }
@@ -482,6 +489,7 @@ export function useGame(locale: Locale) {
       startDemo,
       tourSet,
       tourEnd,
+      setTourInteract,
       demoStage,
       startP1,
       hexClick,
