@@ -85,6 +85,19 @@ export default function GameScreen({
   const docked = state.phase === 1 || state.phase === 2;
   const dockTitle = state.phase === 1 ? t.winFindTitle : t.winRouteTitle;
 
+  // On a wide screen the in-turn controls live as a card at the top of the side
+  // column, so the board itself gets the full height of the stage (much bigger
+  // hexes, no wasted side margins). On mobile they stay as a thin bar docked
+  // above the board.
+  const dockNode = docked ? (
+    <div className={"phasedock " + (isDesktop ? "pd-side" : state.phase === 1 ? "pd-find" : "pd-route")}>
+      <div className="phasedock-title">{dockTitle}</div>
+      <div className="phasedock-body">
+        <ActionPanel t={t} state={state} actions={actions} />
+      </div>
+    </div>
+  ) : null;
+
   return (
     <div id="sg" className="screen active board-canvas">
       <div className="ghdr">
@@ -117,15 +130,8 @@ export default function GameScreen({
 
       <div className="gstage">
         <div className="gstage-main">
-          {/* Fixed bar above the board for the find & route stages */}
-          {docked && (
-            <div className={"phasedock " + (state.phase === 1 ? "pd-find" : "pd-route")}>
-              <div className="phasedock-title">{dockTitle}</div>
-              <div className="phasedock-body">
-                <ActionPanel t={t} state={state} actions={actions} />
-              </div>
-            </div>
-          )}
+          {/* Mobile: a thin bar docked above the board (find & route stages) */}
+          {!isDesktop && dockNode}
 
           <div
             ref={scrollRef}
@@ -146,6 +152,8 @@ export default function GameScreen({
           {!isDesktop && (
             <button className="drawer-close" onClick={() => setBankOpen(false)} aria-label={t.close}>✕</button>
           )}
+          {/* Desktop: the in-turn controls sit at the top of the side column */}
+          {isDesktop && dockNode}
           <PlayerCards t={t} state={state} />
           <StepPrize t={t} state={state} />
           <SidebarRoute t={t} state={state} />

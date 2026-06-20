@@ -257,6 +257,15 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .pd-route .wrongbox,.pd-route .phasedock-body p{flex:1 1 100%;margin:0}
 .pd-route .abt{width:auto;flex:1 1 130px;margin:0}
 
+/* pd-side: on a wide screen the in-turn controls become a card at the top of
+   the side column (the board takes the full height beside it). The controls use
+   their natural vertical stack — no horizontal-bar overrides apply here. */
+.pd-side{flex:none}
+.pd-side .tcard{margin:0 0 8px;padding:13px 14px}
+.pd-side .tcex{font-size:1.7rem;margin:6px 0}
+.pd-side .aphint{margin-bottom:8px}
+.pd-side .abt:last-child{margin-bottom:0}
+
 /* route detail card in the side bar */
 .sq-route .pathlist{max-height:260px;margin:0}
 .route-empty{font-size:.85rem;color:#9ca3af;padding:8px 4px;text-align:center;line-height:1.4}
