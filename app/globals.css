@@ -262,7 +262,11 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   #sg.board-canvas{height:100dvh;min-height:0;overflow:hidden}
   .board-canvas .gstage{padding:6px;gap:0}
   .board-canvas .gstage-main{gap:6px}
-  .board-canvas .hivewrap{flex:1;height:auto;min-height:0;overflow:auto;align-items:center;justify-content:flex-start}
+  .board-canvas .hivewrap{flex:1;height:auto;min-height:0;overflow:auto;align-items:safe center;justify-content:flex-start}
+  /* Mobile only: never let the 10-column board shrink below a comfortable tap
+     size. On wide-enough screens (tablets) it still fits to width; on narrow
+     phones it holds this minimum and the wrap pans instead. */
+  .board-canvas .hivewrap #hsvg{min-width:500px}
 }
 
 /* Side bar: fixed column on desktop; a slide-in drawer on mobile */
