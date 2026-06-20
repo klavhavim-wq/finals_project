@@ -291,7 +291,9 @@ export const PRESETS: Record<PresetId, Settings> = {
   // Calm & together — cooperative, gentle, low-distraction.
   calm: { timer: false, mc: true, rob: false, winMode: "rounds", coop: true, freePlay: false, focus: true, review: true },
   // Full game — the complete, rich experience with every mechanic on.
+  // Win is decided by who collected the most after 4 rounds (no race-to-100
+  // shortcut), so skilled players still play the full game at every level.
   // Choice buttons stay on for Beginner/Intermediate (consistent with the other
   // presets and the regular setup); higher levels are typed-only via sanitisation.
-  full: { timer: true, mc: true, rob: true, winMode: "both", coop: false, freePlay: false, focus: false, review: true },
+  full: { timer: true, mc: true, rob: true, winMode: "rounds", coop: false, freePlay: false, focus: false, review: true },
 };
