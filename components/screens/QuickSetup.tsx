@@ -84,7 +84,7 @@ export default function QuickSetup({
                   className={"qllvl" + (selected ? " on" : "")}
                   style={{
                     borderColor: color,
-                    background: "#fff",
+                    background: selected ? `${color}1A` : "#fff",
                     color: LEVEL_TEXT_COLOR[lv],
                   }}
                   onClick={() => setLevel(lv)}

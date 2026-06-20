@@ -140,7 +140,8 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   transition:transform .12s,box-shadow .12s}
 .qllvl .qli{font-size:1.4rem;line-height:1}
 .qllvl:hover{transform:translateY(-2px);box-shadow:0 5px 13px rgba(0,0,0,.13)}
-.qllvl.on{box-shadow:0 5px 15px rgba(0,0,0,.22)}
+.qllvl.on{transform:translateY(-3px) scale(1.04);box-shadow:0 8px 18px rgba(0,0,0,.22)}
+.qllvl.on:hover{transform:translateY(-4px) scale(1.04)}
 .qllvldesc{text-align:center;font-size:.82rem;color:#6b7280;margin-top:11px}
 .qlpreset{padding:14px 10px;border-radius:14px}
 .qlpreset .li{font-size:1.7rem;margin-bottom:5px}
