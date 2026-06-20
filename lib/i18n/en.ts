@@ -17,6 +17,11 @@ const DOOR_RANGES: Record<DoorKey, string> = {
   redlong: "11–19 × 2–9",
 };
 
+/** A worked calculation: its own line, bold and left-to-right. */
+function calc(s: string): string {
+  return `<span class="hint-calc">${s}</span>`;
+}
+
 function mulHintEn(a: number, b: number): string {
   if (a === 10 || b === 10) {
     const x = a === 10 ? b : a;
@@ -24,30 +29,30 @@ function mulHintEn(a: number, b: number): string {
   }
   if (a === 5 || b === 5) {
     const x = a === 5 ? b : a;
-    return `💜 Hint: ×5 = ×10 then halve — ${x} × 10 = <strong>${x * 10}</strong> ÷ 2 = ?`;
+    return `💜 Hint: ×5 = ×10, then halve` + calc(`${x} × 10 = <strong>${x * 10}</strong> ÷ 2 = ?`);
   }
   if (a === 2 || b === 2) {
     const x = a === 2 ? b : a;
-    return `💜 Hint: ×2 = add the number to itself — ${x} + ${x} = ?`;
+    return `💜 Hint: ×2 = add the number to itself` + calc(`${x} + ${x} = ?`);
   }
   if (a === 9 || b === 9) {
     const x = a === 9 ? b : a;
-    return `💜 Hint: ×9 = ×10 minus one — ${x} × 10 = <strong>${x * 10}</strong>, then minus ${x} = ?`;
+    return `💜 Hint: ×9 = ×10, then take one away` + calc(`${x} × 10 = <strong>${x * 10}</strong> → ${x * 10} − ${x} = ?`);
   }
   if (a >= 10) {
     const t = Math.floor(a / 10) * 10, o = a % 10;
-    return `💜 Hint: split ${a} into ${t}+${o}: (${t}×${b}) + (${o}×${b}) = ?`;
+    return `💜 Hint: split ${a} into ${t} + ${o}` + calc(`(${t} × ${b}) + (${o} × ${b}) = ?`);
   }
   if (b >= 10) {
     const t = Math.floor(b / 10) * 10, o = b % 10;
-    return `💜 Hint: split ${b} into ${t}+${o}: (${a}×${t}) + (${a}×${o}) = ?`;
+    return `💜 Hint: split ${b} into ${t} + ${o}` + calc(`(${a} × ${t}) + (${a} × ${o}) = ?`);
   }
   const [s, g] = a <= b ? [a, b] : [b, a];
   if (g <= 4) {
     const partial = Array.from({ length: g - 1 }, (_, i) => s * (i + 1)).join(", ");
-    return `💜 Hint: start at ${s} and add ${s} each time — ${partial}, ?`;
+    return `💜 Hint: start at ${s} and add ${s} each time` + calc(`${partial}, ?`);
   }
-  return `💜 Hint: split — (${s}×5) + (${s}×${g - 5}) = ?`;
+  return `💜 Hint: break it into easy parts` + calc(`(${s} × 5) + (${s} × ${g - 5}) = ?`);
 }
 
 function calcHintEn(expr: string): string {
@@ -55,20 +60,20 @@ function calcHintEn(expr: string): string {
   if (mParts.length >= 2 && mParts.every(p => /^\d+$/.test(p.trim()))) {
     const nums = mParts.map(p => parseInt(p.trim()));
     if (nums.length === 2) return mulHintEn(nums[0], nums[1]);
-    return `💜 Hint: ${nums[0]} × ${nums[1]} = <strong>${nums[0] * nums[1]}</strong>, then × ${nums[2]} = ?`;
+    return `💜 Hint: multiply the first two, then the third` + calc(`${nums[0]} × ${nums[1]} = <strong>${nums[0] * nums[1]}</strong> → ${nums[0] * nums[1]} × ${nums[2]} = ?`);
   }
   const dM = expr.match(/^(\d+)\s*÷\s*(\d+)$/);
   if (dM) {
     const [a, b] = [+dM[1], +dM[2]];
     if (b === 2) return `💜 Hint: ÷2 = half — what's half of ${a}?`;
-    return `💜 Hint: ${b} × ? = ${a} — what's the missing number?`;
+    return `💜 Hint: what's the missing number?` + calc(`${b} × ? = ${a}`);
   }
   const sM = expr.match(/^(\d+)\s*[−-]\s*(\d+)$/);
   if (sM) {
     const [a, b] = [+sM[1], +sM[2]];
     if (b <= 3) return `💜 Hint: count back ${b} from ${a}`;
     if (a % 10 === 0) return `💜 Hint: subtract 10 from ${a}, then add back ${10 - b}`;
-    return `💜 Hint: ${a} − ${b} — what do you get?`;
+    return `💜 Hint: what do you get?` + calc(`${a} − ${b} = ?`);
   }
   const aM = expr.match(/^(\d+)\s*\+\s*(\d+)$/);
   if (aM) {
@@ -79,15 +84,15 @@ function calcHintEn(expr: string): string {
     if (small <= 3) {
       if (small === 1) return `💜 Hint: count 1 forward from ${big}`;
       const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
-      return `💜 Hint: count ${small} forward from ${big}: ${steps}, ?`;
+      return `💜 Hint: count ${small} forward from ${big}` + calc(`${steps}, ?`);
     }
     const nextRound = Math.ceil(big / 10) * 10;
     const toNext = nextRound - big;
     const leftover = small - toNext;
     if (toNext > 0 && leftover > 0)
-      return `💜 Hint: ${big} + ${toNext} = <strong>${nextRound}</strong>... then add ${leftover} more = ?`;
+      return `💜 Hint: make the next ten, then add the rest` + calc(`${big} + ${toNext} = <strong>${nextRound}</strong> → ${nextRound} + ${leftover} = ?`);
     const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
-    return `💜 Hint: start at ${big}: ${steps}, ?`;
+    return `💜 Hint: start at ${big} and count up` + calc(`${steps}, ?`);
   }
   return `💜 Hint: think step by step! 🐾`;
 }

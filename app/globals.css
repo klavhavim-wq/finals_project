@@ -17,6 +17,10 @@ body{font-family:var(--font-rubik),system-ui,'Segoe UI',Arial,sans-serif;backgro
 button,input,select,textarea{font-family:inherit}
 /* Math expressions stay left-to-right even on the RTL (Hebrew) layout */
 .tcex,.mathex{direction:ltr;unicode-bidi:isolate}
+/* Safety net: any explicitly LTR span (a calculation or a number range) must
+   isolate so its tokens aren't reordered by the surrounding RTL text. The
+   .itext / .tour-text rules below upgrade this to bidi-override where needed. */
+[dir="ltr"]{unicode-bidi:isolate}
 
 .screen{display:none;min-height:100vh}
 .screen.active{display:flex;flex-direction:column}
@@ -467,6 +471,9 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 
 /* HINT BOX */
 .hintbox{background:#EDE9FE;border:2px solid #C4B5FD;border-radius:10px;padding:10px 13px;margin:6px 0;font-size:.95rem;color:#4C1D95;text-align:center;font-weight:600}
+/* The worked calculation inside a hint drops to its own line, bold and locked
+   left-to-right (so "3 × 10 = 30" never reads back-to-front on the RTL layout) */
+.hint-calc{display:block;direction:ltr;unicode-bidi:isolate;margin-top:6px;font-size:1.12em;font-weight:800;color:#5B21B6}
 
 /* PHASE 3 roll button — bigger */
 .p3-roll-btn{font-size:1.05rem;padding:13px;margin-bottom:8px}

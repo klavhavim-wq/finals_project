@@ -17,8 +17,9 @@ const DOOR_RANGES: Record<DoorKey, string> = {
   redlong: "11–19 × 2–9",
 };
 
-function ltr(s: string): string {
-  return `<span dir="ltr">${s}</span>`;
+/** A worked calculation: its own line, locked left-to-right like the target card. */
+function calc(s: string): string {
+  return `<span class="hint-calc">${s}</span>`;
 }
 
 function mulHintHe(a: number, b: number): string {
@@ -28,30 +29,30 @@ function mulHintHe(a: number, b: number): string {
   }
   if (a === 5 || b === 5) {
     const x = a === 5 ? b : a;
-    return `💜 רמז: לכפול ב-5 = לכפול ב-10 ואז לחלק ב-2<br>${ltr(`${x} × 10 = <strong>${x * 10}</strong> ÷ 2 = ?`)}`;
+    return `💜 רמז: לכפול ב-5 = לכפול ב-10 ואז לחלק ב-2` + calc(`${x} × 10 = <strong>${x * 10}</strong> ÷ 2 = ?`);
   }
   if (a === 2 || b === 2) {
     const x = a === 2 ? b : a;
-    return `💜 רמז: לכפול ב-2 = לחבר את המספר לעצמו — ${ltr(`${x} + ${x} = ?`)}`;
+    return `💜 רמז: לכפול ב-2 = לחבר את המספר לעצמו` + calc(`${x} + ${x} = ?`);
   }
   if (a === 9 || b === 9) {
     const x = a === 9 ? b : a;
-    return `💜 רמז: כפל ב-9 = כפל ב-10 פחות פעם אחת — ${ltr(`${x} × 10 = <strong>${x * 10}</strong>`)}, ואז ${ltr(`− ${x} = ?`)}`;
+    return `💜 רמז: כפל ב-9 = כפל ב-10 פחות פעם אחת` + calc(`${x} × 10 = <strong>${x * 10}</strong> → ${x * 10} − ${x} = ?`);
   }
   if (a >= 10) {
     const t = Math.floor(a / 10) * 10, o = a % 10;
-    return `💜 רמז: פרקו את ${a} ל-${ltr(`${t}+${o}`)}:<br>${ltr(`(${t} × ${b}) + (${o} × ${b}) = ?`)}`;
+    return `💜 רמז: פרקו את ${a} ל-${t} ועוד ${o}` + calc(`(${t} × ${b}) + (${o} × ${b}) = ?`);
   }
   if (b >= 10) {
     const t = Math.floor(b / 10) * 10, o = b % 10;
-    return `💜 רמז: פרקו את ${b} ל-${ltr(`${t}+${o}`)}:<br>${ltr(`(${a} × ${t}) + (${a} × ${o}) = ?`)}`;
+    return `💜 רמז: פרקו את ${b} ל-${t} ועוד ${o}` + calc(`(${a} × ${t}) + (${a} × ${o}) = ?`);
   }
   const [s, g] = a <= b ? [a, b] : [b, a];
   if (g <= 4) {
     const partial = Array.from({ length: g - 1 }, (_, i) => s * (i + 1)).join(", ");
-    return `💜 רמז: התחילו מ-${s} והוסיפו עוד ${s} כל פעם — ${ltr(`${partial}, ?`)}`;
+    return `💜 רמז: התחילו מ-${s} והוסיפו עוד ${s} בכל פעם` + calc(`${partial}, ?`);
   }
-  return `💜 רמז: פרקו: ${ltr(`(${s} × 5) + (${s} × ${g - 5}) = ?`)}`;
+  return `💜 רמז: פרקו לחלקים קלים` + calc(`(${s} × 5) + (${s} × ${g - 5}) = ?`);
 }
 
 function calcHintHe(expr: string): string {
@@ -59,20 +60,20 @@ function calcHintHe(expr: string): string {
   if (mParts.length >= 2 && mParts.every(p => /^\d+$/.test(p.trim()))) {
     const nums = mParts.map(p => parseInt(p.trim()));
     if (nums.length === 2) return mulHintHe(nums[0], nums[1]);
-    return `💜 רמז: ${ltr(`${nums[0]} × ${nums[1]} = <strong>${nums[0] * nums[1]}</strong>`)}, ואז ${ltr(`× ${nums[2]} = ?`)}`;
+    return `💜 רמז: כפלו את השניים הראשונים, ואז את השלישי` + calc(`${nums[0]} × ${nums[1]} = <strong>${nums[0] * nums[1]}</strong> → ${nums[0] * nums[1]} × ${nums[2]} = ?`);
   }
   const dM = expr.match(/^(\d+)\s*÷\s*(\d+)$/);
   if (dM) {
     const [a, b] = [+dM[1], +dM[2]];
     if (b === 2) return `💜 רמז: לחלק ב-2 זה חצי — מה חצי מ-${a}?`;
-    return `💜 רמז: ${ltr(`${b} × ? = ${a}`)} — מה המספר החסר?`;
+    return `💜 רמז: איזה מספר משלים את הכפל?` + calc(`${b} × ? = ${a}`);
   }
   const sM = expr.match(/^(\d+)\s*[−-]\s*(\d+)$/);
   if (sM) {
     const [a, b] = [+sM[1], +sM[2]];
     if (b <= 3) return `💜 רמז: ספרו ${b} אחורה מ-${a}`;
     if (a % 10 === 0) return `💜 רמז: הפחיתו 10 מ-${a}, ואז הוסיפו ${10 - b} חזרה`;
-    return `💜 רמז: ${ltr(`${a} − ${b}`)} — מה מקבלים?`;
+    return `💜 רמז: כמה נשאר?` + calc(`${a} − ${b} = ?`);
   }
   const aM = expr.match(/^(\d+)\s*\+\s*(\d+)$/);
   if (aM) {
@@ -83,15 +84,15 @@ function calcHintHe(expr: string): string {
     if (small <= 3) {
       if (small === 1) return `💜 רמז: ספרו 1 קדימה מ-${big}`;
       const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
-      return `💜 רמז: ספרו ${small} קדימה מ-${big}: ${ltr(`${steps}, ?`)}`;
+      return `💜 רמז: ספרו ${small} קדימה מ-${big}` + calc(`${steps}, ?`);
     }
     const nextRound = Math.ceil(big / 10) * 10;
     const toNext = nextRound - big;
     const leftover = small - toNext;
     if (toNext > 0 && leftover > 0)
-      return `💜 רמז: ${ltr(`${big} + ${toNext} = <strong>${nextRound}</strong>`)}, ואז עוד ${ltr(`${leftover} = ?`)}`;
+      return `💜 רמז: השלימו לעשרת הקרובה, ואז הוסיפו את השאר` + calc(`${big} + ${toNext} = <strong>${nextRound}</strong> → ${nextRound} + ${leftover} = ?`);
     const steps = Array.from({ length: small - 1 }, (_, i) => big + i + 1).join(", ");
-    return `💜 רמז: התחילו מ-${big}: ${ltr(`${steps}, ?`)}`;
+    return `💜 רמז: התחילו מ-${big} וספרו קדימה` + calc(`${steps}, ?`);
   }
   return `💜 רמז: חשבו צעד-צעד! 🐾`;
 }
