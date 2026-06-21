@@ -297,6 +297,7 @@ export interface Dict {
   qlAdvanced: string;
   qlPickSetup: string;
   qlLearnLabel: string;
+  qlTourHint: string;
   qlStart: (presetName: string) => string;
   presets: Record<PresetId, LabelDesc>;
 

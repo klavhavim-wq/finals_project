@@ -58,6 +58,7 @@ export default function QuickSetup({
 
         <div className="scard qllearn">
           <h3>{t.qlLearnLabel}</h3>
+          <p className="qllearn-hint">{t.qlTourHint}</p>
           <button
             className="btnbig demo-cta qllearn-btn"
             onClick={() => actions.startDemo(level)}

@@ -680,6 +680,7 @@ export const en: Dict = {
   qlAdvanced: "⚙️ Advanced settings",
   qlPickSetup: "👇 Pick a setup to start playing",
   qlLearnLabel: "🙂 First time? Learn in a minute",
+  qlTourHint: "To get to know the board — pick a level, then tap “Guided tour”.",
   qlStart: (presetName) => `▶ Start: ${presetName}`,
   presets: {
     focus: {

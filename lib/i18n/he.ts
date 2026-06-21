@@ -686,6 +686,7 @@ export const he: Dict = {
   qlAdvanced: "⚙️ הגדרות מתקדמות",
   qlPickSetup: "👇 בחרו סוג משחק כדי להתחיל",
   qlLearnLabel: "🙂 פעם ראשונה? אפשר ללמוד תוך דקה",
+  qlTourHint: "להכרת לוח המשחק — בחרו רמה ולחצו על «סיור מודרך».",
   qlStart: (presetName) => `▶ התחלה: ${presetName}`,
   presets: {
     focus: {
