@@ -340,10 +340,25 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .phasewin-title{flex:1}
 .phasewin-grip{font-size:1.2rem;opacity:.45;color:#B45309;letter-spacing:-1px}
 .phasewin-body{padding:12px 14px;overflow-y:auto}
-/* walk: centered, covers the board (no board answering here) */
-.pw-walk{left:50%;top:50%;transform:translate(-50%,-50%);width:384px;max-width:calc(100vw - 20px)}
-@media(max-width:820px){
-  .pw-walk{width:calc(100vw - 14px);max-height:82vh}
+/* walk: a compact, movable panel docked to the lower inline-end corner by
+   default — the board (and the walking dog) stays clear. Drag it by the title
+   bar to move it anywhere. */
+.pw-walk{inset-inline-end:14px;bottom:14px;
+  width:340px;max-width:calc(100vw - 20px);max-height:64vh}
+.pw-drag{cursor:grab;touch-action:none;user-select:none}
+.pw-drag:active{cursor:grabbing}
+/* Phone portrait: a bottom sheet. The board is lifted above it (see walk-mode
+   below) so the dog stays visible; drag the sheet by its bar to move it. */
+@media(max-width:820px) and (orientation:portrait){
+  .pw-walk{inset-inline-end:7px;bottom:6px;width:calc(100vw - 14px);max-height:46vh}
+  #sg.walk-mode .gstage-main{padding-bottom:48vh}
+}
+/* Phone landscape: little height to spare — dock to the side over the board
+   (the board is wide here) rather than eating vertical space. Sit on the inline
+   START edge so it never covers the bank tab / drawer (both on the END edge). */
+@media(max-width:820px) and (orientation:landscape){
+  .pw-walk{inset-inline-start:8px;inset-inline-end:auto;bottom:8px;
+    width:min(330px,48vw);max-height:88vh}
 }
 
 /* walk-stage progress line */

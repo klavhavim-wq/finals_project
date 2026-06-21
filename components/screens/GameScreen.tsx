@@ -7,6 +7,7 @@ import StepPrize from "../StepPrize";
 import SidebarRoute from "../SidebarRoute";
 import SidebarHelper from "../SidebarHelper";
 import ActionPanel from "../ActionPanel";
+import WalkPanel from "../WalkPanel";
 import LanguageSwitch from "../LanguageSwitch";
 import { DOGS } from "@/lib/engine/constants";
 import type { GameState, Locale } from "@/lib/engine/types";
@@ -72,12 +73,15 @@ export default function GameScreen({
   const [isDesktop, setIsDesktop] = useState(true);
   const [bankOpen, setBankOpen] = useState(false);
   useEffect(() => {
-    // Use the side-by-side (wide) layout on big screens AND in landscape on a
-    // phone — so the board uses the full height and the side panel stays visible,
-    // instead of a tiny board squashed under a thick top bar.
+    // Big-screen layout (a fixed side column with the bank always visible) only
+    // when there's real room for it: a wide desktop, or a tablet/desktop in
+    // landscape that's also tall enough. Phones — including a phone turned
+    // sideways (short height) — use the slide-out bank drawer with its edge tab,
+    // so the board keeps the full width and the bank is one tap away.
     const onResize = () => {
       const w = window.innerWidth, h = window.innerHeight;
-      setIsDesktop(w > 820 || (w >= 640 && w > h));
+      const tallEnough = h >= 600;
+      setIsDesktop(tallEnough && (w > 820 || (w >= 640 && w > h)));
     };
     onResize();
     window.addEventListener("resize", onResize);
@@ -91,8 +95,8 @@ export default function GameScreen({
   useEffect(() => { setBankOpen(false); }, [state.phase]);
 
   // Find (1) and route (2) stages dock a fixed bar above the board so it never
-  // covers the hexes. The walk stage (3) — where you don't tap the board —
-  // shows a centered window over it.
+  // covers the hexes. The walk stage (3) shows a movable panel that floats to
+  // the side of the board, so the dog stays visible as it walks.
   const docked = state.phase === 1 || state.phase === 2;
   const dockTitle = state.phase === 1 ? t.winFindTitle : t.winRouteTitle;
 
@@ -110,7 +114,7 @@ export default function GameScreen({
   ) : null;
 
   return (
-    <div id="sg" className="screen active board-canvas">
+    <div id="sg" className={"screen active board-canvas" + (state.phase === 3 ? " walk-mode" : "")}>
       <div className="ghdr">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.jpg" alt={t.logoAlt} className="brand-logo-sm" />
@@ -181,17 +185,9 @@ export default function GameScreen({
         </aside>
       </div>
 
-      {/* Walk stage: centered window over the board (no board answering here) */}
-      {state.phase === 3 && (
-        <div className="phasewin pw-walk">
-          <div className="phasewin-head">
-            <span className="phasewin-title">{t.winWalkTitle}</span>
-          </div>
-          <div className="phasewin-body">
-            <ActionPanel t={t} state={state} actions={actions} />
-          </div>
-        </div>
-      )}
+      {/* Walk stage: a movable panel floating beside the board — drag it by the
+          title bar so the dog's progress along the route stays visible. */}
+      {state.phase === 3 && <WalkPanel t={t} state={state} actions={actions} />}
     </div>
   );
 }
