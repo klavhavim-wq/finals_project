@@ -319,6 +319,12 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 @media(max-width:820px) and (orientation:landscape){
   .board-canvas .gstage{gap:6px}
   .board-canvas .gsidebar:not(.drawer){width:min(280px,40vw)}
+  /* Landscape has little height to spare. Put the question card BESIDE the board
+     (not stacked above it) so the board keeps the full height and grows to fill
+     the available width instead of being squashed into a narrow centred strip. */
+  .board-canvas .gstage-main{flex-direction:row;align-items:stretch;gap:6px}
+  .board-canvas .gstage-main .phasedock{flex:none;width:min(40vw,300px);
+    align-self:stretch;overflow-y:auto}
 }
 
 /* Side bar: fixed column on desktop; a slide-in drawer on mobile */
