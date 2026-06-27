@@ -10,6 +10,7 @@ import ActionPanel from "../ActionPanel";
 import WalkPanel from "../WalkPanel";
 import LanguageSwitch from "../LanguageSwitch";
 import { DOGS } from "@/lib/engine/constants";
+import { boardSvgSize } from "@/lib/engine/hexgrid";
 import type { GameState, Locale } from "@/lib/engine/types";
 import type { GameActions } from "../useGame";
 import type { Dict } from "@/lib/i18n";
@@ -94,6 +95,97 @@ export default function GameScreen({
   // Close the mobile drawer whenever the stage changes.
   useEffect(() => { setBankOpen(false); }, [state.phase]);
 
+  // ── Mobile board zoom ──
+  // On phones the whole board is scaled to fit the screen. These let the player
+  // make the hexes bigger (to read/tap) or smaller, panning by dragging when the
+  // board is larger than the screen. `base` is the fit-to-screen size (zoom = 1),
+  // measured from the board area so the fit stays exact on any phone/orientation.
+  const ZMIN = 0.6, ZMAX = 3;
+  const [zoom, setZoom] = useState(1);
+  const [base, setBase] = useState<{ w: number; h: number } | null>(null);
+  const zoomBy = (d: number) =>
+    setZoom((z) => Math.min(ZMAX, Math.max(ZMIN, Math.round((z + d) * 10) / 10)));
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || isDesktop) { setBase(null); return; }
+    const measure = () => {
+      const cw = el.clientWidth - 6, ch = el.clientHeight - 6;
+      if (cw <= 0 || ch <= 0) return;
+      const { w: nw, h: nh } = boardSvgSize(state.level);
+      const fit = Math.min(cw / nw, ch / nh);
+      setBase({ w: nw * fit, h: nh * fit });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [isDesktop, state.level]);
+
+  // Reset the zoom back to fit-to-screen when leaving the phone layout.
+  useEffect(() => { if (isDesktop) setZoom(1); }, [isDesktop]);
+
+  const boardSize =
+    !isDesktop && base
+      ? { width: base.w * zoom, height: base.h * zoom, maxWidth: "none", maxHeight: "none" }
+      : undefined;
+
+  // ── Draggable bank tab (mobile) ──
+  // The edge tab can be dragged anywhere so it never sits on top of a hex the
+  // player needs to tap. A plain tap (no drag) still opens the bank drawer.
+  const [tabPos, setTabPos] = useState<{ x: number; y: number } | null>(null);
+  const tabDrag = useRef({ active: false, moved: false, dx: 0, dy: 0, sx: 0, sy: 0 });
+  // Rotating the phone re-docks the tab to its default edge; a plain resize (e.g.
+  // the mobile address bar showing/hiding) just keeps it inside the screen so a
+  // dragged tab can never end up stranded out of reach.
+  useEffect(() => {
+    const reset = () => setTabPos(null);
+    const clamp = () =>
+      setTabPos((p) =>
+        p
+          ? {
+              x: Math.max(4, Math.min(p.x, window.innerWidth - 70)),
+              y: Math.max(4, Math.min(p.y, window.innerHeight - 70)),
+            }
+          : p
+      );
+    window.addEventListener("orientationchange", reset);
+    window.addEventListener("resize", clamp);
+    return () => {
+      window.removeEventListener("orientationchange", reset);
+      window.removeEventListener("resize", clamp);
+    };
+  }, []);
+  const onTabDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    tabDrag.current = {
+      active: true, moved: false,
+      dx: e.clientX - r.left, dy: e.clientY - r.top, sx: e.clientX, sy: e.clientY,
+    };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onTabMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    const d = tabDrag.current;
+    if (!d.active) return;
+    // Only treat it as a drag once the finger has clearly moved, so a tap still opens the bank.
+    if (!d.moved && Math.abs(e.clientX - d.sx) + Math.abs(e.clientY - d.sy) < 6) return;
+    d.moved = true;
+    const el = e.currentTarget;
+    const w = el.offsetWidth, h = el.offsetHeight;
+    const x = Math.max(4, Math.min(e.clientX - d.dx, window.innerWidth - w - 4));
+    const y = Math.max(4, Math.min(e.clientY - d.dy, window.innerHeight - h - 4));
+    setTabPos({ x, y });
+  };
+  const onTabUp = (e: React.PointerEvent<HTMLButtonElement>) => {
+    tabDrag.current.active = false;
+    e.currentTarget.releasePointerCapture(e.pointerId);
+  };
+  const onTabClick = () => {
+    // A drag ends with a click too — only open the bank on a real tap.
+    if (tabDrag.current.moved) { tabDrag.current.moved = false; return; }
+    setBankOpen(true);
+  };
+
   // Find (1) and route (2) stages dock a fixed bar above the board so it never
   // covers the hexes. The walk stage (3) shows a movable panel that floats to
   // the side of the board, so the dog stays visible as it walks.
@@ -151,16 +243,40 @@ export default function GameScreen({
             onPointerUp={endPan}
             onPointerLeave={endPan}
           >
-            <HexBoard state={state} onHexClick={guardedHexClick} />
+            <HexBoard state={state} onHexClick={guardedHexClick} sizeStyle={boardSize} />
           </div>
+
+          {/* Mobile: make the board bigger/smaller. Drag the board to pan when it
+              grows past the screen. Hidden during the walk (the dog drives itself). */}
+          {!isDesktop && state.phase !== 3 && (
+            <div className="board-zoom">
+              <button className="bz-btn" onClick={() => zoomBy(-0.3)} disabled={zoom <= ZMIN}
+                aria-label={t.zoomOut} title={t.zoomOut}>−</button>
+              {Math.abs(zoom - 1) > 0.001 && (
+                <button className="bz-btn bz-reset" onClick={() => setZoom(1)}
+                  aria-label={t.zoomReset} title={t.zoomReset}>⤢</button>
+              )}
+              <button className="bz-btn" onClick={() => zoomBy(0.3)} disabled={zoom >= ZMAX}
+                aria-label={t.zoomIn} title={t.zoomIn}>+</button>
+            </div>
+          )}
         </div>
 
         {/* Mobile: a bold tab stuck to the screen edge opens the side panel
             (bank, route, helper). Lives on the edge, not in the top bar. */}
         {!isDesktop && !bankOpen && (
           <button
-            className="bank-tab"
-            onClick={() => setBankOpen(true)}
+            className={"bank-tab" + (tabPos ? " moved" : "")}
+            onClick={onTabClick}
+            onPointerDown={onTabDown}
+            onPointerMove={onTabMove}
+            onPointerUp={onTabUp}
+            onPointerCancel={onTabUp}
+            style={
+              tabPos
+                ? { left: tabPos.x, top: tabPos.y, right: "auto", insetInlineStart: "auto", insetInlineEnd: "auto", transform: "none", animation: "none", touchAction: "none" }
+                : { touchAction: "none" }
+            }
             aria-label={t.bankBtnLabel}
             title={t.bankBtnLabel}
           >

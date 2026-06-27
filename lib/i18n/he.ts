@@ -633,6 +633,9 @@ export const he: Dict = {
   helperAnswerReveal: (ans) => `💡 התשובה של החבר: ${ans}`,
   bankBtnLabel: "🏦 הבנק",
   bankTab: "בנק",
+  zoomIn: "הגדלה",
+  zoomOut: "הקטנה",
+  zoomReset: "התאמת הלוח",
 
   helpCardBtn: "לוח כפל",
 

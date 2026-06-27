@@ -627,6 +627,9 @@ export const en: Dict = {
   helperAnswerReveal: (ans) => `💡 Friend's answer: ${ans}`,
   bankBtnLabel: "🏦 The Bank",
   bankTab: "Bank",
+  zoomIn: "Zoom in",
+  zoomOut: "Zoom out",
+  zoomReset: "Fit the board",
 
   helpCardBtn: "Times Table",
 

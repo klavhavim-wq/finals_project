@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { boardMaxFor, DC, DOGS, factorBonusActive, PCOLORS, SFILL } from "@/lib/engine/constants";
 import {
   R,
@@ -43,9 +44,12 @@ function fillFor(state: GameState, n: number): string {
 export default function HexBoard({
   state,
   onHexClick,
+  sizeStyle,
 }: {
   state: GameState;
   onHexClick: (n: number) => void;
+  /** Overrides the rendered board size (mobile zoom). When omitted, CSS sizing wins. */
+  sizeStyle?: CSSProperties;
 }) {
   const validNextHexes = new Set<number>();
   const otherPlayerHexes = new Set<number>();
@@ -326,7 +330,7 @@ export default function HexBoard({
       viewBox={`0 0 ${SVG_W} ${SVG_H}`}
       width={SVG_W}
       height={SVG_H}
-      style={{ display: "block" }}
+      style={{ display: "block", ...sizeStyle }}
     >
       <defs>
         <filter id="route-raise" x="-30%" y="-30%" width="160%" height="160%">

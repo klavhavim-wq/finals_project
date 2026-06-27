@@ -243,6 +243,10 @@ export interface Dict {
   bankBtnLabel: string;
   /** short label for the mobile side-edge bank tab */
   bankTab: string;
+  /** mobile board zoom controls */
+  zoomIn: string;
+  zoomOut: string;
+  zoomReset: string;
 
   // Help card
   helpCardBtn: string;

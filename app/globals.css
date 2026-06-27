@@ -252,8 +252,20 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 
 /* ── BOARD-CANVAS LAYOUT (board + a docked bar above it on find/route) ── */
 .gstage{display:flex;flex:1;min-height:0;gap:9px;padding:9px;overflow:hidden;position:relative}
-.gstage-main{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;gap:9px}
+.gstage-main{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;gap:9px;position:relative}
 .gstage-main .hivewrap{flex:1;min-height:0}
+
+/* Mobile board zoom controls — a small floating cluster over the board corner. */
+.board-zoom{position:absolute;z-index:140;bottom:10px;inset-inline-end:10px;
+  display:flex;flex-direction:column;gap:6px}
+.bz-btn{width:42px;height:42px;border-radius:50%;border:2px solid #FDE68A;
+  background:rgba(255,255,255,.92);color:#92400E;font-size:1.5rem;font-weight:800;line-height:1;
+  cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.22);padding:0;
+  display:flex;align-items:center;justify-content:center;
+  -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.bz-btn:active{transform:scale(.94)}
+.bz-btn:disabled{opacity:.4;cursor:default}
+.bz-reset{font-size:1.2rem}
 
 /* docked bar that sits in a clear row above the board (find & route stages) */
 .phasedock{flex:none;background:white;border-radius:14px;box-shadow:var(--shadow);
@@ -305,10 +317,10 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   #sg.board-canvas{height:100dvh;min-height:0;overflow:hidden}
   .board-canvas .gstage{padding:6px;gap:0}
   .board-canvas .gstage-main{gap:6px}
-  /* Mobile: the whole board always fits the screen. It scales down to its area
-     so every hex stays visible at once — no panning, no parts cut off. For kids
-     the board should never hide behind a scroll. */
-  .board-canvas .hivewrap{flex:1;height:auto;min-height:0;overflow:hidden;padding:3px;
+  /* Mobile: the whole board fits the screen by default (every hex visible at
+     once). The player can zoom in with the on-board controls; once the board is
+     bigger than the screen this area scrolls so they can drag to pan around it. */
+  .board-canvas .hivewrap{flex:1;height:auto;min-height:0;overflow:auto;padding:3px;
     align-items:safe center;justify-content:safe center}
   .board-canvas .hivewrap #hsvg{width:100%;height:100%;max-width:100%;max-height:100%;min-width:0}
 }
