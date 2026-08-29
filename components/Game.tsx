@@ -51,7 +51,9 @@ export default function Game({ locale, quickStart }: { locale: Locale; quickStar
           actions={actions}
           locale={locale}
           musicMuted={music.muted}
+          musicVolume={music.volume}
           onToggleMusic={music.toggle}
+          onMusicVolume={music.setVolume}
         />
       )}
       {state.screen === "swin" && <Win t={t} state={state} trials={trials} actions={actions} />}

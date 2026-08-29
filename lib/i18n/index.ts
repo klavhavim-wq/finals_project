@@ -104,6 +104,7 @@ export interface Dict {
   instAria: string;
   musicOn: string;
   musicOff: string;
+  musicVolume: string;
   defaultPlayerName: (dog: string, i: number) => string;
 
   // Phase 1

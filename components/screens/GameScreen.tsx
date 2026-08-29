@@ -9,6 +9,7 @@ import SidebarHelper from "../SidebarHelper";
 import ActionPanel from "../ActionPanel";
 import WalkPanel from "../WalkPanel";
 import LanguageSwitch from "../LanguageSwitch";
+import MusicControl from "../MusicControl";
 import { DOGS } from "@/lib/engine/constants";
 import { boardSvgSize } from "@/lib/engine/hexgrid";
 import type { GameState, Locale } from "@/lib/engine/types";
@@ -25,14 +26,18 @@ export default function GameScreen({
   actions,
   locale,
   musicMuted,
+  musicVolume,
   onToggleMusic,
+  onMusicVolume,
 }: {
   t: Dict;
   state: GameState;
   actions: GameActions;
   locale: Locale;
   musicMuted: boolean;
+  musicVolume: number;
   onToggleMusic: () => void;
+  onMusicVolume: (v: number) => void;
 }) {
   const timerClass =
     "ghtimer" +
@@ -226,15 +231,13 @@ export default function GameScreen({
           </div>
         </div>
         <LanguageSwitch locale={locale} />
-        <button
-          className="ghbtn"
-          onClick={onToggleMusic}
-          aria-label={musicMuted ? t.musicOff : t.musicOn}
-          title={musicMuted ? t.musicOff : t.musicOn}
-          aria-pressed={musicMuted}
-        >
-          {musicMuted ? "🔇" : "🔊"}
-        </button>
+        <MusicControl
+          t={t}
+          muted={musicMuted}
+          volume={musicVolume}
+          onToggle={onToggleMusic}
+          onVolume={onMusicVolume}
+        />
         <button className="ghbtn" onClick={actions.goInst} aria-label={t.instAria} title={t.instAria}>
           📖
         </button>

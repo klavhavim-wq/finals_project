@@ -195,6 +195,22 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 @keyframes tpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 .ghbtn{background:none;border:2px solid #e5e7eb;border-radius:18px;padding:5px 12px;font-size:.82rem;cursor:pointer;font-weight:600;color:#6b7280;transition:all .15s}
 .ghbtn:hover{border-color:#d97706;color:#d97706}
+/* Music: one pill split into a mute button and an arrow that drops down a
+   volume slider. Styled to sit alongside the other top-bar buttons. */
+.musicctl{position:relative;display:flex;flex-shrink:0}
+.musicpill{display:flex;align-items:center;border:2px solid #e5e7eb;border-radius:18px;transition:border-color .15s}
+.musicpill:hover{border-color:#d97706}
+.musicpill button{background:none;border:none;cursor:pointer;font-size:.82rem;font-weight:600;color:#6b7280;padding:5px 7px;line-height:1.15;transition:color .15s}
+.musicpill button:hover{color:#d97706}
+.musicpill .mp-icon{padding-inline-start:11px;border-start-start-radius:16px;border-end-start-radius:16px}
+.musicpill .mp-arrow{padding-inline-end:10px;font-size:.66rem;border-inline-start:1px solid #e5e7eb;border-start-end-radius:16px;border-end-end-radius:16px}
+.musicpop{position:absolute;top:calc(100% + 6px);inset-inline-end:0;z-index:180;
+  background:white;border:2px solid #FDE68A;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.18);
+  padding:10px 12px;display:flex;flex-direction:column;gap:6px;min-width:196px;animation:mIn .15s ease}
+.mp-lbl{font-size:.72rem;font-weight:700;color:#92400E}
+.mp-row{display:flex;align-items:center;gap:8px}
+.mp-range{flex:1;min-width:0;accent-color:#d97706;cursor:pointer}
+.mp-pct{font-size:.72rem;font-weight:700;color:#6b7280;text-align:center}
 /* Mobile: a bold tab on the screen edge that opens the side panel (bank, route,
    helper). It lives on the edge — not in the top bar — so it's easy to spot and
    reach with a thumb. A gentle pulse draws the eye to it. */
