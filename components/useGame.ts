@@ -25,7 +25,9 @@ function usesMC(state: GameState): boolean {
   return state.settings.mc && (state.level === "beg" || state.level === "med");
 }
 
-const LS_KEY = "kaskash_sessions";
+/** Where finished games are stored on this device, for the research export. */
+export const SESSIONS_KEY = "kaskash_sessions";
+const LS_KEY = SESSIONS_KEY;
 const LS_REVIEW = "kaskash_review";
 
 export function useGame(locale: Locale) {

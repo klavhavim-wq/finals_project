@@ -53,6 +53,47 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .btnout{background:white;border:2px solid #DEB887;border-radius:24px;padding:10px 26px;font-size:.98rem;font-weight:600;cursor:pointer;color:#92400E;transition:all .15s}
 .btnout:hover{border-color:var(--ye);background:#FFFBEB}
 
+/* ── PLAYING TOGETHER (lobby + shared game) ── */
+.btn-together{border-color:#8B5CF6;color:#6D28D9}
+.btn-together:hover{border-color:#7C3AED;background:#F5F3FF}
+.lobby-intro{font-size:.95rem;color:#4b5563;line-height:1.6;text-align:center}
+.lobby-code-card{text-align:center}
+.lobby-code-label{font-size:.8rem;font-weight:700;color:#6b7280}
+/* The code is read aloud across a room, so it is deliberately huge and widely
+   spaced — a child copying it should never mis-group the characters. */
+.lobby-code{font-size:2.9rem;font-weight:900;color:#6D28D9;letter-spacing:.42em;
+  margin:6px 0 4px;padding-inline-start:.42em;font-variant-numeric:tabular-nums}
+.lobby-code-hint{font-size:.8rem;color:#6b7280}
+.lobby-code-input{width:100%;text-align:center;font-size:1.9rem;font-weight:900;
+  letter-spacing:.34em;padding-inline-start:.34em;text-transform:uppercase;
+  border:2.5px solid #DDD6FE;border-radius:12px;padding-block:10px;color:#4C1D95}
+.lobby-code-input:focus{outline:none;border-color:#8B5CF6}
+.lobby-levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:7px}
+.lobby-member{align-items:center;gap:9px}
+.lobby-dog{font-size:1.3rem}
+.lobby-name{flex:1;font-weight:600;color:#374151;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lobby-empty .lobby-name{color:#9ca3af;font-weight:500;font-style:italic}
+.lobby-tag{font-size:.68rem;font-weight:800;background:#EDE9FE;color:#5B21B6;
+  border-radius:12px;padding:3px 9px;white-space:nowrap;flex-shrink:0}
+.lobby-tag.lobby-you{background:#FEF3C7;color:#92400E}
+.lobby-tag.lobby-away{background:#FEE2E2;color:#991B1B}
+.lobby-error{color:#991B1B;background:#FEF2F2;border:2px solid #FECACA;
+  font-size:.92rem;font-weight:600;text-align:center}
+.lobby-waiting-note{font-size:.95rem;color:#6b7280;font-weight:600;text-align:center;padding:10px}
+
+/* Whose turn it is, while playing together. Docked low and to the side so it
+   never sits on the board zoom controls or the bank tab. */
+.online-status{position:fixed;bottom:12px;inset-inline-start:12px;z-index:150;
+  display:flex;align-items:center;gap:9px;background:white;border:2.5px solid #DDD6FE;
+  border-radius:22px;padding:7px 14px;box-shadow:0 6px 20px rgba(0,0,0,.16);
+  font-size:.86rem;font-weight:700;color:#5B21B6;max-width:calc(100vw - 24px)}
+.online-status.mine{border-color:#FBBF24;background:#FFFBEB;color:#92400E;
+  animation:tpulse 1.8s ease-in-out infinite}
+.os-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.os-end{background:none;border:2px solid #FECACA;border-radius:14px;padding:3px 10px;
+  font-size:.74rem;font-weight:700;color:#991B1B;cursor:pointer;flex-shrink:0}
+.os-end:hover{background:#FEF2F2}
+
 /* ── INSTRUCTIONS (overlay) ── */
 .inst-overlay{position:fixed;inset:0;z-index:210;display:flex;align-items:flex-start;justify-content:center;padding:12px;background:rgba(30,27,75,.5);overflow-y:auto;animation:mIn .2s ease}
 /* Centre the box when it fits; if the screen is too short, the overlay scrolls

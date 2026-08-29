@@ -12,6 +12,10 @@ export interface InstPage {
 /** Which area of the live game a tour step spotlights. */
 export type TourTarget = "board" | "panel" | "sidebar" | "helper" | "routedetail" | "doors" | "header" | "center";
 
+/** Imported so every reason a lobby can turn you away has real words in both
+ *  languages — a child who mistypes a code should be told that, not "error". */
+import type { LobbyErrorCode } from "@/lib/online/protocol";
+
 /** Which live phase of the sample game a tour step drives the board into. */
 export type TourStage = "find" | "route" | "walk";
 
@@ -310,6 +314,35 @@ export interface Dict {
 
   // Phase labels (for the action panel header)
   phaseLabels: [string, string, string];
+
+  // Group game — the lobby, the waiting room, and playing together
+  playTogether: string;
+  lobbyTitle: string;
+  lobbyIntro: string;
+  lobbyCreateBtn: string;
+  lobbyJoinBtn: string;
+  lobbyBackBtn: string;
+  lobbyYourNameLabel: string;
+  lobbyCodeEnterLabel: string;
+  lobbyJoinGoBtn: string;
+  lobbyCreateGoBtn: string;
+  lobbyWaitTitle: string;
+  lobbyCodeLabel: string;
+  lobbyCodeHint: string;
+  lobbyPlayersHere: (here: number, max: number) => string;
+  lobbyHostTag: string;
+  lobbyYouTag: string;
+  lobbyAwayTag: string;
+  lobbyWaitingForPlayer: string;
+  lobbyWaitingForHost: string;
+  lobbyStartBtn: string;
+  lobbyLeaveBtn: string;
+  lobbyClosedTitle: string;
+  lobbyClosedBody: string;
+  lobbyErrors: Record<LobbyErrorCode, string>;
+  onlineYourTurn: string;
+  onlineWaitingFor: (name: string) => string;
+  onlineEndForAll: string;
 }
 
 const DICTS: Record<Locale, Dict> = { en, he };

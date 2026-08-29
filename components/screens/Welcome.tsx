@@ -12,10 +12,12 @@ export default function Welcome({
   t,
   actions,
   locale,
+  onPlayTogether,
 }: {
   t: Dict;
   actions: GameActions;
   locale: Locale;
+  onPlayTogether: () => void;
 }) {
   return (
     <div id="sw" className="screen active">
@@ -46,6 +48,14 @@ export default function Welcome({
         onClick={actions.goQuick}
       >
         {t.quickLaunchBtn}
+      </button>
+
+      <button
+        className="btnout btn-together"
+        style={{ margin: "0 auto 4px", maxWidth: 360 }}
+        onClick={onPlayTogether}
+      >
+        {t.playTogether}
       </button>
 
       <div className="wchoose">{t.chooseLevel}</div>
