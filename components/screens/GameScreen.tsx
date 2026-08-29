@@ -24,11 +24,15 @@ export default function GameScreen({
   state,
   actions,
   locale,
+  musicMuted,
+  onToggleMusic,
 }: {
   t: Dict;
   state: GameState;
   actions: GameActions;
   locale: Locale;
+  musicMuted: boolean;
+  onToggleMusic: () => void;
 }) {
   const timerClass =
     "ghtimer" +
@@ -222,6 +226,15 @@ export default function GameScreen({
           </div>
         </div>
         <LanguageSwitch locale={locale} />
+        <button
+          className="ghbtn"
+          onClick={onToggleMusic}
+          aria-label={musicMuted ? t.musicOff : t.musicOn}
+          title={musicMuted ? t.musicOff : t.musicOn}
+          aria-pressed={musicMuted}
+        >
+          {musicMuted ? "🔇" : "🔊"}
+        </button>
         <button className="ghbtn" onClick={actions.goInst} aria-label={t.instAria} title={t.instAria}>
           📖
         </button>

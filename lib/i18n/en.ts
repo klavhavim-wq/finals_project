@@ -297,7 +297,7 @@ export const en: Dict = {
         i: "📋",
         t: "The top bar",
         target: "header",
-        x: `At the top you can always see:<br><br>👦 <strong>Whose turn it is</strong> — the name of the current player.<br>⏱ <strong>The clock</strong> — appears here once you start moving, showing the time left in the turn (this level: ${timeByLevel[level]}).<br>📖 <strong>Help</strong> — opens the guide any time.<br>✖ <strong>Exit</strong> — ends the game.`,
+        x: `At the top you can always see:<br><br>👦 <strong>Whose turn it is</strong> — the name of the current player.<br>⏱ <strong>The clock</strong> — appears here once you start moving, showing the time left in the turn (this level: ${timeByLevel[level]}).<br>🔊 <strong>Music</strong> — turns the background music on or off.<br>📖 <strong>Help</strong> — opens the guide any time.<br>✖ <strong>Exit</strong> — ends the game.`,
       },
       {
         i: "🗺️",
@@ -434,6 +434,8 @@ export const en: Dict = {
   turn: (name) => `Turn: ${name}`,
   roundLabel: (round, total) => `Round ${round} of ${total}`,
   instAria: "Help & how to play",
+  musicOn: "Turn the music off",
+  musicOff: "Turn the music on",
   defaultPlayerName: (_dog, i) => `Player ${i + 1}`,
 
   p1Hint:

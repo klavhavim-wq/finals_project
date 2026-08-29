@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useGame } from "./useGame";
+import { useMusic } from "./useMusic";
 import Modal from "./Modal";
 import Welcome from "./screens/Welcome";
 import Instructions from "./screens/Instructions";
@@ -17,6 +18,11 @@ import type { Locale } from "@/lib/engine/types";
 export default function Game({ locale, quickStart }: { locale: Locale; quickStart?: boolean }) {
   const { state, trials, actions } = useGame(locale);
   const t = getDict(locale);
+
+  // The music starts once the board is up. By then the player has clicked their
+  // way through the welcome screens, which is what browsers require before they
+  // will let any sound play.
+  const music = useMusic(state.screen === "sg");
 
   // When this page is the dedicated quick-launch link, open straight onto the
   // quick-launch screen (once, on first load).
@@ -39,7 +45,14 @@ export default function Game({ locale, quickStart }: { locale: Locale; quickStar
       {state.screen === "sq" && <QuickSetup t={t} actions={actions} />}
       {state.screen === "ss" && <Setup t={t} actions={actions} level={state.level} />}
       {state.screen === "sg" && (
-        <GameScreen t={t} state={state} actions={actions} locale={locale} />
+        <GameScreen
+          t={t}
+          state={state}
+          actions={actions}
+          locale={locale}
+          musicMuted={music.muted}
+          onToggleMusic={music.toggle}
+        />
       )}
       {state.screen === "swin" && <Win t={t} state={state} trials={trials} actions={actions} />}
       {state.screen === "sresults" && <Results t={t} actions={actions} />}

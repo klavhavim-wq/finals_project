@@ -102,6 +102,8 @@ export interface Dict {
   turn: (name: string) => string;
   roundLabel: (round: number, total: number) => string;
   instAria: string;
+  musicOn: string;
+  musicOff: string;
   defaultPlayerName: (dog: string, i: number) => string;
 
   // Phase 1

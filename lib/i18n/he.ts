@@ -297,7 +297,7 @@ export const he: Dict = {
         i: "📋",
         t: "הסרגל העליון",
         target: "header",
-        x: `למעלה רואים תמיד:<br><br>👦 <strong>תור של מי עכשיו</strong> — השם של מי שמשחק כרגע.<br>⏱ <strong>השעון</strong> — מופיע כאן כשמתחילים לצעוד, ומראה כמה זמן נשאר לתור (ברמה הזו: ${timeByLevel[level]}).<br>📖 <strong>עזרה</strong> — פותח את ההסבר בכל רגע.<br>✖ <strong>יציאה</strong> — מסיים את המשחק.`,
+        x: `למעלה רואים תמיד:<br><br>👦 <strong>תור של מי עכשיו</strong> — השם של מי שמשחק כרגע.<br>⏱ <strong>השעון</strong> — מופיע כאן כשמתחילים לצעוד, ומראה כמה זמן נשאר לתור (ברמה הזו: ${timeByLevel[level]}).<br>🔊 <strong>מוזיקה</strong> — מדליק ומכבה את מוזיקת הרקע.<br>📖 <strong>עזרה</strong> — פותח את ההסבר בכל רגע.<br>✖ <strong>יציאה</strong> — מסיים את המשחק.`,
       },
       {
         i: "🗺️",
@@ -434,6 +434,8 @@ export const he: Dict = {
   turn: (name) => `תור: ${name}`,
   roundLabel: (round, total) => `סיבוב ${round} מתוך ${total}`,
   instAria: "הסבר ואיך משחקים",
+  musicOn: "כיבוי המוזיקה",
+  musicOff: "הפעלת המוזיקה",
   defaultPlayerName: (_dog, i) => `שחקן ${i + 1}`,
 
   p1Hint:
