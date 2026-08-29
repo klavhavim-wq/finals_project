@@ -329,6 +329,29 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   .board-canvas #hsvg{width:100%;height:100%;max-width:100%;max-height:100%}
 }
 
+/* Every screen from a small laptop upwards keeps ALL panels on screen beside the
+   board — nothing is hidden behind a drawer. What changes with size is only how
+   much room the side column takes, so the board always gets the rest.
+   Narrow laptop → a tight column; big monitor → a roomy one. */
+@media(min-width:821px) and (max-width:1100px){
+  .board-canvas .gsidebar{width:262px}
+  .board-canvas .gstage{gap:7px;padding:7px}
+  .board-canvas .gsidebar .sq{padding:9px 10px}
+}
+@media(min-width:1500px){
+  .board-canvas .gsidebar{width:360px}
+}
+/* Wide but short window (a laptop, or a browser window that isn't full height):
+   the panels stay visible and just pack tighter, instead of being pushed into a
+   drawer. */
+@media(min-width:821px) and (max-height:680px){
+  .board-canvas .gstage{padding:7px;gap:7px}
+  .board-canvas .gsidebar{gap:6px}
+  .board-canvas .gsidebar .sq{padding:8px 10px}
+  .board-canvas .gsidebar .sq-title{font-size:.84rem;margin-bottom:5px}
+  .board-canvas .gsidebar .phasedock{padding:7px 10px}
+}
+
 @media(max-width:820px){
   #sg.board-canvas{height:100dvh;min-height:0;overflow:hidden}
   .board-canvas .gstage{padding:6px;gap:0}

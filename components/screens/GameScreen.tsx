@@ -83,15 +83,24 @@ export default function GameScreen({
   const [isDesktop, setIsDesktop] = useState(true);
   const [bankOpen, setBankOpen] = useState(false);
   useEffect(() => {
-    // Big-screen layout (a fixed side column with the bank always visible) only
-    // when there's real room for it: a wide desktop, or a tablet/desktop in
-    // landscape that's also tall enough. Phones — including a phone turned
-    // sideways (short height) — use the slide-out bank drawer with its edge tab,
-    // so the board keeps the full width and the bank is one tap away.
+    // Which of the two layouts to use:
+    //
+    //   Side column — every panel (in-turn controls, bank, prize, route, helper)
+    //                 is on screen at once, beside the board. Every desktop and
+    //                 laptop width gets this, however short the window is: the
+    //                 column scrolls on its own, so a short window is never a
+    //                 reason to hide the panels. Tablets held sideways too.
+    //   Drawer      — phones, including a phone turned sideways (short *and*
+    //                 narrow): the board keeps the whole screen and the panels
+    //                 slide in from the edge tab.
+    //
+    // Width decides; the height floor only guards a window squashed to a sliver,
+    // where the side column would leave no usable board either way.
     const onResize = () => {
       const w = window.innerWidth, h = window.innerHeight;
-      const tallEnough = h >= 600;
-      setIsDesktop(tallEnough && (w > 820 || (w >= 640 && w > h)));
+      const desktopWidth = w > 820 && h >= 420;
+      const tabletLandscape = w >= 640 && w > h && h >= 600;
+      setIsDesktop(desktopWidth || tabletLandscape);
     };
     onResize();
     window.addEventListener("resize", onResize);
