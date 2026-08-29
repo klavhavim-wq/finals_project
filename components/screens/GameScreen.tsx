@@ -6,10 +6,14 @@ import PlayerCards from "../PlayerCards";
 import StepPrize from "../StepPrize";
 import SidebarRoute from "../SidebarRoute";
 import SidebarHelper from "../SidebarHelper";
+import OnlineHelper from "../OnlineHelper";
+import RouteConfirm from "../RouteConfirm";
 import ActionPanel from "../ActionPanel";
 import WalkPanel from "../WalkPanel";
 import LanguageSwitch from "../LanguageSwitch";
 import MusicControl from "../MusicControl";
+import { useDeviceLayout } from "../useDeviceLayout";
+import { routeReachesTarget } from "@/lib/engine/gameReducer";
 import { DOGS } from "@/lib/engine/constants";
 import { boardSvgSize } from "@/lib/engine/hexgrid";
 import type { GameState, Locale } from "@/lib/engine/types";
@@ -25,6 +29,7 @@ export default function GameScreen({
   state,
   actions,
   locale,
+  mySeat,
   musicMuted,
   musicVolume,
   onToggleMusic,
@@ -34,6 +39,8 @@ export default function GameScreen({
   state: GameState;
   actions: GameActions;
   locale: Locale;
+  /** seat of the player on this device in a game played together; null when playing alone */
+  mySeat: number | null;
   musicMuted: boolean;
   musicVolume: number;
   onToggleMusic: () => void;
@@ -80,36 +87,11 @@ export default function GameScreen({
   };
 
   // ── Responsive + mobile bank drawer ──
-  const [isDesktop, setIsDesktop] = useState(true);
+  // Which of the two layouts to use — a side column that is always open, or the
+  // board on the whole screen with the panels behind an edge tab. The rule lives
+  // in one place, because the guides describe the screen and must agree with it.
+  const isDesktop = useDeviceLayout() === "desktop";
   const [bankOpen, setBankOpen] = useState(false);
-  useEffect(() => {
-    // Which of the two layouts to use:
-    //
-    //   Side column — every panel (in-turn controls, bank, prize, route, helper)
-    //                 is on screen at once, beside the board. Every desktop and
-    //                 laptop width gets this, however short the window is: the
-    //                 column scrolls on its own, so a short window is never a
-    //                 reason to hide the panels. Tablets held sideways too.
-    //   Drawer      — phones, including a phone turned sideways (short *and*
-    //                 narrow): the board keeps the whole screen and the panels
-    //                 slide in from the edge tab.
-    //
-    // Width decides; the height floor only guards a window squashed to a sliver,
-    // where the side column would leave no usable board either way.
-    const onResize = () => {
-      const w = window.innerWidth, h = window.innerHeight;
-      const desktopWidth = w > 820 && h >= 420;
-      const tabletLandscape = w >= 640 && w > h && h >= 600;
-      setIsDesktop(desktopWidth || tabletLandscape);
-    };
-    onResize();
-    window.addEventListener("resize", onResize);
-    window.addEventListener("orientationchange", onResize);
-    return () => {
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("orientationchange", onResize);
-    };
-  }, []);
   // Close the mobile drawer whenever the stage changes.
   useEffect(() => { setBankOpen(false); }, [state.phase]);
 
@@ -208,6 +190,9 @@ export default function GameScreen({
   // covers the hexes. The walk stage (3) shows a movable panel that floats to
   // the side of the board, so the dog stays visible as it walks.
   const docked = state.phase === 1 || state.phase === 2;
+  // A finished route puts the confirm window along the bottom edge on a phone —
+  // the zoom buttons step up out of its way.
+  const routeReady = state.phase === 2 && routeReachesTarget(state);
   const dockTitle = state.phase === 1 ? t.winFindTitle : t.winRouteTitle;
 
   // On a wide screen the in-turn controls live as a card at the top of the side
@@ -274,7 +259,7 @@ export default function GameScreen({
           {/* Mobile: make the board bigger/smaller. Drag the board to pan when it
               grows past the screen. Hidden during the walk (the dog drives itself). */}
           {!isDesktop && state.phase !== 3 && (
-            <div className="board-zoom">
+            <div className={"board-zoom" + (routeReady ? " lifted" : "")}>
               <button className="bz-btn" onClick={() => zoomBy(-0.3)} disabled={zoom <= ZMIN}
                 aria-label={t.zoomOut} title={t.zoomOut}>−</button>
               {Math.abs(zoom - 1) > 0.001 && (
@@ -322,9 +307,33 @@ export default function GameScreen({
           <PlayerCards t={t} state={state} />
           <StepPrize t={t} state={state} />
           <SidebarRoute t={t} state={state} />
-          <SidebarHelper t={t} state={state} actions={actions} />
+          {/* Playing together, the helper is a window of its own on the screen of
+              whoever is not playing — so it is not in this column as well. */}
+          {mySeat === null && (
+            <SidebarHelper
+              key={state.pendingRoll?.expr ?? ""}
+              t={t}
+              state={state}
+              actions={actions}
+            />
+          )}
         </aside>
       </div>
+
+      {/* Route stage: once the route reaches the target, the confirm step comes
+          to the front of the screen — the board stays live behind it. */}
+      <RouteConfirm t={t} state={state} actions={actions} />
+
+      {/* Playing together: helping a friend, on the screen of whoever is waiting. */}
+      {mySeat !== null && (
+        <OnlineHelper
+          key={state.pendingRoll?.expr ?? ""}
+          t={t}
+          state={state}
+          actions={actions}
+          mySeat={mySeat}
+        />
+      )}
 
       {/* Walk stage: a movable panel floating beside the board — drag it by the
           title bar so the dog's progress along the route stays visible. */}

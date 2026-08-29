@@ -2,11 +2,11 @@ import type { DoorKey, EffResult } from "../engine/types";
 import type { Dict, TourStep } from "./index";
 
 const DOOR_LABELS: Record<DoorKey, string> = {
-  blue: "🍪 Biscuit",
-  purple: "🐟 Fish",
-  yellow: "🍗 Wing",
-  red: "🌭 Sausage",
-  redlong: "🥩 Steak",
+  blue: "Blue door",
+  purple: "Purple door",
+  yellow: "Orange door",
+  red: "Red door",
+  redlong: "Black door",
 };
 
 const DOOR_RANGES: Record<DoorKey, string> = {
@@ -119,8 +119,8 @@ function formatEff(r: EffResult): string {
         : "✅ Pellets are odd! All good";
     case "threeColors":
       return r.applied
-        ? `Only ${r.count} food types — half your pellets: <strong>${r.total}</strong>`
-        : `✅ ${r.count} food types! All good`;
+        ? `Only ${r.count} door colors — half your pellets: <strong>${r.total}</strong>`
+        : `✅ ${r.count} door colors! All good`;
     case "noRed":
       return r.applied
         ? `${r.count} red door(s)! −${r.lost} 🦴 — remaining: <strong>${r.total}</strong>`
@@ -151,18 +151,27 @@ export const en: Dict = {
 
   logoAlt: "Dafi & The Dogs",
   title: "Dogylishios 🐕🍖",
-  welcomeSub: "Help the dog collect treats and pellets and fill its bank! 🦴",
+  welcomeSub: "Help the dog collect pellets and fill its bank! 🦴",
   welcomeSub2a: "📚 Times tables · Number facts · Strategy",
   welcomeSub2b: "👥 1–4 players \u00a0·\u00a0 ⏱ 20–45 min",
   startGame: "🎮 Start Game!",
   chooseLevel: "✨ Pick a level to begin",
   demoVideo: "🎬 Demo video",
   howToPlay: "📖 How to Play?",
-  tutorialVideos: "🎬 Tutorial Videos",     inst: [
+  tutorialVideos: "🎬 Tutorial Videos",
+  inst: (device) => [
        {
          i: "🎮",
          t: "The Game Board",
-         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="300" height="126" viewBox="0 0 228 96" xmlns="http://www.w3.org/2000/svg"><polygon points="48,10 80.9,29 80.9,67 48,86 15.1,67 15.1,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="113.8,10 146.7,29 146.7,67 113.8,86 80.9,67 80.9,29" fill="#F5F3FF" stroke="#C9A882" stroke-width="1.5"/><polygon points="179.6,10 212.5,29 212.5,67 179.6,86 146.7,67 146.7,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><line x1="80.9" y1="29" x2="80.9" y2="67" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/><line x1="146.7" y1="29" x2="146.7" y2="67" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/><text x="48" y="58" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">12</text><text x="113.8" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">13</text><text x="179.6" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="48" y="34" text-anchor="middle" font-size="22">🐕</text><text x="113.8" y="34" text-anchor="middle" font-size="16">🎲</text></svg></div>The board is filled with numbered hexes — the higher the level, the bigger the board (up to 100). Between the hexes you\'ll see colored edges — those are the "doors"! 🚪<br><br>Each color = a food type + difficulty level.<br><br>🎯 <strong>The goal:</strong> Collect as many pellets as you can for your dog\'s bank! 🐶🦴',
+         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="300" height="126" viewBox="0 0 228 96" xmlns="http://www.w3.org/2000/svg"><polygon points="48,10 80.9,29 80.9,67 48,86 15.1,67 15.1,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="113.8,10 146.7,29 146.7,67 113.8,86 80.9,67 80.9,29" fill="#F5F3FF" stroke="#C9A882" stroke-width="1.5"/><polygon points="179.6,10 212.5,29 212.5,67 179.6,86 146.7,67 146.7,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><line x1="80.9" y1="29" x2="80.9" y2="67" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/><line x1="146.7" y1="29" x2="146.7" y2="67" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/><text x="48" y="58" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">12</text><text x="113.8" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">13</text><text x="179.6" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="48" y="34" text-anchor="middle" font-size="22">🐕</text><text x="113.8" y="34" text-anchor="middle" font-size="16">🎲</text></svg></div>The board is filled with numbered hexes — the higher the level, the bigger the board (up to 100). Between the hexes you\'ll see colored edges — those are the "doors"! 🚪<br><br>Each color is a different door: a different difficulty, and a different number of pellets per step.<br><br>🎯 <strong>The goal:</strong> Collect as many pellets as you can for your dog\'s bank! 🐶🦴',
+       },
+       {
+         i: device === "mobile" ? "📱" : "🖥️",
+         t: "Where Everything Is",
+         x:
+           device === "mobile"
+             ? '📋 <strong>Top bar</strong> — whose turn it is, the clock, and the music, help and exit buttons.<br><br>🗺️ <strong>The whole screen</strong> — the board. Use ➕ ➖ to make it bigger or smaller, and drag it with your finger to move around.<br><br>🏦 <strong>The bank tab</strong> — on the edge of the screen. Tap it to open a drawer with each player\'s bank, what every door is worth, the route details, and the helping-friend window. You can drag the tab anywhere that suits you.<br><br>⬆️ <strong>Windows</strong> — the confirm-route window and other messages slide up from the bottom, within thumb reach.'
+             : '📋 <strong>Top bar</strong> — whose turn it is, the clock, and the music, help and exit buttons.<br><br>🗺️ <strong>Center</strong> — the board, nice and big.<br><br>📚 <strong>Side column</strong> — always open, with the turn controls, each player\'s bank, what every door is worth, the route details, and the helping-friend window.<br><br>✅ <strong>Bottom center</strong> — once your route reaches the target, a small confirm window pops up there.',
        },
        {
          i: "🎯",
@@ -177,22 +186,25 @@ export const en: Dict = {
        {
          i: "🚪",
          t: "Doors & Pellets",
-         x: '<div style="display:flex;flex-direction:column;gap:7px;margin:0 0 10px;font-size:.85em"><div style="padding:7px 11px;background:#EFF6FF;border-radius:8px;border-left:4px solid #3B82F6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#3B82F6">🍪 Blue — Biscuit</strong><span style="flex-shrink:0;background:#3B82F6;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">1 pellet / step</span></div><div style="margin-top:4px;color:#475569">Products 4–20 · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">3 × 4 = 12</span></div></div><div style="padding:7px 11px;background:#F5F3FF;border-radius:8px;border-left:4px solid #8B5CF6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#8B5CF6">🐟 Purple — Fish</strong><span style="flex-shrink:0;background:#7C3AED;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">2 pellets / step</span></div><div style="margin-top:4px;color:#475569">Products 10–40 · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">4 × 5 = 20</span></div></div><div style="padding:7px 11px;background:#FFFBEB;border-radius:8px;border-left:4px solid #F59E0B"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#B45309">🍗 Orange — Wing</strong><span style="flex-shrink:0;background:#B45309;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">5 pellets / step</span></div><div style="margin-top:4px;color:#475569">Products 24–64 · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">6 × 7 = 42</span></div></div><div style="padding:7px 11px;background:#FEF2F2;border-radius:8px;border-left:4px solid #EF4444"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#EF4444">🌭 Red — Sausage</strong><span style="flex-shrink:0;background:#EF4444;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">10 pellets / step</span></div><div style="margin-top:4px;color:#475569">Products 42–81 · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">8 × 9 = 72</span></div></div><div style="padding:7px 11px;background:#F3F4F6;border-radius:8px;border-left:4px solid #111827"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#111827">🥩 Black — Steak</strong><span style="flex-shrink:0;background:#111827;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">12 pellets / step</span></div><div style="margin-top:4px;color:#475569">Long multiplication · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">13 × 4 = 52</span></div></div></div><em style="font-size:.8em;color:#7C3AED">Steak — Hero level only!</em><br><br>Harder = more pellets in the bank! 🐶',
+         x: '<div style="display:flex;flex-direction:column;gap:7px;margin:0 0 10px;font-size:.85em"><div style="padding:7px 11px;background:#EFF6FF;border-radius:8px;border-left:4px solid #3B82F6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#1D4ED8"><span style="display:inline-block;width:13px;height:13px;border-radius:4px;background:#3B82F6;vertical-align:-2px;margin-right:6px"></span>Blue door</strong><span style="flex-shrink:0;background:#1D4ED8;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">1 pellet per step</span></div><div style="margin-top:4px;color:#475569">Products <span dir="ltr">4–20</span> · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">3 × 4 = 12</span></div></div><div style="padding:7px 11px;background:#F5F3FF;border-radius:8px;border-left:4px solid #7C3AED"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#6D28D9"><span style="display:inline-block;width:13px;height:13px;border-radius:4px;background:#7C3AED;vertical-align:-2px;margin-right:6px"></span>Purple door</strong><span style="flex-shrink:0;background:#6D28D9;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">2 pellets per step</span></div><div style="margin-top:4px;color:#475569">Products <span dir="ltr">10–40</span> · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">4 × 5 = 20</span></div></div><div style="padding:7px 11px;background:#FFFBEB;border-radius:8px;border-left:4px solid #F59E0B"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#B45309"><span style="display:inline-block;width:13px;height:13px;border-radius:4px;background:#F59E0B;vertical-align:-2px;margin-right:6px"></span>Orange door</strong><span style="flex-shrink:0;background:#B45309;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">5 pellets per step</span></div><div style="margin-top:4px;color:#475569">Products <span dir="ltr">24–64</span> · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">6 × 7 = 42</span></div></div><div style="padding:7px 11px;background:#FEF2F2;border-radius:8px;border-left:4px solid #EF4444"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#DC2626"><span style="display:inline-block;width:13px;height:13px;border-radius:4px;background:#EF4444;vertical-align:-2px;margin-right:6px"></span>Red door</strong><span style="flex-shrink:0;background:#DC2626;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">10 pellets per step</span></div><div style="margin-top:4px;color:#475569">Products <span dir="ltr">42–81</span> · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">8 × 9 = 72</span></div></div><div style="padding:7px 11px;background:#F3F4F6;border-radius:8px;border-left:4px solid #111827"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#111827"><span style="display:inline-block;width:13px;height:13px;border-radius:4px;background:#111827;vertical-align:-2px;margin-right:6px"></span>Black door</strong><span style="flex-shrink:0;background:#111827;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">12 pellets per step</span></div><div style="margin-top:4px;color:#475569">Long multiplication · e.g. <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">13 × 4 = 52</span></div></div></div><em style="font-size:.8em;color:#7C3AED">The black door — Hero level only!</em><br><br>The color shows how hard the exercise is, and the number beside it is how many pellets you earn for a step through that door. Harder = more pellets for the bank! 🐶',
        },
        {
          i: "✅",
          t: "Review & Confirm",
-         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 10px"><svg width="300" height="80" viewBox="0 0 245 66" xmlns="http://www.w3.org/2000/svg"><polygon points="102.0,5 115.9,13 115.9,29 102.0,37 88.1,29 88.1,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="129.7,5 143.6,13 143.6,29 129.7,37 115.8,29 115.8,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="157.4,5 171.3,13 171.3,29 157.4,37 143.5,29 143.5,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="185.1,5 199.0,13 199.0,29 185.1,37 171.2,29 171.2,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="212.8,5 226.7,13 226.7,29 212.8,37 198.9,29 198.9,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="32.7,29 46.6,37 46.6,53 32.7,61 18.8,53 18.8,37" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="60.4,29 74.3,37 74.3,53 60.4,61 46.5,53 46.5,37" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="18.9,5 32.8,13 32.8,29 18.9,37 5.0,29 5.0,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="46.6,5 60.5,13 60.5,29 46.6,37 32.7,29 32.7,13" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="74.3,5 88.2,13 88.2,29 74.3,37 60.4,29 60.4,13" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="88.1,29 102.0,37 102.0,53 88.1,61 74.2,53 74.2,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="115.9,29 129.8,37 129.8,53 115.9,61 102.0,53 102.0,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="143.6,29 157.5,37 157.5,53 143.6,61 129.7,53 129.7,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="171.3,29 185.2,37 185.2,53 171.3,61 157.4,53 157.4,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="199.0,29 212.9,37 212.9,53 199.0,61 185.1,53 185.1,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="226.7,29 240.6,37 240.6,53 226.7,61 212.8,53 212.8,37" fill="#FDE68A" stroke="#0891B2" stroke-width="1.5"/><line x1="32.8" y1="13" x2="32.8" y2="29" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><line x1="60.5" y1="13" x2="60.5" y2="29" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><line x1="88.2" y1="29" x2="74.3" y2="37" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"/><line x1="102.0" y1="37" x2="102.0" y2="53" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/><line x1="129.8" y1="37" x2="129.8" y2="53" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/><line x1="157.5" y1="37" x2="157.5" y2="53" stroke="#EF4444" stroke-width="3" stroke-linecap="round"/><line x1="185.2" y1="37" x2="185.2" y2="53" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"/><line x1="212.9" y1="37" x2="212.9" y2="53" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><text x="18.9" y="14" text-anchor="middle" font-size="9">🐕</text><text x="18.9" y="27" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">1</text><text x="46.6" y="21" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">2</text><text x="74.3" y="21" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">3</text><text x="102.0" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">4</text><text x="129.7" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">5</text><text x="157.4" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">6</text><text x="185.1" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">7</text><text x="212.8" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">8</text><text x="32.7" y="45" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">11</text><text x="60.4" y="45" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">12</text><text x="88.1" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">13</text><text x="115.9" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="143.6" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">15</text><text x="171.3" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">16</text><text x="199.0" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">17</text><text x="226.7" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">18</text></svg><div style="font-size:.75em;color:#64748b;margin-top:2px">Example: route from Hex 1 to Hex 18 🗺️</div></div>Before you start walking — check your route! 📝<br><br>On the side of the screen you\'ll see your route details: each step, the food type at each door, and the total pellets you can earn.<br><br>This helps you decide if it\'s worth going through a hard door for more pellets, or picking an easier path.<br><br>Not happy? Click "Clear" 🗑 and build a new route!<br>Ready? Click "Confirm Route" ✅ and off you go!',
+         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 10px"><svg width="300" height="80" viewBox="0 0 245 66" xmlns="http://www.w3.org/2000/svg"><polygon points="102.0,5 115.9,13 115.9,29 102.0,37 88.1,29 88.1,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="129.7,5 143.6,13 143.6,29 129.7,37 115.8,29 115.8,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="157.4,5 171.3,13 171.3,29 157.4,37 143.5,29 143.5,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="185.1,5 199.0,13 199.0,29 185.1,37 171.2,29 171.2,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="212.8,5 226.7,13 226.7,29 212.8,37 198.9,29 198.9,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="32.7,29 46.6,37 46.6,53 32.7,61 18.8,53 18.8,37" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="60.4,29 74.3,37 74.3,53 60.4,61 46.5,53 46.5,37" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="18.9,5 32.8,13 32.8,29 18.9,37 5.0,29 5.0,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="46.6,5 60.5,13 60.5,29 46.6,37 32.7,29 32.7,13" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="74.3,5 88.2,13 88.2,29 74.3,37 60.4,29 60.4,13" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="88.1,29 102.0,37 102.0,53 88.1,61 74.2,53 74.2,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="115.9,29 129.8,37 129.8,53 115.9,61 102.0,53 102.0,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="143.6,29 157.5,37 157.5,53 143.6,61 129.7,53 129.7,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="171.3,29 185.2,37 185.2,53 171.3,61 157.4,53 157.4,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="199.0,29 212.9,37 212.9,53 199.0,61 185.1,53 185.1,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="226.7,29 240.6,37 240.6,53 226.7,61 212.8,53 212.8,37" fill="#FDE68A" stroke="#0891B2" stroke-width="1.5"/><line x1="32.8" y1="13" x2="32.8" y2="29" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><line x1="60.5" y1="13" x2="60.5" y2="29" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><line x1="88.2" y1="29" x2="74.3" y2="37" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"/><line x1="102.0" y1="37" x2="102.0" y2="53" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/><line x1="129.8" y1="37" x2="129.8" y2="53" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/><line x1="157.5" y1="37" x2="157.5" y2="53" stroke="#EF4444" stroke-width="3" stroke-linecap="round"/><line x1="185.2" y1="37" x2="185.2" y2="53" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"/><line x1="212.9" y1="37" x2="212.9" y2="53" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><text x="18.9" y="14" text-anchor="middle" font-size="9">🐕</text><text x="18.9" y="27" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">1</text><text x="46.6" y="21" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">2</text><text x="74.3" y="21" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">3</text><text x="102.0" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">4</text><text x="129.7" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">5</text><text x="157.4" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">6</text><text x="185.1" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">7</text><text x="212.8" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">8</text><text x="32.7" y="45" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">11</text><text x="60.4" y="45" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">12</text><text x="88.1" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">13</text><text x="115.9" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="143.6" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">15</text><text x="171.3" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">16</text><text x="199.0" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">17</text><text x="226.7" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">18</text></svg><div style="font-size:.75em;color:#64748b;margin-top:2px">Example: route from Hex 1 to Hex 18 🗺️</div></div>' +
+           (device === "mobile"
+             ? 'Before you start walking — check your route! 📝<br><br>The bank tab 🏦 opens a drawer with your route details: each step, which door you cross, and how many pellets it is worth.<br><br>This helps you decide if it\'s worth going through a hard door for more pellets, or picking an easier path.<br><br>As soon as your route reaches the target, a strip slides up from the bottom: <strong>"Route ready!"</strong> ✅ with the number of steps and pellets. Tap the green button and off you go, or 🗑 to build a new one.<br><br>The board stays open — keep changing the route and the window updates by itself.'
+             : 'Before you start walking — check your route! 📝<br><br>The side column shows your route details: each step, which door you cross, and how many pellets it is worth.<br><br>This helps you decide if it\'s worth going through a hard door for more pellets, or picking an easier path.<br><br>As soon as your route reaches the target, a window pops up at the bottom center: <strong>"Route ready!"</strong> ✅ with the number of steps and pellets. Click the green button and off you go, or 🗑 to build a new one.<br><br>The board stays open — keep changing the route and the window updates by itself.'),
        },
        {
          i: "🐕",
          t: "Step 3 — Off You Go!",
-         x: 'Your dog jumps on the board and starts moving! 🐾<br><br>Each step:<br>1️⃣ Press "Roll" 🎲<br>2️⃣ Get a multiplication problem based on the door color<br>3️⃣ Answer by typing or using choice buttons<br><br>✅ Correct → the dog moves forward + pellets! 🦴<br>❌ Wrong → try again — no limit!<br>💡 Reveal answer → the dog stops, <strong>pellets earned so far are saved!</strong> 🦴<br><br>🔢 <strong>Need help?</strong> Press the "Times Table" button at the bottom of the panel at any time.<br><br>🙋 <strong>Other players can help!</strong> While the active player is solving — any other player clicks their name and tries to answer. Whoever is right earns +1 pellet! 🦴',
+         x: 'Your dog jumps on the board and starts moving! 🐾<br><br>Each step:<br>1️⃣ Press "Roll" 🎲<br>2️⃣ Get a multiplication problem based on the door color<br>3️⃣ Answer by typing or using choice buttons<br><br>✅ Correct → the dog moves forward + pellets! 🦴<br>❌ Wrong → try again — no limit!<br>💡 Reveal answer → the dog stops, <strong>pellets earned so far are saved!</strong> 🦴<br><br>🔢 <strong>Need help?</strong> Press the "Times Table" button at the bottom of the panel at any time.<br><br>🙋 <strong>Other players can help!</strong> The player in turn gets a few seconds to try alone; after that (or right away after a wrong answer) anyone else can answer and earn +1 pellet. 🦴<br>In a game played together, where everyone has their own device, that window pops up front and center for whoever is not playing — with the exercise the active player is solving.',
        },
        {
          i: "⏱",
          t: "Time Limits",
-         x: 'Each difficulty level has a time limit per turn:<br><br>🐾⭐🌟 <strong>Beginner / Intermediate / Advanced</strong> — 3 minutes<br>🏆 <strong>Champion</strong> — 2 minutes<br>⚡ <strong>Hero</strong> — <span dir="ltr">1:30</span> min<br><br>Did not finish in time? You stay in place, <strong>pellets earned so far are saved!</strong> 🦴<br><br>💡 You can turn off the timer in the settings.',
+         x: 'The clock starts ticking when the dog sets off (step 3) and times the walk. Finding the target and planning the route are not timed at all.<br><br>How long each level gives you:<br><br>🐾⭐🌟 <strong>Beginner / Intermediate / Advanced</strong> — 3 minutes<br>🏆 <strong>Champion</strong> — 2 minutes<br>⚡ <strong>Hero</strong> — <span dir="ltr">1:30</span> min<br><br>Did not finish in time? You stay in place, <strong>pellets earned so far are saved!</strong> 🦴<br><br>💡 You can turn off the clock in the settings.',
        },
        {
          i: "🏆",
@@ -219,9 +231,9 @@ export const en: Dict = {
          t: "Together — Cooperative Mode",
          x: 'Enable "Cooperative mode" in settings.<br>In this mode — <strong>everyone works together!</strong><br><br>✅ All pellets go into one shared bank 🦴<br>✅ No stealing — we\'re all one team!<br>✅ Collect together — <strong>everyone wins at the end! 🎉</strong> (reach 100 for an instant win!)<br><br>🐕🐩🐶🦮 Great for young kids, therapy, and family play.',
        }
-     ],
+  ],
   fullGuideBtn: "📚 Full game guide",
-  simpleGuide: (level) => {
+  simpleGuide: (level, device) => {
     const goal = {
       i: "🎯",
       t: "The Goal",
@@ -250,7 +262,15 @@ export const en: Dict = {
           t: "Five Levels",
           x: 'The game has 5 levels, from easy to hard:<br><br>🐾 Beginner · ⭐ Intermediate · 🌟 Advanced · 🏆 Champion · ⚡ Hero<br><br>Pick the level that fits you — each level has its own exercises and board. You can always switch! 😊',
         };
-    const pages = [goal, steps, levelPage];
+    const screenPage = {
+      i: device === "mobile" ? "📱" : "🖥️",
+      t: "Where things are",
+      x:
+        device === "mobile"
+          ? 'The board fills the screen. ➕ ➖ make it bigger or smaller, and you can drag it with your finger. 🗺️<br><br>The bank tab 🏦 on the edge opens a drawer: how many pellets everyone has, what each door is worth, and your route details.<br><br>When the route is ready, a green strip slides up from the bottom to confirm it. ✅'
+          : 'The board sits in the middle, and a column on the side stays open the whole time: the turn buttons, how many pellets everyone has, what each door is worth, and your route details. 📚<br><br>When the route is ready, a green window pops up at the bottom center to confirm it. ✅',
+    };
+    const pages = [goal, steps, levelPage, screenPage];
     if (level === "adv" || level === "champ" || level === "hero") {
       pages.push({
         i: "🧩",
@@ -264,7 +284,10 @@ export const en: Dict = {
   next: "Next →",
   gotItDone: "Got it! ✅",
 
-  tour: (level) => {
+  tour: (level, device) => {
+    // Where the panels live on this device — an always-open column on a computer,
+    // a drawer behind the bank tab on a phone.
+    const here = device === "mobile" ? "in the bank-tab drawer 🏦" : "here on the side";
     const mathByLevel: Record<string, string> = {
       beg: "times table — answers up to 40",
       med: "times table — answers up to 60",
@@ -324,8 +347,8 @@ export const en: Dict = {
         t: oneDoor ? "The door you cross" : "The colored doors",
         target: "doors",
         x: oneDoor
-          ? 'The colored lines between the hexes on the board are <strong>doors</strong> 🚪.<br><br>On Beginner there is one door — the <strong>Biscuit</strong> door 🍪. <strong>Here on the side</strong> you can see it: which exercise you cross and how many pellets it is worth. Each time you cross it you solve a small exercise and earn a pellet. Higher levels add more door colors — harder, but worth more pellets!'
-          : 'The colored lines between the hexes on the board are <strong>doors</strong> 🚪, and each color is a different food and exercise.<br><br><strong>Here on the side</strong> you can see all the doors for this level — which exercise hides in each and how many pellets it is worth. <strong>The harder the door, the more pellets you earn!</strong> 🦴',
+          ? `The colored lines between the hexes on the board are <strong>doors</strong> 🚪.<br><br>On Beginner there is one door — the <strong>blue door</strong>. <strong>${here}</strong> you can see it: which exercise you cross and how many pellets it is worth. Each time you cross it you solve a small exercise and earn a pellet. Higher levels add more door colors — harder, but worth more pellets!`
+          : `The colored lines between the hexes on the board are <strong>doors</strong> 🚪, and each color is a different level of difficulty.<br><br><strong>${here}</strong> you can see all the doors for this level — which exercise hides in each and how many pellets it is worth. <strong>The harder the door, the more pellets you earn!</strong> 🦴`,
       },
       {
         i: "🐾",
@@ -338,14 +361,14 @@ export const en: Dict = {
         t: "Route details",
         target: "routedetail",
         stage: "route",
-        x: 'On the side you get the <strong>full route breakdown</strong>: each step, which door you cross, and how many pellets it is worth. 🦴<br><br>That way you can compare paths and choose wisely.',
+        x: `${here.charAt(0).toUpperCase() + here.slice(1)} you get the <strong>full route breakdown</strong>: each step, which door you cross, and how many pellets it is worth. 🦴<br><br>That way you can compare paths and choose wisely.`,
       },
       {
         i: "🧠",
         t: "Strategy & confirming",
         target: "panel",
         stage: "route",
-        x: 'The top bar shows the <strong>total pellets</strong> you can collect on this route. 🍖<br><br>A short route = fewer exercises but fewer pellets; hard doors = more pellets. Pick the path that suits you!<br><br>Ready? <strong>✅ Confirm route</strong>. Want to change it? <strong>🗑 Clear</strong>.',
+        x: `You can see the <strong>total pellets</strong> you can collect on this route. 🦴<br><br>A short route = fewer exercises but fewer pellets; hard doors = more pellets. Pick the path that suits you!<br><br>Once the route reaches the target, ${device === "mobile" ? "a green strip slides up from the bottom" : "a green window pops up at the bottom center"}: <strong>"Route ready!"</strong> — tap it and off you go, or <strong>🗑 Clear</strong> and build again.`,
       },
       {
         i: "🧩",
@@ -371,7 +394,7 @@ export const en: Dict = {
         i: "🙋",
         t: "Help and earn",
         target: "helper",
-        x: 'Even when it\'s not your turn — you can help! 🙋<br><br>Over here on the side, while someone else is solving an exercise, another player can tap their own name, type the answer — and if right, earns <strong>+1 pellet for helping</strong>! 🦴<br><br>That way everyone stays involved and thinks together. 🧠',
+        x: `Even when it's not your turn — you can help! 🙋<br><br>First the player in turn gets a few seconds to try alone. After that (or right away after a wrong answer) you can tap your own name ${here}, type the answer — and if you are right, <strong>+1 pellet for helping</strong>! 🦴<br><br>In a game played together, where everyone has their own device, this window pops up front and center for whoever is not playing, with the exercise the active player is solving. 🧠`,
       },
       {
         i: "✨",
@@ -383,7 +406,7 @@ export const en: Dict = {
         i: "🏆",
         t: "Score & who wins",
         target: "sidebar",
-        x: 'On the side you can always see how many pellets each player has 🦴, and the doors-and-points table.<br><br>Whoever collects the most pellets — wins! 🎉',
+        x: `${here.charAt(0).toUpperCase() + here.slice(1)} you can always see how many pellets each player has 🦴, and the doors-and-points table.<br><br>Whoever collects the most pellets — wins! 🎉`,
       },
       {
         i: "🎉",
@@ -457,14 +480,17 @@ export const en: Dict = {
   doorLabel: (key) => DOOR_LABELS[key],
   pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | ${DOOR_RANGES[key]} | ${pts}🦴`,
   possiblePellets: (pts, steps) =>
-    `🍖 <strong>Total possible: ${pts} pellets</strong> in ${steps} steps`,
+    `🦴 <strong>Total possible: ${pts} pellets</strong> in ${steps} steps`,
   routeNotReach: (target) => `⚠️ Route doesn't reach Hex ${target}!`,
   confirmRoute: "✅ Confirm Route",
   clearRoute: "🗑 Clear",
   newTarget: "← New Target",
+  routeReadyTitle: "🗺️ Route ready!",
+  routeReadyLine: (pts, steps) =>
+    `${steps} ${steps === 1 ? "step" : "steps"} · worth up to <strong>${pts}</strong> 🦴`,
 
   p3Hint: (step, total, doorLabel, pts, turnPts) =>
-    `<strong>Step 3 — Execute! 🐕</strong><br>Step ${step}/${total} | Door: ${doorLabel} | ${pts} 🦴<br>🦴 Earned this turn: <strong>${turnPts}</strong>`,
+    `<strong>Step 3 — Execute! 🐕</strong><br>Step ${step}/${total} |  | ${pts} 🦴<br>🦴 Earned this turn: <strong>${turnPts}</strong>`,
   rollFor: (doorLabel) => `🎲 Roll ${doorLabel}`,
   orClickHex: "or click the hex with the answer on the board 👆",
   answerPlaceholder: "Answer...",
@@ -491,8 +517,8 @@ export const en: Dict = {
     lim_even: { t: "Even Only!", tx: "Your pellet total must be even. Otherwise — lose 1 pellet 🦴" },
     lim_odd: { t: "Odd Only!", tx: "Your pellet total must be odd. Otherwise — lose 1 pellet 🦴" },
     lim_three: {
-      t: "3 Food Types",
-      tx: "If you used fewer than 3 different food types —<br>you get only half your pellets!",
+      t: "3 Door Colors",
+      tx: "If you used fewer than 3 doors of different colors —<br>you get only half your pellets!",
     },
     lim_nored: {
       t: "No Red Door!",
@@ -538,7 +564,7 @@ export const en: Dict = {
     <div style="display:flex;flex-direction:column;gap:11px;margin-top:10px">
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>⏱ Turn Timer</strong>
-        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">When on — each player has 3 minutes per turn (2 min for Champion, 1:30 for Hero). Pellets earned before time runs out are <strong>saved!</strong><br>💡 Turn it off for young children, first-time players, or relaxed cooperative play.</p>
+        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">When on — the clock starts when the dog sets off, and you have 3 minutes to finish the walk (2 min for Champion, 1:30 for Hero). Pellets earned before time runs out are <strong>saved!</strong><br>💡 Turn it off for young children, first-time players, or relaxed cooperative play.</p>
       </div>
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>🏁 Win Condition</strong>
@@ -607,9 +633,10 @@ export const en: Dict = {
 
   bankTitle: "🏦 The Bank — what we collected",
   stepPrizeTitle: "🎁 This step's prize",
-  foodMenuTitle: "🍽️ What each food is worth",
+  doorMenuTitle: "🚪 What each door is worth",
   pelletsUnit: (n) => `${n} ${n === 1 ? "pellet" : "pellets"}`,
-  bankEmpty: "No food collected yet",
+  bankEmpty: "No pellets collected yet",
+  bankChipTitle: (door, count) => `${door} × ${count}`,
   tabPlay: "🎯 Exercise",
   tabBoard: "🗺️ Board",
   boardBannerFind: "🎯 Solve the exercise and tap the hex with the answer",
@@ -640,6 +667,9 @@ export const en: Dict = {
   spectatorAnswerFor: (name) => `${name} answers:`,
   spectatorCorrect: (name) => `+1 for ${name}! 🎉`,
   spectatorWrong: "❌ Wrong",
+  helperOnlineTitle: (name) => `🙋 ${name} is solving right now — do you know the answer?`,
+  helperOnlineHold: (name) => `🤫 Hang on, let ${name} try first…`,
+  helperOnlineSend: "✅ Send answer",
 
   primeHexTitle: (n) => `🎲 Prime Hex — ${n}!`,
   primeHexMsg: (n) => `<strong>${n}</strong> is a prime number — only divisible by 1 and itself, and it can't be broken into factors!<br>That means a Twist card is waiting for you! 🎲`,

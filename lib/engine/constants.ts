@@ -13,23 +13,10 @@ export const DOGS = ["🐕", "🐩", "🐶", "🦮"];
 
 /**
  * The single thing you collect: a pellet (גרגיר). This bone icon is the score
- * unit everywhere — bank, win screen, results. Foods (doors) are just worth a
- * different number of pellets; no food uses this icon, so the two never clash.
+ * unit everywhere — bank, win screen, results. A door is simply worth a number
+ * of pellets, so there is only ever one kind of food in the game.
  */
 export const PELLET = "🦴";
-
-/**
- * Food icon per door — language-agnostic, used by the board, the bank, and the
- * "this step's prize" panel. The easiest (blue) door is a Biscuit, not a Bone,
- * so it stays visually distinct from the pellet score unit.
- */
-export const DOOR_ICON: Record<DoorKey, string> = {
-  blue: "🍪",
-  purple: "🐟",
-  yellow: "🍗",
-  red: "🌭",
-  redlong: "🥩",
-};
 
 /** Door config — min/max range maps to cognitive difficulty families. Labels are localized. */
 export const DC: Record<DoorKey, Door> = {

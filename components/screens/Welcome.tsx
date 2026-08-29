@@ -42,6 +42,17 @@ export default function Welcome({
       <div className="wsub2">{t.welcomeSub2a}</div>
       <div className="wsub2">{t.welcomeSub2b}</div>
 
+      {/* The two explanations come before anything that starts a game, so a child
+          (or an adult handing over the tablet) reads how to play first. */}
+      <div className="wguides">
+        <button className="btnout wguide-btn" onClick={() => actions.goSimpleGuide(null)}>
+          {t.howToPlay}
+        </button>
+        <button className="btnout wguide-btn" onClick={actions.goInst}>
+          {t.fullGuideBtn}
+        </button>
+      </div>
+
       <button
         className="btnbig"
         style={{ margin: "14px auto 4px", maxWidth: 360 }}
@@ -80,12 +91,6 @@ export default function Welcome({
         })}
       </div>
 
-      <button className="btnout" onClick={() => actions.goSimpleGuide(null)}>
-        {t.howToPlay}
-      </button>
-      <button className="btnout" onClick={actions.goInst}>
-        {t.fullGuideBtn}
-      </button>
       <button className="btnout" onClick={actions.goResults}>
         {t.viewResults}
       </button>

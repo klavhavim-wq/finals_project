@@ -9,6 +9,14 @@ export interface InstPage {
   x: string;
 }
 
+/**
+ * Which layout the player is actually looking at. The guides describe where
+ * things are on screen, and the two layouts put them in different places — a
+ * side column on a computer, an edge tab and a drawer on a phone — so every
+ * page that says "over here" is written twice, once per device.
+ */
+export type Device = "desktop" | "mobile";
+
 /** Which area of the live game a tour step spotlights. */
 export type TourTarget = "board" | "panel" | "sidebar" | "helper" | "routedetail" | "doors" | "header" | "center";
 
@@ -62,9 +70,10 @@ export interface Dict {
   tutorialVideos: string;
 
   // Instructions
-  inst: InstPage[];
+  /** full guide; the pages that describe the screen are written per device */
+  inst: (device: Device) => InstPage[];
   /** short, child-friendly guide; tailored to a level, or all levels when null */
-  simpleGuide: (level: Level | null) => InstPage[];
+  simpleGuide: (level: Level | null, device: Device) => InstPage[];
   fullGuideBtn: string;
   back: string;
   next: string;
@@ -72,7 +81,7 @@ export interface Dict {
 
   // Guided demo tour
   /** step-by-step popups shown over a live sample game, tailored per level */
-  tour: (level: Level) => TourStep[];
+  tour: (level: Level, device: Device) => TourStep[];
   demoGameBtn: string;
   demoPlayerName: string;
   demoHelperName: string;
@@ -132,6 +141,9 @@ export interface Dict {
   confirmRoute: string;
   clearRoute: string;
   newTarget: string;
+  /** the confirm-your-route window that pops to the front once the route reaches the target */
+  routeReadyTitle: string;
+  routeReadyLine: (pts: number, steps: number) => string;
 
   // Phase 3
   p3Hint: (step: number, total: number, doorLabel: string, pts: number, turnPts: number) => string;
@@ -212,16 +224,18 @@ export interface Dict {
   doorLegendTitle: string;
   doorLegendPts: (pts: number) => string;
 
-  // Game squares (bank / step prize / food menu / mobile views)
+  // Game squares (bank / step prize / door menu / mobile views)
   bankTitle: string;
   /** title of the "this step's prize" square while walking */
   stepPrizeTitle: string;
-  /** title of the food-values menu shown when not walking */
-  foodMenuTitle: string;
-  /** "N pellets" — the worth of a food */
+  /** title of the door-values menu shown when not walking */
+  doorMenuTitle: string;
+  /** "N pellets" — what a door is worth */
   pelletsUnit: (n: number) => string;
-  /** shown in the bank before any food is collected */
+  /** shown in the bank before any pellets are collected */
   bankEmpty: string;
+  /** tooltip on a bank chip: "blue door × 3" */
+  bankChipTitle: (door: string, count: number) => string;
   /** mobile two-screen tab labels */
   tabPlay: string;
   tabBoard: string;
@@ -263,6 +277,11 @@ export interface Dict {
   spectatorAnswerFor: (name: string) => string;
   spectatorCorrect: (name: string) => string;
   spectatorWrong: string;
+  /** playing together: the helper window that pops up for whoever is not playing */
+  helperOnlineTitle: (name: string) => string;
+  /** the quiet line shown while the player in turn is given a chance to answer alone */
+  helperOnlineHold: (name: string) => string;
+  helperOnlineSend: string;
 
   // Prime hex explanation modal
   primeHexTitle: (n: number) => string;

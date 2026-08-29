@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import RichText from "./RichText";
-import { DC, DOOR_ICON } from "@/lib/engine/constants";
+import { DC } from "@/lib/engine/constants";
+import { routeReachesTarget } from "@/lib/engine/gameReducer";
 import type { GameState, Level } from "@/lib/engine/types";
 import type { GameActions } from "./useGame";
 import type { Dict } from "@/lib/i18n";
@@ -102,7 +103,7 @@ function Phase1({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
 function Phase2({ t, state, actions }: { t: Dict; state: GameState; actions: GameActions }) {
   const steps = state.path.length;
   const pts = state.pathDoors.reduce((s, d) => s + DC[d].pts, 0);
-  const hasTarget = state.targetHex !== null && state.path.includes(state.targetHex);
+  const hasTarget = routeReachesTarget(state);
 
   // The route reads off the board (each hex painted in its door colour); the
   // step-by-step breakdown lives in the side bar. This docked bar keeps the
@@ -124,7 +125,7 @@ function Phase2({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
       <button
         className="abt abg"
         onClick={actions.confirmPath}
-        disabled={!steps || !hasTarget}
+        disabled={!hasTarget}
       >
         {t.confirmRoute}
       </button>
@@ -171,8 +172,8 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
     <div>
       <TurnProgress t={t} state={state} />
       <div className="p3-door" style={{ borderColor: dc.color, color: dc.color }}>
-        <span className="p3-door-ico">{DOOR_ICON[col]}</span>
-        <RichText html={t.doorLabel(col).split(" ").slice(1).join(" ")} />
+        <span className="p3-door-ico door-swatch" style={{ background: dc.color }} aria-hidden="true" />
+        <RichText html={t.doorLabel(col)} />
         <span className="p3-door-val">{t.pelletsUnit(dc.pts)}</span>
       </div>
       <button

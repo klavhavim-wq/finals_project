@@ -2,11 +2,11 @@ import type { DoorKey, EffResult } from "../engine/types";
 import type { Dict, TourStep } from "./index";
 
 const DOOR_LABELS: Record<DoorKey, string> = {
-  blue: "🍪 ביסקוויט",
-  purple: "🐟 דג",
-  yellow: "🍗 כנף",
-  red: "🌭 נקניקיה",
-  redlong: "🥩 סטייק",
+  blue: "דלת כחולה",
+  purple: "דלת סגולה",
+  yellow: "דלת כתומה",
+  red: "דלת אדומה",
+  redlong: "דלת שחורה",
 };
 
 const DOOR_RANGES: Record<DoorKey, string> = {
@@ -119,8 +119,8 @@ function formatEff(r: EffResult): string {
         : "✅ הגרגירים אי-זוגיים! אפשר להמשיך";
     case "threeColors":
       return r.applied
-        ? `רק ${r.count} סוגי אוכל — חצי מהגרגירים: <strong>${r.total}</strong>`
-        : `✅ ${r.count} סוגי אוכל! אפשר להמשיך`;
+        ? `רק ${r.count} צבעי דלתות — חצי מהגרגירים: <strong>${r.total}</strong>`
+        : `✅ ${r.count} צבעי דלתות! אפשר להמשיך`;
     case "noRed":
       return r.applied
         ? `${r.count} דלתות אדומות! −${r.lost} 🦴 — נשאר: <strong>${r.total}</strong>`
@@ -151,18 +151,27 @@ export const he: Dict = {
 
   logoAlt: "דפי והכלבים",
   title: "כשכש-נשנש 🐕🍖",
-  welcomeSub: "עזרו לכלב לצבור מטעמים וגרגירים ולמלא את הבנק שלו! 🦴",
+  welcomeSub: "עזרו לכלב לצבור גרגירים ולמלא את הבנק שלו! 🦴",
   welcomeSub2a: "📚 לוח הכפל · עובדות יסוד · אסטרטגיה",
   welcomeSub2b: "👥 1–4 שחקנים \u00a0·\u00a0 ⏱ 20–45 דק׳",
   startGame: "🎮 התחל משחק!",
   chooseLevel: "✨ בחרו רמה כדי להתחיל",
   demoVideo: "🎬 סרטון הדגמה",
   howToPlay: "📖 איך משחקים?",
-  tutorialVideos: "🎬 סרטוני הסבר",     inst: [
+  tutorialVideos: "🎬 סרטוני הסבר",
+  inst: (device) => [
        {
          i: "🎮",
          t: "לוח המשחק",
-         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="300" height="126" viewBox="0 0 228 96" xmlns="http://www.w3.org/2000/svg"><polygon points="48,10 80.9,29 80.9,67 48,86 15.1,67 15.1,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="113.8,10 146.7,29 146.7,67 113.8,86 80.9,67 80.9,29" fill="#F5F3FF" stroke="#C9A882" stroke-width="1.5"/><polygon points="179.6,10 212.5,29 212.5,67 179.6,86 146.7,67 146.7,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><line x1="80.9" y1="29" x2="80.9" y2="67" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/><line x1="146.7" y1="29" x2="146.7" y2="67" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/><text x="48" y="58" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">12</text><text x="113.8" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">13</text><text x="179.6" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="48" y="34" text-anchor="middle" font-size="22">🐕</text><text x="113.8" y="34" text-anchor="middle" font-size="16">🎲</text></svg></div>הלוח מכיל משושים ממוספרים — ככל שהרמה גבוהה יותר, הלוח גדול יותר (עד 100). בין המשושים יש צלעות צבעוניות — אלה ה"דלתות" שלנו! 🚪<br><br>כל צבע = סוג אוכל + רמת קושי.<br><br>🎯 <strong>המטרה:</strong> לצבור כמה שיותר גרגירים לבנק של הכלב! 🐶🦴',
+         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="300" height="126" viewBox="0 0 228 96" xmlns="http://www.w3.org/2000/svg"><polygon points="48,10 80.9,29 80.9,67 48,86 15.1,67 15.1,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="113.8,10 146.7,29 146.7,67 113.8,86 80.9,67 80.9,29" fill="#F5F3FF" stroke="#C9A882" stroke-width="1.5"/><polygon points="179.6,10 212.5,29 212.5,67 179.6,86 146.7,67 146.7,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><line x1="80.9" y1="29" x2="80.9" y2="67" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/><line x1="146.7" y1="29" x2="146.7" y2="67" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/><text x="48" y="58" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">12</text><text x="113.8" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">13</text><text x="179.6" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="48" y="34" text-anchor="middle" font-size="22">🐕</text><text x="113.8" y="34" text-anchor="middle" font-size="16">🎲</text></svg></div>הלוח מכיל משושים ממוספרים — ככל שהרמה גבוהה יותר, הלוח גדול יותר (עד 100). בין המשושים יש צלעות צבעוניות — אלה ה"דלתות" שלנו! 🚪<br><br>כל צבע הוא דלת אחרת: תרגילים ברמת קושי אחרת, ומספר אחר של גרגירים לצעד.<br><br>🎯 <strong>המטרה:</strong> לצבור כמה שיותר גרגירים לבנק של הכלב! 🐶🦴',
+       },
+       {
+         i: device === "mobile" ? "📱" : "🖥️",
+         t: "איפה כל דבר על המסך",
+         x:
+           device === "mobile"
+             ? '📋 <strong>למעלה</strong> — תור של מי עכשיו, השעון, וכפתורי מוזיקה, הסבר ויציאה.<br><br>🗺️ <strong>כל המסך</strong> — הלוח. אפשר להגדיל ולהקטין אותו בכפתורי ➕ ➖, ולגרור אותו באצבע כדי לנוע עליו.<br><br>🏦 <strong>לשונית הבנק</strong> — בקצה המסך. לחיצה עליה פותחת מגירה ובה: הבנק של כל שחקן, טבלת הדלתות, פירוט המסלול, ועזרת החברים. אפשר לגרור את הלשונית לכל מקום נוח על המסך.<br><br>⬆️ <strong>חלונות</strong> — חלון אישור המסלול וההודעות נפתחים מלמטה, בטווח האצבע.'
+             : '📋 <strong>למעלה</strong> — תור של מי עכשיו, השעון, וכפתורי מוזיקה, הסבר ויציאה.<br><br>🗺️ <strong>במרכז</strong> — הלוח, בגדול.<br><br>📚 <strong>בצד</strong> — טור שנשאר פתוח כל הזמן, ובו: כפתורי התור, הבנק של כל שחקן, טבלת הדלתות, פירוט המסלול, ועזרת החברים.<br><br>✅ <strong>באמצע-למטה</strong> — כשהמסלול מוכן, קופץ שם חלון קטן לאישור.',
        },
        {
          i: "🎯",
@@ -177,22 +186,25 @@ export const he: Dict = {
        {
          i: "🚪",
          t: "דלתות וגרגירים",
-         x: '<div style="display:flex;flex-direction:column;gap:7px;margin:0 0 10px;font-size:.85em"><div style="padding:7px 11px;background:#EFF6FF;border-radius:8px;border-right:4px solid #3B82F6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#3B82F6">🍪 כחול — ביסקוויט</strong><span style="flex-shrink:0;background:#3B82F6;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">1 גרגיר לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">4–20</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">3 × 4 = 12</span></div></div><div style="padding:7px 11px;background:#F5F3FF;border-radius:8px;border-right:4px solid #8B5CF6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#8B5CF6">🐟 סגול — דג</strong><span style="flex-shrink:0;background:#7C3AED;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">2 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">10–40</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">4 × 5 = 20</span></div></div><div style="padding:7px 11px;background:#FFFBEB;border-radius:8px;border-right:4px solid #F59E0B"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#B45309">🍗 כתום — כנף</strong><span style="flex-shrink:0;background:#B45309;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">5 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">24–64</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">6 × 7 = 42</span></div></div><div style="padding:7px 11px;background:#FEF2F2;border-radius:8px;border-right:4px solid #EF4444"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#EF4444">🌭 אדום — נקניקיה</strong><span style="flex-shrink:0;background:#EF4444;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">10 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">42–81</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">8 × 9 = 72</span></div></div><div style="padding:7px 11px;background:#F3F4F6;border-radius:8px;border-right:4px solid #111827"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#111827">🥩 שחור — סטייק</strong><span style="flex-shrink:0;background:#111827;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">12 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">כפל ארוך · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">13 × 4 = 52</span></div></div></div><em style="font-size:.8em;color:#7C3AED">סטייק — רמת גיבור בלבד!</em><br><br>קשה יותר = יותר גרגירים לבנק! 🐶',
+         x: '<div style="display:flex;flex-direction:column;gap:7px;margin:0 0 10px;font-size:.85em"><div style="padding:7px 11px;background:#EFF6FF;border-radius:8px;border-right:4px solid #3B82F6"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#1D4ED8"><span style="display:inline-block;width:13px;height:13px;border-radius:4px;background:#3B82F6;vertical-align:-2px;margin-left:6px"></span>דלת כחולה</strong><span style="flex-shrink:0;background:#1D4ED8;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">1 גרגיר לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">4–20</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">3 × 4 = 12</span></div></div><div style="padding:7px 11px;background:#F5F3FF;border-radius:8px;border-right:4px solid #7C3AED"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#6D28D9"><span style="display:inline-block;width:13px;height:13px;border-radius:4px;background:#7C3AED;vertical-align:-2px;margin-left:6px"></span>דלת סגולה</strong><span style="flex-shrink:0;background:#6D28D9;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">2 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">10–40</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">4 × 5 = 20</span></div></div><div style="padding:7px 11px;background:#FFFBEB;border-radius:8px;border-right:4px solid #F59E0B"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#B45309"><span style="display:inline-block;width:13px;height:13px;border-radius:4px;background:#F59E0B;vertical-align:-2px;margin-left:6px"></span>דלת כתומה</strong><span style="flex-shrink:0;background:#B45309;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">5 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">24–64</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">6 × 7 = 42</span></div></div><div style="padding:7px 11px;background:#FEF2F2;border-radius:8px;border-right:4px solid #EF4444"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#DC2626"><span style="display:inline-block;width:13px;height:13px;border-radius:4px;background:#EF4444;vertical-align:-2px;margin-left:6px"></span>דלת אדומה</strong><span style="flex-shrink:0;background:#DC2626;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">10 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">מכפלות <span dir="ltr">42–81</span> · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">8 × 9 = 72</span></div></div><div style="padding:7px 11px;background:#F3F4F6;border-radius:8px;border-right:4px solid #111827"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong style="color:#111827"><span style="display:inline-block;width:13px;height:13px;border-radius:4px;background:#111827;vertical-align:-2px;margin-left:6px"></span>דלת שחורה</strong><span style="flex-shrink:0;background:#111827;color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;white-space:nowrap">12 גרגירים לצעד</span></div><div style="margin-top:4px;color:#475569">כפל ארוך · למשל <span dir="ltr" style="white-space:nowrap;font-weight:600;color:#1e293b">13 × 4 = 52</span></div></div></div><em style="font-size:.8em;color:#7C3AED">הדלת השחורה — רמת גיבור בלבד!</em><br><br>הצבע מסמן את רמת הקושי, והמספר שלידו הוא כמה גרגירים מקבלים על צעד בדלת הזו. קשה יותר = יותר גרגירים לבנק! 🐶',
        },
        {
          i: "✅",
          t: "בדיקה ואישור מסלול",
-         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 10px"><svg width="300" height="80" viewBox="0 0 245 66" xmlns="http://www.w3.org/2000/svg"><polygon points="102.0,5 115.9,13 115.9,29 102.0,37 88.1,29 88.1,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="129.7,5 143.6,13 143.6,29 129.7,37 115.8,29 115.8,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="157.4,5 171.3,13 171.3,29 157.4,37 143.5,29 143.5,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="185.1,5 199.0,13 199.0,29 185.1,37 171.2,29 171.2,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="212.8,5 226.7,13 226.7,29 212.8,37 198.9,29 198.9,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="32.7,29 46.6,37 46.6,53 32.7,61 18.8,53 18.8,37" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="60.4,29 74.3,37 74.3,53 60.4,61 46.5,53 46.5,37" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="18.9,5 32.8,13 32.8,29 18.9,37 5.0,29 5.0,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="46.6,5 60.5,13 60.5,29 46.6,37 32.7,29 32.7,13" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="74.3,5 88.2,13 88.2,29 74.3,37 60.4,29 60.4,13" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="88.1,29 102.0,37 102.0,53 88.1,61 74.2,53 74.2,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="115.9,29 129.8,37 129.8,53 115.9,61 102.0,53 102.0,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="143.6,29 157.5,37 157.5,53 143.6,61 129.7,53 129.7,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="171.3,29 185.2,37 185.2,53 171.3,61 157.4,53 157.4,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="199.0,29 212.9,37 212.9,53 199.0,61 185.1,53 185.1,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="226.7,29 240.6,37 240.6,53 226.7,61 212.8,53 212.8,37" fill="#FDE68A" stroke="#0891B2" stroke-width="1.5"/><line x1="32.8" y1="13" x2="32.8" y2="29" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><line x1="60.5" y1="13" x2="60.5" y2="29" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><line x1="88.2" y1="29" x2="74.3" y2="37" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"/><line x1="102.0" y1="37" x2="102.0" y2="53" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/><line x1="129.8" y1="37" x2="129.8" y2="53" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/><line x1="157.5" y1="37" x2="157.5" y2="53" stroke="#EF4444" stroke-width="3" stroke-linecap="round"/><line x1="185.2" y1="37" x2="185.2" y2="53" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"/><line x1="212.9" y1="37" x2="212.9" y2="53" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><text x="18.9" y="14" text-anchor="middle" font-size="9">🐕</text><text x="18.9" y="27" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">1</text><text x="46.6" y="21" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">2</text><text x="74.3" y="21" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">3</text><text x="102.0" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">4</text><text x="129.7" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">5</text><text x="157.4" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">6</text><text x="185.1" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">7</text><text x="212.8" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">8</text><text x="32.7" y="45" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">11</text><text x="60.4" y="45" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">12</text><text x="88.1" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">13</text><text x="115.9" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="143.6" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">15</text><text x="171.3" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">16</text><text x="199.0" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">17</text><text x="226.7" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">18</text></svg><div style="font-size:.75em;color:#64748b;margin-top:2px">דוגמה: מסלול ממשושה 1 למשושה 18 🗺️</div></div>לפני שיוצאים לדרך — בדקו את המסלול! 📝<br><br>בצד המסך תראו את פירוט המסלול שבחרתם: כל צעד, סוג האוכל בכל דלת, וסך הגרגירים שתוכלו לצבור.<br><br>ככה תוכלו להחליט אם שווה לעבור דלת קשה בשביל יותר גרגירים, או לבחור דרך קלה יותר.<br><br>לא מרוצים? לוחצים "נקה" 🗑 ובונים מחדש!<br>מוכנים? לוחצים "אשר מסלול" ✅ ויוצאים לדרך!',
+         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 10px"><svg width="300" height="80" viewBox="0 0 245 66" xmlns="http://www.w3.org/2000/svg"><polygon points="102.0,5 115.9,13 115.9,29 102.0,37 88.1,29 88.1,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="129.7,5 143.6,13 143.6,29 129.7,37 115.8,29 115.8,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="157.4,5 171.3,13 171.3,29 157.4,37 143.5,29 143.5,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="185.1,5 199.0,13 199.0,29 185.1,37 171.2,29 171.2,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="212.8,5 226.7,13 226.7,29 212.8,37 198.9,29 198.9,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="32.7,29 46.6,37 46.6,53 32.7,61 18.8,53 18.8,37" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="60.4,29 74.3,37 74.3,53 60.4,61 46.5,53 46.5,37" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="18.9,5 32.8,13 32.8,29 18.9,37 5.0,29 5.0,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="46.6,5 60.5,13 60.5,29 46.6,37 32.7,29 32.7,13" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="74.3,5 88.2,13 88.2,29 74.3,37 60.4,29 60.4,13" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="88.1,29 102.0,37 102.0,53 88.1,61 74.2,53 74.2,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="115.9,29 129.8,37 129.8,53 115.9,61 102.0,53 102.0,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="143.6,29 157.5,37 157.5,53 143.6,61 129.7,53 129.7,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="171.3,29 185.2,37 185.2,53 171.3,61 157.4,53 157.4,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="199.0,29 212.9,37 212.9,53 199.0,61 185.1,53 185.1,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="226.7,29 240.6,37 240.6,53 226.7,61 212.8,53 212.8,37" fill="#FDE68A" stroke="#0891B2" stroke-width="1.5"/><line x1="32.8" y1="13" x2="32.8" y2="29" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><line x1="60.5" y1="13" x2="60.5" y2="29" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><line x1="88.2" y1="29" x2="74.3" y2="37" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"/><line x1="102.0" y1="37" x2="102.0" y2="53" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/><line x1="129.8" y1="37" x2="129.8" y2="53" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/><line x1="157.5" y1="37" x2="157.5" y2="53" stroke="#EF4444" stroke-width="3" stroke-linecap="round"/><line x1="185.2" y1="37" x2="185.2" y2="53" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"/><line x1="212.9" y1="37" x2="212.9" y2="53" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><text x="18.9" y="14" text-anchor="middle" font-size="9">🐕</text><text x="18.9" y="27" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">1</text><text x="46.6" y="21" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">2</text><text x="74.3" y="21" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">3</text><text x="102.0" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">4</text><text x="129.7" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">5</text><text x="157.4" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">6</text><text x="185.1" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">7</text><text x="212.8" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">8</text><text x="32.7" y="45" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">11</text><text x="60.4" y="45" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">12</text><text x="88.1" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">13</text><text x="115.9" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="143.6" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">15</text><text x="171.3" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">16</text><text x="199.0" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">17</text><text x="226.7" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">18</text></svg><div style="font-size:.75em;color:#64748b;margin-top:2px">דוגמה: מסלול ממשושה 1 למשושה 18 🗺️</div></div>' +
+           (device === "mobile"
+             ? 'לפני שיוצאים לדרך — בדקו את המסלול! 📝<br><br>בלשונית הבנק 🏦 נפתחת מגירה עם פירוט המסלול: כל צעד, איזו דלת עוברים בה, וכמה גרגירים היא שווה.<br><br>ככה אפשר להחליט אם שווה לעבור דלת קשה בשביל יותר גרגירים, או לבחור דרך קלה יותר.<br><br>ברגע שהמסלול מגיע ליעד — נפתחת מלמטה רצועה: <strong>«המסלול מוכן!»</strong> ✅ עם מספר הצעדים והגרגירים. לוחצים על הכפתור הירוק ויוצאים לדרך, או על 🗑 ובונים מחדש.<br><br>הלוח נשאר פתוח — אפשר להמשיך לשנות את המסלול, והחלון מתעדכן לבד.'
+             : 'לפני שיוצאים לדרך — בדקו את המסלול! 📝<br><br>בטור שבצד המסך תראו את פירוט המסלול: כל צעד, איזו דלת עוברים בה, וכמה גרגירים היא שווה.<br><br>ככה אפשר להחליט אם שווה לעבור דלת קשה בשביל יותר גרגירים, או לבחור דרך קלה יותר.<br><br>ברגע שהמסלול מגיע ליעד — קופץ באמצע-למטה חלון: <strong>«המסלול מוכן!»</strong> ✅ עם מספר הצעדים והגרגירים. לוחצים על הכפתור הירוק ויוצאים לדרך, או על 🗑 ובונים מחדש.<br><br>הלוח נשאר פתוח — אפשר להמשיך לשנות את המסלול, והחלון מתעדכן לבד.'),
        },
        {
          i: "🐕",
          t: "שלב 3 — יוצאים לדרך!",
-         x: 'הכלב קופץ ללוח ומתחיל לנוע! 🐾<br><br>לכל צעד:<br>1️⃣ לוחצים "זרוק" 🎲<br>2️⃣ מקבלים תרגיל כפל לפי צבע הדלת<br>3️⃣ עונים על ידי הקלדה או כפתורי בחירה<br><br>✅ נכון ← הכלב מתקדם + גרגירים! 🦴<br>❌ טעות ← אפשר לנסות שוב בלי הגבלה!<br>💡 חושפים תשובה ← הכלב נעצר, <strong>הגרגירים שנצברו עד כה נשמרים!</strong> 🦴<br><br>🔢 <strong>צריכים עזרה?</strong> לחצו על כפתור "לוח כפל" בתחתית הפאנל בכל עת.<br><br>🙋 <strong>שחקנים אחרים יכולים לעזור!</strong> כשהשחקן הפעיל פותר — כל שחקן אחר לוחץ על שמו ומנסה לענות. מי שצודק מקבל +1 גרגיר! 🦴',
+         x: 'הכלב קופץ ללוח ומתחיל לנוע! 🐾<br><br>לכל צעד:<br>1️⃣ לוחצים "זרוק" 🎲<br>2️⃣ מקבלים תרגיל כפל לפי צבע הדלת<br>3️⃣ עונים על ידי הקלדה או כפתורי בחירה<br><br>✅ נכון ← הכלב מתקדם + גרגירים! 🦴<br>❌ טעות ← אפשר לנסות שוב בלי הגבלה!<br>💡 חושפים תשובה ← הכלב נעצר, <strong>הגרגירים שנצברו עד כה נשמרים!</strong> 🦴<br><br>🔢 <strong>צריכים עזרה?</strong> לחצו על כפתור "לוח כפל" בתחתית הפאנל בכל עת.<br><br>🙋 <strong>שחקנים אחרים יכולים לעזור!</strong> נותנים למי שבתור לנסות לבד, ואחרי כמה שניות (או מיד אחרי טעות) מי שלא בתור יכול לענות ולקבל +1 גרגיר. 🦴<br>במשחק «ביחד», שבו לכל אחד יש מכשיר משלו, החלון של העזרה קופץ בקדמת המסך של מי שלא משחק, עם התרגיל שמופיע אצל מי שכן.',
        },
        {
          i: "⏱",
          t: "הגבלת זמן",
-         x: 'לכל רמה יש הגבלת זמן לתור:<br><br>🐾⭐🌟 <strong>מתחילים / בינוני / מתקדם</strong> — 3 דקות<br>🏆 <strong>אלוף</strong> — 2 דקות<br>⚡ <strong>גיבור</strong> — דקה וחצי<br><br>לא סיימתם בזמן? נשארים במקום, <strong>הגרגירים שנצברו נשמרים!</strong> 🦴<br><br>💡 אפשר לכבות את הטיימר בהגדרות.',
+         x: 'השעון מתחיל לתקתק כשהכלב יוצא לדרך (שלב 3), ומודד את זמן ההליכה. במציאת היעד ובתכנון המסלול אין הגבלת זמן.<br><br>כמה זמן יש לכל רמה:<br><br>🐾⭐🌟 <strong>מתחילים / בינוני / מתקדם</strong> — 3 דקות<br>🏆 <strong>אלוף</strong> — 2 דקות<br>⚡ <strong>גיבור</strong> — דקה וחצי<br><br>לא סיימתם בזמן? נשארים במקום, <strong>הגרגירים שנצברו נשמרים!</strong> 🦴<br><br>💡 אפשר לכבות את השעון בהגדרות.',
        },
        {
          i: "🏆",
@@ -219,9 +231,9 @@ export const he: Dict = {
          t: "ביחד — מצב שיתופי",
          x: 'מפעילים "משחק שיתופי" בהגדרות.<br>במצב הזה — <strong>כולנו עובדים ביחד!</strong><br><br>✅ כל הגרגירים נכנסים לבנק המשותף 🦴<br>✅ אין שוד — כולנו אחד!<br>✅ אוספים ביחד כמה שיותר — ובסוף <strong>כולנו מנצחים! 🎉</strong> (ואם מגיעים ל-100 — ניצחון מיידי!)<br><br>🐕🐩🐶🦮 מתאים לילדים צעירים, לטיפול, ולמשחק משפחתי רגוע.',
        }
-     ],
+  ],
   fullGuideBtn: "📚 מדריך משחק מלא",
-  simpleGuide: (level) => {
+  simpleGuide: (level, device) => {
     const goal = {
       i: "🎯",
       t: "המטרה",
@@ -250,7 +262,15 @@ export const he: Dict = {
           t: "חמש רמות",
           x: 'במשחק יש 5 רמות, מהקלה לקשה:<br><br>🐾 מתחילים · ⭐ בינוני · 🌟 מתקדם · 🏆 אלוף · ⚡ גיבור<br><br>בוחרים רמה שמתאימה לכם — לכל רמה תרגילים ולוח משלה. תמיד אפשר להחליף! 😊',
         };
-    const pages = [goal, steps, levelPage];
+    const screenPage = {
+      i: device === "mobile" ? "📱" : "🖥️",
+      t: "איפה כל דבר",
+      x:
+        device === "mobile"
+          ? 'הלוח תופס את כל המסך. ➕ ➖ מגדילים ומקטינים אותו, ואפשר לגרור אותו באצבע. 🗺️<br><br>לשונית הבנק 🏦 שבקצה פותחת מגירה: כמה גרגירים יש לכל אחד, כמה שווה כל דלת, ופירוט המסלול.<br><br>כשהמסלול מוכן — נפתחת מלמטה רצועה ירוקה לאישור. ✅'
+          : 'הלוח באמצע, ובצד יש טור שפתוח כל הזמן: כפתורי התור, כמה גרגירים יש לכל אחד, כמה שווה כל דלת, ופירוט המסלול. 📚<br><br>כשהמסלול מוכן — קופץ באמצע-למטה חלון ירוק לאישור. ✅',
+    };
+    const pages = [goal, steps, levelPage, screenPage];
     if (level === "adv" || level === "champ" || level === "hero") {
       pages.push({
         i: "🧩",
@@ -264,7 +284,10 @@ export const he: Dict = {
   next: "← הבא",
   gotItDone: "✅ הבנתי!",
 
-  tour: (level) => {
+  tour: (level, device) => {
+    // Where the panels live on this device — a column that is always open on a
+    // computer, a drawer behind the bank tab on a phone.
+    const here = device === "mobile" ? "במגירה של לשונית הבנק 🏦" : "כאן בצד";
     const mathByLevel: Record<string, string> = {
       beg: "לוח הכפל — תשובות עד 40",
       med: "לוח הכפל — תשובות עד 60",
@@ -324,8 +347,8 @@ export const he: Dict = {
         t: oneDoor ? "הדלת שעוברים בה" : "הדלתות הצבעוניות",
         target: "doors",
         x: oneDoor
-          ? 'בין המשושים שעל הלוח יש קווים צבעוניים — אלה ה<strong>דלתות</strong> 🚪.<br><br>ברמת מתחילים יש דלת אחת — דלת ה<strong>ביסקוויט</strong> 🍪. <strong>כאן בצד</strong> רואים אותה: איזה תרגיל עוברים בה וכמה גרגירים היא שווה. בכל מעבר פותרים תרגיל קטן ומקבלים גרגיר. ברמות הבאות מתווספים עוד צבעי דלתות — קשות יותר אבל שוות יותר גרגירים!'
-          : 'בין המשושים שעל הלוח יש קווים צבעוניים — אלה ה<strong>דלתות</strong> 🚪, וכל צבע הוא סוג אוכל ותרגיל אחר.<br><br><strong>כאן בצד</strong> רואים את כל הדלתות של הרמה — איזה תרגיל מסתתר בכל אחת וכמה גרגירים היא שווה. <strong>ככל שהדלת קשה יותר, מקבלים יותר גרגירים!</strong> 🦴',
+          ? `בין המשושים שעל הלוח יש קווים צבעוניים — אלה ה<strong>דלתות</strong> 🚪.<br><br>ברמת מתחילים יש דלת אחת — ה<strong>דלת הכחולה</strong>. <strong>${here}</strong> רואים אותה: איזה תרגיל עוברים בה וכמה גרגירים היא שווה. בכל מעבר פותרים תרגיל קטן ומקבלים גרגיר. ברמות הבאות מתווספים עוד צבעי דלתות — קשות יותר אבל שוות יותר גרגירים!`
+          : `בין המשושים שעל הלוח יש קווים צבעוניים — אלה ה<strong>דלתות</strong> 🚪, וכל צבע הוא רמת קושי אחרת.<br><br><strong>${here}</strong> רואים את כל הדלתות של הרמה — איזה תרגיל מסתתר בכל אחת וכמה גרגירים היא שווה. <strong>ככל שהדלת קשה יותר, מקבלים יותר גרגירים!</strong> 🦴`,
       },
       {
         i: "🐾",
@@ -338,14 +361,14 @@ export const he: Dict = {
         t: "פירוט המסלול",
         target: "routedetail",
         stage: "route",
-        x: 'בצד יש <strong>פירוט מלא של המסלול</strong>: כל צעד, איזו דלת עוברים בו וכמה גרגירים הוא שווה. 🦴<br><br>ככה אפשר להשוות דרכים ולבחור חכם.',
+        x: `${here} יש <strong>פירוט מלא של המסלול</strong>: כל צעד, איזו דלת עוברים בו וכמה גרגירים הוא שווה. 🦴<br><br>ככה אפשר להשוות דרכים ולבחור חכם.`,
       },
       {
         i: "🧠",
         t: "תכנון ואישור",
         target: "panel",
         stage: "route",
-        x: 'בסרגל למעלה רואים את <strong>סך הגרגירים</strong> שאפשר לצבור במסלול. 🍖<br><br>מסלול קצר = פחות תרגילים אבל פחות גרגירים; דלתות קשות = יותר גרגירים. בוחרים דרך שמתאימה לכם!<br><br>מוכנים? <strong>✅ אשרו מסלול</strong>. רוצים לשנות? <strong>🗑 נקו</strong>.',
+        x: `רואים את <strong>סך הגרגירים</strong> שאפשר לצבור במסלול. 🦴<br><br>מסלול קצר = פחות תרגילים אבל פחות גרגירים; דלתות קשות = יותר גרגירים. בוחרים דרך שמתאימה לכם!<br><br>כשהמסלול מגיע ליעד, ${device === "mobile" ? "נפתחת מלמטה רצועה ירוקה" : "קופץ באמצע-למטה חלון ירוק"}: <strong>«המסלול מוכן!»</strong> — לוחצים ויוצאים לדרך, או <strong>🗑 נקו</strong> ובונים מחדש.`,
       },
       {
         i: "🧩",
@@ -371,7 +394,7 @@ export const he: Dict = {
         i: "🙋",
         t: "עוזרים ומרוויחים",
         target: "helper",
-        x: 'גם כשזה לא התור שלכם — אפשר לעזור! 🙋<br><br>כאן בצד, בזמן שמישהו אחר פותר תרגיל, שחקן אחר יכול ללחוץ על השם שלו, לכתוב את התשובה — ואם צדק, מקבל <strong>+1 גרגיר על העזרה</strong>! 🦴<br><br>ככה כולם נשארים בעניין וחושבים יחד. 🧠',
+        x: `גם כשזה לא התור שלכם — אפשר לעזור! 🙋<br><br>קודם נותנים למי שבתור לנסות לבד. אחרי כמה שניות (או מיד אחרי טעות) ${here} אפשר ללחוץ על השם, לכתוב את התשובה — ואם צדקתם, <strong>+1 גרגיר על העזרה</strong>! 🦴<br><br>במשחק «ביחד», שבו לכל אחד מכשיר משלו, החלון הזה קופץ בקדמת המסך של מי שלא בתור, עם התרגיל שמופיע אצל מי שכן. 🧠`,
       },
       {
         i: "✨",
@@ -383,7 +406,7 @@ export const he: Dict = {
         i: "🏆",
         t: "ניקוד ומי מנצח",
         target: "sidebar",
-        x: 'בצד רואים בכל רגע כמה גרגירים יש לכל שחקן 🦴, ואת טבלת הדלתות והנקודות.<br><br>מי שאסף הכי הרבה גרגירים — מנצח! 🎉',
+        x: `${here} רואים בכל רגע כמה גרגירים יש לכל שחקן 🦴, ואת טבלת הדלתות והערך שלהן.<br><br>מי שאסף הכי הרבה גרגירים — מנצח! 🎉`,
       },
       {
         i: "🎉",
@@ -457,14 +480,17 @@ export const he: Dict = {
   doorLabel: (key) => DOOR_LABELS[key],
   pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | <span dir="ltr">${DOOR_RANGES[key]}</span> | ${pts}🦴`,
   possiblePellets: (pts, steps) =>
-    `🍖 <strong>סה"כ אפשרי: ${pts} גרגירים</strong> ב-${steps} צעדים`,
+    `🦴 <strong>סה"כ אפשרי: ${pts} גרגירים</strong> ב-${steps} צעדים`,
   routeNotReach: (target) => `⚠️ המסלול לא מגיע למשושה ${target}!`,
   confirmRoute: "✅ אשרו מסלול",
   clearRoute: "🗑 נקו",
   newTarget: "בחרו יעד מחדש",
+  routeReadyTitle: "🗺️ המסלול מוכן!",
+  routeReadyLine: (pts, steps) =>
+    `${steps} ${steps === 1 ? "צעד" : "צעדים"} · אפשר לצבור <strong>${pts}</strong> 🦴`,
 
   p3Hint: (step, total, doorLabel, pts, turnPts) =>
-    `<strong>שלב 3 — יוצאים לדרך! 🐕</strong><br>צעד <span dir="ltr">${step}/${total}</span> | אוכל: ${doorLabel} | ${pts} 🦴<br>🦴 גרגירים עד כה: <strong>${turnPts}</strong>`,
+    `<strong>שלב 3 — יוצאים לדרך! 🐕</strong><br>צעד <span dir="ltr">${step}/${total}</span> | ${doorLabel} | ${pts} 🦴<br>🦴 גרגירים עד כה: <strong>${turnPts}</strong>`,
   rollFor: (doorLabel) => `🎲 זרקו עבור ${doorLabel}`,
   orClickHex: "או לחצו על המשושה עם התשובה בלוח 👆",
   answerPlaceholder: "התשובה...",
@@ -497,12 +523,12 @@ export const he: Dict = {
       tx: "מספר הגרגירים שלכם חייב להיות אי-זוגי.<br>אם לא — תאבדו גרגיר אחד 🦴",
     },
     lim_three: {
-      t: "3 סוגי אוכל",
-      tx: "אם עברתם דרך פחות מ-3 סוגי אוכל שונים —<br>תקבלו רק חצי מהגרגירים!",
+      t: "3 צבעי דלתות",
+      tx: "אם עברתם דרך פחות מ-3 דלתות בצבעים שונים —<br>תקבלו רק חצי מהגרגירים!",
     },
     lim_nored: {
       t: "ללא דלת אדומה!",
-      tx: "אם עברתם בדלת אדומה (נקניקיה או סטייק) בתור הזה —<br>תאבדו את הגרגירים שצברתם ממנה!",
+      tx: "אם עברתם בדלת אדומה או שחורה בתור הזה —<br>תאבדו את הגרגירים שצברתם ממנה!",
     },
     lim_short: {
       t: "מסלול קצר",
@@ -544,7 +570,7 @@ export const he: Dict = {
     <div style="display:flex;flex-direction:column;gap:11px;margin-top:10px">
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>⏱ טיימר לכל תור</strong>
-        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">כשמופעל — יש לכל שחקן 3 דקות לסיים תור (2 דקות ברמת אלוף, דקה וחצי בגיבור). גרגירים שנצברו לפני שהזמן נגמר — <strong>נשמרים!</strong><br>💡 כבו אותו עם ילדים קטנים, כשמתרגלים בפעם הראשונה, או במשחק שיתופי רגוע.</p>
+        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">כשמופעל — השעון מתחיל כשהכלב יוצא לדרך, ויש 3 דקות לסיים את ההליכה (2 דקות ברמת אלוף, דקה וחצי בגיבור). גרגירים שנצברו לפני שהזמן נגמר — <strong>נשמרים!</strong><br>💡 כבו אותו עם ילדים קטנים, כשמתרגלים בפעם הראשונה, או במשחק שיתופי רגוע.</p>
       </div>
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>🏁 מטרת המשחק</strong>
@@ -613,9 +639,10 @@ export const he: Dict = {
 
   bankTitle: "🏦 הבנק — מה אספנו",
   stepPrizeTitle: "🎁 הפרס בצעד הזה",
-  foodMenuTitle: "🍽️ כמה שווה כל אוכל",
+  doorMenuTitle: "🚪 כמה שווה כל דלת",
   pelletsUnit: (n) => `${n} ${n === 1 ? "גרגיר" : "גרגירים"}`,
-  bankEmpty: "עדיין לא אספנו אוכל",
+  bankEmpty: "עדיין לא אספנו גרגירים",
+  bankChipTitle: (door, count) => `${door} — ${count === 1 ? "פעם אחת" : `${count} פעמים`}`,
   tabPlay: "🎯 התרגיל",
   tabBoard: "🗺️ הלוח",
   boardBannerFind: "🎯 פתרו את התרגיל ולחצו על המשושה עם התשובה",
@@ -646,6 +673,9 @@ export const he: Dict = {
   spectatorAnswerFor: (name) => `${name} עונה:`,
   spectatorCorrect: (name) => `+1 ל-${name}! 🎉`,
   spectatorWrong: "❌ לא נכון",
+  helperOnlineTitle: (name) => `🙋 ${name} פותר/ת עכשיו — יודעים את התשובה?`,
+  helperOnlineHold: (name) => `🤫 רגע, נותנים ל${name} לנסות…`,
+  helperOnlineSend: "✅ שלחו תשובה",
 
   primeHexTitle: (n) => `🎲 משושה ראשוני — ${n}!`,
   primeHexMsg: (n) => `המספר <strong>${n}</strong> הוא מספר ראשוני — מתחלק רק ב-1 ובעצמו, ואי-אפשר לפרק אותו לגורמים!<br>זה אומר... קלף טוויסט מחכה לך! 🎲`,

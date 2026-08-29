@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import RichText from "./RichText";
+import { useDeviceLayout } from "./useDeviceLayout";
 import type { Dict, TourStage, TourTarget } from "@/lib/i18n";
 import type { GameState } from "@/lib/engine/types";
 import type { GameActions } from "./useGame";
@@ -91,7 +92,10 @@ export default function GuidedTour({
   state: GameState;
   actions: GameActions;
 }) {
-  const steps = t.tour(state.level);
+  // The tour points at real panels, and those sit in different places on a
+  // computer and on a phone — so its words follow the screen in front of you.
+  const device = useDeviceLayout();
+  const steps = t.tour(state.level, device);
   const idx = Math.min(Math.max(state.tourStep, 0), steps.length - 1);
   const step = steps[idx];
   const isLast = idx === steps.length - 1;

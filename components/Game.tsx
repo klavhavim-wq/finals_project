@@ -89,6 +89,7 @@ export default function Game({ locale, quickStart }: { locale: Locale; quickStar
               state={state}
               actions={actions}
               locale={locale}
+              mySeat={together ? online.seat?.seat ?? null : null}
               musicMuted={music.muted}
               musicVolume={music.volume}
               onToggleMusic={music.toggle}

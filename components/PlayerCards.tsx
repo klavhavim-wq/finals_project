@@ -1,6 +1,6 @@
 "use client";
 
-import { DC, DOGS, DOOR_ICON, LVL_DOORS, PCOLORS, PELLET } from "@/lib/engine/constants";
+import { DC, DOGS, LVL_DOORS, PCOLORS, PELLET } from "@/lib/engine/constants";
 import type { DoorKey, FoodTally, GameState } from "@/lib/engine/types";
 import type { Dict } from "@/lib/i18n";
 
@@ -13,8 +13,13 @@ function merge(a: FoodTally, b: FoodTally): FoodTally {
   return out;
 }
 
-/** The row of food icons + counts a player has banked (only non-zero foods). */
-function FoodsRow({ t, state, foods }: { t: Dict; state: GameState; foods: FoodTally }) {
+/**
+ * The little collection a player has banked: one coloured chip per door they
+ * walked through, with how many times. It keeps the "look what I collected"
+ * feel of the old food row without a second kind of food in the game — the
+ * chip is the door's own colour, and the count is a plain number beside it.
+ */
+function DoorChips({ t, state, foods }: { t: Dict; state: GameState; foods: FoodTally }) {
   const order = [...new Set(LVL_DOORS[state.level])];
   const have = order.filter((d) => (foods[d] ?? 0) > 0);
   if (have.length === 0) {
@@ -23,8 +28,13 @@ function FoodsRow({ t, state, foods }: { t: Dict; state: GameState; foods: FoodT
   return (
     <div className="bank-foods">
       {have.map((d) => (
-        <span key={d} className="bank-food" style={{ background: DC[d].color + "1c", borderColor: DC[d].color }}>
-          <span className="bank-food-ico">{DOOR_ICON[d]}</span>
+        <span
+          key={d}
+          className="bank-food"
+          style={{ background: DC[d].color + "1c", borderColor: DC[d].color }}
+          title={t.bankChipTitle(t.doorLabel(d), foods[d] ?? 0)}
+        >
+          <span className="bank-food-ico" style={{ background: DC[d].color }} aria-hidden="true" />
           <span className="bank-food-cnt">{foods[d]}</span>
         </span>
       ))}
@@ -57,7 +67,7 @@ export default function PlayerCards({ t, state }: { t: Dict; state: GameState })
               {PELLET}{state.sharedTokens + state.turnPts}
             </div>
           </div>
-          <FoodsRow t={t} state={state} foods={merge(state.sharedFoods, state.turnFoods)} />
+          <DoorChips t={t} state={state} foods={merge(state.sharedFoods, state.turnFoods)} />
           <div
             style={{
               marginTop: 6,
@@ -113,7 +123,7 @@ export default function PlayerCards({ t, state }: { t: Dict; state: GameState })
               )}
             </div>
             {!coop && !state.settings.freePlay && (
-              <FoodsRow t={t} state={state} foods={liveFoods} />
+              <DoorChips t={t} state={state} foods={liveFoods} />
             )}
             <div className="pcpos">{t.hexLabel(p.hex)}</div>
           </div>

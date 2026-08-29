@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import RichText from "../RichText";
+import { useDeviceLayout } from "../useDeviceLayout";
 import type { GameActions } from "../useGame";
 import type { Level } from "@/lib/engine/types";
 import type { Dict } from "@/lib/i18n";
@@ -19,7 +20,10 @@ export default function Instructions({
   mode: "simple" | "full";
   level: Level | null;
 }) {
-  const pages = mode === "simple" ? t.simpleGuide(level) : t.inst;
+  // The guide describes where things are on screen, and that differs between a
+  // computer and a phone — so it is written for whichever one is in front of you.
+  const device = useDeviceLayout();
+  const pages = mode === "simple" ? t.simpleGuide(level, device) : t.inst(device);
   const safeIdx = Math.min(idx, pages.length - 1);
   const page = pages[safeIdx];
   const isLast = safeIdx === pages.length - 1;

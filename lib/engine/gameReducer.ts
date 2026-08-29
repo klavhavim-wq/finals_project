@@ -1173,4 +1173,14 @@ function commitStep(state: GameState): GameState {
   return base;
 }
 
+/**
+ * Is the planned route finished — at least one step, and it actually gets to the
+ * target hex? This is what decides whether the walk may begin, so the confirm
+ * button, the "route ready" window and the board controls all read it from here
+ * rather than each working it out again.
+ */
+export function routeReachesTarget(s: GameState): boolean {
+  return s.path.length > 0 && s.targetHex !== null && s.path.includes(s.targetHex);
+}
+
 export { isPrime };

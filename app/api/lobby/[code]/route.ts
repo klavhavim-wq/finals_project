@@ -10,7 +10,7 @@
 import { NextResponse } from "next/server";
 import { PCOLORS } from "@/lib/engine/constants";
 import { initState, reducer } from "@/lib/engine/gameReducer";
-import type { GameState, Player } from "@/lib/engine/types";
+import type { Player } from "@/lib/engine/types";
 import { normaliseCode } from "@/lib/online/codes";
 import {
   OFFLINE_AFTER_MS,
@@ -35,10 +35,32 @@ function fail(error: LobbyErrorCode, status = 400) {
   return NextResponse.json<ErrorReply>({ ok: false, error }, { status });
 }
 
-/** When the current turn runs out, in wall-clock terms every device agrees on. */
-function deadlineFor(state: GameState | null): number | null {
-  if (!state || !state.timerRunning) return null;
-  return Date.now() + state.timerSecs * 1000;
+/**
+ * Keep the shared clock honest.
+ *
+ * The turn's deadline is wall-clock, so every device shows the same countdown.
+ * It is set once, when the clock starts running, and then left alone: recomputing
+ * it from the seconds left on every write would push it forward with each tap,
+ * and the clock would never actually count down. Instead the seconds stored in
+ * the game state are caught up to the deadline that already exists — which is
+ * also how a turn that ran out while nobody was looking gets settled.
+ */
+function syncClock(record: LobbyRecord): void {
+  const s = record.state;
+  if (!s || !s.timerRunning) {
+    record.turnEndsAt = null;
+    return;
+  }
+  if (record.turnEndsAt === null) {
+    record.turnEndsAt = Date.now() + s.timerSecs * 1000;
+    return;
+  }
+  const elapsedMs = s.timerSecs * 1000 - (record.turnEndsAt - Date.now());
+  if (elapsedMs >= 1000) {
+    const caught = catchUpClock(s, elapsedMs);
+    record.state = caught;
+    if (!caught.timerRunning) record.turnEndsAt = null;
+  }
 }
 
 /** Has this lobby's turn clock actually run out? */
@@ -53,14 +75,13 @@ function expired(record: LobbyRecord): boolean {
 function advance(record: LobbyRecord): void {
   if (!record.state) return;
   const idle = Date.now() - record.updatedAt;
+  syncClock(record);
   let s = record.state;
-  if (record.turnEndsAt !== null && Date.now() >= record.turnEndsAt) {
-    s = catchUpClock(s, Date.now() - record.turnEndsAt + s.timerSecs * 1000);
-  }
   s = unstick(s, idle);
   s = settle(s);
   record.state = s;
-  record.turnEndsAt = deadlineFor(s);
+  syncClock(record);
+  s = record.state;
   if (s.screen === "swin") {
     record.phase = "ended";
     record.endedReason = "finished";
@@ -171,7 +192,8 @@ export async function POST(req: Request, ctx: { params: Promise<{ code: string }
       });
       record.state = settle(s);
       record.phase = "playing";
-      record.turnEndsAt = deadlineFor(record.state);
+      record.turnEndsAt = null;
+      syncClock(record);
       return;
     }
 
@@ -224,7 +246,11 @@ export async function POST(req: Request, ctx: { params: Promise<{ code: string }
       let s = applyIntent(record.state, intent);
       s = settle(s);
       record.state = s;
-      record.turnEndsAt = deadlineFor(s);
+      // Note: this only starts a clock that just began running, or clears one
+      // that stopped — a turn already being timed keeps the deadline it has, so
+      // playing does not push the countdown forward.
+      syncClock(record);
+      s = record.state;
       if (s.screen === "swin") {
         record.phase = "ended";
         record.endedReason = "finished";
