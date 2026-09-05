@@ -40,12 +40,21 @@ Always run `npm run build` locally before pushing to catch TypeScript and build 
 
 GitHub remote: `https://github.com/klavhavim-wq/finals_project.git`
 
-**The working tree is this directory** — the one holding this file. It is the git
-repo. `C:\dogcheck` is a scratch mirror used only to run builds (the real path has
-Hebrew and spaces, which the build tool chokes on); it is synced one way, has no
-git repo, and **anything edited there is destroyed on the next sync**. Never work
-in it. `C:\dog_build` and `C:\dogbuild_real` also exist on this machine and are of
-unknown origin — do not assume either is live.
+**The working tree is this directory** — the one holding this file, at
+`C:\Users\daffy\OneDrive\dog_game`. It is the git repo, and it is the only copy.
+Build here, run the dev server here, edit here.
+
+The project used to sit under a path containing Hebrew and spaces, which the
+build tool chokes on, and a one-way mirror at `C:\dogcheck` existed solely to
+work around that. **Both are gone as of 5 September 2026**: the project moved to
+this English path and the mirror was deleted. Do not recreate it. A mirror costs
+more than it saves — a build once passed against a stale copy and reported
+success for code that had never been compiled, and a lint run counted every fault
+twice because the mirror held a second copy of the tree.
+
+`C:\dog_build` and `C:\dogbuild_real` still exist on this machine and are of
+unknown origin. Neither is live. Do not build in them or treat anything they
+contain as current.
 
 ## Commands
 
