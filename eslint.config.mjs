@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Standalone Node harnesses under tools/, not part of the site. They are
+    // CommonJS and are kept exactly as they were written, so the app's rules
+    // report sixteen findings against them — noise that reads like the site
+    // regressing when nothing about the site has changed.
+    "tools/**",
   ]),
 ]);
 

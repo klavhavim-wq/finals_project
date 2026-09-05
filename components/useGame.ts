@@ -42,9 +42,11 @@ export function useGame(locale: Locale) {
 
   // ── Review mode: each player's remembered missed facts, kept across games ──
   // Keyed by player name and persisted to localStorage, so a child's hard facts
-  // carry over from one session to the next. Only read/written when the active
-  // game has review mode on (the quick-launch presets) — the standard game never
-  // touches it, so its behaviour is unchanged.
+  // carry over from one session to the next. Read and written whenever the
+  // active game has review mode on, which is now the ordinary case: it started
+  // out reachable only through the quick-launch presets, and is offered on the
+  // standard settings screen too, switched on by default — a teacher who sets a
+  // game up the usual way was otherwise getting none of it.
   const reviewRef = useRef<Map<string, ReviewFact[]>>(new Map());
   /**
    * The player's own recent correct response times, the personal baseline for

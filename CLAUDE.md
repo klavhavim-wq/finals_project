@@ -45,12 +45,28 @@ GitHub remote: `https://github.com/klavhavim-wq/finals_project.git`
 Build here, run the dev server here, edit here.
 
 The project used to sit under a path containing Hebrew and spaces, which the
-build tool chokes on, and a one-way mirror at `C:\dogcheck` existed solely to
-work around that. **Both are gone as of 5 September 2026**: the project moved to
-this English path and the mirror was deleted. Do not recreate it. A mirror costs
-more than it saves — a build once passed against a stale copy and reported
-success for code that had never been compiled, and a lint run counted every fault
-twice because the mirror held a second copy of the tree.
+build tool chokes on, and a one-way mirror at `C:\dogcheck` existed to work
+around that. **Both are gone as of 5 September 2026**: the project moved to this
+English path and the mirror was deleted. Do not recreate it. A mirror costs more
+than it saves — a build once passed against a stale copy and reported success for
+code that had never been compiled, and a lint run counted every fault twice
+because the mirror held a second copy of the tree.
+
+**If a build fails with `EPERM: operation not permitted, unlink` somewhere under
+`.next`, the cause is OneDrive, not the code.** This folder is inside OneDrive,
+which turns files it is syncing into placeholders that the build cannot then
+delete. The mirror used to hide this by building outside OneDrive; now that
+builds happen here, the fix is to keep the folder pinned so OneDrive never
+dehydrates it:
+
+```bash
+attrib +P -U "C:\Users\daffy\OneDrive\dog_game\*" /S /D
+```
+
+That was applied on 6 September 2026 and the build has been stable since. It may
+need repeating if OneDrive is reconfigured or the folder is moved again. Never
+report a build as passing without seeing "Compiled successfully" in that run's
+own output — this failure appeared minutes after a build that genuinely passed.
 
 `C:\dog_build` and `C:\dogbuild_real` still exist on this machine and are of
 unknown origin. Neither is live. Do not build in them or treat anything they
