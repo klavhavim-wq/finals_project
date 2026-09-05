@@ -90,6 +90,21 @@ export const DC: Record<DoorKey, Door> = {
   },
 };
 
+/**
+ * Whether stealing starts switched on, by level. Off while the multiplication
+ * facts are still being acquired, where taking pellets off a named classmate
+ * adds pressure to the thing being learned; on from Advanced up, where the
+ * facts are more settled and the threat of losing pellets is what makes the
+ * route worth choosing carefully. Every level can still toggle it by hand.
+ */
+export const ROB_DEFAULT: Record<Level, boolean> = {
+  beg: false,
+  med: false,
+  adv: true,
+  champ: true,
+  hero: true,
+};
+
 export const LVL_DOORS: Record<Level, DoorKey[]> = {
   beg: ["blue"],
   med: ["blue", "purple"],

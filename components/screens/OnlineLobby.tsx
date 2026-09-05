@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { DOGS, PCOLORS } from "@/lib/engine/constants";
+import { DOGS, PCOLORS, ROB_DEFAULT } from "@/lib/engine/constants";
 import type { Level, Settings } from "@/lib/engine/types";
 import { CODE_LENGTH } from "@/lib/online/codes";
 import { MAX_PLAYERS } from "@/lib/online/protocol";
@@ -51,7 +51,10 @@ export default function OnlineLobby({
   // so the same level does not behave differently depending on how you started it.
   const [timer, setTimer] = useState(false);
   const [mc, setMc] = useState(true);
-  const [rob, setRob] = useState(false);
+  // The level is picked inside this screen, so the starting position has to
+  // follow it as it changes — but only until someone decides for themselves.
+  // After that their choice stands, whatever level they land on.
+  const [robChosen, setRobChosen] = useState<boolean | null>(null);
   const [coop, setCoop] = useState(false);
 
   const { view, seat, busy, error, clearError } = online;
@@ -60,8 +63,14 @@ export default function OnlineLobby({
 
   const errorText = error ? t.lobbyErrors[error] : null;
 
+  const rob = robChosen ?? ROB_DEFAULT[level];
+  const setRob = (v: boolean) => setRobChosen(v);
+
   const showMc = level === "beg" || level === "med";
-  const showRob = level !== "beg";
+  // Shown at every level, matching the single-device setup screen — the two
+  // used to disagree, so the same level offered stealing on one path and hid it
+  // on the other. The starting position comes from ROB_DEFAULT either way.
+  const showRob = true;
 
   const create = () => {
     const settings: Settings = {

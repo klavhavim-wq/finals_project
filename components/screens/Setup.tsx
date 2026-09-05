@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { DOGS, PCOLORS } from "@/lib/engine/constants";
+import { DOGS, PCOLORS, ROB_DEFAULT } from "@/lib/engine/constants";
 import type { Level, Player, Settings, WinMode } from "@/lib/engine/types";
 import type { GameActions } from "../useGame";
 import type { Dict } from "@/lib/i18n";
@@ -19,15 +19,14 @@ export default function Setup({
 }) {
   const [count, setCount] = useState(1);
   const [names, setNames] = useState<string[]>(["", "", "", ""]);
-  // The clock and stealing both start off, at every level. Whoever sets a game up
-  // usually presses Start without opening Options, so the defaults are what most
-  // children actually meet — and a countdown that cannot be paused, plus taking
-  // pellets off a named classmate, are the two things a first session least needs.
-  // Both are one tap away for anyone who wants them, and the Full Game preset
-  // still switches them on together.
+  // The clock starts off at every level. Whoever sets a game up usually presses
+  // Start without opening Options, so the defaults are what most children
+  // actually meet, and a countdown that cannot be paused is the thing a first
+  // session least needs. It is one tap away for anyone who wants it.
   const [timer, setTimer] = useState(false);
   const [mc, setMc] = useState(true);
-  const [rob, setRob] = useState(false);
+  // Stealing follows the level rather than a flat default: see ROB_DEFAULT.
+  const [rob, setRob] = useState(ROB_DEFAULT[level]);
   const [coop, setCoop] = useState(false);
   const [freePlay, setFreePlay] = useState(false);
   const [focus, setFocus] = useState(false);
@@ -38,7 +37,7 @@ export default function Setup({
 
   // Which options are relevant for this level.
   const showMc = level === "beg" || level === "med"; // multiple-choice only applies to these levels
-  const showRob = true; // every level can toggle steal; Beginner defaults it off
+  const showRob = true; // every level can toggle stealing; the default follows the level
   const showCoop = true; // cooperative play is available on every level, including Beginner
   // "First to 100" is only reachable from Advanced up; below that it would drag on
   // and fall back to the leader, so only Rounds is offered on Beginner/Intermediate.
