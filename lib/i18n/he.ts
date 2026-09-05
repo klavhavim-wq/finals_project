@@ -503,6 +503,8 @@ export const he: Dict = {
     return parts.join(", ");
   },
   boardAria: (max) => `לוח המשחק, משושים 1 עד ${max}`,
+  lobbyNameHint:
+    "עדיף שם פרטי או כינוי. השם נשלח לשרת רק כדי שהחברים בחדר יראו מי משחק, והוא נמחק מעצמו.",
   doorLabel: (key) => DOOR_LABELS[key],
   pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | <span dir="ltr">${DOOR_RANGES[key]}</span> | ${pts}🦴`,
   possiblePellets: (pts, steps) =>

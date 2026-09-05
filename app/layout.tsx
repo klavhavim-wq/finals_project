@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Rubik } from "next/font/google";
+import SiteFooter from "@/components/SiteFooter";
 import "./globals.css";
 
 const rubik = Rubik({
@@ -42,24 +43,7 @@ export default function RootLayout({
     <html lang="en" className={rubik.variable} style={{ colorScheme: "light" }}>
       <body>
         {children}
-        <footer
-          style={{
-            position: "fixed",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            textAlign: "center",
-            fontSize: "0.7rem",
-            color: "rgba(120, 53, 15, 0.45)",
-            padding: "3px 0 5px",
-            pointerEvents: "none",
-            zIndex: 1000,
-            direction: "ltr",
-            letterSpacing: "0.3px",
-          }}
-        >
-          © {new Date().getFullYear()} Daffy Nudel
-        </footer>
+        <SiteFooter year={new Date().getFullYear()} />
       </body>
     </html>
   );

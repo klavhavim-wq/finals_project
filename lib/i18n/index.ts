@@ -139,6 +139,8 @@ export interface Dict {
   hexAria: (n: number, isTarget: boolean, routeStep: number | null, hasDog: boolean, sym: string) => string;
   /** spoken description of the board as a whole, for screen readers */
   boardAria: (max: number) => string;
+  /** why the name typed into a group game leaves the device, shown next to the box */
+  lobbyNameHint: string;
   doorLabel: (key: DoorKey) => string;
   pathDoorLabel: (key: DoorKey, pts: number) => string;
   possiblePellets: (pts: number, steps: number) => string;

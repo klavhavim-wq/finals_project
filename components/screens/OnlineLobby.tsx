@@ -223,6 +223,9 @@ export default function OnlineLobby({
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
+            <p style={{ fontSize: ".72rem", color: "#8a7050", margin: "8px 2px 0", lineHeight: 1.5 }}>
+              {t.lobbyNameHint}
+            </p>
           </div>
 
           {errorText && (
@@ -265,6 +268,9 @@ export default function OnlineLobby({
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
+            <p style={{ fontSize: ".72rem", color: "#8a7050", margin: "8px 2px 0", lineHeight: 1.5 }}>
+              {t.lobbyNameHint}
+            </p>
           </div>
 
           <div className="scard">
