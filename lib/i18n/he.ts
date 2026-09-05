@@ -1,4 +1,5 @@
 import type { DoorKey, EffResult } from "../engine/types";
+import { timerTotalFor } from "../engine/constants";
 import type { Dict, TourStep } from "./index";
 
 const DOOR_LABELS: Record<DoorKey, string> = {
@@ -215,7 +216,7 @@ export const he: Dict = {
        {
          i: "⏱",
          t: "הגבלת זמן",
-         x: 'השעון מתחיל לתקתק כשהכלב יוצא לדרך (שלב 3), ומודד את זמן ההליכה. במציאת היעד ובתכנון המסלול אין הגבלת זמן.<br><br>כמה זמן יש לכל רמה:<br><br>🐾⭐🌟 <strong>מתחילים / בינוני / מתקדם</strong> — 3 דקות<br>🏆 <strong>אלוף</strong> — 2 דקות<br>⚡ <strong>גיבור</strong> — דקה וחצי<br><br>לא סיימתם בזמן? נשארים במקום, <strong>הגרגירים שנצברו נשמרים!</strong> 🦴<br><br>💡 אפשר לכבות את השעון בהגדרות.',
+         x: 'השעון מתחיל לתקתק כשהכלב יוצא לדרך (שלב 3), ומודד את זמן ההליכה. במציאת היעד ובתכנון המסלול אין הגבלת זמן.<br><br>כמה זמן יש? זה תלוי במסלול שבחרתם. כל תור מקבל זמן בסיס, ועוד תוספת קבועה לכל צעד — כך שמסלול ארוך יותר מקבל יותר זמן, ולא נענשים על בחירה בדרך ארוכה. ככל שהרמה גבוהה יותר, הזמן קצר יותר<br><br>לא סיימתם בזמן? נשארים במקום, <strong>הגרגירים שנצברו נשמרים!</strong> 🦴<br><br>💡 אפשר לכבות את השעון בהגדרות.',
        },
        {
          i: "🏆",
@@ -307,12 +308,16 @@ export const he: Dict = {
       hero: "כפל ארוך — מספר דו-ספרתי כפול חד-ספרתי",
     };
     const topNum: Record<string, number> = { beg: 40, med: 60, adv: 90, champ: 100, hero: 100 };
+    // Read off the real clock instead of restated by hand: the turn timer is
+    // base time plus a fixed amount per step, so a longer route buys more time.
+    // The old fixed "3 minutes" held only for a four-step beginner route.
+    const mmss = (n: number) => Math.floor(n / 60) + ":" + String(n % 60).padStart(2, "0");
     const timeByLevel: Record<string, string> = {
-      beg: "3 דקות",
-      med: "3 דקות",
-      adv: "3 דקות",
-      champ: "2 דקות",
-      hero: "דקה וחצי",
+      beg: mmss(timerTotalFor("beg", 4)),
+      med: mmss(timerTotalFor("med", 4)),
+      adv: mmss(timerTotalFor("adv", 4)),
+      champ: mmss(timerTotalFor("champ", 4)),
+      hero: mmss(timerTotalFor("hero", 4)),
     };
     const answerStyle =
       level === "beg" || level === "med"
@@ -331,7 +336,7 @@ export const he: Dict = {
         i: "📋",
         t: "הסרגל העליון",
         target: "header",
-        x: `למעלה רואים תמיד:<br><br>👦 <strong>תור של מי עכשיו</strong> — השם של מי שמשחק כרגע.<br>⏱ <strong>השעון</strong> — מופיע כאן כשמתחילים לצעוד, ומראה כמה זמן נשאר לתור (ברמה הזו: ${timeByLevel[level]}).<br>🔊 <strong>מוזיקה</strong> — מדליק ומכבה את מוזיקת הרקע. החץ הקטן שלידו פותח בקרת עוצמה.<br>📖 <strong>עזרה</strong> — פותח את ההסבר בכל רגע.<br>✖ <strong>יציאה</strong> — מסיים את המשחק.`,
+        x: `למעלה רואים תמיד:<br><br>👦 <strong>תור של מי עכשיו</strong> — השם של מי שמשחק כרגע.<br>⏱ <strong>השעון</strong> — מופיע כאן כשמתחילים לצעוד, ומראה כמה זמן נשאר לתור. הזמן נגזר מאורך המסלול שבחרתם — מסלול ארוך יותר מקבל יותר זמן. למסלול בן ארבעה צעדים ברמה הזו: ${timeByLevel[level]}.<br>🔊 <strong>מוזיקה</strong> — מדליק ומכבה את מוזיקת הרקע. החץ הקטן שלידו פותח בקרת עוצמה.<br>📖 <strong>עזרה</strong> — פותח את ההסבר בכל רגע.<br>✖ <strong>יציאה</strong> — מסיים את המשחק.`,
       },
       {
         i: "🗺️",
@@ -456,6 +461,7 @@ export const he: Dict = {
   optRob: "🦹 מנגנון שוד",
   optCoop: "🤝 משחק שיתופי — אוספים ביחד!",
   optFocus: "🎯 מצב מיקוד — בלי משושים מיוחדים (פחות הסחות)",
+  optReview: "🔁 תרגול חוזר — מחזיר תרגילים שטעיתם בהם, עד שהם נענים נכון ומהר",
   winCondition: "🏁 מטרת המשחק",
   winModes: {
     rounds: { icon: "🔄", name: "4 סיבובים", desc: "הכי הרבה גרגירים לאחר 4 סיבובים" },
@@ -592,7 +598,7 @@ export const he: Dict = {
     <div style="display:flex;flex-direction:column;gap:11px;margin-top:10px">
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>⏱ טיימר לכל תור</strong>
-        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">כשמופעל — השעון מתחיל כשהכלב יוצא לדרך, ויש 3 דקות לסיים את ההליכה (2 דקות ברמת אלוף, דקה וחצי בגיבור). גרגירים שנצברו לפני שהזמן נגמר — <strong>נשמרים!</strong><br>💡 כבו אותו עם ילדים קטנים, כשמתרגלים בפעם הראשונה, או במשחק שיתופי רגוע.</p>
+        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">כשמופעל — השעון מתחיל כשהכלב יוצא לדרך. הזמן נקבע לפי אורך המסלול שנבחר — זמן בסיס ועוד תוספת לכל צעד — ומתקצר ככל שהרמה עולה. גרגירים שנצברו לפני שהזמן נגמר — <strong>נשמרים!</strong><br>💡 כבו אותו עם ילדים קטנים, כשמתרגלים בפעם הראשונה, או במשחק שיתופי רגוע.</p>
       </div>
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>🏁 מטרת המשחק</strong>

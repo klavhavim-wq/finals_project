@@ -106,6 +106,7 @@ export interface Dict {
   optRob: string;
   optCoop: string;
   optFocus: string;
+  optReview: string;
   winCondition: string;
   winModes: Record<WinMode, LabelDesc>;
   startShort: string;

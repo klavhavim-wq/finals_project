@@ -29,6 +29,7 @@ function usesMC(state: GameState): boolean {
 export const SESSIONS_KEY = "kaskash_sessions";
 const LS_KEY = SESSIONS_KEY;
 const LS_REVIEW = "kaskash_review";
+const LS_PACE = "kaskash_pace";
 
 export function useGame(locale: Locale) {
   const [state, dispatch] = useReducer(reducer, locale, initState);
@@ -45,6 +46,14 @@ export function useGame(locale: Locale) {
   // game has review mode on (the quick-launch presets) — the standard game never
   // touches it, so its behaviour is unchanged.
   const reviewRef = useRef<Map<string, ReviewFact[]>>(new Map());
+  /**
+   * The player's own recent correct response times, the personal baseline for
+   * "quick". Persisted beside the practice list: the list survives between
+   * sessions, so a baseline that did not would hand every child five unmeasured
+   * answers at the start of each sitting — long enough to retire a fact on
+   * answers nobody ever checked the speed of.
+   */
+  const paceRef = useRef<Map<string, number[]>>(new Map());
   const loadReview = useCallback(() => {
     try {
       const raw = JSON.parse(localStorage.getItem(LS_REVIEW) || "{}") as Record<string, ReviewFact[]>;
@@ -52,10 +61,21 @@ export function useGame(locale: Locale) {
     } catch {
       reviewRef.current = new Map();
     }
+    try {
+      const raw = JSON.parse(localStorage.getItem(LS_PACE) || "{}") as Record<string, number[]>;
+      paceRef.current = new Map(Object.entries(raw));
+    } catch {
+      paceRef.current = new Map();
+    }
   }, []);
   const saveReview = useCallback(() => {
     try {
       localStorage.setItem(LS_REVIEW, JSON.stringify(Object.fromEntries(reviewRef.current)));
+    } catch {}
+  }, []);
+  const savePace = useCallback(() => {
+    try {
+      localStorage.setItem(LS_PACE, JSON.stringify(Object.fromEntries(paceRef.current)));
     } catch {}
   }, []);
   /** Record a missed multiplication fact for a player (review mode). */
@@ -75,12 +95,6 @@ export function useGame(locale: Locale) {
     reviewRef.current.set(name, list);
     saveReview();
   }, [saveReview]);
-  /**
-   * The player's own recent correct response times, used as their personal
-   * baseline for "quick". Kept per player, in memory only — it exists to judge
-   * the next few answers, not to be reported.
-   */
-  const paceRef = useRef<Map<string, number[]>>(new Map());
   const PACE_WINDOW = 12; // how many recent correct answers form the baseline
   const PACE_MIN = 5; // below this, there is no baseline yet
   const PACE_FACTOR = 1.5; // "quick" = no worse than 1.5× your own typical time
@@ -106,7 +120,8 @@ export function useGame(locale: Locale) {
     times.push(rtMs);
     if (times.length > PACE_WINDOW) times.shift();
     paceRef.current.set(name, times);
-  }, []);
+    savePace();
+  }, [savePace]);
 
   /**
    * A correct answer relaxes (and eventually retires) a remembered fact — but

@@ -31,6 +31,9 @@ export default function Setup({
   const [coop, setCoop] = useState(false);
   const [freePlay, setFreePlay] = useState(false);
   const [focus, setFocus] = useState(false);
+  // On by default: bringing missed facts back is what adapts the game to the
+  // child, and it is what fills the practice list a teacher reads afterwards.
+  const [review, setReview] = useState(true);
   const [winMode, setWinMode] = useState<WinMode>("rounds");
 
   // Which options are relevant for this level.
@@ -62,9 +65,7 @@ export default function Setup({
       coop: showCoop ? coop : false,
       freePlay,
       focus,
-      // The standard setup never turns review on — it lives in Quick Launch only,
-      // so the regular game's behaviour is unchanged.
-      review: false,
+      review,
     };
     actions.startGame(players, level, settings);
   };
@@ -153,6 +154,7 @@ export default function Setup({
         {showRob && <Toggle label={t.optRob} checked={rob} onChange={setRob} />}
         {showCoop && <Toggle label={t.optCoop} checked={coop} onChange={setCoop} />}
         <Toggle label={t.optFocus} checked={focus} onChange={setFocus} />
+        <Toggle label={t.optReview} checked={review} onChange={setReview} />
         <Toggle label={t.optFreePlay} checked={freePlay} onChange={setFreePlay} />
       </div>
 

@@ -1,4 +1,5 @@
 import type { DoorKey, EffResult } from "../engine/types";
+import { timerTotalFor } from "../engine/constants";
 import type { Dict, TourStep } from "./index";
 
 const DOOR_LABELS: Record<DoorKey, string> = {
@@ -215,7 +216,7 @@ export const en: Dict = {
        {
          i: "⏱",
          t: "Time Limits",
-         x: 'The clock starts ticking when the dog sets off (step 3) and times the walk. Finding the target and planning the route are not timed at all.<br><br>How long each level gives you:<br><br>🐾⭐🌟 <strong>Beginner / Intermediate / Advanced</strong> — 3 minutes<br>🏆 <strong>Champion</strong> — 2 minutes<br>⚡ <strong>Hero</strong> — <span dir="ltr">1:30</span> min<br><br>Did not finish in time? You stay in place, <strong>pellets earned so far are saved!</strong> 🦴<br><br>💡 You can turn off the clock in the settings.',
+         x: 'The clock starts ticking when the dog sets off (step 3) and times the walk. Finding the target and planning the route are not timed at all.<br><br>How long you get depends on the route you chose. Every turn gets a base time plus a fixed amount per step, so a longer route gets more time and you are never punished for taking the long way. The higher the level, the tighter the clock<br><br>Did not finish in time? You stay in place, <strong>pellets earned so far are saved!</strong> 🦴<br><br>💡 You can turn off the clock in the settings.',
        },
        {
          i: "🏆",
@@ -307,12 +308,16 @@ export const en: Dict = {
       hero: "long multiplication — two-digit × one-digit",
     };
     const topNum: Record<string, number> = { beg: 40, med: 60, adv: 90, champ: 100, hero: 100 };
+    // Read off the real clock instead of restated by hand: the turn timer is
+    // base time plus a fixed amount per step, so a longer route buys more time.
+    // The old fixed "3 minutes" held only for a four-step beginner route.
+    const mmss = (n: number) => Math.floor(n / 60) + ":" + String(n % 60).padStart(2, "0");
     const timeByLevel: Record<string, string> = {
-      beg: "3 minutes",
-      med: "3 minutes",
-      adv: "3 minutes",
-      champ: "2 minutes",
-      hero: "1:30 min",
+      beg: mmss(timerTotalFor("beg", 4)),
+      med: mmss(timerTotalFor("med", 4)),
+      adv: mmss(timerTotalFor("adv", 4)),
+      champ: mmss(timerTotalFor("champ", 4)),
+      hero: mmss(timerTotalFor("hero", 4)),
     };
     const answerStyle =
       level === "beg" || level === "med"
@@ -331,7 +336,7 @@ export const en: Dict = {
         i: "📋",
         t: "The top bar",
         target: "header",
-        x: `At the top you can always see:<br><br>👦 <strong>Whose turn it is</strong> — the name of the current player.<br>⏱ <strong>The clock</strong> — appears here once you start moving, showing the time left in the turn (this level: ${timeByLevel[level]}).<br>🔊 <strong>Music</strong> — turns the background music on or off. The little arrow beside it opens a volume slider.<br>📖 <strong>Help</strong> — opens the guide any time.<br>✖ <strong>Exit</strong> — ends the game.`,
+        x: `At the top you can always see:<br><br>👦 <strong>Whose turn it is</strong> — the name of the current player.<br>⏱ <strong>The clock</strong> — appears here once you start moving, showing the time left in the turn. The time follows the route you picked — a longer route gets more time. For a four-step route at this level: ${timeByLevel[level]}.<br>🔊 <strong>Music</strong> — turns the background music on or off. The little arrow beside it opens a volume slider.<br>📖 <strong>Help</strong> — opens the guide any time.<br>✖ <strong>Exit</strong> — ends the game.`,
       },
       {
         i: "🗺️",
@@ -456,6 +461,7 @@ export const en: Dict = {
   optRob: "🦹 Steal mechanic",
   optCoop: "🤝 Cooperative — collect together!",
   optFocus: "🎯 Focus mode — no special hexes (fewer distractions)",
+  optReview: "🔁 Practice again — brings back facts you missed, until they come right and quick",
   winCondition: "🏁 Win Condition",
   winModes: {
     rounds: { icon: "🔄", name: "4 Rounds", desc: "Most pellets after 4 rounds wins" },
@@ -586,7 +592,7 @@ export const en: Dict = {
     <div style="display:flex;flex-direction:column;gap:11px;margin-top:10px">
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>⏱ Turn Timer</strong>
-        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">When on — the clock starts when the dog sets off, and you have 3 minutes to finish the walk (2 min for Champion, 1:30 for Hero). Pellets earned before time runs out are <strong>saved!</strong><br>💡 Turn it off for young children, first-time players, or relaxed cooperative play.</p>
+        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">When on — the clock starts when the dog sets off. The time follows the route you chose — a base time plus an amount for every step — and tightens as the level rises. Pellets earned before time runs out are <strong>saved!</strong><br>💡 Turn it off for young children, first-time players, or relaxed cooperative play.</p>
       </div>
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>🏁 Win Condition</strong>

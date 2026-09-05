@@ -9,6 +9,7 @@ import { statsForPlayer } from "@/lib/stats";
 
 const LS_KEY = "kaskash_sessions";
 const LS_REVIEW = "kaskash_review";
+const LS_PACE = "kaskash_pace";
 
 function loadSessions(): SessionRecord[] {
   if (typeof window === "undefined") return [];
@@ -43,6 +44,7 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
   const clearAll = () => {
     localStorage.removeItem(LS_KEY);
     localStorage.removeItem(LS_REVIEW);
+    localStorage.removeItem(LS_PACE); // the speed baseline is part of "everything"
     setSessions([]);
     setOpenFacts({});
   };
