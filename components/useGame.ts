@@ -206,14 +206,26 @@ export function useGame(locale: Locale) {
             // Judge against the baseline as it stood *before* this answer, then
             // let this answer join it — otherwise a fact is measured partly
             // against itself.
-            // A hint teaches a way to work the answer out — doubling, adding a
-            // zero, splitting into easier parts. That is derivation, not
-            // retrieval, so a hinted answer neither retires a fact nor joins
-            // the child's baseline, where reading the hint would inflate the
-            // typical time and make later answers look quick by comparison.
-            const clean = it.attempt === 1 && !it.hintUsed && !it.revealed;
+            // Two different questions, so two different tests.
+            //
+            // Whether the answer can retire a fact is a question about what
+            // counts as knowing it, and that definition is not ours to move: it
+            // belongs to the person running the intervention. So the only thing
+            // excluded here is an answer that was handed over whole — the target
+            // uncovered, or a friend's answer revealed. That is not the child's
+            // answer at all, so it cannot be evidence about the child. A hint is
+            // deliberately NOT excluded: it teaches a way to work the answer out
+            // rather than giving it, and whether a child who applies a rule
+            // quickly counts as knowing the fact is a real question, still open.
+            const clean = it.attempt === 1 && !it.revealed;
+            //
+            // Whether the answer belongs in the child's speed baseline is a
+            // measurement question, and there a hint does disqualify it: the
+            // seconds spent reading the hint would inflate the median and make
+            // every later answer look quick against it.
+            const timedCleanly = clean && !it.hintUsed;
             const fluent = clean && isFluent(name, rt);
-            if (clean) notePace(name, rt);
+            if (timedCleanly) notePace(name, rt);
             noteRightFact(name, it.expr, fluent);
           } else {
             noteWrongFact(name, it.expr, it.answer);
