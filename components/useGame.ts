@@ -191,8 +191,14 @@ export function useGame(locale: Locale) {
             // Judge against the baseline as it stood *before* this answer, then
             // let this answer join it — otherwise a fact is measured partly
             // against itself.
-            const fluent = it.attempt === 1 && isFluent(name, rt);
-            notePace(name, rt);
+            // A hint teaches a way to work the answer out — doubling, adding a
+            // zero, splitting into easier parts. That is derivation, not
+            // retrieval, so a hinted answer neither retires a fact nor joins
+            // the child's baseline, where reading the hint would inflate the
+            // typical time and make later answers look quick by comparison.
+            const clean = it.attempt === 1 && !it.hintUsed && !it.revealed;
+            const fluent = clean && isFluent(name, rt);
+            if (clean) notePace(name, rt);
             noteRightFact(name, it.expr, fluent);
           } else {
             noteWrongFact(name, it.expr, it.answer);

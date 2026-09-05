@@ -15,6 +15,7 @@ import {
   edgeColor,
 } from "@/lib/engine/hexgrid";
 import type { DoorKey, GameState } from "@/lib/engine/types";
+import { getDict } from "@/lib/i18n";
 
 /**
  * A dash pattern per door, so a door can be told apart without seeing its colour.
@@ -45,13 +46,14 @@ function tint(hex: string, t: number): string {
  * route) is otherwise carried by colour only.
  */
 function hexLabel(state: GameState, n: number, sym: string): string {
-  const parts: string[] = [String(n)];
-  if (state.targetHex === n) parts.push("target");
   const idx = state.path.indexOf(n);
-  if (idx !== -1) parts.push(`route step ${idx + 1}`);
-  if (state.players.some((p) => p.hex === n)) parts.push("dog here");
-  if (sym) parts.push(sym);
-  return parts.join(", ");
+  return getDict(state.locale).hexAria(
+    n,
+    state.targetHex === n,
+    idx === -1 ? null : idx + 1,
+    state.players.some((p) => p.hex === n),
+    sym
+  );
 }
 
 function fillFor(state: GameState, n: number): string {

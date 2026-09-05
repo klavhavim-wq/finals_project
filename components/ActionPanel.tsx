@@ -280,7 +280,7 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
           {(hintVisible || state.wrongAnswerVisible) ? (
             <RichText className="hintbox" html={t.hintResult(state.pendingRoll.expr)} />
           ) : (
-            <button className="abt abp" onClick={() => setHintVisible(true)}>
+            <button className="abt abp" onClick={() => { actions.noteHint(); setHintVisible(true); }}>
               {t.hintBtn}
             </button>
           )}

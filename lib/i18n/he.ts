@@ -488,6 +488,14 @@ export const he: Dict = {
     `🎯 יעד: <strong>משושה ${target}</strong> · לחצו על משושים סמוכים לבניית המסלול 🗺️`,
   p2Empty: "לחצו על משושים בלוח לבניית המסלול 👆",
   stepHexLabel: (h) => `→ משושה ${h}`,
+  hexAria: (n, isTarget, routeStep, hasDog, sym) => {
+    const parts = [`משושה ${n}`];
+    if (isTarget) parts.push("היעד");
+    if (routeStep !== null) parts.push(`צעד ${routeStep} במסלול`);
+    if (hasDog) parts.push("הכלב כאן");
+    if (sym) parts.push(sym);
+    return parts.join(", ");
+  },
   doorLabel: (key) => DOOR_LABELS[key],
   pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | <span dir="ltr">${DOOR_RANGES[key]}</span> | ${pts}🦴`,
   possiblePellets: (pts, steps) =>

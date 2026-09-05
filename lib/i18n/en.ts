@@ -488,6 +488,14 @@ export const en: Dict = {
     `🎯 Target: <strong>hex ${target}</strong> · tap neighbouring hexes to build the route 🗺️`,
   p2Empty: "Click hexes on the board to build the route 👆",
   stepHexLabel: (h) => `→ Hex ${h}`,
+  hexAria: (n, isTarget, routeStep, hasDog, sym) => {
+    const parts = [`Hex ${n}`];
+    if (isTarget) parts.push("target");
+    if (routeStep !== null) parts.push(`route step ${routeStep}`);
+    if (hasDog) parts.push("dog here");
+    if (sym) parts.push(sym);
+    return parts.join(", ");
+  },
   doorLabel: (key) => DOOR_LABELS[key],
   pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | ${DOOR_RANGES[key]} | ${pts}🦴`,
   possiblePellets: (pts, steps) =>

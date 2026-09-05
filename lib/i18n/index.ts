@@ -134,6 +134,8 @@ export interface Dict {
   p2Hint: (target: number) => string;
   p2Empty: string;
   stepHexLabel: (h: number) => string;
+  /** spoken description of one board hex, for screen readers */
+  hexAria: (n: number, isTarget: boolean, routeStep: number | null, hasDog: boolean, sym: string) => string;
   doorLabel: (key: DoorKey) => string;
   pathDoorLabel: (key: DoorKey, pts: number) => string;
   possiblePellets: (pts: number, steps: number) => string;
