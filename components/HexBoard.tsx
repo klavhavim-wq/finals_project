@@ -386,7 +386,7 @@ export default function HexBoard({
       height={SVG_H}
       style={{ display: "block", ...sizeStyle }}
       role="group"
-      aria-label={`Game board, hexes 1 to ${boardMax}`}
+      aria-label={getDict(state.locale).boardAria(boardMax)}
     >
       {/* Keyboard focus has to be visible on the board too. Scoped inside the
           SVG so the board owns its own focus ring. */}

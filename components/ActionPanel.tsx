@@ -270,7 +270,7 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
             ) : (
               <div className="helper-solved">
                 <div className="helper-solved-note">{t.helperSolvedNote(state.helperSolvedBy)}</div>
-                <button className="abt abp" onClick={() => setHelperReveal(true)}>
+                <button className="abt abp" onClick={() => { actions.noteReveal(); setHelperReveal(true); }}>
                   {t.helperRevealBtn}
                 </button>
               </div>

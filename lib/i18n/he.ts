@@ -502,6 +502,7 @@ export const he: Dict = {
     if (sym) parts.push(sym);
     return parts.join(", ");
   },
+  boardAria: (max) => `לוח המשחק, משושים 1 עד ${max}`,
   doorLabel: (key) => DOOR_LABELS[key],
   pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | <span dir="ltr">${DOOR_RANGES[key]}</span> | ${pts}🦴`,
   possiblePellets: (pts, steps) =>

@@ -233,6 +233,16 @@ export function useGame(locale: Locale) {
     if (itemRef.current) itemRef.current.hintUsed = true;
   }, []);
 
+  /**
+   * The answer was handed over whole — a friend's answer uncovered rather than
+   * worked out. That is not a retrieval at all, so it counts as a reveal, not a
+   * hint: the item stays out of the clean response-time median and out of the
+   * child's fluency baseline.
+   */
+  const noteReveal = useCallback(() => {
+    if (itemRef.current) itemRef.current.revealed = true;
+  }, []);
+
   // Auto-save session to localStorage when game ends.
   const savedThisGame = useRef(false);
   useEffect(() => {
@@ -596,6 +606,7 @@ export function useGame(locale: Locale) {
     trials: trialLogRef.current,
     actions: {
       noteHint,
+      noteReveal,
       showScreen,
       goInst,
       goSimpleGuide,

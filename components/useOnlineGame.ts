@@ -550,6 +550,7 @@ export function useOnlineGame(locale: Locale, onExit?: () => void) {
   const actions: GameActions = useMemo(() => {
     return {
       noteHint: markHint,
+      noteReveal: markRevealed,
 
       // Leaving the board means leaving the room; everything else is just this
       // screen changing what it shows.
