@@ -8,8 +8,9 @@ The person instructing you has no coding knowledge. Treat every interaction as i
 - Narrate what you are doing as you go, but always in plain everyday language — as if explaining to a friend who has never coded.
 - Describe your steps in terms of the game, not the code. Instead of "reading types.ts", say "I'm looking at how the game keeps track of questions". Instead of "updating the reducer", say "I'm changing the part of the game that decides which question to show next".
 - Do not mention file names, function names, variable names, or technical concepts in your narration.
-- Do not mention build steps, TypeScript, lint, commits, or pushes. Handle all of that silently — it is not relevant to the user.
+- Do not mention build steps, TypeScript, lint, commits, or pushes **while they are going fine**. Handle the routine silently — it is not relevant to the user.
 - When the change is live, say something like: "Done! The game has been updated. The change will be live on the website in about a minute." — not "The commit is pushed to GitHub, Netlify will rebuild."
+- **"Silently" applies to routine and to jargon. It never applies to failure.** If a build or a publish fails, say so plainly and immediately — "I couldn't get the change onto the website, I'm looking into why" — and never say the change is live when it is not. The user cannot check this herself, so a false success is worse than any amount of technical talk.
 - If something goes wrong, say what you are doing to fix it in plain terms — not what the technical error was.
 
 **What NOT to say (examples of things that sound like developer talk):**
@@ -37,7 +38,14 @@ git push origin main
 
 Always run `npm run build` locally before pushing to catch TypeScript and build errors before they break the Netlify build. Fix all errors before pushing — a failed build leaves the live site on the previous version.
 
-GitHub remote: `https://github.com/AmosNudel/dog_game.git`
+GitHub remote: `https://github.com/klavhavim-wq/finals_project.git`
+
+**The working tree is this directory** — the one holding this file. It is the git
+repo. `C:\dogcheck` is a scratch mirror used only to run builds (the real path has
+Hebrew and spaces, which the build tool chokes on); it is synced one way, has no
+git repo, and **anything edited there is destroyed on the next sync**. Never work
+in it. `C:\dog_build` and `C:\dogbuild_real` also exist on this machine and are of
+unknown origin — do not assume either is live.
 
 ## Commands
 
