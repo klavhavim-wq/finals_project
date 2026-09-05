@@ -8,6 +8,7 @@ import { MEDALS, type Dict } from "@/lib/i18n";
 import { statsForPlayer } from "@/lib/stats";
 
 const LS_KEY = "kaskash_sessions";
+const LS_REVIEW = "kaskash_review";
 
 function loadSessions(): SessionRecord[] {
   if (typeof window === "undefined") return [];
@@ -18,12 +19,32 @@ function loadSessions(): SessionRecord[] {
   }
 }
 
+/**
+ * The facts each player still has open, keyed by player name. This is the list
+ * the game itself uses to decide what to practise next, and it is the single
+ * most useful thing for a teacher: not "how did they do today" but "which facts
+ * are still not there". Weight is how far a fact is from being retired — higher
+ * means it has been missed more and practised less.
+ */
+function loadOpenFacts(): Record<string, { expr: string; ans: number; weight: number }[]> {
+  if (typeof window === "undefined") return {};
+  try {
+    return JSON.parse(localStorage.getItem(LS_REVIEW) || "{}");
+  } catch {
+    return {};
+  }
+}
+
 export default function Results({ t, actions }: { t: Dict; actions: GameActions }) {
   const [sessions, setSessions] = useState<SessionRecord[]>(loadSessions);
+  const [openFacts, setOpenFacts] = useState(loadOpenFacts);
+  const openNames = Object.keys(openFacts).filter((n) => (openFacts[n] ?? []).length);
 
   const clearAll = () => {
     localStorage.removeItem(LS_KEY);
+    localStorage.removeItem(LS_REVIEW);
     setSessions([]);
+    setOpenFacts({});
   };
 
   const downloadCSV = () => {
@@ -65,6 +86,22 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
           formatDate(s.date), s.id, csv(p.name), p.tokens, p.errors ?? 0,
           stat.accuracyPct, stat.correct, stat.total, stat.medianRtSec ?? "",
         ].join(","));
+      }
+    }
+
+    // What a teacher actually needs: which facts are still open, per child,
+    // ordered by how far each is from being learned.
+    const open = loadOpenFacts();
+    const names = Object.keys(open).filter((n) => (open[n] ?? []).length);
+    if (names.length) {
+      lines.push("");
+      lines.push(he ? "--- עובדות שעדיין בתרגול ---" : "--- Facts Still In Practice ---");
+      lines.push(he ? "שחקן,תרגיל,תשובה,משקל" : "Player,Exercise,Answer,Weight");
+      for (const name of names) {
+        const facts = [...(open[name] ?? [])].sort((a, b) => b.weight - a.weight);
+        for (const f of facts) {
+          lines.push([csv(name), csv(f.expr), f.ans, f.weight].join(","));
+        }
       }
     }
 
@@ -128,6 +165,70 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
       }}
     >
       <div className="stitle">{t.resultsTitle}</div>
+
+      {/* Which facts are still open, per child. A teacher opening this screen
+          wants to know what to work on next, not only how today went. */}
+      {openNames.length > 0 && (
+        <div className="scard" style={{ padding: "14px 16px" }}>
+          <div style={{ fontWeight: 800, fontSize: ".95rem", color: "#78350F", marginBottom: 4 }}>
+            {t.openFactsTitle}
+          </div>
+          <div style={{ fontSize: ".8rem", color: "#6b7280", marginBottom: 10 }}>
+            {t.openFactsHint}
+          </div>
+          {openNames.map((name) => {
+            const facts = [...(openFacts[name] ?? [])].sort((a, b) => b.weight - a.weight);
+            return (
+              <div key={name} style={{ marginBottom: 10 }}>
+                <div style={{ fontWeight: 700, fontSize: ".88rem", color: "#1F2937", marginBottom: 5 }}>
+                  {name} <span style={{ color: "#6b7280", fontWeight: 400 }}>· {t.openFactsCount(facts.length)}</span>
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {facts.map((f) => (
+                    // The weight is printed, not only coloured. Colour alone
+                    // would make the ranking unreadable for the same people the
+                    // board's door patterns were added for.
+                    <span
+                      key={f.expr}
+                      title={t.openFactsWeight(f.weight)}
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 6,
+                        fontSize: ".84rem",
+                        fontWeight: 700,
+                        padding: "3px 8px 3px 10px",
+                        borderRadius: 999,
+                        border: "2px solid",
+                        borderColor: f.weight >= 4 ? "#B91C1C" : f.weight >= 3 ? "#B45309" : "#6B7280",
+                        color: f.weight >= 4 ? "#B91C1C" : f.weight >= 3 ? "#B45309" : "#374151",
+                        background: "white",
+                      }}
+                    >
+                      <span dir="ltr" style={{ fontFamily: "Arial, sans-serif" }}>{f.expr}</span>
+                      <span
+                        aria-hidden="true"
+                        style={{
+                          fontSize: ".72rem",
+                          fontWeight: 800,
+                          background: "currentColor",
+                          color: "white",
+                          borderRadius: 999,
+                          minWidth: 17,
+                          textAlign: "center",
+                          padding: "0 4px",
+                        }}
+                      >
+                        {f.weight}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {sessions.length === 0 ? (
         <div

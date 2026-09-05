@@ -220,7 +220,12 @@ export interface Dict {
   resultsSaved: string;
   viewResultsBtn: string;
 
-  // Results screen
+  // Results screen — the per-child "what is still open" panel
+  openFactsTitle: string;
+  openFactsHint: string;
+  openFactsCount: (n: number) => string;
+  openFactsWeight: (w: number) => string;
+
   viewResults: string;
   resultsTitle: string;
   noResults: string;

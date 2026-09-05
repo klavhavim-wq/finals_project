@@ -75,8 +75,46 @@ export function useGame(locale: Locale) {
     reviewRef.current.set(name, list);
     saveReview();
   }, [saveReview]);
-  /** A correct answer relaxes (and eventually retires) a remembered fact. */
-  const noteRightFact = useCallback((name: string, expr: string) => {
+  /**
+   * The player's own recent correct response times, used as their personal
+   * baseline for "quick". Kept per player, in memory only — it exists to judge
+   * the next few answers, not to be reported.
+   */
+  const paceRef = useRef<Map<string, number[]>>(new Map());
+  const PACE_WINDOW = 12; // how many recent correct answers form the baseline
+  const PACE_MIN = 5; // below this, there is no baseline yet
+  const PACE_FACTOR = 1.5; // "quick" = no worse than 1.5× your own typical time
+
+  /**
+   * Is this answer fluent for this child? The goal is retrieval speed, not just
+   * accuracy, so a correct-but-laboured answer should not retire a fact. The bar
+   * is the child's own median, never an absolute number — a six-year-old and a
+   * twelve-year-old are each measured against themselves. Until there are enough
+   * samples every correct answer counts, so nobody is held back by a bar that
+   * has not been established yet.
+   */
+  const isFluent = useCallback((name: string, rtMs: number): boolean => {
+    const times = paceRef.current.get(name) ?? [];
+    if (times.length < PACE_MIN) return true;
+    const sorted = [...times].sort((a, b) => a - b);
+    const median = sorted[Math.floor(sorted.length / 2)];
+    return rtMs <= median * PACE_FACTOR;
+  }, []);
+
+  const notePace = useCallback((name: string, rtMs: number) => {
+    const times = paceRef.current.get(name) ?? [];
+    times.push(rtMs);
+    if (times.length > PACE_WINDOW) times.shift();
+    paceRef.current.set(name, times);
+  }, []);
+
+  /**
+   * A correct answer relaxes (and eventually retires) a remembered fact — but
+   * only if it was also quick. A fact answered right but slowly stays in
+   * rotation at its current weight: it is not punished, it is simply not yet
+   * done.
+   */
+  const noteRightFact = useCallback((name: string, expr: string, fluent: boolean) => {
     const pair = parseFactors(expr);
     if (!pair) return;
     const key = factKey(pair[0], pair[1]);
@@ -84,6 +122,7 @@ export function useGame(locale: Locale) {
     if (!list) return;
     const found = list.find((f) => f.key === key);
     if (!found) return;
+    if (!fluent) return; // right, but not yet fluent — keep practising it
     found.weight -= 1;
     if (found.weight <= 0) {
       reviewRef.current.set(name, list.filter((f) => f.key !== key));
@@ -148,8 +187,16 @@ export function useGame(locale: Locale) {
       if (s.settings.review) {
         const name = s.players[s.cur]?.name ?? "";
         if (name && (it.phase === "find" || it.phase === "walk")) {
-          if (correct) noteRightFact(name, it.expr);
-          else noteWrongFact(name, it.expr, it.answer);
+          if (correct) {
+            // Judge against the baseline as it stood *before* this answer, then
+            // let this answer join it — otherwise a fact is measured partly
+            // against itself.
+            const fluent = it.attempt === 1 && isFluent(name, rt);
+            notePace(name, rt);
+            noteRightFact(name, it.expr, fluent);
+          } else {
+            noteWrongFact(name, it.expr, it.answer);
+          }
         }
       }
       if (correct) itemRef.current = null;
@@ -158,7 +205,7 @@ export function useGame(locale: Locale) {
         it.lastAt = now;
       }
     },
-    [noteRightFact, noteWrongFact]
+    [noteRightFact, noteWrongFact, isFluent, notePace]
   );
 
   const noteHint = useCallback(() => {

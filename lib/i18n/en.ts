@@ -637,6 +637,10 @@ export const en: Dict = {
   resultsSaved: "✅ Results saved automatically",
   viewResultsBtn: "📊 All Results",
 
+  openFactsTitle: "🎯 Still in practice",
+  openFactsHint: "The exercises the game keeps bringing back for each player, hardest first. A fact leaves the list once it is answered correctly and quickly.",
+  openFactsCount: (n) => (n === 1 ? "1 exercise" : `${n} exercises`),
+  openFactsWeight: (w) => `needs ${w} more quick, correct ${w === 1 ? "answer" : "answers"}`,
   viewResults: "📊 Results",
   resultsTitle: "📊 Game Results",
   noResults: "No saved results yet",
