@@ -1,0 +1,24 @@
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3100
+- Network:       http://10.0.0.5:3100
+✓ Ready in 5.3s
+
+○ Compiling /he ...
+ GET /he 200 in 132ms (next.js: 21ms, application-code: 112ms)
+ GET /he 200 in 20.8s (next.js: 19.9s, application-code: 893ms)
+ GET /he 200 in 96ms (next.js: 6ms, application-code: 90ms)
+ GET /he 200 in 71ms (next.js: 12ms, application-code: 60ms)
+ GET /he 200 in 140ms (next.js: 11ms, application-code: 129ms)
+ GET / 200 in 802ms (next.js: 717ms, application-code: 85ms)
+ GET / 200 in 117ms (next.js: 19ms, application-code: 99ms)
+ GET /quick 200 in 879ms (next.js: 819ms, application-code: 60ms)
+ GET /quick 200 in 161ms (next.js: 13ms, application-code: 148ms)
+ GET /he 200 in 162ms (next.js: 27ms, application-code: 135ms)
+ GET /he 200 in 235ms (next.js: 18ms, application-code: 217ms)
+ GET / 200 in 196ms (next.js: 23ms, application-code: 173ms)
+ GET /quick 200 in 311ms (next.js: 11ms, application-code: 300ms)
+ GET /he 200 in 601ms (next.js: 211ms, application-code: 390ms)
+ GET /he 200 in 430ms (next.js: 145ms, application-code: 285ms)
+ GET /he 200 in 115ms (next.js: 21ms, application-code: 94ms)
+ GET / 200 in 111ms (next.js: 42ms, application-code: 69ms)
+ GET /quick 200 in 117ms (next.js: 40ms, application-code: 77ms)
