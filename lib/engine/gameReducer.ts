@@ -113,6 +113,13 @@ export function pickTargetCard(
   } else if (level === "beg" || level === "med") {
     // Keep the find step mostly multiplication at the easiest levels: primes
     // (which are shown as additions) still appear, just less often.
+    //
+    // Note this shifts the order within a draw cycle, not the overall rate:
+    // cards are drawn without replacement until the pool empties, so every
+    // card still comes up once per cycle. Widening this to the harder levels
+    // was tried and reverted — it would push their much larger prime share to
+    // the tail of the cycle, so a long session ended in a run of consecutive
+    // addition targets.
     const mult = avail.filter((c) => !c.prime);
     if (mult.length && rand() < 0.7) pickFrom = mult;
   }
