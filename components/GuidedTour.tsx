@@ -166,7 +166,8 @@ export default function GuidedTour({
     const next = idx + d;
     if (next < 0) return;
     if (next >= steps.length) {
-      actions.tourEnd();
+      // The last button promises a game, so it starts one.
+      actions.tourPlay();
       return;
     }
     actions.demoStage(stageFor(next));
@@ -178,19 +179,19 @@ export default function GuidedTour({
   idxRef.current = idx;
   const stepsRef = useRef(steps);
   stepsRef.current = steps;
-  const { setTourInteract, demoStage, tourSet, tourEnd: endTour } = actions;
+  const { setTourInteract, demoStage, tourSet, tourPlay: playNow } = actions;
   const advance = useCallback(() => {
     const i = idxRef.current;
     const st = stepsRef.current;
     const next = i + 1;
     if (next >= st.length) {
-      endTour();
+      playNow();
       return;
     }
     const stg = st[next]?.stage ?? STAGE_BY_ICON[st[next]?.i ?? ""] ?? "find";
     demoStage(stg);
     tourSet(next);
-  }, [demoStage, tourSet, endTour]);
+  }, [demoStage, tourSet, playNow]);
 
   // Tell the engine whether this step needs the player to really act, and reset
   // the "solved" celebration when the step changes.

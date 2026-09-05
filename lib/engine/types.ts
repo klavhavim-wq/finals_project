@@ -143,7 +143,7 @@ export interface SessionRecord {
   level: Level;
   settings?: Settings;
   coop: boolean;
-  players: { name: string; tokens: number; errors: number; errorLog?: ErrorRecord[] }[];
+  players: { name: string; tokens: number; errors: number; solvedCount?: number; errorLog?: ErrorRecord[] }[];
   winnerName: string | null;
   sharedTokens?: number;
   /** chronometric log */
@@ -265,6 +265,12 @@ export interface GameState {
   /** win screen data */
   winnerIdx: number | null;
   coopWin: boolean;
+  /**
+   * The players stopped the game themselves rather than playing it out. The end
+   * screen says so instead of crowning a winner — and, crucially, stopping still
+   * goes through that screen, because that is where the session is saved.
+   */
+  endedEarly: boolean;
 
   /** set when the game should begin a fresh turn (engine asks the host to pick a card) */
   awaitNewTurn: boolean;

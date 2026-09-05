@@ -48,7 +48,9 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .wsub{font-size:1.2rem;color:#92400E;text-align:center}
 .chips{display:flex;gap:9px;flex-wrap:wrap;justify-content:center}
 .chip{background:white;border-radius:30px;padding:6px 15px;font-size:.88rem;font-weight:600;color:#78350F;box-shadow:0 2px 7px rgba(0,0,0,.1)}
-.btnbig{background:linear-gradient(135deg,#F59E0B,#D97706);color:white;border:none;border-radius:30px;padding:15px 46px;font-size:1.35rem;font-weight:800;cursor:pointer;box-shadow:0 6px 22px rgba(245,158,11,.4);transition:transform .15s}
+/* Deeper amber than the old #F59E0B→#D97706: white on that read at only 2.15:1.
+   White on #B45309 is 5.02:1 and on #92400E 7.09:1 — both clear AA for any size. */
+.btnbig{background:linear-gradient(135deg,#B45309,#92400E);color:white;border:none;border-radius:30px;padding:15px 46px;font-size:1.35rem;font-weight:800;cursor:pointer;box-shadow:0 6px 22px rgba(180,83,9,.4);transition:transform .15s}
 .btnbig:hover{transform:scale(1.05)}
 .btnout{background:white;border:2px solid #DEB887;border-radius:24px;padding:10px 26px;font-size:.98rem;font-weight:600;cursor:pointer;color:#92400E;transition:all .15s}
 .btnout:hover{border-color:var(--ye);background:#FFFBEB}
@@ -72,8 +74,9 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .lobby-member{align-items:center;gap:9px}
 .lobby-dog{font-size:1.3rem}
 .lobby-name{flex:1;font-weight:600;color:#374151;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lobby-empty .lobby-name{color:#9ca3af;font-weight:500;font-style:italic}
-.lobby-tag{font-size:.68rem;font-weight:800;background:#EDE9FE;color:#5B21B6;
+/* was #9ca3af (2.54:1) — #6b7280 is 4.83:1 on white */
+.lobby-empty .lobby-name{color:#6b7280;font-weight:500;font-style:italic}
+.lobby-tag{font-size:.78rem;font-weight:800;background:#EDE9FE;color:#5B21B6;
   border-radius:12px;padding:3px 9px;white-space:nowrap;flex-shrink:0}
 .lobby-tag.lobby-you{background:#FEF3C7;color:#92400E}
 .lobby-tag.lobby-away{background:#FEE2E2;color:#991B1B}
@@ -91,7 +94,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   animation:tpulse 1.8s ease-in-out infinite}
 .os-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .os-end{background:none;border:2px solid #FECACA;border-radius:14px;padding:3px 10px;
-  font-size:.74rem;font-weight:700;color:#991B1B;cursor:pointer;flex-shrink:0}
+  font-size:.78rem;font-weight:700;color:#991B1B;cursor:pointer;flex-shrink:0}
 .os-end:hover{background:#FEF2F2}
 
 /* ── INSTRUCTIONS (overlay) ── */
@@ -114,8 +117,14 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   .ititl{font-size:1.25rem;margin-bottom:5px}
   .ibox{padding:16px 20px 12px}
 }
-.idot{width:9px;height:9px;border-radius:50%;background:#d1d5db;cursor:pointer;transition:all .2s}
-.idot.on{background:var(--pu);transform:scale(1.3)}
+/* The dot still LOOKS 9px: a transparent 7.5px border pads the tappable box out
+   to 24x24 (the WCAG AA minimum) while background-clip keeps the colour in the
+   9px middle. Small fingers get a real target without the design changing. */
+.idot{width:24px;height:24px;border:7.5px solid transparent;background-clip:content-box;
+  border-radius:50%;background-color:#d1d5db;cursor:pointer;transition:all .2s;flex-shrink:0}
+/* background-COLOR, not the shorthand — the shorthand would reset background-clip
+   and paint the whole 24px hit box instead of the little dot. */
+.idot.on{background-color:var(--pu);transform:scale(1.3)}
 .ibtn{background:var(--pu);color:white;border:none;border-radius:18px;padding:9px 22px;font-size:.95rem;font-weight:700;cursor:pointer}
 .iback{background:none;border:2px solid #e5e7eb;border-radius:18px;padding:9px 22px;font-size:.95rem;font-weight:600;cursor:pointer;color:#6b7280}
 
@@ -130,8 +139,10 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .tour-card{position:fixed;background:white;border-radius:20px;padding:16px 20px 12px;
   width:min(340px, calc(100vw - 28px));max-height:calc(100dvh - 24px);overflow:hidden auto;
   box-shadow:0 18px 55px rgba(0,0,0,.35);text-align:center;animation:popIn .25s ease}
-.tour-close{position:absolute;top:8px;inset-inline-end:10px;background:none;border:none;
-  font-size:1.05rem;color:#9ca3af;cursor:pointer;line-height:1}
+/* 32x32 tap box (was ~17px) and a darker grey: #9ca3af was 2.54:1 on white. */
+.tour-close{position:absolute;top:2px;inset-inline-end:4px;background:none;border:none;
+  font-size:1.05rem;color:#6b7280;cursor:pointer;line-height:1;border-radius:50%;
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;padding:0}
 .tour-ico{font-size:42px;margin-bottom:2px;animation:cbob 2.4s ease-in-out infinite}
 .tour-titl{font-size:1.14rem;font-weight:800;color:#1e1b4b;margin-bottom:6px}
 .tour-text{font-size:.9rem;color:#374151;line-height:1.55;margin-bottom:12px}
@@ -161,13 +172,15 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .pnrow{display:flex;align-items:center;gap:9px}
 .pndot{width:17px;height:17px;border-radius:50%;flex-shrink:0}
 .pnrow input{flex:1;padding:9px 11px;border:2px solid #e5e7eb;border-radius:9px;font-size:.96rem;font-family:inherit}
-.pnrow input:focus{outline:none;border-color:var(--ye)}
+/* The focus ring is the ONLY focus signal here, so it has to be seen: the old
+   --ye (#F59E0B) was 2.15:1 against white; #B45309 is 5.02:1 (AA needs 3:1). */
+.pnrow input:focus{outline:none;border-color:#B45309}
 .lvgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .lvb{padding:11px 8px;border:2.5px solid #e5e7eb;border-radius:11px;background:white;cursor:pointer;text-align:center;transition:all .15s;font-family:inherit}
 .lvb.on{border-color:var(--ye);background:#FFFBEB}
 .lvb .li{font-size:1.5rem;display:block;margin-bottom:3px}
 .lvb strong{font-size:.9rem;display:block;color:#1F2937}
-.lvb small{font-size:.74rem;color:#6b7280}
+.lvb small{font-size:.78rem;color:#6b7280}
 .lvb:hover{border-color:var(--ye);background:#FFFBEB}
 .wchoose{font-weight:800;color:#92400E;margin:16px 0 6px;font-size:1.04rem;text-align:center}
 .wlvgrid{width:100%;max-width:400px;margin-bottom:8px}
@@ -231,7 +244,10 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .ghtimer.warn{border-color:#FCD34D}
 .ghtimer.warn .tfill{background:#D97706}
 .ghtimer.urg .tnum{color:#B45309}
-.ghtimer.urg{animation:tpulse 1.4s ease-in-out infinite;border-color:#F97316;background:#FFF7ED}
+/* No pulsing here. The last seconds of a timer are exactly when an anxious or
+   easily-distracted child least needs something throbbing at them — the orange
+   border, the orange background and the shrinking bar already say "hurry". */
+.ghtimer.urg{border-color:#F97316;background:#FFF7ED}
 .ghtimer.urg .tfill{background:#F97316}
 @keyframes tpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 .ghbtn{background:none;border:2px solid #e5e7eb;border-radius:18px;padding:5px 12px;font-size:.82rem;cursor:pointer;font-weight:600;color:#6b7280;transition:all .15s}
@@ -244,21 +260,24 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .musicpill button{background:none;border:none;cursor:pointer;font-size:.82rem;font-weight:600;color:#6b7280;padding:5px 7px;line-height:1.15;transition:color .15s}
 .musicpill button:hover{color:#d97706}
 .musicpill .mp-icon{padding-inline-start:11px;border-start-start-radius:16px;border-end-start-radius:16px}
-.musicpill .mp-arrow{padding-inline-end:10px;font-size:.66rem;border-inline-start:1px solid #e5e7eb;border-start-end-radius:16px;border-end-end-radius:16px}
+/* min-width takes the arrow from ~23px to a 32px tap target */
+.musicpill .mp-arrow{padding-inline-end:10px;font-size:.66rem;min-width:32px;border-inline-start:1px solid #e5e7eb;border-start-end-radius:16px;border-end-end-radius:16px}
 .musicpop{position:absolute;top:calc(100% + 6px);inset-inline-end:0;z-index:180;
   background:white;border:2px solid #FDE68A;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.18);
   padding:10px 12px;display:flex;flex-direction:column;gap:6px;min-width:196px;animation:mIn .15s ease}
-.mp-lbl{font-size:.72rem;font-weight:700;color:#92400E}
+.mp-lbl{font-size:.78rem;font-weight:700;color:#92400E}
 .mp-row{display:flex;align-items:center;gap:8px}
 .mp-range{flex:1;min-width:0;accent-color:#d97706;cursor:pointer}
-.mp-pct{font-size:.72rem;font-weight:700;color:#6b7280;text-align:center}
+.mp-pct{font-size:.78rem;font-weight:700;color:#6b7280;text-align:center}
 /* Mobile: a bold tab on the screen edge that opens the side panel (bank, route,
    helper). It lives on the edge — not in the top bar — so it's easy to spot and
    reach with a thumb. A gentle pulse draws the eye to it. */
+/* White on the old #FBBF24→#D97706 gradient was 1.67:1 — unreadable. Deepened to
+   #B45309→#92400E: white is 5.02:1 at the lightest end, 7.09:1 at the darkest. */
 .bank-tab{position:fixed;inset-inline-end:0;top:50%;z-index:160;
   display:flex;flex-direction:column;align-items:center;gap:3px;
-  background:linear-gradient(160deg,#FBBF24,#D97706);color:white;
-  font-family:inherit;font-weight:800;font-size:.72rem;letter-spacing:.4px;
+  background:linear-gradient(160deg,#B45309,#92400E);color:white;
+  font-family:inherit;font-weight:800;font-size:.78rem;letter-spacing:.4px;
   border:none;border-radius:16px 0 0 16px;padding:11px 7px 11px 9px;
   box-shadow:-3px 3px 14px rgba(180,83,9,.45);cursor:pointer;
   animation:bankTabPulse 2.4s ease-in-out infinite}
@@ -266,7 +285,8 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .bank-tab-lbl{line-height:1}
 [dir="rtl"] .bank-tab{border-radius:0 16px 16px 0;box-shadow:3px 3px 14px rgba(180,83,9,.45)}
 @keyframes bankTabPulse{0%,100%{transform:translateY(-50%) scale(1)}50%{transform:translateY(-50%) scale(1.06)}}
-@media(prefers-reduced-motion:reduce){.bank-tab{animation:none;transform:translateY(-50%)}}
+/* (the reduced-motion handling for this — and everything else — lives in one
+    block at the very end of this file) */
 
 .gbody{display:flex;gap:9px;padding:9px;flex:1;overflow:hidden;min-height:0}
 @media(max-width:820px){
@@ -318,7 +338,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 /* The "route ready" strip sits along the bottom edge on a phone — step the zoom
    buttons up so they stay tappable instead of sitting under it. */
 .board-zoom.lifted{bottom:152px}
-.bz-btn{width:42px;height:42px;border-radius:50%;border:2px solid #FDE68A;
+.bz-btn{width:44px;height:44px;border-radius:50%;border:2px solid #FDE68A;
   background:rgba(255,255,255,.92);color:#92400E;font-size:1.5rem;font-weight:800;line-height:1;
   cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.22);padding:0;
   display:flex;align-items:center;justify-content:center;
@@ -332,7 +352,8 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .rotate-tip{flex:none;display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;
   background:#FFFBEB;border:2px solid #FBBF24;border-radius:12px;padding:7px 10px;
   font-size:.85rem;font-weight:700;color:#78350F;text-align:center}
-.rotate-tip-btn{flex:0 0 auto;border:none;border-radius:999px;background:#F59E0B;color:white;
+/* white on #F59E0B was 2.15:1; on #B45309 it is 5.02:1 */
+.rotate-tip-btn{flex:0 0 auto;border:none;border-radius:999px;background:#B45309;color:white;
   font-weight:800;font-size:.8rem;padding:6px 14px;cursor:pointer;font-family:inherit}
 
 /* The times-table close button exists for the phone overlay only (see the
@@ -349,7 +370,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .pd-find .phasedock-body > div{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 12px}
 .pd-find .aphint{display:none}
 .pd-find .tcard{flex:0 1 auto;min-width:200px;max-width:440px;margin:0;padding:6px 18px}
-.pd-find .tclbl{margin:0 0 1px;font-size:.72rem;opacity:.9}
+.pd-find .tclbl{margin:0 0 1px;font-size:.78rem;opacity:.9}
 .pd-find .tcex{font-size:1.45rem;margin:1px 0}
 .pd-find .tcinst{font-size:.78rem;opacity:.92}
 .pd-find .abt{width:auto;flex:0 0 auto;margin:0}
@@ -378,7 +399,8 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 
 /* route detail card in the side bar */
 .sq-route .pathlist{max-height:260px;margin:0}
-.route-empty{font-size:.85rem;color:#9ca3af;padding:8px 4px;text-align:center;line-height:1.4}
+/* was #9ca3af (2.54:1) — #6b7280 is 4.83:1 on white */
+.route-empty{font-size:.85rem;color:#6b7280;padding:8px 4px;text-align:center;line-height:1.4}
 
 /* Desktop/tablet: the board scales to fit its area — the whole board is always
    visible (no scrolling) and fills the space. Mobile keeps natural size + scroll. */
@@ -425,13 +447,14 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   .board-canvas .ghdr{gap:5px;padding:5px 8px}
   .board-canvas .ghdr .brand-logo-sm{display:none}
   .board-canvas .ghtitle{font-size:.9rem;margin-inline-start:0}
-  .board-canvas .ghturn,.board-canvas .ghround{font-size:.74rem;padding:3px 8px}
+  .board-canvas .ghturn,.board-canvas .ghround{font-size:.78rem;padding:3px 8px}
   .board-canvas .ghturn{max-width:130px}
   .board-canvas .ghtimer{flex-direction:row;gap:7px;padding:3px 9px;min-width:0;border-width:2px;border-radius:11px}
   .board-canvas .ghtimer .tnum{font-size:1rem}
   .board-canvas .ghtimer .tbar{width:44px;height:6px}
   .board-canvas .ghbtn{padding:3px 8px;font-size:.78rem;border-radius:12px}
-  .board-canvas .musicpill button{padding:3px 6px;font-size:.78rem}
+  /* min-height keeps the mute/volume buttons a real 32px tap target on a phone */
+  .board-canvas .musicpill button{padding:3px 6px;font-size:.78rem;min-height:32px}
   /* Phone: the open times table floats over the board (with its own close
      button) instead of pushing the board into a sliver. */
   .multbl-wrap{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:210;
@@ -445,10 +468,12 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   .pd-route.ready .abt{display:none}
   /* The route bar sits above the board, so its explanations stay compact —
      they must not push the hexes off the screen you are planning on. */
-  .pd-route .routetip{font-size:.74rem;line-height:1.4;padding:5px 8px}
+  /* Text stays at the 12.5px floor; the padding and line-height take the hit so
+     the bar is no taller than it was and the board keeps its room. */
+  .pd-route .routetip{font-size:.78rem;line-height:1.35;padding:4px 8px}
   .pd-route .routedoors{gap:4px}
-  .pd-route .routedoors-lbl{font-size:.7rem}
-  .pd-route .routedoors-chip{font-size:.72rem;padding:1px 7px;gap:3px}
+  .pd-route .routedoors-lbl{font-size:.78rem}
+  .pd-route .routedoors-chip{font-size:.78rem;padding:1px 7px;gap:3px}
   .pd-route .routedoors-chip .door-swatch{width:12px;height:12px;border-radius:4px}
 }
 
@@ -473,7 +498,10 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 [dir="rtl"] .gsidebar.drawer{box-shadow:8px 0 26px rgba(0,0,0,.28);transform:translateX(-100%)}
 .gsidebar.drawer.open,[dir="rtl"] .gsidebar.drawer.open{transform:translateX(0)}
 .drawer-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:165}
-.drawer-close{align-self:flex-end;background:none;border:none;font-size:1.3rem;color:#92400E;cursor:pointer;margin-bottom:4px}
+/* 40x40 tap box (it was about 21x25) */
+.drawer-close{align-self:flex-end;background:none;border:none;font-size:1.3rem;color:#92400E;
+  cursor:pointer;margin-bottom:4px;width:40px;height:40px;flex-shrink:0;padding:0;
+  display:flex;align-items:center;justify-content:center;border-radius:50%}
 
 /* ── PER-STAGE FLOATING WINDOW ── */
 .phasewin{position:fixed;z-index:120;background:white;border-radius:16px;
@@ -501,8 +529,10 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
      together — no scrolling inside it to reach a button. */
   .pw-walk .phasewin-head{padding:6px 12px;font-size:.88rem}
   .pw-walk .phasewin-body{padding:6px 10px}
-  .pw-walk .turnprog{gap:3px;margin-bottom:5px;flex-wrap:nowrap}
-  .pw-walk .tp-chip{font-size:.66rem;padding:2px 6px;white-space:nowrap}
+  /* Readable chips (12.5px floor) without a taller sheet: the row loses a little
+     padding and margin to pay for the extra text height. */
+  .pw-walk .turnprog{gap:3px;margin-bottom:4px;flex-wrap:nowrap}
+  .pw-walk .tp-chip{font-size:.78rem;padding:1px 6px;white-space:nowrap}
   /* The dog's position chip goes — the dog itself is right there on the board. */
   .pw-walk .tp-dog{display:none}
   .pw-walk .p3-door{padding:4px 9px;margin-bottom:5px;font-size:.85rem}
@@ -579,7 +609,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 
 /* walk-stage progress line */
 .turnprog{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-.tp-chip{font-size:.75rem;font-weight:800;background:#f3f4f6;color:#374151;border-radius:999px;padding:3px 9px}
+.tp-chip{font-size:.78rem;font-weight:800;background:#f3f4f6;color:#374151;border-radius:999px;padding:3px 9px}
 .tp-earn{background:#FEF3C7;color:#92400E}
 .tp-dog{background:#EDE9FE;color:#5B21B6}
 /* current door/food chip in the walk window */
@@ -589,7 +619,8 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .p3-door-val{margin-inline-start:auto;border:1.5px solid currentColor;border-radius:8px;padding:2px 9px;font-size:.85rem;white-space:nowrap}
 
 /* side-bar helper-friend */
-.helper-wait{font-size:.82rem;color:#9ca3af;font-style:italic;line-height:1.4}
+/* was #9ca3af (2.54:1) — #6b7280 is 4.83:1 on white */
+.helper-wait{font-size:.82rem;color:#6b7280;font-style:italic;line-height:1.4}
 .helper-prompt{font-size:.8rem;color:#6b7280;margin-bottom:6px}
 .helper-names{display:flex;flex-wrap:wrap;gap:5px}
 .helper-name{width:auto;flex:0 0 auto;font-size:.86rem;padding:5px 13px;margin-bottom:0}
@@ -614,9 +645,11 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .pcname{font-weight:700;font-size:1rem;min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pcdog{font-size:1.1rem}
 .pchon{font-weight:900;font-size:1.3rem;color:#B45309;flex-shrink:0;white-space:nowrap}
-.pcpos{font-size:.78rem;color:#9ca3af;margin-top:2px}
+/* was #9ca3af (2.54:1) — #6b7280 is 4.83:1 on the white card */
+.pcpos{font-size:.78rem;color:#6b7280;margin-top:2px}
 .bank-foods{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
-.bank-foods.empty{color:#cbb89c;font-size:.74rem;font-style:italic;margin-top:4px}
+/* was #cbb89c (1.93:1); #8B6F47 keeps the warm tan and reads 4.71:1 */
+.bank-foods.empty{color:#8B6F47;font-size:.78rem;font-style:italic;margin-top:4px}
 .bank-food{display:inline-flex;align-items:center;gap:2px;border:1.5px solid;border-radius:999px;padding:1px 7px 1px 5px;font-weight:800;font-size:.84rem;color:#374151}
 .bank-food-ico{width:11px;height:11px;border-radius:4px;display:inline-block;border:1px solid rgba(0,0,0,.15)}
 .bank-food-cnt{color:#1f2937}
@@ -630,7 +663,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .prize-kibbles .kibble{font-size:.95rem;line-height:1}
 .prize-hero-worth{font-weight:800;color:#1f2937;font-size:.92rem}
 /* Says, once, what the colours mean before the list of them */
-.prize-lead{font-size:.76rem;color:#6b7280;line-height:1.35;margin-bottom:6px}
+.prize-lead{font-size:.78rem;color:#6b7280;line-height:1.35;margin-bottom:6px}
 .prize-menu{display:flex;flex-direction:column;gap:5px}
 .prizerow{display:flex;align-items:center;gap:8px;background:#fafafa;border-radius:9px;padding:5px 8px;border-inline-start:4px solid #ccc}
 .prizerow.active{box-shadow:0 1px 6px rgba(0,0,0,.1)}
@@ -638,8 +671,9 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .prizerow-mid{flex:1;min-width:0}
 .prizerow-name{font-weight:700;font-size:.86rem;color:#1f2937;line-height:1.1}
 /* How hard this door is, in words — carries the meaning the range never did */
-.prizerow-diff{font-size:.74rem;font-weight:700;color:#4b5563;line-height:1.25}
-.prizerow-range{font-size:.72rem;color:#9ca3af}
+.prizerow-diff{font-size:.78rem;font-weight:700;color:#4b5563;line-height:1.25}
+/* was #9ca3af (2.43:1 on the #fafafa row) — #6b7280 is 4.63:1 there */
+.prizerow-range{font-size:.78rem;color:#6b7280}
 .prizerow-val{flex-shrink:0;font-weight:800;font-size:.9rem;background:white;border:1.5px solid;border-radius:8px;padding:2px 8px;white-space:nowrap}
 
 /* ── ROUTE PLANNING: what the chosen way is made of ──
@@ -649,7 +683,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   border-radius:10px;padding:7px 10px;margin:0 0 7px;color:#78350F}
 .routetip strong{color:#92400E}
 .routedoors{display:flex;flex-wrap:wrap;align-items:center;gap:5px 6px;margin:0 0 7px}
-.routedoors-lbl{font-size:.76rem;font-weight:700;color:#6b7280}
+.routedoors-lbl{font-size:.78rem;font-weight:700;color:#6b7280}
 .routedoors-chip{display:inline-flex;align-items:center;gap:4px;background:white;
   border:2px solid;border-radius:999px;padding:2px 9px;font-size:.78rem;font-weight:800;
   white-space:nowrap}
@@ -658,7 +692,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 
 /* ── PHASE STRIP (top of command square) ── */
 .phasestrip{display:flex;gap:4px;margin-bottom:9px}
-.phasestep{flex:1;text-align:center;font-size:.7rem;font-weight:600;border-radius:7px;padding:4px 3px;background:transparent;color:#b45309;transition:all .2s}
+.phasestep{flex:1;text-align:center;font-size:.78rem;font-weight:600;border-radius:7px;padding:4px 3px;background:transparent;color:#b45309;transition:all .2s}
 .phasestep.cur{background:#FDE68A;color:#92400E;font-weight:800}
 .phasestep.done{background:#d1fae5;color:#065F46}
 
@@ -696,17 +730,24 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .abt:last-child{margin-bottom:0}
 .abt:hover{transform:scale(1.02)}
 .abt:disabled{opacity:.45;cursor:default;transform:none}
-.abl{background:var(--bl);color:white}
-.abg{background:var(--gr);color:white}
-.abr{background:var(--rd);color:white}
-.aby{background:var(--ye);color:white}
+/* Deeper than the board palette on purpose: these carry white LABELS, and the
+   bright board colours were far too light behind white text. Ratios against
+   white — blue 3.68→5.17, green 2.54→5.48, red 3.76→4.83, amber 2.15→5.02.
+   The board's own --bl/--gr/--rd/--ye are untouched, so doors, dice and hexes
+   keep their exact colours. */
+.abl{background:#2563EB;color:white}
+.abg{background:#047857;color:white}
+.abr{background:#DC2626;color:white}
+.aby{background:#B45309;color:white}
 .abp{background:var(--pu);color:white}
 .abgr{background:#e5e7eb;color:#374151}
 
 /* PATH LIST */
 .pathlist{display:flex;flex-direction:column;gap:4px;max-height:150px;overflow-y:auto;margin:6px 0}
 .pstep{display:flex;align-items:center;gap:5px;background:#f9fafb;border-radius:7px;padding:4px 7px}
-.psnum{width:18px;height:18px;border-radius:50%;background:var(--bl);color:white;font-size:.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* The step number was 9.6px — far too small. At 12.5px the circle grows to 20px
+   to hold it, and the blue deepens so the white numeral reads (3.68→5.17:1). */
+.psnum{width:20px;height:20px;border-radius:50%;background:#2563EB;color:white;font-size:.78rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .pshex{font-size:.82rem;font-weight:600;flex:1;color:#374151}
 .psdoor{font-size:.8rem;padding:2px 6px;border-radius:5px;font-weight:700}
 .psdoor.blue{background:#EFF6FF;color:#1D4ED8}
@@ -714,7 +755,8 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .psdoor.yellow{background:#FFFBEB;color:#B45309}
 .psdoor.red{background:#FEF2F2;color:#B91C1C}
 .psdoor.redlong{background:#F3F4F6;color:#111827;font-style:italic}
-.pspts{font-size:.8rem;color:#9ca3af;margin-inline-end:auto}
+/* was #9ca3af (2.43:1 on the #f9fafb step row) — #6b7280 is 4.63:1 there */
+.pspts{font-size:.8rem;color:#6b7280;margin-inline-end:auto}
 
 .rsum{background:#f0fdf4;border-radius:8px;padding:7px 10px;font-size:.8rem;color:#065F46;margin:5px 0}
 .rsum-big{background:#FEF9C3;border:2px solid #FBBF24;border-radius:10px;padding:10px 13px;font-size:.95rem;color:#78350F;text-align:center;font-weight:600}
@@ -785,7 +827,10 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .modal h2{font-size:1.35rem;font-weight:800;margin-bottom:9px}
 .modal p{color:#4b5563;line-height:1.6;margin-bottom:11px}
 .macts{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;margin-top:5px}
-.mclose{position:absolute;top:11px;inset-inline-start:11px;background:none;border:none;font-size:1.25rem;cursor:pointer;color:#9ca3af}
+/* 32x32 tap box and a readable grey (#9ca3af was 2.54:1 on white) */
+.mclose{position:absolute;top:5px;inset-inline-start:5px;background:none;border:none;
+  font-size:1.25rem;cursor:pointer;color:#6b7280;padding:0;border-radius:50%;
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center}
 
 /* ── WIN ── */
 #swin{background:linear-gradient(135deg,#667eea,#764ba2);color:white;align-items:center;justify-content:center;gap:16px;text-align:center;padding:22px}
@@ -815,11 +860,14 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .wmodecard{display:block;padding:10px 5px;border:2.5px solid #e5e7eb;border-radius:11px;text-align:center;background:white;transition:all .15s;cursor:pointer}
 .wmodecard .wmi{font-size:1.3rem;display:block;margin-bottom:4px}
 .wmodecard strong{display:block;font-size:.82rem;color:#1F2937;margin-bottom:3px}
-.wmodecard small{font-size:.7rem;color:#6b7280;display:block;line-height:1.3}
+.wmodecard small{font-size:.78rem;color:#6b7280;display:block;line-height:1.3}
 .wmodecard:hover{border-color:var(--ye);background:#FFFBEB}
 .wmodelbl input:checked+.wmodecard{border-color:var(--ye);background:#FFFBEB;box-shadow:0 2px 8px rgba(245,158,11,.25)}
 /* SETTINGS HELP LINK */
-.shlp{background:none;border:none;color:var(--pu);font-size:.82rem;font-weight:600;cursor:pointer;padding:3px 7px;border-radius:7px;text-decoration:underline}
+/* was about 22px tall — now a 32px tap target */
+.shlp{background:none;border:none;color:var(--pu);font-size:.82rem;font-weight:600;cursor:pointer;
+  padding:4px 9px;min-height:32px;display:inline-flex;align-items:center;
+  border-radius:7px;text-decoration:underline}
 .shlp:hover{background:#F5F3FF}
 
 /* ── RESULTS ── */
@@ -827,7 +875,7 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .rcardwrap{background:white;border-radius:var(--rad);width:100%;max-width:640px;box-shadow:var(--shadow);overflow:hidden}
 .rchead{background:linear-gradient(135deg,#FFFBEB,#FEF3C7);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #FDE68A}
 .rclevel{font-size:.9rem;font-weight:800;color:#78350F;display:flex;align-items:center;gap:6px}
-.rcdate{font-size:.76rem;color:#92400E;opacity:.8}
+.rcdate{font-size:.78rem;color:#92400E;opacity:.8}
 .rcbody{padding:10px 16px 14px}
 .rccoopbank{display:flex;justify-content:space-between;align-items:center;background:#F0FDF4;border-radius:9px;padding:8px 12px;margin-bottom:8px;font-weight:700;font-size:.95rem;color:#065F46}
 .rcrow{display:flex;justify-content:space-between;align-items:center;padding:8px 4px;border-bottom:1px solid #F3F4F6}
@@ -844,4 +892,41 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 @media(max-width:520px){
   .wguides{gap:6px;flex-wrap:nowrap}
   .wguide-btn{flex:1;padding:9px 8px;font-size:.86rem;white-space:nowrap}
+}
+
+/* ── LESS MOVEMENT ON REQUEST ────────────────────────────────────────────────
+   Some children — and anyone prone to migraine or nausea, or simply pulled off
+   task by things that move — switch on "reduce motion" in their phone or
+   computer settings. When they have, nothing here should loop, bounce, glow,
+   spin, shake or slide.
+
+   Stopped by the blanket rule below: the bouncing dog on the welcome screen
+   (bounce), the "it's your turn" badge (tpulse), the tour spotlight (tourGlow),
+   the bobbing tour icon and winner's coins (cbob), the winner's dancing dog
+   (dogHappy) and its treats (foodBounce), the dice spin (dspin), the pop and
+   shake of a chosen answer (popIn / shk), modals and pop-ups appearing (mIn),
+   the route bar rising (rc-pop) and the bank tab's pulse (bankTabPulse) — plus
+   every transition, so colours, the side drawer and the timer bar change at
+   once instead of gliding.
+
+   Everything still WORKS and still sits exactly where it belongs: the drawer
+   opens and shuts, the switch knob still moves to the "on" side, windows stay
+   centred. Those transforms position things rather than animate them, so they
+   are left alone. The only transforms cleared are the ones that existed purely
+   to grow a control on hover or press. */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation:none !important;
+    transition:none !important;
+    scroll-behavior:auto !important;
+  }
+
+  /* The bank tab hangs from the middle of the screen edge, and the centring was
+     living inside its pulse keyframes — put it back explicitly or the tab drops
+     half its own height down the screen. */
+  .bank-tab{transform:translateY(-50%) !important}
+
+  /* Hover / press / selected growth — decorative only, so it goes. What marks a
+     selected item stays: colour, border and shadow all still change. */
+  .btnbig,.abt,.mcb,.qllvl,.idot,.bz-btn{transform:none !important}
 }

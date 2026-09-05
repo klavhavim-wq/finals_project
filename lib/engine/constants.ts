@@ -27,7 +27,10 @@ export const DC: Record<DoorKey, Door> = {
   // Indigo (not light violet) so blue and purple doors stay distinguishable,
   // including for blue-yellow colour-vision deficiency.
   purple: { key: "purple", fac: [2, 9], band: [10, 40], cnt: 2, pts: 2, color: "#7C3AED" },
-  yellow: { key: "yellow", fac: [3, 9], band: [24, 64], cnt: 2, pts: 5, color: "#F59E0B" },
+  // Deepened from #F59E0B, which sat at 1.99:1 against the board parchment — the
+  // line was there but a child with any low vision simply did not see it. This
+  // reads as the same orange and clears 3:1.
+  yellow: { key: "yellow", fac: [3, 9], band: [24, 64], cnt: 2, pts: 5, color: "#C2660A" },
   red: { key: "red", fac: [6, 9], band: [42, 81], cnt: 2, pts: 10, color: "#EF4444" },
   // Hero level — long multiplication: 2-digit × 1-digit
   redlong: {
@@ -159,13 +162,34 @@ function buildPool(mult: TargetCard[], cap: number): TargetCard[] {
   return [...mult, ...PRIME_TARGETS].filter((c) => c.ans <= cap);
 }
 
-/** Target-card pool per level — the full times table up to its board + primes. */
+/**
+ * How hard the find-the-target card may be, per level — deliberately NOT the
+ * board size.
+ *
+ * The find step is the entry ticket to every turn: nothing else in the turn can
+ * happen until it is answered, and it has no multiple choice. So it is capped at
+ * the level's own door band, which is what the level name and description
+ * promise. A beginner meeting 4 × 8 = 32 before they may move at all was the
+ * level system quietly not applying to the first thing that happens.
+ *
+ * The board stays larger than this cap on purpose — the extra rows are walking
+ * room, which keeps routes varied without raising the recall demand.
+ */
+export const TARGET_MAX: Record<Level, number> = {
+  beg: 20, // blue door: products to 20
+  med: 40, // + purple door
+  adv: 64, // + yellow door
+  champ: 100, // + red door — the full table
+  hero: 100, // long multiplication
+};
+
+/** Target-card pool per level — the level's own difficulty band, plus primes. */
 export const TARGETS_BY_LEVEL: Record<Level, TargetCard[]> = {
-  beg: buildPool(timesTableTargets(BOARD_MAX.beg, 100), BOARD_MAX.beg),
-  med: buildPool(timesTableTargets(BOARD_MAX.med, 200), BOARD_MAX.med),
-  adv: buildPool(timesTableTargets(BOARD_MAX.adv, 300), BOARD_MAX.adv),
-  champ: buildPool(timesTableTargets(BOARD_MAX.champ, 400), BOARD_MAX.champ),
-  hero: buildPool(longTargets(BOARD_MAX.hero, 500), BOARD_MAX.hero),
+  beg: buildPool(timesTableTargets(TARGET_MAX.beg, 100), TARGET_MAX.beg),
+  med: buildPool(timesTableTargets(TARGET_MAX.med, 200), TARGET_MAX.med),
+  adv: buildPool(timesTableTargets(TARGET_MAX.adv, 300), TARGET_MAX.adv),
+  champ: buildPool(timesTableTargets(TARGET_MAX.champ, 400), TARGET_MAX.champ),
+  hero: buildPool(longTargets(TARGET_MAX.hero, 500), TARGET_MAX.hero),
 };
 
 export function targetPoolFor(level: Level): TargetCard[] {
@@ -226,8 +250,22 @@ export const SFILL = {
   blocked: "#FEE2E2",
 } as const;
 
-export function timerTotalFor(level: Level): number {
-  return level === "hero" ? 90 : level === "champ" ? 120 : 180;
+/**
+ * How long a turn gets, given how many doors the route actually crosses.
+ *
+ * A flat per-turn clock punished route length rather than slowness: the same 90
+ * seconds covered a 2-step route and a 13-step one, so on the hardest level a
+ * long route left about 7 seconds per long-multiplication question and could not
+ * be finished by anyone. The clock is now a base for reading and planning plus a
+ * per-question allowance, so a longer route buys the time it needs and the only
+ * thing the clock measures is how long each question takes.
+ */
+const TURN_BASE: Record<Level, number> = { beg: 60, med: 60, adv: 55, champ: 45, hero: 40 };
+const SECS_PER_STEP: Record<Level, number> = { beg: 30, med: 26, adv: 22, champ: 18, hero: 16 };
+
+export function timerTotalFor(level: Level, steps = 4): number {
+  const n = Math.max(1, steps);
+  return TURN_BASE[level] + SECS_PER_STEP[level] * n;
 }
 
 // ── Pedagogy add-on: factoring (פירוק לגורמים) ──

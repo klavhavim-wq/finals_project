@@ -52,6 +52,8 @@ interface PrivateUi {
   instLevel: Level | null;
   modal: ModalState | null;
   screen: Screen | null;
+  /** this device left the shared game rather than playing it out */
+  endedEarly: boolean;
 }
 
 const FRESH_UI: PrivateUi = {
@@ -61,6 +63,7 @@ const FRESH_UI: PrivateUi = {
   instLevel: null,
   modal: null,
   screen: null,
+  endedEarly: false,
 };
 
 function readSeat(): Seat | null {
@@ -258,6 +261,7 @@ export function useOnlineGame(locale: Locale, onExit?: () => void) {
       // A private modal always wins: it was opened on this screen only.
       modal: ui.modal ?? shared,
       timerSecs: clockSecs ?? base.timerSecs,
+      endedEarly: ui.endedEarly || base.endedEarly,
       // The guided tour is a single-player teaching aid; it has no place in a
       // shared game where it would freeze the board for everyone else.
       tourActive: false,
@@ -568,6 +572,7 @@ export function useOnlineGame(locale: Locale, onExit?: () => void) {
       startDemo: noop,
       tourSet: noop,
       tourEnd: noop,
+      tourPlay: noop,
       setTourInteract: noop,
       demoStage: noop,
       // The server deals each new turn as soon as one is due.
@@ -632,6 +637,9 @@ export function useOnlineGame(locale: Locale, onExit?: () => void) {
       openSettingsHelp: () => patchUi({ modal: { kind: "settingsHelp" } }),
       openVideo: (videoKey: string) => patchUi({ modal: { kind: "video", videoKey } }),
       goResults: () => patchUi({ screen: "sresults" }),
+      // Leaving a shared game shows this device its own end screen, which is
+      // also what writes the session to the results log.
+      endGame: () => patchUi({ screen: "swin", modal: null, endedEarly: true }),
 
       // A watching friend solving the open question is the whole point of the
       // feature, so this one is allowed when it isn't your turn.

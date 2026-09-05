@@ -133,8 +133,8 @@ function formatEff(r: EffResult): string {
         : `✅ ${r.count} door colors! All good`;
     case "noRed":
       return r.applied
-        ? `${r.count} red door(s)! −${r.lost} 🦴 — remaining: <strong>${r.total}</strong>`
-        : "✅ No red door! All good";
+        ? `${r.count} red or black door(s)! −${r.lost} 🦴 — remaining: <strong>${r.total}</strong>`
+        : "✅ No red or black door! All good";
     case "shortPath":
       return r.applied
         ? `Long route (${r.steps} steps) — 75%: <strong>${r.total}</strong> 🦴`
@@ -186,7 +186,7 @@ export const en: Dict = {
        {
          i: "🎯",
          t: "Step 1 — Find the Target",
-         x: 'Draw a target card with a math problem, for example: <strong><span dir="ltr" style="white-space:nowrap">6 × 4 = ?</span></strong><br><br>Solve it in your head 🧠 and click the hex with the answer (24) on the board!<br><br>Wrong? <strong>You can try again as many times as you want!</strong> 😊<br>Need help? You can choose a hint 💡, or click "Show Answer".<br><br>ℹ️ <strong>This step has NO time limit!</strong>',
+         x: 'Draw a target card with a math problem, for example: <strong><span dir="ltr" style="white-space:nowrap">6 × 4 = ?</span></strong><br><br>Solve it in your head 🧠 and click the hex with the answer (24) on the board!<br><br>Wrong? <strong>You can try again as many times as you want!</strong> 😊<br>Need help? You can choose a hint 💜, or click "💡 Show Answer".<br><br>ℹ️ <strong>This step has NO time limit!</strong>',
        },
        {
          i: "🗺️",
@@ -203,13 +203,13 @@ export const en: Dict = {
          t: "Review & Confirm",
          x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 10px"><svg width="300" height="80" viewBox="0 0 245 66" xmlns="http://www.w3.org/2000/svg"><polygon points="102.0,5 115.9,13 115.9,29 102.0,37 88.1,29 88.1,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="129.7,5 143.6,13 143.6,29 129.7,37 115.8,29 115.8,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="157.4,5 171.3,13 171.3,29 157.4,37 143.5,29 143.5,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="185.1,5 199.0,13 199.0,29 185.1,37 171.2,29 171.2,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="212.8,5 226.7,13 226.7,29 212.8,37 198.9,29 198.9,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="32.7,29 46.6,37 46.6,53 32.7,61 18.8,53 18.8,37" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="60.4,29 74.3,37 74.3,53 60.4,61 46.5,53 46.5,37" fill="#FFF8E7" stroke="#C9A882" stroke-width="1" opacity="0.35"/><polygon points="18.9,5 32.8,13 32.8,29 18.9,37 5.0,29 5.0,13" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="46.6,5 60.5,13 60.5,29 46.6,37 32.7,29 32.7,13" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="74.3,5 88.2,13 88.2,29 74.3,37 60.4,29 60.4,13" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="88.1,29 102.0,37 102.0,53 88.1,61 74.2,53 74.2,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="115.9,29 129.8,37 129.8,53 115.9,61 102.0,53 102.0,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="143.6,29 157.5,37 157.5,53 143.6,61 129.7,53 129.7,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="171.3,29 185.2,37 185.2,53 171.3,61 157.4,53 157.4,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="199.0,29 212.9,37 212.9,53 199.0,61 185.1,53 185.1,37" fill="#DBEAFE" stroke="#0891B2" stroke-width="1.5"/><polygon points="226.7,29 240.6,37 240.6,53 226.7,61 212.8,53 212.8,37" fill="#FDE68A" stroke="#0891B2" stroke-width="1.5"/><line x1="32.8" y1="13" x2="32.8" y2="29" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><line x1="60.5" y1="13" x2="60.5" y2="29" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><line x1="88.2" y1="29" x2="74.3" y2="37" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"/><line x1="102.0" y1="37" x2="102.0" y2="53" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/><line x1="129.8" y1="37" x2="129.8" y2="53" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/><line x1="157.5" y1="37" x2="157.5" y2="53" stroke="#EF4444" stroke-width="3" stroke-linecap="round"/><line x1="185.2" y1="37" x2="185.2" y2="53" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"/><line x1="212.9" y1="37" x2="212.9" y2="53" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/><text x="18.9" y="14" text-anchor="middle" font-size="9">🐕</text><text x="18.9" y="27" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">1</text><text x="46.6" y="21" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">2</text><text x="74.3" y="21" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">3</text><text x="102.0" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">4</text><text x="129.7" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">5</text><text x="157.4" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">6</text><text x="185.1" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">7</text><text x="212.8" y="21" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">8</text><text x="32.7" y="45" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif" opacity="0.4">11</text><text x="60.4" y="45" text-anchor="middle" dominant-baseline="middle" font-size="7" font-weight="700" fill="#78350F" font-family="Arial,sans-serif" opacity="0.4">12</text><text x="88.1" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">13</text><text x="115.9" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="143.6" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">15</text><text x="171.3" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">16</text><text x="199.0" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#7C3AED" font-family="Arial,sans-serif">17</text><text x="226.7" y="45" text-anchor="middle" dominant-baseline="middle" font-size="8" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">18</text></svg><div style="font-size:.75em;color:#64748b;margin-top:2px">Example: route from Hex 1 to Hex 18 🗺️</div></div>' +
            (device === "mobile"
-             ? 'Before you start walking — check your route! 📝<br><br>The bank tab 🏦 opens a drawer with your route details: each step, which door you cross, and how many pellets it is worth.<br><br>This helps you decide if it\'s worth going through a hard door for more pellets, or picking an easier path.<br><br>As soon as your route reaches the target, a strip slides up from the bottom: <strong>"Route ready!"</strong> ✅ with the number of steps and pellets. Tap the green button and off you go, or 🗑 to build a new one.<br><br>The board stays open — keep changing the route and the window updates by itself.'
-             : 'Before you start walking — check your route! 📝<br><br>The side column shows your route details: each step, which door you cross, and how many pellets it is worth.<br><br>This helps you decide if it\'s worth going through a hard door for more pellets, or picking an easier path.<br><br>As soon as your route reaches the target, a window pops up at the bottom center: <strong>"Route ready!"</strong> ✅ with the number of steps and pellets. Click the green button and off you go, or 🗑 to build a new one.<br><br>The board stays open — keep changing the route and the window updates by itself.'),
+             ? 'Before you start walking — check your route! 📝<br><br>The bank tab 🏦 opens a drawer with your route details: each step, which door you cross, and how many pellets it is worth.<br><br>This helps you decide if it\'s worth going through a hard door for more pellets, or picking an easier route.<br><br>As soon as your route reaches the target, a strip slides up from the bottom: <strong>"Route ready!"</strong> ✅ with the number of steps and pellets. Tap the green button and off you go, or 🗑 to build a new one.<br><br>The board stays open — keep changing the route and the window updates by itself.'
+             : 'Before you start walking — check your route! 📝<br><br>The side column shows your route details: each step, which door you cross, and how many pellets it is worth.<br><br>This helps you decide if it\'s worth going through a hard door for more pellets, or picking an easier route.<br><br>As soon as your route reaches the target, a window pops up at the bottom center: <strong>"Route ready!"</strong> ✅ with the number of steps and pellets. Click the green button and off you go, or 🗑 to build a new one.<br><br>The board stays open — keep changing the route and the window updates by itself.'),
        },
        {
          i: "🐕",
          t: "Step 3 — Off You Go!",
-         x: 'Your dog jumps on the board and starts moving! 🐾<br><br>Each step:<br>1️⃣ Press "Roll" 🎲<br>2️⃣ Get a multiplication problem based on the door color<br>3️⃣ Answer by typing or using choice buttons<br><br>✅ Correct → the dog moves forward + pellets! 🦴<br>❌ Wrong → try again — no limit!<br>💡 Reveal answer → the dog stops, <strong>pellets earned so far are saved!</strong> 🦴<br><br>🔢 <strong>Need help?</strong> Press the "Times Table" button at the bottom of the panel at any time.<br><br>🙋 <strong>Other players can help!</strong> The player in turn gets a few seconds to try alone; after that (or right away after a wrong answer) anyone else can answer and earn +1 pellet. 🦴<br>In a game played together, where everyone has their own device, that window pops up front and center for whoever is not playing — with the exercise the active player is solving.',
+         x: 'Your dog jumps on the board and starts moving! 🐾<br><br>Each step:<br>1️⃣ Press the "🎲 Roll" button for that door<br>2️⃣ Get a multiplication problem based on the door color<br>3️⃣ Answer by typing or using choice buttons<br><br>✅ Correct → the dog moves forward + pellets! 🦴<br>❌ Wrong → try again — no limit!<br>💡 Reveal answer → the dog stops, <strong>pellets earned so far are saved!</strong> 🦴<br><br>🔢 <strong>Need help?</strong> Press the "Times Table" button at the bottom of the panel at any time.<br><br>🙋 <strong>Other players can help!</strong> The player in turn gets a few seconds to try alone; after that (or right away after a wrong answer) anyone else can answer and earn +1 pellet. 🦴<br>In a game played together, where everyone has their own device, that window pops up front and center for whoever is not playing — with the exercise the active player is solving.',
        },
        {
          i: "⏱",
@@ -224,17 +224,17 @@ export const en: Dict = {
        {
          i: "✨",
          t: "Special Symbols on the Board",
-         x: '<strong>💎 Round numbers (10, 20, 30...)</strong><br>Landed here? Draw a Bonus card! 🎁<br>You might get: double pellets / extra turn / +10 pellets<br><br><strong>🚧 Numbers ending in 5 (15, 25, 35...)</strong><br>Draw a Limit card — a challenge for collecting!<br>Example: "Your pellets must be even"<br><br><strong>🦹 Numbers ending in 6 (16, 26, 36...)</strong><br>Steal! ✋ You can steal pellets from a rival (about 10% of theirs)!<br><br><strong>🎲 Prime numbers (2, 3, 5, 7, 11, 13...)</strong><br>A number that can only be divided by 1 and itself!<br>Draw a Twist card — the rules change! 🎲<br><br><em style="font-size:.85em;color:#64748b">💡 In «Focus mode» (settings) these special tiles are hidden — a calmer board with fewer distractions.</em>',
+         x: '<strong>💎 Round numbers (10, 20, 30...)</strong><br>Landed here? Draw a Bonus card! 🎁<br>You might get: double pellets / extra turn / +10 pellets<br><br><strong>🚧 Numbers ending in 5 (15, 25, 35...)</strong><br>Draw a Limit card — a challenge for collecting!<br>Example: "Your pellets must be even"<br><br><strong>🦹 Numbers ending in 6 (16, 26, 36...)</strong><br>Steal! ✋ You can steal pellets from a rival (about 10% of theirs)!<br><br><strong>🎲 Prime numbers (2, 3, 5, 7, 11, 13...)</strong><br>A number that can only be divided by 1 and itself!<br>Draw a Twist card — the rules change! 🎲<br><br><em style="font-size:.85em;color:#64748b">💡 In «Focus mode» (settings) these special hexes are hidden — a calmer board with fewer distractions.</em>',
        },
        {
          i: "🧩",
          t: "Factor Hunt",
-         x: '<strong>🧩 Factor Hunt — Advanced level and up</strong><br><br>With the bigger numbers, when you reach the target you get a fun challenge: break it into two numbers that multiply to it — for example <span dir="ltr" style="white-space:nowrap">4 × 6 = 24</span> or <span dir="ltr" style="white-space:nowrap">3 × 8 = 24</span>.<br>Solved it? +5 pellet bonus! 🦴 <em>(You can also skip.)</em><br><br>And while planning your route — tiles with a <strong>gold ring</strong> are factors of the target. Every factor tile you step through earns +2 extra pellets! 🐾',
+         x: '<strong>🧩 Factor Hunt — Advanced level and up</strong><br><br>With the bigger numbers, when you reach the target you get a fun challenge: break it into two numbers that multiply to it — for example <span dir="ltr" style="white-space:nowrap">4 × 6 = 24</span> or <span dir="ltr" style="white-space:nowrap">3 × 8 = 24</span>.<br>Solved it? +5 pellet bonus! 🦴 <em>(You can also skip.)</em><br><br>And while planning your route — hexes with a <strong>gold ring</strong> are factors of the target. Every factor hex you step through earns +2 extra pellets! 🐾',
        },
        {
          i: "⚙️",
          t: "Game Settings",
-         x: 'Before you start — set your game preferences:<br><br>📊 <strong>Difficulty level</strong> — Beginner to Hero<br>⏱ <strong>Timer</strong> — on or off<br>🔤 <strong>Choice buttons</strong> — for Beginner/Intermediate levels<br>🦹 <strong>Steal</strong> — on or off<br>🤝 <strong>Cooperative</strong> — play together instead of competing<br>🎯 <strong>Focus mode</strong> — no special tiles, fewer distractions<br>🎓 <strong>Free Play</strong> — practice with no score or winner<br>🏁 <strong>Win condition</strong> — how do you win?',
+         x: 'Before you start — set your game preferences:<br><br>📊 <strong>Difficulty level</strong> — Beginner to Hero<br>⏱ <strong>Timer</strong> — on or off<br>🔤 <strong>Choice buttons</strong> — for Beginner/Intermediate levels<br>🦹 <strong>Steal</strong> — on or off<br>🤝 <strong>Cooperative</strong> — play together instead of competing<br>🎯 <strong>Focus mode</strong> — no special hexes, fewer distractions<br>🎓 <strong>Free Play</strong> — practice with no score or winner<br>🏁 <strong>Win condition</strong> — how do you win?',
        },
        {
          i: "🤝",
@@ -252,7 +252,7 @@ export const en: Dict = {
     const steps = {
       i: "🎮",
       t: "How to play — 3 steps",
-      x: '<strong>1.</strong> Get an exercise and tap the right number on the board. 🔢<br><br><strong>2.</strong> Build a path from the dog to that number. 🗺️<br><br><strong>3.</strong> At every step solve a little exercise and move — each step earns pellets! 🦴<br><br>Made a mistake? Try again, and there\'s a hint too 💡',
+      x: '<strong>1.</strong> Get an exercise and tap the right number on the board. 🔢<br><br><strong>2.</strong> Build a route from the dog to that number. 🗺️<br><br><strong>3.</strong> At every step solve a little exercise and move — each step earns pellets! 🦴<br><br>Made a mistake? Try again, and there\'s a hint too 💜',
     };
     const LV: Record<string, string> = {
       beg: '🐾 <strong>Beginner</strong> — find numbers up to 40 on the board. Along the way you cross the blue door and solve easy exercises — products up to 20. Perfect to start! 😊',
@@ -285,7 +285,7 @@ export const en: Dict = {
       pages.push({
         i: "🧩",
         t: "Factor Hunt",
-        x: 'Higher levels have a special bonus! 🧩<br><br>When you reach the target number, you can break it into two numbers that multiply to it (e.g. <span dir="ltr" style="white-space:nowrap">4 × 6 = 24</span>) — and earn extra pellets! 🦴<br><br>Stepping on tiles with a gold ring (factors of the target) also earns a bonus.',
+        x: 'Higher levels have a special bonus! 🧩<br><br>When you reach the target number, you can break it into two numbers that multiply to it (e.g. <span dir="ltr" style="white-space:nowrap">4 × 6 = 24</span>) — and earn extra pellets! 🦴<br><br>Stepping on hexes with a gold ring (factors of the target) also earns a bonus.',
       });
     }
     return pages;
@@ -316,7 +316,7 @@ export const en: Dict = {
     const answerStyle =
       level === "beg" || level === "med"
         ? "tap the button with the correct answer."
-        : 'type your answer and press "Confirm".';
+        : 'type your answer and press "✅ Confirm".';
     const oneDoor = level === "beg"; // Beginner has a single door (Bone)
     const factorActive = level === "adv" || level === "champ" || level === "hero";
     const pages: TourStep[] = [
@@ -342,7 +342,7 @@ export const en: Dict = {
         i: "🎯",
         t: "Step 1 — Find the target",
         target: "panel",
-        x: `Here you get an exercise (${mathByLevel[level]}).<br><br>Solve it and tap the hex with the answer on the board. 🔢<br><br>Need help? There's a <strong>💜 Hint</strong> button, you can <strong>Show the answer</strong>, and there's a <strong>times-table</strong> helper too.`,
+        x: `Here you get an exercise (${mathByLevel[level]}).<br><br>Solve it and tap the hex with the answer on the board. 🔢<br><br>Need help? There's a <strong>💜 Hint</strong> button, there's <strong>💡 Show Answer</strong>, and there's a <strong>times-table</strong> helper too.`,
       },
       {
         i: "🖐️",
@@ -350,7 +350,7 @@ export const en: Dict = {
         target: "board",
         stage: "find",
         interact: "find",
-        x: "Let's try for real! Solve the exercise below and tap the hex with the answer on the board. 👆<br><br>Not sure? Ask for a hint 💡 or reveal the answer — you can't skip an exercise.",
+        x: "Let's try for real! Solve the exercise below and tap the hex with the answer on the board. 👆<br><br>Not sure? Ask for a hint 💜 or reveal the answer — you can't skip an exercise.",
       },
       {
         i: "🚪",
@@ -362,7 +362,7 @@ export const en: Dict = {
       },
       {
         i: "🐾",
-        t: "Step 2 — Build the path",
+        t: "Step 2 — Build the route",
         target: "board",
         x: 'Once you found the target, build a route from the dog to it — tap hex after hex. Each hex must touch the previous one.<br><br>The color of the line you cross decides which exercise will be there. 🗺️',
       },
@@ -371,26 +371,26 @@ export const en: Dict = {
         t: "Route details",
         target: "routedetail",
         stage: "route",
-        x: `${here.charAt(0).toUpperCase() + here.slice(1)} you get the <strong>full route breakdown</strong>: each step, which door you cross, and how many pellets it is worth. 🦴<br><br>That way you can compare paths and choose wisely.`,
+        x: `${here.charAt(0).toUpperCase() + here.slice(1)} you get the <strong>full route breakdown</strong>: each step, which door you cross, and how many pellets it is worth. 🦴<br><br>That way you can compare routes and choose wisely.`,
       },
       {
         i: "🧠",
         t: "Strategy & confirming",
         target: "panel",
         stage: "route",
-        x: `You can see the <strong>total pellets</strong> you can collect on this route. 🦴<br><br>A short route = fewer exercises but fewer pellets; hard doors = more pellets. Pick the path that suits you!<br><br>Once the route reaches the target, ${device === "mobile" ? "a green strip slides up from the bottom" : "a green window pops up at the bottom center"}: <strong>"Route ready!"</strong> — tap it and off you go, or <strong>🗑 Clear</strong> and build again.`,
+        x: `You can see the <strong>total pellets</strong> you can collect on this route. 🦴<br><br>A short route = fewer exercises but fewer pellets; hard doors = more pellets. Pick the route that suits you!<br><br>Once the route reaches the target, ${device === "mobile" ? "a green strip slides up from the bottom" : "a green window pops up at the bottom center"}: <strong>"Route ready!"</strong> — tap it and off you go, or <strong>🗑 Clear</strong> and build again.`,
       },
       {
         i: "🧩",
         t: "Factoring",
         target: "board",
-        x: 'This level has a special bonus! 🧩<br><br>The tiles with a <strong>gold frame</strong> are <strong>factors</strong> of the target (numbers that divide it). Walk over them on the way and you earn <strong>+2 pellets</strong> for each! 🦴<br><br>And when you reach the target, you can break it into two numbers that multiply to it — for an extra bonus! 🎉',
+        x: 'This level has a special bonus! 🧩<br><br>The hexes with a <strong>gold frame</strong> are <strong>factors</strong> of the target (numbers that divide it). Walk over them on the way and you earn <strong>+2 pellets</strong> for each! 🦴<br><br>And when you reach the target, you can break it into two numbers that multiply to it — for an extra bonus! 🎉',
       },
       {
         i: "🦴",
         t: "Step 3 — Set off!",
         target: "panel",
-        x: `Now you walk, and the clock starts ticking ⏱.<br><br>At each step you solve the door's exercise — ${answerStyle} Correct? You move forward and collect pellets! 🦴<br><br>Mistake? Try again or ask for a hint 💡. You can also give up — you lose the turn but keep what you already collected.`,
+        x: `Now you walk, and the clock starts ticking ⏱.<br><br>At each step you solve the door's exercise — ${answerStyle} Correct? You move forward and collect pellets! 🦴<br><br>Mistake? Try again or ask for a hint 💜. You can also give up — you lose the turn but keep what you already collected.`,
       },
       {
         i: "🖐️",
@@ -398,7 +398,7 @@ export const en: Dict = {
         target: "panel",
         stage: "walk",
         interact: "answer",
-        x: "Now solve the door's exercise and choose the answer. 🦴<br><br>Not sure? Ask for a hint 💡, or reveal the answer if you must (the dog stops, but the pellets you already collected are kept). You can't skip an exercise.",
+        x: "Now solve the door's exercise and choose the answer. 🦴<br><br>Not sure? Ask for a hint 💜, or reveal the answer if you must (the dog stops, but the pellets you already collected are kept). You can't skip an exercise.",
       },
       {
         i: "🙋",
@@ -408,7 +408,7 @@ export const en: Dict = {
       },
       {
         i: "✨",
-        t: "Surprise tiles",
+        t: "Surprise hexes",
         target: "board",
         x: `Some hexes have special symbols:<br><br>💎 <strong>Bonus</strong> — a gift! (double pellets / extra turn and more)<br>🚧 <strong>Challenge</strong> — a small rule to collect<br>🎲 <strong>Surprise</strong> — the rules change!<br>🦹 <strong>Robber</strong> — steal pellets from a rival${level === "beg" ? " (on Beginner you can turn it off in settings)" : ""}`,
       },
@@ -454,7 +454,7 @@ export const en: Dict = {
   optMc: "🔤 Choice buttons (Beginner/Intermediate)",
   optRob: "🦹 Steal mechanic",
   optCoop: "🤝 Cooperative — collect together!",
-  optFocus: "🎯 Focus mode — no special tiles (fewer distractions)",
+  optFocus: "🎯 Focus mode — no special hexes (fewer distractions)",
   winCondition: "🏁 Win Condition",
   winModes: {
     rounds: { icon: "🔄", name: "4 Rounds", desc: "Most pellets after 4 rounds wins" },
@@ -474,7 +474,7 @@ export const en: Dict = {
 
   p1Hint:
     "<strong>Step 1 — Find the Target 🎯</strong><br>Solve the equation and click the hex with the answer on the board!",
-  targetCardLabel: (id, prime) => `🃏 Target Card #${id}${prime ? " 🎲 Prime!" : ""}`,
+  targetCardLabel: (_id, prime) => `🃏 Target Card${prime ? " 🎲 Prime!" : ""}`,
   targetExpr: (ex) => `${ex} = ?`,
   targetInstruction: (prime) =>
     `${prime ? "🔮 Prime number — Twist card awaits!<br>" : ""}Click the hex on the board 👆`,
@@ -484,7 +484,7 @@ export const en: Dict = {
   hintResult: (expr) => calcHintEn(expr),
 
   p2Hint: (target) =>
-    `🎯 Target: <strong>hex ${target}</strong> · tap neighbouring hexes to build the path 🗺️`,
+    `🎯 Target: <strong>hex ${target}</strong> · tap neighbouring hexes to build the route 🗺️`,
   p2Empty: "Click hexes on the board to build the route 👆",
   stepHexLabel: (h) => `→ Hex ${h}`,
   doorLabel: (key) => DOOR_LABELS[key],
@@ -492,7 +492,7 @@ export const en: Dict = {
   possiblePellets: (pts, steps) =>
     `🦴 <strong>Total possible: ${pts} pellets</strong> in ${steps} steps`,
   routeTradeoff:
-    "💡 Every coloured line is a <strong>door</strong> — a harder door is worth more pellets. <strong>The way you choose decides how much you earn!</strong>",
+    "💡 Every coloured line is a <strong>door</strong> — a harder door is worth more pellets. <strong>The route you choose decides how much you earn!</strong>",
   routeMadeOf: "Doors on the way:",
   routeNotReach: (target) => `⚠️ Route doesn't reach Hex ${target}!`,
   confirmRoute: "✅ Confirm Route",
@@ -503,13 +503,13 @@ export const en: Dict = {
     `${steps} ${steps === 1 ? "step" : "steps"} · worth up to <strong>${pts}</strong> 🦴`,
 
   p3Hint: (step, total, doorLabel, pts, turnPts) =>
-    `<strong>Step 3 — Execute! 🐕</strong><br>Step ${step}/${total} |  | ${pts} 🦴<br>🦴 Earned this turn: <strong>${turnPts}</strong>`,
+    `<strong>Step 3 — Off you go! 🐕</strong><br>Step ${step}/${total} | ${doorLabel} | ${pts} 🦴<br>🦴 Earned this turn: <strong>${turnPts}</strong>`,
   rollFor: (doorLabel) => `🎲 Roll ${doorLabel}`,
   orClickHex: "or click the hex with the answer on the board 👆",
   answerPlaceholder: "Answer...",
   confirmAnswer: "✅ Confirm",
-  wrongTryAgain: "❌ Wrong! Try again, or reveal and lose this turn 😊",
-  revealEndsTurn: "💡 Reveal Answer (ends turn)",
+  wrongTryAgain: "❌ Wrong! Try again, or reveal the answer — the pellets you collected are kept 😊",
+  revealEndsTurn: "💡 Reveal Answer (turn ends, pellets kept 🦴)",
 
   revealTitle: (ans) => `💡 The Answer: ${ans}`,
   revealBody: (ans) => `Find Hex <strong>${ans}</strong> on the board and click it.`,
@@ -527,19 +527,19 @@ export const en: Dict = {
   coopNoRob: "🦹 No stealing in cooperative mode — keep going together!",
   collectPellets: "🦴 Collect Pellets!",
   cards: {
-    lim_even: { t: "Even Only!", tx: "Your pellet total must be even. Otherwise — lose 1 pellet 🦴" },
-    lim_odd: { t: "Odd Only!", tx: "Your pellet total must be odd. Otherwise — lose 1 pellet 🦴" },
+    lim_even: { t: "Even Only!", tx: "Your pellet total must be even. Not even? 1 pellet comes off 🦴" },
+    lim_odd: { t: "Odd Only!", tx: "Your pellet total must be odd. Not odd? 1 pellet comes off 🦴" },
     lim_three: {
       t: "3 Door Colors",
-      tx: "If you used fewer than 3 doors of different colors —<br>you get only half your pellets!",
+      tx: "Did you cross fewer than 3 doors of different colors?<br>Then only half your pellets stay!",
     },
     lim_nored: {
-      t: "No Red Door!",
-      tx: "If you crossed a red door (sausage or steak) this turn —<br>you lose the pellets you earned from it!",
+      t: "No Red or Black Door!",
+      tx: "Did you cross a red door or a black door this turn?<br>Then the pellets it gave you come off!",
     },
     lim_short: {
       t: "Short Route",
-      tx: "If you chose more than 4 steps —<br>you get only 75% of your pellets",
+      tx: "Was your route longer than 4 steps?<br>Then only 75% of your pellets stay",
     },
     bon_dbl: { t: "Double Pellets! 🦴🦴", tx: "Get ×2 all the pellets you earned this turn!" },
     bon_extra: { t: "Extra Turn! 🎉", tx: "Congratulations — you get an extra turn!" },
@@ -567,7 +567,7 @@ export const en: Dict = {
   timeoutBody: (hex) =>
     `You stay at Hex ${hex}. Pellets earned so far are saved! 🦴`,
   confirmEndTitle: "✖ End Game?",
-  confirmEndBody: "All progress will be lost.",
+  confirmEndBody: "We'll show what you managed, and the results are saved. 📊",
   cancel: "Cancel",
   endGame: "End",
   close: "Close",
@@ -600,7 +600,7 @@ export const en: Dict = {
       </div>
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>🎯 Focus Mode</strong>
-        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">Hides every special tile from the board — no bonus cards, no limits, no stealing, and no Twist cards. The dog simply travels and solves exercises, with no surprises or pop-up cards in the middle of a turn.<br><strong>Who's it for?</strong> Children who struggle with attention and are easily distracted, and any time you want all the focus on the math itself.<br>💡 The factoring challenge (at higher levels) still stays — it's part of the math, not a distraction.</p>
+        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">Hides every special hex from the board — no bonus cards, no limits, no stealing, and no Twist cards. The dog simply travels and solves exercises, with no surprises or pop-up cards in the middle of a turn.<br><strong>Who's it for?</strong> Children who struggle with attention and are easily distracted, and any time you want all the focus on the math itself.<br>💡 The factoring challenge (at higher levels) still stays — it's part of the math, not a distraction.</p>
       </div>
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>🎓 Free Play</strong>
@@ -623,6 +623,11 @@ export const en: Dict = {
 
   winnerTitle: "Winner! 🏆",
   winnerSuffix: " 🎉",
+  stoppedTitle: "That's a wrap! 🐕",
+  soloTitle: "Nicely done! 🌟",
+  soloSummary: (pellets) => `You collected ${pellets} pellets 🦴`,
+  freePlayTitle: "Great practice! 🎓",
+  freePlaySummary: (solved) => `${solved} exercises solved`,
   newGameBtn: "🔄 New Game",
   coopWinTitle: "Cooperative Win! 🏆",
   coopWinName: "We all win! 🎉",
@@ -644,7 +649,7 @@ export const en: Dict = {
   doorLegendTitle: "🚪 Doors & Pellets",
   doorLegendPts: (pts) => `${pts}🦴`,
   doorDifficulty: (key) => DOOR_DIFFICULTY[key],
-  doorMenuLead: "Each colour = how hard the exercise is, and how many pellets you get",
+  doorMenuLead: "Each door has its own line on the board — colour and pattern show how hard it is and what it pays",
 
   bankTitle: "🏦 The Bank — what we collected",
   stepPrizeTitle: "🎁 This step's prize",
@@ -663,7 +668,7 @@ export const en: Dict = {
   winWalkTitle: "🐕 On the way!",
   progStep: (step, total) => `Step ${step}/${total}`,
   progEarned: (n) => `Earned ${n}🦴`,
-  progLeft: (steps, pellets) => `${steps} steps left · ≈${pellets}🦴`,
+  progLeft: (steps, pellets) => `${steps} steps left · about ${pellets}🦴`,
   progDogAt: (hex) => `🐕 hex ${hex}`,
   helperTitle: "🙋 Friends help",
   helperWaiting: "When the active player gets an exercise — you can help and earn a pellet!",
@@ -701,9 +706,9 @@ export const en: Dict = {
     `🎉 Nice! <span dir="ltr">${a} × ${b} = ${n}</span> — bonus +${bonus} 🦴`,
   factorWrong: (n) => `Almost! Two numbers that multiply to ${n}. Try again 😊`,
   factorTilesBonus: (count, pts) =>
-    `🧩 You stepped on ${count} factor tile(s) of the target — bonus +${pts} 🦴`,
+    `🧩 You stepped on ${count} factor hex(es) of the target — bonus +${pts} 🦴`,
   factorHuntHint: (target) =>
-    `🧩 The gold-outlined tiles are factors of ${target} — walk on them for a bonus!`,
+    `🧩 The gold-outlined hexes are factors of ${target} — walk on them for a bonus!`,
 
   optFreePlay: "🎓 Free Play — count exercises (no scoring)",
   freeSolvedCount: (n) => `✅ ${n}`,

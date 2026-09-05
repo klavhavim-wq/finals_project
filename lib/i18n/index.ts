@@ -204,6 +204,14 @@ export interface Dict {
   // Win
   winnerTitle: string;
   winnerSuffix: string;
+  /** end screen when the players stopped the game themselves */
+  stoppedTitle: string;
+  /** end screen for a solo game — nobody to beat, so it reports what was done */
+  soloTitle: string;
+  soloSummary: (pellets: number) => string;
+  /** end screen for free practice — counts exercises, keeps no score */
+  freePlayTitle: string;
+  freePlaySummary: (solved: number) => string;
   newGameBtn: string;
   coopWinTitle: string;
   coopWinName: string;

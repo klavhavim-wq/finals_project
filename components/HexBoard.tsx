@@ -14,7 +14,20 @@ import {
   boardSvgSize,
   edgeColor,
 } from "@/lib/engine/hexgrid";
-import type { GameState } from "@/lib/engine/types";
+import type { DoorKey, GameState } from "@/lib/engine/types";
+
+/**
+ * A dash pattern per door, so a door can be told apart without seeing its colour.
+ * Ordered by what the door pays: solid (1) → increasingly broken (2, 5, 10, 12),
+ * so the pattern carries the same ranking the colour does.
+ */
+const DOOR_DASH: Record<DoorKey, string | undefined> = {
+  blue: undefined, // solid — 1 pellet
+  purple: "14 5", // long dashes — 2
+  yellow: "7 5", // medium dashes — 5
+  red: "2.5 4.5", // dots — 10
+  redlong: "13 4 2.5 4", // dash-dot — 12
+};
 
 /** Mix a #rrggbb colour toward white. t=1 → full colour, t=0 → white. */
 function tint(hex: string, t: number): string {
@@ -24,6 +37,21 @@ function tint(hex: string, t: number): string {
   const b = parseInt(c.slice(4, 6), 16);
   const mix = (x: number) => Math.round(255 + (x - 255) * t);
   return `rgb(${mix(r)},${mix(g)},${mix(b)})`;
+}
+
+/**
+ * What a screen reader says for one hex. The number alone is not enough — the
+ * board's whole state (where the dog is, what the target is, what is on the
+ * route) is otherwise carried by colour only.
+ */
+function hexLabel(state: GameState, n: number, sym: string): string {
+  const parts: string[] = [String(n)];
+  if (state.targetHex === n) parts.push("target");
+  const idx = state.path.indexOf(n);
+  if (idx !== -1) parts.push(`route step ${idx + 1}`);
+  if (state.players.some((p) => p.hex === n)) parts.push("dog here");
+  if (sym) parts.push(sym);
+  return parts.join(", ");
 }
 
 function fillFor(state: GameState, n: number): string {
@@ -101,8 +129,13 @@ export default function HexBoard({
       if (neighbor && neighbor <= boardMax) {
         const dkey = edgeColor(state.edgeColors, state.level, n, neighbor);
         const stroke = DC[dkey].color;
-        // Steak (redlong) is drawn dashed so it can't be confused with the
-        // solid red Sausage door — distinguishable without relying on hue.
+        // Every door gets its own dash pattern as well as its own colour.
+        // Colour alone was not enough: simulated for the commonest colour-vision
+        // deficiency, blue and purple render as one violet and orange and red as
+        // one olive — so the 1-pellet door and the 2-pellet door, and the 5 and
+        // the 10, were indistinguishable for roughly one boy in twelve. The
+        // dash count rises with the door's value, so the pattern is readable as
+        // an order even by someone who sees no colour at all.
         edges.push(
           <line
             key={e}
@@ -111,9 +144,9 @@ export default function HexBoard({
             x2={v2.x.toFixed(1)}
             y2={v2.y.toFixed(1)}
             stroke={stroke}
-            strokeWidth={4.5}
+            strokeWidth={5}
             strokeLinecap="round"
-            strokeDasharray={dkey === "redlong" ? "7 5" : undefined}
+            strokeDasharray={DOOR_DASH[dkey]}
           />
         );
       } else {
@@ -162,6 +195,19 @@ export default function HexBoard({
         key={n}
         className="hex-group"
         onClick={() => onHexClick(n)}
+        // The board is reachable from the keyboard: every hex is a real button in
+        // the tab order, and Enter or Space picks it. Without this the route stage
+        // had no non-pointer path at all, so a child using a switch or unable to
+        // aim a tap could not play past the first stage.
+        role="button"
+        tabIndex={0}
+        aria-label={hexLabel(state, n, sym)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+            e.preventDefault();
+            onHexClick(n);
+          }
+        }}
       >
         <polygon
           points={pts}
@@ -198,12 +244,16 @@ export default function HexBoard({
             pointerEvents="none"
           />
         )}
+        {/* The number keeps its full size even on a hex that carries a symbol.
+            It used to shrink by a quarter to make room, which on a phone meant
+            more than half the board's numbers rendered near 10px. The symbol
+            moves down and grows instead — the hex has the room. */}
         <text
           x={cx.toFixed(1)}
-          y={(cy - (sym ? 9 : 0)).toFixed(1)}
+          y={(cy - (sym ? 7 : 0)).toFixed(1)}
           textAnchor="middle"
           dominantBaseline="middle"
-          fontSize={sym ? 19 : 25}
+          fontSize={25}
           fontWeight={fw}
           fill={tcol}
           pointerEvents="none"
@@ -214,10 +264,10 @@ export default function HexBoard({
         {sym && (
           <text
             x={cx.toFixed(1)}
-            y={(cy + 13).toFixed(1)}
+            y={(cy + 16).toFixed(1)}
             textAnchor="middle"
             dominantBaseline="middle"
-            fontSize={13}
+            fontSize={16}
             pointerEvents="none"
           >
             {sym}
@@ -233,13 +283,15 @@ export default function HexBoard({
           const { x: cx, y: cy } = hCenter(h);
           return (
             <g key={`badge-${h}`} className="svg-badge">
-              <circle cx={(cx + 13).toFixed(1)} cy={(cy - 13).toFixed(1)} r={9} fill="#3B82F6" stroke="white" strokeWidth={1.5} />
+              {/* Bigger than it was: at phone scale a 10px badge numeral came out
+                  around 5px, which is below anyone's reading threshold. */}
+              <circle cx={(cx + 13).toFixed(1)} cy={(cy - 13).toFixed(1)} r={12} fill="#1D4ED8" stroke="white" strokeWidth={2} />
               <text
                 x={(cx + 13).toFixed(1)}
                 y={(cy - 13).toFixed(1)}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fontSize={10}
+                fontSize={14}
                 fill="white"
                 fontWeight={800}
                 pointerEvents="none"
@@ -331,7 +383,17 @@ export default function HexBoard({
       width={SVG_W}
       height={SVG_H}
       style={{ display: "block", ...sizeStyle }}
+      role="group"
+      aria-label={`Game board, hexes 1 to ${boardMax}`}
     >
+      {/* Keyboard focus has to be visible on the board too. Scoped inside the
+          SVG so the board owns its own focus ring. */}
+      <style>{`
+        #hsvg .hex-group{outline:none}
+        #hsvg .hex-group:focus-visible polygon:first-of-type{
+          stroke:#111827;stroke-width:4;paint-order:stroke;
+        }
+      `}</style>
       <defs>
         <filter id="route-raise" x="-30%" y="-30%" width="160%" height="160%">
           <feDropShadow dx="0" dy="3" stdDeviation="2.6" floodColor="#1f2937" floodOpacity="0.4" />

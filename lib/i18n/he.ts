@@ -133,8 +133,8 @@ function formatEff(r: EffResult): string {
         : `✅ ${r.count} צבעי דלתות! אפשר להמשיך`;
     case "noRed":
       return r.applied
-        ? `${r.count} דלתות אדומות! −${r.lost} 🦴 — נשאר: <strong>${r.total}</strong>`
-        : "✅ ללא דלת אדומה! אפשר להמשיך";
+        ? `${r.count} דלתות אדומות או שחורות! −${r.lost} 🦴 — נשאר: <strong>${r.total}</strong>`
+        : "✅ ללא דלת אדומה או שחורה! אפשר להמשיך";
     case "shortPath":
       return r.applied
         ? `מסלול ארוך (${r.steps} צעדים) — 75%: <strong>${r.total}</strong> 🦴`
@@ -173,7 +173,7 @@ export const he: Dict = {
        {
          i: "🎮",
          t: "לוח המשחק",
-         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="300" height="126" viewBox="0 0 228 96" xmlns="http://www.w3.org/2000/svg"><polygon points="48,10 80.9,29 80.9,67 48,86 15.1,67 15.1,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="113.8,10 146.7,29 146.7,67 113.8,86 80.9,67 80.9,29" fill="#F5F3FF" stroke="#C9A882" stroke-width="1.5"/><polygon points="179.6,10 212.5,29 212.5,67 179.6,86 146.7,67 146.7,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><line x1="80.9" y1="29" x2="80.9" y2="67" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/><line x1="146.7" y1="29" x2="146.7" y2="67" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/><text x="48" y="58" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">12</text><text x="113.8" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">13</text><text x="179.6" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="48" y="34" text-anchor="middle" font-size="22">🐕</text><text x="113.8" y="34" text-anchor="middle" font-size="16">🎲</text></svg></div>הלוח מכיל משושים ממוספרים — ככל שהרמה גבוהה יותר, הלוח גדול יותר (עד 100). בין המשושים יש צלעות צבעוניות — אלה ה"דלתות" שלנו! 🚪<br><br>כל צבע הוא דלת אחרת: תרגילים ברמת קושי אחרת, ומספר אחר של גרגירים לצעד.<br><br>🎯 <strong>המטרה:</strong> לצבור כמה שיותר גרגירים לבנק של הכלב! 🐶🦴',
+         x: '<div style="display:flex;flex-direction:column;align-items:center;margin:0 0 8px"><svg width="300" height="126" viewBox="0 0 228 96" xmlns="http://www.w3.org/2000/svg"><polygon points="48,10 80.9,29 80.9,67 48,86 15.1,67 15.1,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><polygon points="113.8,10 146.7,29 146.7,67 113.8,86 80.9,67 80.9,29" fill="#F5F3FF" stroke="#C9A882" stroke-width="1.5"/><polygon points="179.6,10 212.5,29 212.5,67 179.6,86 146.7,67 146.7,29" fill="#FFF8E7" stroke="#C9A882" stroke-width="1.5"/><line x1="80.9" y1="29" x2="80.9" y2="67" stroke="#3B82F6" stroke-width="5" stroke-linecap="round"/><line x1="146.7" y1="29" x2="146.7" y2="67" stroke="#8B5CF6" stroke-width="5" stroke-linecap="round"/><text x="48" y="58" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">12</text><text x="113.8" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">13</text><text x="179.6" y="52" text-anchor="middle" dominant-baseline="middle" font-size="17" font-weight="700" fill="#78350F" font-family="Arial,sans-serif">14</text><text x="48" y="34" text-anchor="middle" font-size="22">🐕</text><text x="113.8" y="34" text-anchor="middle" font-size="16">🎲</text></svg></div>הלוח מכיל משושים ממוספרים — ככל שהרמה גבוהה יותר, הלוח גדול יותר (עד 100). בין המשושים יש צלעות צבעוניות — אלה ה«דלתות» שלנו! 🚪<br><br>כל צבע הוא דלת אחרת: תרגילים ברמת קושי אחרת, ומספר אחר של גרגירים לצעד.<br><br>🎯 <strong>המטרה:</strong> לצבור כמה שיותר גרגירים לבנק של הכלב! 🐶🦴',
        },
        {
          i: device === "mobile" ? "📱" : "🖥️",
@@ -186,7 +186,7 @@ export const he: Dict = {
        {
          i: "🎯",
          t: "שלב 1 — מוצאים את היעד",
-         x: 'שולפים כרטיס יעד עם תרגיל חשבון, למשל: <strong><span dir="ltr" style="white-space:nowrap">6 × 4 = ?</span></strong><br><br>פותרים בראש 🧠 ולוחצים על המשושה עם התשובה (24) בלוח!<br><br>טעות? <strong>אפשר לנסות שוב כמה פעמים שרוצים!</strong> 😊<br>רוצים עזרה? אפשר לבחור רמז 💡, או ללחוץ "הראה תשובה".<br><br>ℹ️ <strong>בשלב הזה אין הגבלת זמן!</strong>',
+         x: 'שולפים כרטיס יעד עם תרגיל חשבון, למשל: <strong><span dir="ltr" style="white-space:nowrap">6 × 4 = ?</span></strong><br><br>פותרים בראש 🧠 ולוחצים על המשושה עם התשובה (24) בלוח!<br><br>טעות? <strong>אפשר לנסות שוב כמה פעמים שרוצים!</strong> 😊<br>רוצים עזרה? אפשר לבחור רמז 💜, או ללחוץ «💡 הראו תשובה».<br><br>ℹ️ <strong>בשלב הזה אין הגבלת זמן!</strong>',
        },
        {
          i: "🗺️",
@@ -209,7 +209,7 @@ export const he: Dict = {
        {
          i: "🐕",
          t: "שלב 3 — יוצאים לדרך!",
-         x: 'הכלב קופץ ללוח ומתחיל לנוע! 🐾<br><br>לכל צעד:<br>1️⃣ לוחצים "זרוק" 🎲<br>2️⃣ מקבלים תרגיל כפל לפי צבע הדלת<br>3️⃣ עונים על ידי הקלדה או כפתורי בחירה<br><br>✅ נכון ← הכלב מתקדם + גרגירים! 🦴<br>❌ טעות ← אפשר לנסות שוב בלי הגבלה!<br>💡 חושפים תשובה ← הכלב נעצר, <strong>הגרגירים שנצברו עד כה נשמרים!</strong> 🦴<br><br>🔢 <strong>צריכים עזרה?</strong> לחצו על כפתור "לוח כפל" בתחתית הפאנל בכל עת.<br><br>🙋 <strong>שחקנים אחרים יכולים לעזור!</strong> נותנים למי שבתור לנסות לבד, ואחרי כמה שניות (או מיד אחרי טעות) מי שלא בתור יכול לענות ולקבל +1 גרגיר. 🦴<br>במשחק «ביחד», שבו לכל אחד יש מכשיר משלו, החלון של העזרה קופץ בקדמת המסך של מי שלא משחק, עם התרגיל שמופיע אצל מי שכן.',
+         x: 'הכלב קופץ ללוח ומתחיל לנוע! 🐾<br><br>לכל צעד:<br>1️⃣ לוחצים על כפתור «🎲 זרקו עבור הדלת»<br>2️⃣ מקבלים תרגיל כפל לפי צבע הדלת<br>3️⃣ עונים על ידי הקלדה או כפתורי בחירה<br><br>✅ נכון ← הכלב מתקדם + גרגירים! 🦴<br>❌ טעות ← אפשר לנסות שוב בלי הגבלה!<br>💡 חושפים תשובה ← הכלב נעצר, <strong>הגרגירים שנצברו עד כה נשמרים!</strong> 🦴<br><br>🔢 <strong>צריכים עזרה?</strong> לחצו על כפתור "לוח כפל" בתחתית הפאנל בכל עת.<br><br>🙋 <strong>שחקנים אחרים יכולים לעזור!</strong> נותנים למי שבתור לנסות לבד, ואחרי כמה שניות (או מיד אחרי טעות) מי שלא בתור יכול לענות ולקבל +1 גרגיר. 🦴<br>במשחק «ביחד», שבו לכל אחד יש מכשיר משלו, החלון של העזרה קופץ בקדמת המסך של מי שלא משחק, עם התרגיל שמופיע אצל מי שכן.',
        },
        {
          i: "⏱",
@@ -224,17 +224,17 @@ export const he: Dict = {
        {
          i: "✨",
          t: "סימנים מיוחדים על הלוח",
-         x: '<strong>💎 מספרים עגולים <span dir="ltr" style="white-space:nowrap">(10, 20, 30...)</span></strong><br>נחתתם כאן? שלפו קלף בונוס! 🎁<br>אולי תקבלו: כפול גרגירים / תור נוסף / +10 גרגירים<br><br><strong>🚧 מסתיימים ב-5 <span dir="ltr" style="white-space:nowrap">(15, 25, 35...)</span></strong><br>שלפו קלף הגבלה — אתגר לאיסוף!<br>למשל: "מספר הגרגירים חייב להיות זוגי"<br><br><strong>🦹 מסתיימים ב-6 <span dir="ltr" style="white-space:nowrap">(16, 26, 36...)</span></strong><br>שוד! ✋ אפשר לגנוב גרגירים מיריב (כ-10% מהגרגירים שלו)!<br><br><strong>🎲 מספרים ראשוניים <span dir="ltr" style="white-space:nowrap">(2, 3, 5, 7, 11, 13...)</span></strong><br>מספר שמתחלק רק ב-1 ובעצמו!<br>שלפו קלף טוויסט — הכללים משתנים! 🎲<br><br><em style="font-size:.85em;color:#64748b">💡 ב«מצב מיקוד» (בהגדרות) המשבצות המיוחדות האלה מוסתרות — לוח רגוע יותר, בלי הסחות.</em>',
+         x: '<strong>💎 מספרים עגולים <span dir="ltr" style="white-space:nowrap">(10, 20, 30...)</span></strong><br>נחתתם כאן? שלפו קלף בונוס! 🎁<br>אולי תקבלו: כפול גרגירים / תור נוסף / +10 גרגירים<br><br><strong>🚧 מסתיימים ב-5 <span dir="ltr" style="white-space:nowrap">(15, 25, 35...)</span></strong><br>שלפו קלף הגבלה — אתגר לאיסוף!<br>למשל: "מספר הגרגירים חייב להיות זוגי"<br><br><strong>🦹 מסתיימים ב-6 <span dir="ltr" style="white-space:nowrap">(16, 26, 36...)</span></strong><br>שוד! ✋ אפשר לגנוב גרגירים מיריב (כ-10% מהגרגירים שלו)!<br><br><strong>🎲 מספרים ראשוניים <span dir="ltr" style="white-space:nowrap">(2, 3, 5, 7, 11, 13...)</span></strong><br>מספר שמתחלק רק ב-1 ובעצמו!<br>שלפו קלף טוויסט — הכללים משתנים! 🎲<br><br><em style="font-size:.85em;color:#64748b">💡 ב«מצב מיקוד» (בהגדרות) המשושים המיוחדים האלה מוסתרים — לוח רגוע יותר, בלי הסחות.</em>',
        },
        {
          i: "🧩",
          t: "פירוק לגורמים",
-         x: '<strong>🧩 פירוק לגורמים — מרמת מתקדם ומעלה</strong><br><br>במספרים הגדולים, כשמגיעים למספר היעד מקבלים אתגר נחמד: לפרק אותו לשני מספרים שמכפלתם נותנת אותו — למשל <span dir="ltr" style="white-space:nowrap">4 × 6 = 24</span> או <span dir="ltr" style="white-space:nowrap">3 × 8 = 24</span>.<br>פתרתם? בונוס +5 גרגירים! 🦴 <em>(אפשר גם לדלג.)</em><br><br>ובזמן תכנון המסלול — המשבצות עם <strong>מסגרת זהובה</strong> הן גורמים של היעד. כל משבצת-גורם שעוברים עליה בדרך שווה +2 גרגירים נוספים! 🐾',
+         x: '<strong>🧩 פירוק לגורמים — מרמת מתקדם ומעלה</strong><br><br>במספרים הגדולים, כשמגיעים למספר היעד מקבלים אתגר נחמד: לפרק אותו לשני מספרים שמכפלתם נותנת אותו — למשל <span dir="ltr" style="white-space:nowrap">4 × 6 = 24</span> או <span dir="ltr" style="white-space:nowrap">3 × 8 = 24</span>.<br>פתרתם? בונוס +5 גרגירים! 🦴 <em>(אפשר גם לדלג.)</em><br><br>ובזמן תכנון המסלול — המשושים עם <strong>מסגרת זהובה</strong> הם גורמים של היעד. כל משושה-גורם שעוברים עליו בדרך שווה +2 גרגירים נוספים! 🐾',
        },
        {
          i: "⚙️",
          t: "הגדרות המשחק",
-         x: 'לפני שמתחילים — מגדירים את העדפות המשחק שלנו:<br><br>📊 <strong>רמת קושי</strong> — מתחילים עד גיבור<br>⏱ <strong>טיימר</strong> — מופעל או כבוי<br>🔤 <strong>כפתורי בחירה</strong> — לרמות מתחילים/בינוני<br>🦹 <strong>שוד</strong> — מופעל או כבוי<br>🤝 <strong>שיתופי</strong> — כולם ביחד במקום תחרות<br>🎯 <strong>מצב מיקוד</strong> — בלי משבצות מיוחדות, פחות הסחות<br>🎓 <strong>משחק חופשי</strong> — תרגול בלי ניקוד ובלי מנצח<br>🏁 <strong>מטרת המשחק</strong> — איך מנצחים?',
+         x: 'לפני שמתחילים — מגדירים את העדפות המשחק שלנו:<br><br>📊 <strong>רמת קושי</strong> — מתחילים עד גיבור<br>⏱ <strong>טיימר</strong> — מופעל או כבוי<br>🔤 <strong>כפתורי בחירה</strong> — לרמות מתחילים/בינוני<br>🦹 <strong>שוד</strong> — מופעל או כבוי<br>🤝 <strong>שיתופי</strong> — כולם ביחד במקום תחרות<br>🎯 <strong>מצב מיקוד</strong> — בלי משושים מיוחדים, פחות הסחות<br>🎓 <strong>משחק חופשי</strong> — תרגול בלי ניקוד ובלי מנצח<br>🏁 <strong>מטרת המשחק</strong> — איך מנצחים?',
        },
        {
          i: "🤝",
@@ -252,7 +252,7 @@ export const he: Dict = {
     const steps = {
       i: "🎮",
       t: "איך משחקים? 3 שלבים",
-      x: '<strong>1.</strong> מקבלים תרגיל ולוחצים על המספר הנכון בלוח. 🔢<br><br><strong>2.</strong> בונים דרך מהכלב עד המספר. 🗺️<br><br><strong>3.</strong> בכל צעד פותרים תרגיל קטן ומתקדמים — וכל צעד שווה גרגירים! 🦴<br><br>טעות? אפשר לנסות שוב, ויש גם רמז 💡',
+      x: '<strong>1.</strong> מקבלים תרגיל ולוחצים על המספר הנכון בלוח. 🔢<br><br><strong>2.</strong> בונים מסלול מהכלב עד המספר. 🗺️<br><br><strong>3.</strong> בכל צעד פותרים תרגיל קטן ומתקדמים — וכל צעד שווה גרגירים! 🦴<br><br>טעות? אפשר לנסות שוב, ויש גם רמז 💜',
     };
     const LV: Record<string, string> = {
       beg: '🐾 <strong>מתחילים</strong> — מוצאים על הלוח מספרים עד 40. בדרך עוברים בדלת הכחולה ופותרים תרגילים קלים — מכפלות עד 20. מושלם להתחלה! 😊',
@@ -285,7 +285,7 @@ export const he: Dict = {
       pages.push({
         i: "🧩",
         t: "פירוק לגורמים",
-        x: 'ברמות הגבוהות יש בונוס מיוחד! 🧩<br><br>כשמגיעים למספר היעד, אפשר לפרק אותו לשני מספרים שמכפלתם נותנת אותו (למשל <span dir="ltr" style="white-space:nowrap">4 × 6 = 24</span>) — ומקבלים גרגירים נוספים! 🦴<br><br>גם מעבר במשבצות עם המסגרת הזהובה (גורמים של היעד) שווה בונוס.',
+        x: 'ברמות הגבוהות יש בונוס מיוחד! 🧩<br><br>כשמגיעים למספר היעד, אפשר לפרק אותו לשני מספרים שמכפלתם נותנת אותו (למשל <span dir="ltr" style="white-space:nowrap">4 × 6 = 24</span>) — ומקבלים גרגירים נוספים! 🦴<br><br>גם מעבר במשושים עם המסגרת הזהובה (גורמים של היעד) שווה בונוס.',
       });
     }
     return pages;
@@ -316,7 +316,7 @@ export const he: Dict = {
     const answerStyle =
       level === "beg" || level === "med"
         ? "לוחצים על הכפתור עם התשובה הנכונה."
-        : "מקלידים את התשובה ולוחצים «אשר».";
+        : "מקלידים את התשובה ולוחצים «✅ אשרו תשובה».";
     const oneDoor = level === "beg"; // Beginner has a single door (Bone)
     const factorActive = level === "adv" || level === "champ" || level === "hero";
     const pages: TourStep[] = [
@@ -342,7 +342,7 @@ export const he: Dict = {
         i: "🎯",
         t: "שלב 1 — מוצאים את היעד",
         target: "panel",
-        x: `כאן מקבלים תרגיל (${mathByLevel[level]}).<br><br>פותרים אותו, ולוחצים על המשושה עם התשובה בלוח. 🔢<br><br>צריך עזרה? יש כפתור <strong>💜 רמז</strong>, אפשר <strong>להראות תשובה</strong>, ויש גם <strong>לוח כפל</strong> לעזרה.`,
+        x: `כאן מקבלים תרגיל (${mathByLevel[level]}).<br><br>פותרים אותו, ולוחצים על המשושה עם התשובה בלוח. 🔢<br><br>צריך עזרה? יש כפתור <strong>💜 רמז</strong>, יש <strong>💡 הראו תשובה</strong>, ויש גם <strong>לוח כפל</strong> לעזרה.`,
       },
       {
         i: "🖐️",
@@ -350,7 +350,7 @@ export const he: Dict = {
         target: "board",
         stage: "find",
         interact: "find",
-        x: "בואו ננסה באמת! פתרו את התרגיל למטה ולחצו על המשושה עם התשובה בלוח. 👆<br><br>לא בטוחים? אפשר לבקש רמז 💡 או לחשוף את התשובה — אי אפשר לדלג על תרגיל.",
+        x: "בואו ננסה באמת! פתרו את התרגיל למטה ולחצו על המשושה עם התשובה בלוח. 👆<br><br>לא בטוחים? אפשר לבקש רמז 💜 או לחשוף את התשובה — אי אפשר לדלג על תרגיל.",
       },
       {
         i: "🚪",
@@ -362,7 +362,7 @@ export const he: Dict = {
       },
       {
         i: "🐾",
-        t: "שלב 2 — בונים את הדרך",
+        t: "שלב 2 — בונים את המסלול",
         target: "board",
         x: 'אחרי שמצאנו את היעד, בונים מסלול מהכלב עד אליו — לוחצים על משושה אחרי משושה. כל משושה חייב לגעת בקודם.<br><br>הצבע של הקו שעוברים עליו קובע איזה תרגיל יהיה שם. 🗺️',
       },
@@ -384,13 +384,13 @@ export const he: Dict = {
         i: "🧩",
         t: "פירוק לגורמים",
         target: "board",
-        x: 'ברמה הזו יש בונוס מיוחד! 🧩<br><br>המשבצות עם <strong>המסגרת הזהובה</strong> הן <strong>גורמים</strong> של היעד (מספרים שמתחלקים בו). אם עוברים עליהן בדרך — מקבלים <strong>+2 גרגירים</strong> על כל אחת! 🦴<br><br>וכשמגיעים ליעד, אפשר לפרק אותו לשני מספרים שמכפלתם היא היעד — ולקבל עוד בונוס! 🎉',
+        x: 'ברמה הזו יש בונוס מיוחד! 🧩<br><br>המשושים עם <strong>המסגרת הזהובה</strong> הם <strong>גורמים</strong> של היעד (מספרים שמתחלקים בו). אם עוברים עליהם בדרך — מקבלים <strong>+2 גרגירים</strong> על כל אחד! 🦴<br><br>וכשמגיעים ליעד, אפשר לפרק אותו לשני מספרים שמכפלתם היא היעד — ולקבל עוד בונוס! 🎉',
       },
       {
         i: "🦴",
         t: "שלב 3 — יוצאים לדרך",
         target: "panel",
-        x: `עכשיו צועדים, והשעון מתחיל לתקתק ⏱.<br><br>בכל צעד פותרים את התרגיל של הדלת — ${answerStyle} נכון? מתקדמים וצוברים גרגירים! 🦴<br><br>טעות? אפשר לנסות שוב או לבקש רמז 💡. אפשר גם לוותר — מפסידים את התור אבל שומרים את מה שכבר אספתם.`,
+        x: `עכשיו צועדים, והשעון מתחיל לתקתק ⏱.<br><br>בכל צעד פותרים את התרגיל של הדלת — ${answerStyle} נכון? מתקדמים וצוברים גרגירים! 🦴<br><br>טעות? אפשר לנסות שוב או לבקש רמז 💜. אפשר גם לוותר — מפסידים את התור אבל שומרים את מה שכבר אספתם.`,
       },
       {
         i: "🖐️",
@@ -398,7 +398,7 @@ export const he: Dict = {
         target: "panel",
         stage: "walk",
         interact: "answer",
-        x: "עכשיו פתרו את התרגיל של הדלת ובחרו את התשובה. 🦴<br><br>לא בטוחים? אפשר רמז 💡, ואם צריך — לחשוף תשובה (הכלב נעצר אבל הגרגירים שכבר נאספו נשמרים). אי אפשר לדלג על תרגיל.",
+        x: "עכשיו פתרו את התרגיל של הדלת ובחרו את התשובה. 🦴<br><br>לא בטוחים? אפשר רמז 💜, ואם צריך — לחשוף תשובה (הכלב נעצר אבל הגרגירים שכבר נאספו נשמרים). אי אפשר לדלג על תרגיל.",
       },
       {
         i: "🙋",
@@ -408,7 +408,7 @@ export const he: Dict = {
       },
       {
         i: "✨",
-        t: "משבצות מפתיעות",
+        t: "משושים מפתיעים",
         target: "board",
         x: `על חלק מהמשושים יש סמלים מיוחדים:<br><br>💎 <strong>בונוס</strong> — מתנה! (כפול גרגירים / תור נוסף ועוד)<br>🚧 <strong>אתגר</strong> — חוק קטן לאיסוף<br>🎲 <strong>הפתעה</strong> — הכללים משתנים!<br>🦹 <strong>שודד</strong> — אפשר לגנוב גרגירים מיריב${level === "beg" ? " (ברמת מתחילים אפשר לכבות אותו בהגדרות)" : ""}`,
       },
@@ -454,7 +454,7 @@ export const he: Dict = {
   optMc: "🔤 כפתורי בחירה (מתחילים/בינוני)",
   optRob: "🦹 מנגנון שוד",
   optCoop: "🤝 משחק שיתופי — אוספים ביחד!",
-  optFocus: "🎯 מצב מיקוד — בלי משבצות מיוחדות (פחות הסחות)",
+  optFocus: "🎯 מצב מיקוד — בלי משושים מיוחדים (פחות הסחות)",
   winCondition: "🏁 מטרת המשחק",
   winModes: {
     rounds: { icon: "🔄", name: "4 סיבובים", desc: "הכי הרבה גרגירים לאחר 4 סיבובים" },
@@ -474,7 +474,7 @@ export const he: Dict = {
 
   p1Hint:
     "<strong>שלב 1 — מוצאים יעד 🎯</strong><br>פתרו את התרגיל ולחצו על המשושה עם התשובה בלוח!",
-  targetCardLabel: (id, prime) => `🃏 כרטיס יעד #${id}${prime ? " 🎲 ראשוני!" : ""}`,
+  targetCardLabel: (_id, prime) => `🃏 כרטיס יעד${prime ? " 🎲 ראשוני!" : ""}`,
   targetExpr: (ex) => `${ex} = ?`,
   targetInstruction: (prime) =>
     `${prime ? "🔮 מספר ראשוני — קלף טוויסט מחכה!<br>" : ""}לחצו על המשושה בלוח 👆`,
@@ -484,7 +484,7 @@ export const he: Dict = {
   hintResult: (expr) => calcHintHe(expr),
 
   p2Hint: (target) =>
-    `🎯 יעד: <strong>משושה ${target}</strong> · לחצו על משושים סמוכים לבניית הדרך 🗺️`,
+    `🎯 יעד: <strong>משושה ${target}</strong> · לחצו על משושים סמוכים לבניית המסלול 🗺️`,
   p2Empty: "לחצו על משושים בלוח לבניית המסלול 👆",
   stepHexLabel: (h) => `→ משושה ${h}`,
   doorLabel: (key) => DOOR_LABELS[key],
@@ -508,8 +508,8 @@ export const he: Dict = {
   orClickHex: "או לחצו על המשושה עם התשובה בלוח 👆",
   answerPlaceholder: "התשובה...",
   confirmAnswer: "✅ אשרו תשובה",
-  wrongTryAgain: "❌ לא נכון! נסו שוב, או חשפו ותפסידו את התור 😊",
-  revealEndsTurn: "💡 חשפו תשובה (מסיים תור)",
+  wrongTryAgain: "❌ לא נכון! נסו שוב, או חשפו את התשובה — הגרגירים שאספתם נשמרים 😊",
+  revealEndsTurn: "💡 חשפו תשובה (סוף התור, הגרגירים נשמרים 🦴)",
 
   revealTitle: (ans) => `💡 התשובה: ${ans}`,
   revealBody: (ans) => `מצאו את משושה <strong>${ans}</strong> בלוח ולחצו עליו.`,
@@ -529,23 +529,23 @@ export const he: Dict = {
   cards: {
     lim_even: {
       t: "רק זוגי!",
-      tx: "מספר הגרגירים שלכם חייב להיות זוגי.<br>אם לא — תאבדו גרגיר אחד 🦴",
+      tx: "מספר הגרגירים שלכם חייב להיות זוגי.<br>הוא לא זוגי? יורד גרגיר אחד 🦴",
     },
     lim_odd: {
       t: "רק אי-זוגי!",
-      tx: "מספר הגרגירים שלכם חייב להיות אי-זוגי.<br>אם לא — תאבדו גרגיר אחד 🦴",
+      tx: "מספר הגרגירים שלכם חייב להיות אי-זוגי.<br>הוא לא אי-זוגי? יורד גרגיר אחד 🦴",
     },
     lim_three: {
       t: "3 צבעי דלתות",
-      tx: "אם עברתם דרך פחות מ-3 דלתות בצבעים שונים —<br>תקבלו רק חצי מהגרגירים!",
+      tx: "עברתם דרך פחות מ-3 דלתות בצבעים שונים?<br>אז נשאר רק חצי מהגרגירים!",
     },
     lim_nored: {
-      t: "ללא דלת אדומה!",
-      tx: "אם עברתם בדלת אדומה או שחורה בתור הזה —<br>תאבדו את הגרגירים שצברתם ממנה!",
+      t: "ללא דלת אדומה או שחורה!",
+      tx: "עברתם בדלת אדומה או שחורה בתור הזה?<br>אז הגרגירים שצברתם ממנה יורדים!",
     },
     lim_short: {
       t: "מסלול קצר",
-      tx: "אם בחרתם יותר מ-4 צעדים —<br>תקבלו רק 75% מהגרגירים",
+      tx: "המסלול שלכם ארוך מ-4 צעדים?<br>אז נשארים 75% מהגרגירים",
     },
     bon_dbl: { t: "כפול גרגירים! 🦴🦴", tx: "מקבלים פי 2 מכל הגרגירים שצברתם בתור הזה!" },
     bon_extra: { t: "תור נוסף! 🎉", tx: "ברכות — מגיע לכם תור נוסף!" },
@@ -573,7 +573,7 @@ export const he: Dict = {
   timeoutBody: (hex) =>
     `נשארים במשושה ${hex}. הגרגירים שנצברו עד כה נשמרים! 🦴`,
   confirmEndTitle: "✖ לסיים?",
-  confirmEndBody: "כל ההתקדמות תאבד.",
+  confirmEndBody: "נראה מה הספקתם, והתוצאות יישמרו. 📊",
   cancel: "ביטול",
   endGame: "סיים",
   close: "סגור",
@@ -606,7 +606,7 @@ export const he: Dict = {
       </div>
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>🎯 מצב מיקוד</strong>
-        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">מסתיר את כל המשבצות המיוחדות מהלוח — אין קלפי בונוס, אין הגבלות, אין שוד ואין קלפי טוויסט. הכלב פשוט מטייל ופותר תרגילים, בלי הפתעות וקלפים שקופצים באמצע התור.<br><strong>למי מתאים?</strong> לילדים שמתקשים בקשב ומתפזרים בקלות, וכשרוצים שכל תשומת הלב תהיה על החשבון עצמו.<br>💡 אתגר פירוק הגורמים (ברמות הגבוהות) עדיין נשאר — הוא חלק מהחשבון, לא הסחה.</p>
+        <p style="margin-top:5px;color:#4b5563;font-size:.88rem;line-height:1.6">מסתיר את כל המשושים המיוחדים מהלוח — אין קלפי בונוס, אין הגבלות, אין שוד ואין קלפי טוויסט. הכלב פשוט מטייל ופותר תרגילים, בלי הפתעות וקלפים שקופצים באמצע התור.<br><strong>למי מתאים?</strong> לילדים שמתקשים בקשב ומתפזרים בקלות, וכשרוצים שכל תשומת הלב תהיה על החשבון עצמו.<br>💡 אתגר פירוק הגורמים (ברמות הגבוהות) עדיין נשאר — הוא חלק מהחשבון, לא הסחה.</p>
       </div>
       <div style="background:#f9fafb;border-radius:10px;padding:11px 13px">
         <strong>🎓 משחק חופשי</strong>
@@ -629,6 +629,11 @@ export const he: Dict = {
 
   winnerTitle: "מנצח! 🏆",
   winnerSuffix: " 🎉",
+  stoppedTitle: "סיימנו! 🐕",
+  soloTitle: "כל הכבוד! 🌟",
+  soloSummary: (pellets) => `אספתם ${pellets} גרגירים 🦴`,
+  freePlayTitle: "יופי של תרגול! 🎓",
+  freePlaySummary: (solved) => `${solved} תרגילים נפתרו`,
   newGameBtn: "🔄 משחק חדש",
   coopWinTitle: "ניצחון משותף! 🏆",
   coopWinName: "כולנו מנצחים! 🎉",
@@ -649,7 +654,7 @@ export const he: Dict = {
 
   doorLegendTitle: "🚪 דלתות וגרגירים",
   doorDifficulty: (key) => DOOR_DIFFICULTY[key],
-  doorMenuLead: "כל צבע = כמה קשה התרגיל וכמה גרגירים מקבלים",
+  doorMenuLead: "לכל דלת יש קו משלה בלוח — הצבע והקו מראים כמה קשה התרגיל וכמה גרגירים מקבלים",
   doorLegendPts: (pts) => `${pts}🦴`,
 
   bankTitle: "🏦 הבנק — מה אספנו",
@@ -669,11 +674,11 @@ export const he: Dict = {
   winWalkTitle: "🐕 בדרך!",
   progStep: (step, total) => `צעד ${step}/${total}`,
   progEarned: (n) => `נצברו ${n}🦴`,
-  progLeft: (steps, pellets) => `נשארו ${steps} צעדים · ≈${pellets}🦴`,
+  progLeft: (steps, pellets) => `נשארו ${steps} צעדים · בערך ${pellets}🦴`,
   progDogAt: (hex) => `🐕 משושה ${hex}`,
   helperTitle: "🙋 חברים עוזרים",
   helperWaiting: "כשהשחקן הפעיל יקבל תרגיל — תוכלו לעזור ולהרוויח גרגיר!",
-  helperSolvedNote: (name) => `🙋 ${name} פתר/ה נכון! אפשר לחשוף את התשובה.`,
+  helperSolvedNote: (name) => `🙋 תשובה נכונה של ${name}! אפשר לחשוף אותה.`,
   helperRevealBtn: "👁 חשפו את התשובה של החבר",
   helperAnswerReveal: (ans) => `💡 התשובה של החבר: ${ans}`,
   bankBtnLabel: "🏦 הבנק",
@@ -690,7 +695,7 @@ export const he: Dict = {
   spectatorAnswerFor: (name) => `${name} עונה:`,
   spectatorCorrect: (name) => `+1 ל-${name}! 🎉`,
   spectatorWrong: "❌ לא נכון",
-  helperOnlineTitle: (name) => `🙋 ${name} פותר/ת עכשיו — יודעים את התשובה?`,
+  helperOnlineTitle: (name) => `🙋 התור של ${name} עכשיו — יודעים את התשובה?`,
   helperOnlineHold: (name) => `🤫 רגע, נותנים ל${name} לנסות…`,
   helperOnlineSend: "✅ שלחו תשובה",
 
@@ -707,9 +712,9 @@ export const he: Dict = {
     `🎉 כל הכבוד! <span dir="ltr">${a} × ${b} = ${n}</span> — בונוס +${bonus} 🦴`,
   factorWrong: (n) => `כמעט! צריך שני מספרים שמכפלתם היא ${n}. נסו שוב 😊`,
   factorTilesBonus: (count, pts) =>
-    `🧩 עברת על ${count} משבצות-גורם של היעד — בונוס +${pts} 🦴`,
+    `🧩 עברת על ${count} משושים שהם גורמים של היעד — בונוס +${pts} 🦴`,
   factorHuntHint: (target) =>
-    `🧩 המשבצות עם המסגרת הזהובה הן גורמים של ${target} — עברו עליהן בדרך לבונוס!`,
+    `🧩 המשושים עם המסגרת הזהובה הם גורמים של ${target} — עברו עליהם בדרך לבונוס!`,
 
   optFreePlay: "🎓 משחק חופשי — ספור תרגילים (ללא ניקוד)",
   freeSolvedCount: (n) => `✅ ${n}`,
@@ -718,7 +723,7 @@ export const he: Dict = {
 
   statTitle: "🧠 שליפה",
   statAccuracy: (correct, total) => `דיוק: ${correct}/${total}`,
-  statSpeed: (sec) => `זמן ממוצע: ${sec} שׂנ׳`,
+  statSpeed: (sec) => `זמן ממוצע: ${sec} שנ׳`,
   statNoData: "—",
 
   quickStartBtn: "🚀 התחל מהר!",
@@ -781,15 +786,15 @@ export const he: Dict = {
   lobbyCodeLabel: "קוד המשחק שלכם",
   lobbyCodeHint: "הקריאו אותו בקול — כולם מקלידים אותו כדי להצטרף.",
   lobbyPlayersHere: (here, max) => `שחקנים (${here} מתוך ${max})`,
-  lobbyHostTag: "פתח/ה",
-  lobbyYouTag: "את/ה",
-  lobbyAwayTag: "מנותק/ת",
+  lobbyHostTag: "פתיחת המשחק",
+  lobbyYouTag: "אני",
+  lobbyAwayTag: "אין חיבור",
   lobbyWaitingForPlayer: "מחכים שמישהו יצטרף…",
-  lobbyWaitingForHost: "מחכים שמי שפתח/ה את המשחק יתחיל…",
+  lobbyWaitingForHost: "מחכים שיתחילו את המשחק…",
   lobbyStartBtn: "🚀 מתחילים!",
   lobbyLeaveBtn: "יציאה",
   lobbyClosedTitle: "המשחק נסגר",
-  lobbyClosedBody: "מי שפתח/ה את המשחק סיים/ה אותו לכולם.",
+  lobbyClosedBody: "סיימו את המשחק לכולם.",
   lobbyErrors: {
     badCode: "הקוד לא נראה תקין — בדקו אותו ונסו שוב.",
     notFound: "אין משחק עם הקוד הזה. בדקו אותו, או בקשו אותו שוב.",
@@ -797,7 +802,7 @@ export const he: Dict = {
     alreadyStarted: "המשחק הזה כבר התחיל.",
     nameTaken: "כבר יש מישהו במשחק עם השם הזה — בחרו שם אחר.",
     notYourTurn: "זה עדיין לא התור שלך.",
-    notHost: "רק מי שפתח/ה את המשחק יכול/ה לעשות את זה.",
+    notHost: "רק מי שפתחו את המשחק יכולים לעשות את זה.",
     notPlaying: "המשחק עוד לא התחיל.",
     needPlayers: "צריך לפחות שחקן אחד כדי להתחיל.",
     gameEnded: "המשחק הזה הסתיים.",
@@ -805,6 +810,6 @@ export const he: Dict = {
     server: "משהו השתבש. נסו שוב עוד רגע.",
   },
   onlineYourTurn: "🎲 התור שלך!",
-  onlineWaitingFor: (name) => `⏳ ${name} משחק/ת…`,
+  onlineWaitingFor: (name) => `⏳ התור של ${name}…`,
   onlineEndForAll: "סיום לכולם",
 };

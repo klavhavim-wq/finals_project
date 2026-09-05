@@ -271,7 +271,7 @@ function Body({
             <button
               className="abt abr"
               style={{ padding: "9px 18px" }}
-              onClick={() => actions.showScreen("sw")}
+              onClick={actions.endGame}
             >
               {t.endGame}
             </button>

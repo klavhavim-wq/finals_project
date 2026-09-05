@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import { boardMaxFor, DC, PCOLORS } from "@/lib/engine/constants";
+import { boardMaxFor, DC, DOGS, PCOLORS } from "@/lib/engine/constants";
 import { getDict } from "@/lib/i18n";
 import {
   factKey,
@@ -177,7 +177,15 @@ export function useGame(locale: Locale) {
         level: s.level,
         settings: s.settings,
         coop: s.settings.coop,
-        players: s.players.map((p) => ({ name: p.name, tokens: p.tokens, errors: p.errors, errorLog: p.errorLog })),
+        players: s.players.map((p) => ({
+          name: p.name,
+          tokens: p.tokens,
+          errors: p.errors,
+          // Free practice keeps no score, so the exercise count is the only
+          // record of what the session actually contained.
+          solvedCount: p.solvedCount,
+          errorLog: p.errorLog,
+        })),
         winnerName: s.coopWin ? null : s.winnerIdx !== null ? s.players[s.winnerIdx].name : null,
         sharedTokens: s.settings.coop ? s.sharedTokens : undefined,
         startedAt: gameStartRef.current || undefined,
@@ -290,6 +298,42 @@ export function useGame(locale: Locale) {
   );
   const tourSet = useCallback((step: number) => dispatch({ type: "TOUR_SET", step }), []);
   const tourEnd = useCallback(() => dispatch({ type: "TOUR_END" }), []);
+  /**
+   * The tour's last button says "let's play" — so it starts a real game at the
+   * same level, rather than dropping the player back on the settings form they
+   * had already filled in before the tour.
+   */
+  const tourPlay = useCallback(() => {
+    const s = stateRef.current;
+    const dict = getDict(locale);
+    dispatch({ type: "TOUR_END" });
+    dispatch({
+      type: "START_GAME",
+      players: [
+        {
+          name: dict.defaultPlayerName(DOGS[0], 1),
+          color: PCOLORS[0],
+          tokens: 0,
+          hex: 1,
+          errors: 0,
+          errorLog: [],
+          solvedCount: 0,
+          foods: {},
+        },
+      ],
+      level: s.level,
+      settings: {
+        timer: false,
+        mc: s.level === "beg" || s.level === "med",
+        rob: false,
+        winMode: "rounds",
+        coop: false,
+        freePlay: false,
+        focus: false,
+        review: false,
+      },
+    });
+  }, [locale]);
   const setTourInteract = useCallback(
     (mode: "find" | "answer" | null) => dispatch({ type: "SET_TOUR_INTERACT", mode }),
     []
@@ -474,6 +518,7 @@ export function useGame(locale: Locale) {
   const factorSkip = useCallback(() => dispatch({ type: "FACTOR_SKIP" }), []);
 
   const goResults = useCallback(() => dispatch({ type: "SHOW_SCREEN", screen: "sresults" }), []);
+  const endGame = useCallback(() => dispatch({ type: "END_GAME" }), []);
 
   return {
     state,
@@ -492,6 +537,7 @@ export function useGame(locale: Locale) {
       startDemo,
       tourSet,
       tourEnd,
+      tourPlay,
       setTourInteract,
       demoStage,
       startP1,
@@ -515,6 +561,7 @@ export function useGame(locale: Locale) {
       openSettingsHelp,
       openVideo,
       goResults,
+      endGame,
       awardSpectatorBonus,
       openPrimeHex,
       factorSolved,

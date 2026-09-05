@@ -19,11 +19,15 @@ export default function Setup({
 }) {
   const [count, setCount] = useState(1);
   const [names, setNames] = useState<string[]>(["", "", "", ""]);
-  // Timer defaults off for Beginner (gentlest for the youngest / first-time players).
-  const [timer, setTimer] = useState(level !== "beg");
+  // The clock and stealing both start off, at every level. Whoever sets a game up
+  // usually presses Start without opening Options, so the defaults are what most
+  // children actually meet — and a countdown that cannot be paused, plus taking
+  // pellets off a named classmate, are the two things a first session least needs.
+  // Both are one tap away for anyone who wants them, and the Full Game preset
+  // still switches them on together.
+  const [timer, setTimer] = useState(false);
   const [mc, setMc] = useState(true);
-  // Steal defaults off for Beginner (gentlest for the youngest players), on elsewhere.
-  const [rob, setRob] = useState(level !== "beg");
+  const [rob, setRob] = useState(false);
   const [coop, setCoop] = useState(false);
   const [freePlay, setFreePlay] = useState(false);
   const [focus, setFocus] = useState(false);

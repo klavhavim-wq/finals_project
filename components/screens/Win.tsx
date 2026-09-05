@@ -20,13 +20,35 @@ export default function Win({
   actions: GameActions;
 }) {
   const coop = state.coopWin;
+  const free = state.settings.freePlay;
+  const solo = !coop && !free && state.players.length === 1;
   const winnerDog = coop || state.winnerIdx === null ? "🐕" : DOGS[state.winnerIdx];
-  const winnerName = coop
-    ? t.coopWinName
-    : state.winnerIdx !== null
-      ? state.players[state.winnerIdx].name + t.winnerSuffix
-      : "";
   const sorted = [...state.players].sort((a, b) => b.tokens - a.tokens);
+
+  // What the end screen actually claims. Playing alone there is nobody to beat,
+  // and free practice keeps no score at all — announcing a "winner" in either
+  // case told the child something that had not happened. Each mode now reports
+  // what it really measured, and stopping early says so rather than crowning
+  // whoever happened to be ahead.
+  const title = state.endedEarly
+    ? t.stoppedTitle
+    : free
+      ? t.freePlayTitle
+      : solo
+        ? t.soloTitle
+        : coop
+          ? t.coopWinTitle
+          : t.winnerTitle;
+
+  const subtitle = free
+    ? t.freePlaySummary(state.players.reduce((s, p) => s + p.solvedCount, 0))
+    : solo
+      ? t.soloSummary(state.players[0].tokens)
+      : coop
+        ? t.coopWinName
+        : state.winnerIdx !== null
+          ? state.players[state.winnerIdx].name + t.winnerSuffix
+          : "";
 
   return (
     <div id="swin" className="screen active">
@@ -42,10 +64,21 @@ export default function Win({
           </span>
         ))}
       </div>
-      <div className="wtitle">{coop ? t.coopWinTitle : t.winnerTitle}</div>
-      <div className="wname">{winnerName}</div>
+      <div className="wtitle">{title}</div>
+      <div className="wname">{subtitle}</div>
       <div className="wscores">
-        {coop ? (
+        {free ? (
+          state.players.map((p, i) => (
+            <div className="wsrow" key={i}>
+              <span>
+                {DOGS[i]} {p.name}
+              </span>
+              <span style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                <span>{t.freePlaySummary(p.solvedCount)}</span>
+              </span>
+            </div>
+          ))
+        ) : coop ? (
           <>
             <div className="wsrow">
               <span>{t.coopTeamwork}</span>

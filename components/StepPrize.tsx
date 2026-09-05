@@ -34,6 +34,36 @@ function Swatch({ d, big }: { d: DoorKey; big?: boolean }) {
   );
 }
 
+/**
+ * The door's line exactly as it is drawn between hexes — same colour, same dash
+ * pattern. The legend has to show the pattern too, or the pattern on the board
+ * is a code with no key for anyone who cannot use the colour.
+ */
+const DOOR_DASH: Record<DoorKey, string | undefined> = {
+  blue: undefined,
+  purple: "14 5",
+  yellow: "7 5",
+  red: "2.5 4.5",
+  redlong: "13 4 2.5 4",
+};
+
+function DoorLine({ d }: { d: DoorKey }) {
+  return (
+    <svg viewBox="0 0 44 8" width="44" height="8" style={{ display: "block", flexShrink: 0 }} aria-hidden="true">
+      <line
+        x1="1"
+        y1="4"
+        x2="43"
+        y2="4"
+        stroke={DC[d].color}
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeDasharray={DOOR_DASH[d]}
+      />
+    </svg>
+  );
+}
+
 export default function StepPrize({ t, state }: { t: Dict; state: GameState }) {
   const doors = [...new Set(LVL_DOORS[state.level])];
   const walking = state.phase === 3;
@@ -68,7 +98,7 @@ export default function StepPrize({ t, state }: { t: Dict; state: GameState }) {
               className={"prizerow" + (active ? " active" : "")}
               style={{ borderInlineStartColor: dc.color, background: active ? dc.color + "12" : undefined }}
             >
-              <span className="prizerow-ico"><Swatch d={d} /></span>
+              <span className="prizerow-ico"><DoorLine d={d} /></span>
               <div className="prizerow-mid">
                 <div className="prizerow-name">{t.doorLabel(d)}</div>
                 {/* How hard it is, in words — the number range alone never said so */}

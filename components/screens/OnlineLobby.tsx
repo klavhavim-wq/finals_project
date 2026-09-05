@@ -47,9 +47,11 @@ export default function OnlineLobby({
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [level, setLevel] = useState<Level>("med");
-  const [timer, setTimer] = useState(true);
+  // Same defaults as a game set up on one device — the clock and stealing off —
+  // so the same level does not behave differently depending on how you started it.
+  const [timer, setTimer] = useState(false);
   const [mc, setMc] = useState(true);
-  const [rob, setRob] = useState(true);
+  const [rob, setRob] = useState(false);
   const [coop, setCoop] = useState(false);
 
   const { view, seat, busy, error, clearError } = online;

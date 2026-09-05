@@ -55,7 +55,7 @@ export default function Results({ t, actions }: { t: Dict; actions: GameActions 
     lines.push(he ? "--- תוצאות שחקנים ---" : "--- Player Results ---");
     lines.push(
       he
-        ? "תאריך,מזהה_משחק,שחקן,ניקוד,שגיאות,דיוק_אחוז,נכונים,סהכ_פריטים,זמן_חציוני_שׂנ"
+        ? "תאריך,מזהה_משחק,שחקן,ניקוד,שגיאות,דיוק_אחוז,נכונים,סהכ_פריטים,זמן_חציוני_שנ"
         : "Date,GameID,Player,Score,Errors,Accuracy_pct,Correct,Items,MedianRT_sec"
     );
     for (const s of sessions) {
