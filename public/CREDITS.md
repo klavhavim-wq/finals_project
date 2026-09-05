@@ -24,6 +24,13 @@ be credited. A credit line in a repository file is not something a player ever
 sees, so the credit is shown inside the game itself, on the privacy and credits
 page linked from the footer of every screen.
 
-**Still worth doing before any paid release:** save a dated copy or screenshot
-of that page. A statement in a comment thread is a reasonable basis, but it is
-not a licence file, and pages can change.
+**Evidence.** A full dated screenshot of that page was taken on 5 September 2026
+and is kept with Daffy's project files, outside this repository, under
+`פרוייקט גמר- משחק/תיעוד-רישיון-מוזיקה/`. It shows all three things the claim
+rests on: the royalty free description, the line saying the tracks are free to
+use, and the comment thread where the author answers the commercial-use question.
+It sits outside the repository on purpose, so it is not republished with the code.
+
+**Still open.** A statement in a comment thread is a reasonable basis, but it is
+not a licence file. Before a wide commercial release, either ask the author for
+written permission or move to music with an explicit licence.

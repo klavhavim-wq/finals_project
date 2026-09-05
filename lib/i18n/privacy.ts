@@ -26,6 +26,10 @@ export interface PrivacyCopy {
   updated: string;
   intro: string;
   sections: PrivacySection[];
+  contactHeading: string;
+  /** the sentence that introduces the address; the address itself follows it */
+  contactIntro: string;
+  contactEmail: string;
   creditsHeading: string;
   creditsBody: string[];
   backToGame: string;
@@ -82,6 +86,10 @@ export const PRIVACY: Record<Locale, PrivacyCopy> = {
         ],
       },
     ],
+    contactHeading: "שאלות ופניות",
+    contactIntro:
+      "לכל שאלה על הפרטיות במשחק, או לבקשה למחוק מידע, אפשר לכתוב לכתובת",
+    contactEmail: "klavhavim@gmail.com",
     creditsHeading: "קרדיטים",
     creditsBody: [
       "מוזיקת רקע: Leonardo Paz (Leohpaz), מתוך Ocean Music Pack. בשימוש באישור היוצר.",
@@ -138,6 +146,10 @@ export const PRIVACY: Record<Locale, PrivacyCopy> = {
         ],
       },
     ],
+    contactHeading: "Questions",
+    contactIntro:
+      "For any question about privacy in this game, or to ask for data to be deleted, write to",
+    contactEmail: "klavhavim@gmail.com",
     creditsHeading: "Credits",
     creditsBody: [
       "Background music: Leonardo Paz (Leohpaz), from the Ocean Music Pack. Used with the author's permission.",

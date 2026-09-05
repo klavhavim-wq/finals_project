@@ -47,6 +47,18 @@ export default function PrivacyNotice({ locale }: { locale: Locale }) {
         </section>
       ))}
 
+      <section style={{ margin: "0 0 1.9rem" }}>
+        <h2 style={{ fontSize: "1.12rem", fontWeight: 700, margin: "0 0 .6rem" }}>
+          {c.contactHeading}
+        </h2>
+        <p style={{ margin: "0 0 .7rem" }}>
+          {c.contactIntro}{" "}
+          <a href={`mailto:${c.contactEmail}`} style={{ color: "#7c4a15", fontWeight: 600 }} dir="ltr">
+            {c.contactEmail}
+          </a>
+        </p>
+      </section>
+
       <section style={{ margin: "0 0 2rem" }}>
         <h2 style={{ fontSize: "1.12rem", fontWeight: 700, margin: "0 0 .6rem" }}>
           {c.creditsHeading}
