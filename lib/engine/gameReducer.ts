@@ -125,6 +125,23 @@ export interface RollResult {
   expr: string;
 }
 
+/**
+ * Do two facts share a digit? Dotan & Zviran-Ginat (2022) taught first-graders 16
+ * multiplication facts over four weeks and varied only how the facts were grouped
+ * into weeks: weeks whose four facts were dissimilar produced better learning than
+ * weeks whose facts were similar, and the difference was still there seven weeks
+ * later. The effect came from the grouping itself, not from some facts being
+ * intrinsically easier.
+ *
+ * A door serves one family of facts, so consecutive questions from the same door
+ * would otherwise share an operand almost every time — the high-interference
+ * grouping. This lets the roll prefer a next fact that shares nothing with the
+ * one just answered.
+ */
+function sharesDigit(a: number[], b: number[]): boolean {
+  return a.some((x) => b.includes(x));
+}
+
 export function rollDoor(door: Door, guards: RollGuards, rand: Rand = Math.random): RollResult {
   const bandPairs = door.family ?? null;
   const gen = (): RollResult => {
@@ -142,6 +159,8 @@ export function rollDoor(door: Door, guards: RollGuards, rand: Rand = Math.rando
     return { rolls: r, correct: r.reduce((a, b) => a * b, 1), expr: [...r].sort((a, b) => a - b).join(" × ") };
   };
 
+  const prev = parseFactors(guards.lastExpr) ?? [];
+
   let { rolls, correct, expr } = gen();
   let tries = 0;
   for (;;) {
@@ -152,6 +171,10 @@ export function rollDoor(door: Door, guards: RollGuards, rand: Rand = Math.rando
     if (expr === guards.lastExpr) { ({ rolls, correct, expr } = gen()); continue; }
     if (rolls.includes(1) && guards.turnHasOne) { ({ rolls, correct, expr } = gen()); continue; }
     if (correct % 10 === 0 && guards.turnHasTen) { ({ rolls, correct, expr } = gen()); continue; }
+    // Prefer a fact that shares no digit with the one just answered. Given up on
+    // after 25 attempts, because in a one-door family (Beginner) a fully
+    // dissimilar pair does not always exist — a preference, not a rule.
+    if (tries <= 25 && prev.length && sharesDigit(rolls, prev)) { ({ rolls, correct, expr } = gen()); continue; }
     break;
   }
   // Guarantee no consecutive repeat even when the broader guards are exhausted.
