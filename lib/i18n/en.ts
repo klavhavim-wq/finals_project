@@ -17,6 +17,16 @@ const DOOR_RANGES: Record<DoorKey, string> = {
   redlong: "11–19 × 2–9",
 };
 
+/** How hard each door's exercise is, in words a child reads — the number range
+ *  alone never told anyone that a darker door means a harder question. */
+const DOOR_DIFFICULTY: Record<DoorKey, string> = {
+  blue: "Easy exercises",
+  purple: "A bit harder",
+  yellow: "Hard",
+  red: "Very hard",
+  redlong: "Challenge!",
+};
+
 /** A worked calculation: its own line, bold and left-to-right. */
 function calc(s: string): string {
   return `<span class="hint-calc">${s}</span>`;
@@ -481,6 +491,9 @@ export const en: Dict = {
   pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | ${DOOR_RANGES[key]} | ${pts}🦴`,
   possiblePellets: (pts, steps) =>
     `🦴 <strong>Total possible: ${pts} pellets</strong> in ${steps} steps`,
+  routeTradeoff:
+    "💡 Every coloured line is a <strong>door</strong> — a harder door is worth more pellets. <strong>The way you choose decides how much you earn!</strong>",
+  routeMadeOf: "Doors on the way:",
   routeNotReach: (target) => `⚠️ Route doesn't reach Hex ${target}!`,
   confirmRoute: "✅ Confirm Route",
   clearRoute: "🗑 Clear",
@@ -630,6 +643,8 @@ export const en: Dict = {
 
   doorLegendTitle: "🚪 Doors & Pellets",
   doorLegendPts: (pts) => `${pts}🦴`,
+  doorDifficulty: (key) => DOOR_DIFFICULTY[key],
+  doorMenuLead: "Each colour = how hard the exercise is, and how many pellets you get",
 
   bankTitle: "🏦 The Bank — what we collected",
   stepPrizeTitle: "🎁 This step's prize",
@@ -660,6 +675,8 @@ export const en: Dict = {
   zoomIn: "Zoom in",
   zoomOut: "Zoom out",
   zoomReset: "Fit the board",
+  rotateHint: "📱 Tip: turn your phone sideways — the board gets much bigger!",
+  rotateHintClose: "Got it",
 
   helpCardBtn: "Times Table",
 

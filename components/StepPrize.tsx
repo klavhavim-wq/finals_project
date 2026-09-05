@@ -54,6 +54,10 @@ export default function StepPrize({ t, state }: { t: Dict; state: GameState }) {
         </div>
       )}
 
+      {/* The colour → difficulty → prize link, said once above the list. Only
+          worth saying when the level actually has more than one door. */}
+      {doors.length > 1 && <div className="prize-lead">{t.doorMenuLead}</div>}
+
       <div className="prize-menu">
         {doors.map((d) => {
           const dc = DC[d];
@@ -67,6 +71,8 @@ export default function StepPrize({ t, state }: { t: Dict; state: GameState }) {
               <span className="prizerow-ico"><Swatch d={d} /></span>
               <div className="prizerow-mid">
                 <div className="prizerow-name">{t.doorLabel(d)}</div>
+                {/* How hard it is, in words — the number range alone never said so */}
+                <div className="prizerow-diff">{t.doorDifficulty(d)}</div>
                 <div className="prizerow-range" dir="ltr">{doorRange(d)}</div>
               </div>
               <span className="prizerow-val" style={{ color: dc.color, borderColor: dc.color }}>

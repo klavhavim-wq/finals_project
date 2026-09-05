@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import RichText from "./RichText";
-import { DC } from "@/lib/engine/constants";
+import { DC, LVL_DOORS } from "@/lib/engine/constants";
 import { routeReachesTarget } from "@/lib/engine/gameReducer";
-import type { GameState, Level } from "@/lib/engine/types";
+import type { DoorKey, GameState, Level } from "@/lib/engine/types";
 import type { GameActions } from "./useGame";
 import type { Dict } from "@/lib/i18n";
 
@@ -49,7 +49,17 @@ function HelpCard({ t, level }: { t: Dict; level: Level }) {
         onClick={() => setOpen(v => !v)}>
         {open ? "✖ " : "🔢 "}{t.helpCardBtn}
       </button>
-      {open && <MulTable max={max} />}
+      {open && (
+        // On a phone this wrapper floats over the board (with its own close
+        // button) instead of shoving the board aside; on a computer it sits
+        // inline and the close button stays hidden.
+        <div className="multbl-wrap">
+          <button className="multbl-close" onClick={() => setOpen(false)} aria-label={t.close}>
+            ✖
+          </button>
+          <MulTable max={max} />
+        </div>
+      )}
     </div>
   );
 }
@@ -100,10 +110,43 @@ function Phase1({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
   );
 }
 
+/**
+ * The doors the planned route crosses, as one coloured chip per door colour with
+ * how many times it appears and what that is worth. It is the whole point of
+ * planning a route made visible while you plan it: the side-bar breakdown lives
+ * behind a drawer on a phone, so without this a player never sees that the route
+ * they drew is a choice about which doors to walk through.
+ */
+function RouteDoors({ t, state }: { t: Dict; state: GameState }) {
+  if (state.pathDoors.length === 0) return null;
+  const counts = new Map<DoorKey, number>();
+  for (const d of state.pathDoors) counts.set(d, (counts.get(d) ?? 0) + 1);
+
+  return (
+    <div className="routedoors">
+      <span className="routedoors-lbl">{t.routeMadeOf}</span>
+      {[...counts].map(([d, n]) => (
+        <span
+          key={d}
+          className="routedoors-chip"
+          style={{ borderColor: DC[d].color, color: DC[d].color }}
+          title={t.doorLabel(d) + " · " + t.doorDifficulty(d)}
+        >
+          <span className="door-swatch" style={{ background: DC[d].color }} aria-hidden="true" />
+          <span className="routedoors-n">×{n}</span>
+          <span className="routedoors-pts">{n * DC[d].pts}🦴</span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function Phase2({ t, state, actions }: { t: Dict; state: GameState; actions: GameActions }) {
   const steps = state.path.length;
   const pts = state.pathDoors.reduce((s, d) => s + DC[d].pts, 0);
   const hasTarget = routeReachesTarget(state);
+  // Levels with a single door have no route trade-off to explain.
+  const manyDoors = new Set(LVL_DOORS[state.level]).size > 1;
 
   // The route reads off the board (each hex painted in its door colour); the
   // step-by-step breakdown lives in the side bar. This docked bar keeps the
@@ -111,6 +154,12 @@ function Phase2({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
   return (
     <div>
       <RichText className="aphint" html={t.p2Hint(state.targetHex ?? 0)} />
+      {/* Why the route is a decision, not just a line to the target. Shown
+          before any step is drawn, where it can still change what you draw. */}
+      {manyDoors && steps === 0 && (
+        <RichText className="routetip" html={t.routeTradeoff} />
+      )}
+      {manyDoors && <RouteDoors t={t} state={state} />}
       {steps > 0 && (
         <RichText className="rsum rsum-big pd-total" html={t.possiblePellets(pts, steps)} />
       )}
@@ -176,13 +225,13 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
         <RichText html={t.doorLabel(col)} />
         <span className="p3-door-val">{t.pelletsUnit(dc.pts)}</span>
       </div>
-      <button
-        className="abt abl p3-roll-btn"
-        onClick={() => actions.rollDice(step)}
-        disabled={!!state.pendingRoll}
-      >
-        {t.rollFor(t.doorLabel(col))}
-      </button>
+      {/* Once the dice are on the table the roll button steps aside — the dice
+          and the question say it all, and the panel stays short on a phone. */}
+      {!state.pendingRoll && (
+        <button className="abt abl p3-roll-btn" onClick={() => actions.rollDice(step)}>
+          {t.rollFor(t.doorLabel(col))}
+        </button>
+      )}
 
       {state.pendingRoll && (
         <div>

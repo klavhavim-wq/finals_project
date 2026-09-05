@@ -327,6 +327,18 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .bz-btn:disabled{opacity:.4;cursor:default}
 .bz-reset{font-size:1.2rem}
 
+/* One-time tip strip on a phone held upright: sideways shows a bigger board.
+   Sits in the spare space between the docked bar and the board. */
+.rotate-tip{flex:none;display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;
+  background:#FFFBEB;border:2px solid #FBBF24;border-radius:12px;padding:7px 10px;
+  font-size:.85rem;font-weight:700;color:#78350F;text-align:center}
+.rotate-tip-btn{flex:0 0 auto;border:none;border-radius:999px;background:#F59E0B;color:white;
+  font-weight:800;font-size:.8rem;padding:6px 14px;cursor:pointer;font-family:inherit}
+
+/* The times-table close button exists for the phone overlay only (see the
+   mobile block below); on a computer the table sits inline and needs no close. */
+.multbl-close{display:none}
+
 /* docked bar that sits in a clear row above the board (find & route stages) */
 .phasedock{flex:none;background:white;border-radius:14px;box-shadow:var(--shadow);
   border:2px solid #FDE68A;padding:9px 13px}
@@ -350,6 +362,8 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .pd-route .phasedock-body > div{display:flex;flex-wrap:wrap;align-items:center;gap:7px 8px}
 .pd-route .aphint{flex:1 1 100%;margin:0;font-size:.82rem;text-align:center;padding:4px 9px}
 .pd-route .rsum-big.pd-total{flex:0 0 auto;margin:0;padding:6px 13px;font-size:.92rem}
+/* The trade-off line and the door chips each take their own row in the bar */
+.pd-route .routetip,.pd-route .routedoors{flex:1 1 100%;margin:0}
 .pd-route .wrongbox,.pd-route .phasedock-body p{flex:1 1 100%;margin:0}
 .pd-route .abt{width:auto;flex:1 1 130px;margin:0}
 
@@ -406,6 +420,36 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
   .board-canvas .hivewrap{flex:1;height:auto;min-height:0;overflow:auto;padding:3px;
     align-items:safe center;justify-content:safe center}
   .board-canvas .hivewrap #hsvg{width:100%;height:100%;max-width:100%;max-height:100%;min-width:0}
+  /* Slim top bar: no logo, tighter chips, the timer as a single row — the play
+     area gets the height back. */
+  .board-canvas .ghdr{gap:5px;padding:5px 8px}
+  .board-canvas .ghdr .brand-logo-sm{display:none}
+  .board-canvas .ghtitle{font-size:.9rem;margin-inline-start:0}
+  .board-canvas .ghturn,.board-canvas .ghround{font-size:.74rem;padding:3px 8px}
+  .board-canvas .ghturn{max-width:130px}
+  .board-canvas .ghtimer{flex-direction:row;gap:7px;padding:3px 9px;min-width:0;border-width:2px;border-radius:11px}
+  .board-canvas .ghtimer .tnum{font-size:1rem}
+  .board-canvas .ghtimer .tbar{width:44px;height:6px}
+  .board-canvas .ghbtn{padding:3px 8px;font-size:.78rem;border-radius:12px}
+  .board-canvas .musicpill button{padding:3px 6px;font-size:.78rem}
+  /* Phone: the open times table floats over the board (with its own close
+     button) instead of pushing the board into a sliver. */
+  .multbl-wrap{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:210;
+    background:white;border:2.5px solid #FDE68A;border-radius:14px;
+    box-shadow:0 18px 55px rgba(0,0,0,.45);padding:8px;max-width:96vw;max-height:78vh;overflow:auto}
+  .multbl-close{display:flex;position:sticky;top:0;margin-inline-start:auto;align-items:center;justify-content:center;
+    width:32px;height:32px;border-radius:50%;border:none;background:#FEE2E2;color:#B91C1C;
+    font-size:1rem;font-weight:800;cursor:pointer;z-index:1}
+  /* The bottom "route ready" strip already carries confirm/clear — the docked
+     bar hides its copies so the same button never shows twice. */
+  .pd-route.ready .abt{display:none}
+  /* The route bar sits above the board, so its explanations stay compact —
+     they must not push the hexes off the screen you are planning on. */
+  .pd-route .routetip{font-size:.74rem;line-height:1.4;padding:5px 8px}
+  .pd-route .routedoors{gap:4px}
+  .pd-route .routedoors-lbl{font-size:.7rem}
+  .pd-route .routedoors-chip{font-size:.72rem;padding:1px 7px;gap:3px}
+  .pd-route .routedoors-chip .door-swatch{width:12px;height:12px;border-radius:4px}
 }
 
 /* Phone landscape: the board and the side panel sit side by side so the board
@@ -451,8 +495,31 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 /* Phone portrait: a bottom sheet. The board is lifted above it (see walk-mode
    below) so the dog stays visible; drag the sheet by its bar to move it. */
 @media(max-width:820px) and (orientation:portrait){
-  .pw-walk{inset-inline-end:7px;bottom:6px;width:calc(100vw - 14px);max-height:46vh}
-  #sg.walk-mode .gstage-main{padding-bottom:48vh}
+  .pw-walk{inset-inline-end:7px;bottom:6px;width:calc(100vw - 14px);max-height:58vh}
+  #sg.walk-mode .gstage-main{padding-bottom:59vh}
+  /* Pack the sheet tight so dice + question + all four answers are on screen
+     together — no scrolling inside it to reach a button. */
+  .pw-walk .phasewin-head{padding:6px 12px;font-size:.88rem}
+  .pw-walk .phasewin-body{padding:6px 10px}
+  .pw-walk .turnprog{gap:3px;margin-bottom:5px;flex-wrap:nowrap}
+  .pw-walk .tp-chip{font-size:.66rem;padding:2px 6px;white-space:nowrap}
+  /* The dog's position chip goes — the dog itself is right there on the board. */
+  .pw-walk .tp-dog{display:none}
+  .pw-walk .p3-door{padding:4px 9px;margin-bottom:5px;font-size:.85rem}
+  .pw-walk .p3-door-ico{font-size:1.2rem}
+  .pw-walk .abt{padding:8px 10px;margin-bottom:5px;font-size:.88rem}
+  /* Dice and the exercise share one row (wrapping if there are many dice) */
+  .pw-walk .mathbox{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+    gap:6px 12px;padding:6px 8px;margin:5px 0}
+  .pw-walk .dicerow{gap:7px;margin:0}
+  .pw-walk .die{width:42px;height:42px;font-size:1.35rem;border-radius:10px;border-width:2.5px}
+  .pw-walk .mathex{font-size:1.4rem}
+  .pw-walk .mcgrid{gap:6px;margin:5px 0}
+  .pw-walk .mcb{padding:7px;font-size:1.1rem}
+  .pw-walk .ansinp{gap:5px;margin:5px 0}
+  .pw-walk .ansinp input{padding:8px;font-size:1.1rem}
+  .pw-walk .hintbox{font-size:.82rem;padding:6px 9px;margin:4px 0}
+  .pw-walk .wrongbox{margin:4px 0}
 }
 /* Phone landscape: little height to spare — dock to the side over the board
    (the board is wide here) rather than eating vertical space. Sit on the inline
@@ -562,14 +629,32 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 .prize-kibbles{display:flex;flex-wrap:wrap;gap:1px;margin:3px 0}
 .prize-kibbles .kibble{font-size:.95rem;line-height:1}
 .prize-hero-worth{font-weight:800;color:#1f2937;font-size:.92rem}
+/* Says, once, what the colours mean before the list of them */
+.prize-lead{font-size:.76rem;color:#6b7280;line-height:1.35;margin-bottom:6px}
 .prize-menu{display:flex;flex-direction:column;gap:5px}
 .prizerow{display:flex;align-items:center;gap:8px;background:#fafafa;border-radius:9px;padding:5px 8px;border-inline-start:4px solid #ccc}
 .prizerow.active{box-shadow:0 1px 6px rgba(0,0,0,.1)}
 .prizerow-ico{font-size:1.35rem;line-height:1;flex-shrink:0}
 .prizerow-mid{flex:1;min-width:0}
 .prizerow-name{font-weight:700;font-size:.86rem;color:#1f2937;line-height:1.1}
+/* How hard this door is, in words — carries the meaning the range never did */
+.prizerow-diff{font-size:.74rem;font-weight:700;color:#4b5563;line-height:1.25}
 .prizerow-range{font-size:.72rem;color:#9ca3af}
 .prizerow-val{flex-shrink:0;font-weight:800;font-size:.9rem;background:white;border:1.5px solid;border-radius:8px;padding:2px 8px;white-space:nowrap}
+
+/* ── ROUTE PLANNING: what the chosen way is made of ──
+   The strategic heart of the game, made visible while the choice is being made:
+   which doors this route crosses and what each colour is worth. */
+.routetip{font-size:.82rem;line-height:1.5;background:#FFFBEB;border:2px solid #FDE68A;
+  border-radius:10px;padding:7px 10px;margin:0 0 7px;color:#78350F}
+.routetip strong{color:#92400E}
+.routedoors{display:flex;flex-wrap:wrap;align-items:center;gap:5px 6px;margin:0 0 7px}
+.routedoors-lbl{font-size:.76rem;font-weight:700;color:#6b7280}
+.routedoors-chip{display:inline-flex;align-items:center;gap:4px;background:white;
+  border:2px solid;border-radius:999px;padding:2px 9px;font-size:.78rem;font-weight:800;
+  white-space:nowrap}
+.routedoors-n{font-variant-numeric:tabular-nums}
+.routedoors-pts{color:#4b5563;font-weight:700}
 
 /* ── PHASE STRIP (top of command square) ── */
 .phasestrip{display:flex;gap:4px;margin-bottom:9px}

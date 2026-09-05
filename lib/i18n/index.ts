@@ -137,6 +137,10 @@ export interface Dict {
   doorLabel: (key: DoorKey) => string;
   pathDoorLabel: (key: DoorKey, pts: number) => string;
   possiblePellets: (pts: number, steps: number) => string;
+  /** the trade-off behind choosing a route, shown while planning one */
+  routeTradeoff: string;
+  /** heading above the coloured door chips that make up the planned route */
+  routeMadeOf: string;
   routeNotReach: (target: number) => string;
   confirmRoute: string;
   clearRoute: string;
@@ -223,6 +227,10 @@ export interface Dict {
   // Door legend
   doorLegendTitle: string;
   doorLegendPts: (pts: number) => string;
+  /** how hard this door's exercise is, in plain words — the colour→difficulty→prize link */
+  doorDifficulty: (key: DoorKey) => string;
+  /** one line above the door list tying colour, difficulty and prize together */
+  doorMenuLead: string;
 
   // Game squares (bank / step prize / door menu / mobile views)
   bankTitle: string;
@@ -268,6 +276,9 @@ export interface Dict {
   zoomIn: string;
   zoomOut: string;
   zoomReset: string;
+  /** one-time tip on a phone held upright: turn it sideways for a bigger board */
+  rotateHint: string;
+  rotateHintClose: string;
 
   // Help card
   helpCardBtn: string;

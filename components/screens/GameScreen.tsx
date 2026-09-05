@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import HexBoard from "../HexBoard";
 import PlayerCards from "../PlayerCards";
 import StepPrize from "../StepPrize";
@@ -22,6 +22,37 @@ import type { Dict } from "@/lib/i18n";
 
 function fmtTime(s: number): string {
   return "⏱ " + Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60);
+}
+
+// ── One-time tip: a phone held upright suggests turning it sideways ──
+// The board is wide and flat, so a sideways phone shows it far bigger. The tip
+// only appears while the phone is upright, and one tap retires it for good.
+const ROTATE_TIP_KEY = "kn-rotate-tip";
+const rotateTipListeners = new Set<() => void>();
+
+function subscribeRotateTip(onChange: () => void): () => void {
+  rotateTipListeners.add(onChange);
+  window.addEventListener("resize", onChange);
+  window.addEventListener("orientationchange", onChange);
+  return () => {
+    rotateTipListeners.delete(onChange);
+    window.removeEventListener("resize", onChange);
+    window.removeEventListener("orientationchange", onChange);
+  };
+}
+
+function rotateTipSnapshot(): boolean {
+  if (window.innerHeight <= window.innerWidth) return false;
+  try {
+    return localStorage.getItem(ROTATE_TIP_KEY) !== "1";
+  } catch {
+    return true;
+  }
+}
+
+function dismissRotateTip(): void {
+  try { localStorage.setItem(ROTATE_TIP_KEY, "1"); } catch {}
+  rotateTipListeners.forEach((cb) => cb());
 }
 
 export default function GameScreen({
@@ -125,6 +156,9 @@ export default function GameScreen({
   // Reset the zoom back to fit-to-screen when leaving the phone layout.
   useEffect(() => { if (isDesktop) setZoom(1); }, [isDesktop]);
 
+  // Is the tip to turn the phone sideways showing? (see rotateTipSnapshot)
+  const rotateTip = useSyncExternalStore(subscribeRotateTip, rotateTipSnapshot, () => false);
+
   const boardSize =
     !isDesktop && base
       ? { width: base.w * zoom, height: base.h * zoom, maxWidth: "none", maxHeight: "none" }
@@ -200,7 +234,15 @@ export default function GameScreen({
   // hexes, no wasted side margins). On mobile they stay as a thin bar docked
   // above the board.
   const dockNode = docked ? (
-    <div className={"phasedock " + (isDesktop ? "pd-side" : state.phase === 1 ? "pd-find" : "pd-route")}>
+    <div
+      className={
+        "phasedock " +
+        (isDesktop ? "pd-side" : state.phase === 1 ? "pd-find" : "pd-route") +
+        // Phone: once the bottom "route ready" strip is up, it carries the
+        // confirm/clear buttons — the docked bar hides its copies of them.
+        (routeReady && !isDesktop ? " ready" : "")
+      }
+    >
       <div className="phasedock-title">{dockTitle}</div>
       <div className="phasedock-body">
         <ActionPanel t={t} state={state} actions={actions} />
@@ -244,6 +286,17 @@ export default function GameScreen({
         <div className="gstage-main">
           {/* Mobile: a thin bar docked above the board (find & route stages) */}
           {!isDesktop && dockNode}
+
+          {/* Phone held upright: one-time nudge that sideways shows a bigger board.
+              Stays out of the guided tour's way. */}
+          {!isDesktop && rotateTip && !state.tourActive && (
+            <div className="rotate-tip">
+              <span>{t.rotateHint}</span>
+              <button className="rotate-tip-btn" onClick={dismissRotateTip}>
+                {t.rotateHintClose}
+              </button>
+            </div>
+          )}
 
           <div
             ref={scrollRef}

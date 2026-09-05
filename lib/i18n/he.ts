@@ -17,6 +17,16 @@ const DOOR_RANGES: Record<DoorKey, string> = {
   redlong: "11–19 × 2–9",
 };
 
+/** How hard each door's exercise is, in words a child reads — the number range
+ *  alone never told anyone that a darker door means a harder question. */
+const DOOR_DIFFICULTY: Record<DoorKey, string> = {
+  blue: "תרגילים קלים",
+  purple: "קצת יותר קשה",
+  yellow: "קשה",
+  red: "קשה מאוד",
+  redlong: "אתגר!",
+};
+
 /** A worked calculation: its own line, locked left-to-right like the target card. */
 function calc(s: string): string {
   return `<span class="hint-calc">${s}</span>`;
@@ -481,6 +491,9 @@ export const he: Dict = {
   pathDoorLabel: (key, pts) => `${DOOR_LABELS[key]} | <span dir="ltr">${DOOR_RANGES[key]}</span> | ${pts}🦴`,
   possiblePellets: (pts, steps) =>
     `🦴 <strong>סה"כ אפשרי: ${pts} גרגירים</strong> ב-${steps} צעדים`,
+  routeTradeoff:
+    "💡 כל קו צבעוני הוא <strong>דלת</strong> — דלת קשה יותר שווה יותר גרגירים. <strong>הדרך שתבחרו קובעת כמה תרוויחו!</strong>",
+  routeMadeOf: "הדלתות בדרך:",
   routeNotReach: (target) => `⚠️ המסלול לא מגיע למשושה ${target}!`,
   confirmRoute: "✅ אשרו מסלול",
   clearRoute: "🗑 נקו",
@@ -635,6 +648,8 @@ export const he: Dict = {
   hexLabel: (h) => `📍 משושה ${h}`,
 
   doorLegendTitle: "🚪 דלתות וגרגירים",
+  doorDifficulty: (key) => DOOR_DIFFICULTY[key],
+  doorMenuLead: "כל צבע = כמה קשה התרגיל וכמה גרגירים מקבלים",
   doorLegendPts: (pts) => `${pts}🦴`,
 
   bankTitle: "🏦 הבנק — מה אספנו",
@@ -666,6 +681,8 @@ export const he: Dict = {
   zoomIn: "הגדלה",
   zoomOut: "הקטנה",
   zoomReset: "התאמת הלוח",
+  rotateHint: "📱 טיפ: סובבו את הטלפון על הצד — הלוח יגדל הרבה!",
+  rotateHintClose: "הבנתי",
 
   helpCardBtn: "לוח כפל",
 
