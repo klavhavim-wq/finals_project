@@ -33,7 +33,11 @@ function usesMC(s: GameState): boolean {
 export function settle(state: GameState): GameState {
   let s = state;
   for (let i = 0; i < 8 && s.awaitNewTurn; i++) {
-    const { card, resetUsed } = pickTargetCard(s.level, s.usedCards, Math.random, false);
+    // Same guard as the single-device game: a target on the dog's own hex cannot
+    // be routed to, and the confirm button would stay dead with no explanation.
+    const { card, resetUsed } = pickTargetCard(
+      s.level, s.usedCards, Math.random, false, s.players[s.cur]?.hex
+    );
     s = reducer(s, { type: "START_P1", card, resetUsed });
   }
   return s;

@@ -79,15 +79,30 @@ export function pickTargetCard(
   level: Level,
   usedCards: number[],
   rand: Rand = Math.random,
-  preferComposite = false
+  preferComposite = false,
+  /**
+   * The hex the dog is standing on. A target there is a dead end: the route has
+   * to contain the target hex to be confirmable, but clicking the hex the dog
+   * occupies is ignored, so the confirm button would stay disabled with nothing
+   * on screen explaining why. Drawing a different card is silent and costs
+   * nothing; the player never sees the near miss.
+   */
+  avoidAns?: number
 ): { card: TargetCard; resetUsed: boolean } {
   // Each level has its own multiplication target pool, already sized to its board.
   const pool = targetPoolFor(level);
-  let avail = pool.filter((c) => !usedCards.includes(c.id));
+  const usable = (cards: TargetCard[]) =>
+    avoidAns != null && cards.some((c) => c.ans !== avoidAns)
+      ? cards.filter((c) => c.ans !== avoidAns)
+      : cards;
+
+  let avail = usable(pool.filter((c) => !usedCards.includes(c.id)));
   let resetUsed = false;
   if (!avail.length) {
     resetUsed = true;
-    avail = pool;
+    // Re-apply the guard after the reset too — a pool that has just cycled is
+    // exactly when the same answer is most likely to come round again.
+    avail = usable(pool);
   }
   // The guided demo asks for a composite target so the factoring step (gold
   // factor tiles + the "break it into factors" challenge) actually shows.
@@ -223,13 +238,16 @@ export function pickReviewTarget(
   level: Level,
   facts: ReviewFact[],
   usedCards: number[],
-  rand: Rand = Math.random
+  rand: Rand = Math.random,
+  /** see pickTargetCard — a target on the dog's own hex cannot be routed to */
+  avoidAns?: number
 ): { card: TargetCard; resetUsed: boolean } | null {
   if (!facts.length) return null;
   const pool = targetPoolFor(level);
   // Keep only facts whose product is a real target on this board, preferring
   // ones not just shown this round.
   const eligible = facts
+    .filter((f) => f.ans !== avoidAns)
     .map((f) => ({ f, base: pool.find((c) => c.ans === f.ans && !c.prime) }))
     .filter((x): x is { f: ReviewFact; base: TargetCard } => !!x.base);
   const fresh = eligible.filter((x) => !usedCards.includes(x.base.id));

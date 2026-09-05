@@ -204,12 +204,15 @@ export function useGame(locale: Locale) {
   const startP1 = useCallback(() => {
     const s = stateRef.current;
     // During the guided demo, prefer a composite target so the factoring step works.
-    let picked = pickTargetCard(s.level, s.usedCards, Math.random, s.tourActive);
+    // Never hand out a target the dog is already standing on — the route could
+    // not then be confirmed and nothing on screen would say why.
+    const dogHex = s.players[s.cur]?.hex;
+    let picked = pickTargetCard(s.level, s.usedCards, Math.random, s.tourActive, dogHex);
     // Review mode: about half the time, re-test a fact this player missed before.
     if (s.settings.review && !s.tourActive) {
       const facts = reviewRef.current.get(s.players[s.cur]?.name ?? "") ?? [];
       if (facts.length && Math.random() < 0.5) {
-        const rev = pickReviewTarget(s.level, facts, s.usedCards, Math.random);
+        const rev = pickReviewTarget(s.level, facts, s.usedCards, Math.random, dogHex);
         if (rev) picked = rev;
       }
     }
