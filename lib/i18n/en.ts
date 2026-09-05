@@ -9,11 +9,12 @@ const DOOR_LABELS: Record<DoorKey, string> = {
   redlong: "Black door",
 };
 
+/** What each door asks, named by the family rather than by a range of answers. */
 const DOOR_RANGES: Record<DoorKey, string> = {
-  blue: "4–20",
-  purple: "10–40",
-  yellow: "24–64",
-  red: "42–81",
+  blue: "×2 and ×10",
+  purple: "×5",
+  yellow: "×3 and ×4",
+  red: "6·7·8·9",
   redlong: "11–19 × 2–9",
 };
 
@@ -255,7 +256,7 @@ export const en: Dict = {
       x: '<strong>1.</strong> Get an exercise and tap the right number on the board. 🔢<br><br><strong>2.</strong> Build a route from the dog to that number. 🗺️<br><br><strong>3.</strong> At every step solve a little exercise and move — each step earns pellets! 🦴<br><br>Made a mistake? Try again, and there\'s a hint too 💜',
     };
     const LV: Record<string, string> = {
-      beg: '🐾 <strong>Beginner</strong> — find numbers up to 40 on the board. Along the way you cross the blue door and solve easy exercises — products up to 20. Perfect to start! 😊',
+      beg: '🐾 <strong>Beginner</strong> — find numbers up to 40 on the board. Every exercise is ×2 or ×10, so you can get there by doubling or by adding a zero, without knowing it by heart. Perfect to start! 😊',
       med: '⭐ <strong>Intermediate</strong> — find numbers up to 60. The door exercises along the way go up to 40.',
       adv: '🌟 <strong>Advanced</strong> — find numbers up to 90. The door exercises along the way go up to 64.',
       champ: '🏆 <strong>Champion</strong> — find numbers up to 100. The door exercises along the way go up to 81.',
@@ -442,11 +443,11 @@ export const en: Dict = {
   playerPlaceholder: (dog, i) => `${dog} Player ${i + 1}...`,
   difficulty: "📊 Difficulty",
   levels: {
-    beg: { icon: "🐾", name: "Beginner", desc: "Board to 40 · products to 20", board: "Board to 40" },
-    med: { icon: "⭐", name: "Intermediate", desc: "Board to 60 · products to 40", board: "Board to 60" },
-    adv: { icon: "🌟", name: "Advanced", desc: "Board to 90 · products to 64", board: "Board to 90" },
-    champ: { icon: "🏆", name: "Champion", desc: "Board to 100 · products to 81 | 2 min", board: "Board to 100" },
-    hero: { icon: "⚡", name: "Hero", desc: "Long multiplication | (11–19)×(2–9) | 1:30 min", board: "Long multiplication" },
+    beg: { icon: "🐾", name: "Beginner", desc: "Board to 40 · ×2 and ×10", board: "Board to 40" },
+    med: { icon: "⭐", name: "Intermediate", desc: "Board to 60 · adds ×5", board: "Board to 60" },
+    adv: { icon: "🌟", name: "Advanced", desc: "Board to 90 · adds ×3 and ×4", board: "Board to 90" },
+    champ: { icon: "🏆", name: "Champion", desc: "Board to 100 · the whole table", board: "Board to 100" },
+    hero: { icon: "⚡", name: "Hero", desc: "Long multiplication | (11–19)×(2–9)", board: "Long multiplication" },
   },
   options: "🔧 Options",
   whatsThis: "What's this?",
@@ -649,6 +650,7 @@ export const en: Dict = {
   doorLegendTitle: "🚪 Doors & Pellets",
   doorLegendPts: (pts) => `${pts}🦴`,
   doorDifficulty: (key) => DOOR_DIFFICULTY[key],
+  doorFamily: (key) => DOOR_RANGES[key],
   doorMenuLead: "Each door has its own line on the board — colour and pattern show how hard it is and what it pays",
 
   bankTitle: "🏦 The Bank — what we collected",

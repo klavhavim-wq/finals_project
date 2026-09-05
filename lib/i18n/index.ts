@@ -237,6 +237,8 @@ export interface Dict {
   doorLegendPts: (pts: number) => string;
   /** how hard this door's exercise is, in plain words — the colour→difficulty→prize link */
   doorDifficulty: (key: DoorKey) => string;
+  /** which family of facts this door asks, e.g. "×2 and ×10" */
+  doorFamily: (key: DoorKey) => string;
   /** one line above the door list tying colour, difficulty and prize together */
   doorMenuLead: string;
 

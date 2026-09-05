@@ -56,10 +56,17 @@ function altFactorPair(ans: number, level: Level, rand: Rand): string | null {
       }
     }
   } else {
+    // Only decompositions the level actually teaches. 30 is a Beginner answer
+    // because 3 × 10 is a Beginner fact — but showing it as 5 × 6 would put a
+    // fact from two levels up on the card, which is how "products up to 20"
+    // ended up asking 5 × 6 in the first place.
+    const allowed = new Set<string>();
+    for (const key of LVL_DOORS[level])
+      for (const [a, b] of DC[key].family ?? []) allowed.add(`${a}x${b}`);
     for (let a = 2; a <= 10; a++) {
       if (ans % a === 0) {
         const b = ans / a;
-        if (b >= a && b <= 10) pairs.push([a, b]);
+        if (b >= a && b <= 10 && allowed.has(`${a}x${b}`)) pairs.push([a, b]);
       }
     }
   }
@@ -118,21 +125,8 @@ export interface RollResult {
   expr: string;
 }
 
-/** All factor pairs a≤b within a band door's factor range whose product is in band. */
-function pairsInBand(door: Door): [number, number][] {
-  const [f0, f1] = door.fac!;
-  const [p0, p1] = door.band!;
-  const out: [number, number][] = [];
-  for (let a = f0; a <= f1; a++)
-    for (let b = a; b <= f1; b++) {
-      const p = a * b;
-      if (p >= p0 && p <= p1) out.push([a, b]);
-    }
-  return out;
-}
-
 export function rollDoor(door: Door, guards: RollGuards, rand: Rand = Math.random): RollResult {
-  const bandPairs = door.band ? pairsInBand(door) : null;
+  const bandPairs = door.family ?? null;
   const gen = (): RollResult => {
     if (door.ranges) {
       const r = door.ranges.map(([mn, mx]) => Math.floor(rand() * (mx - mn + 1)) + mn);
@@ -245,12 +239,10 @@ export function pickReviewRoll(
       if (tryOrder(a, b)) { x = a; y = b; }
       else if (tryOrder(b, a)) { x = b; y = a; }
       else return null;
-    } else if (door.band) {
-      const [f0, f1] = door.fac!;
-      const [p0, p1] = door.band!;
-      const prod = a * b;
-      if (a < f0 || a > f1 || b < f0 || b > f1 || prod < p0 || prod > p1) return null;
+    } else if (door.family) {
       [x, y] = a <= b ? [a, b] : [b, a];
+      // A review fact only fits this door if it belongs to its fact family.
+      if (!door.family.some(([p, q]) => p === x && q === y)) return null;
     } else {
       return null;
     }
@@ -282,8 +274,8 @@ function doorProducts(door: Door): number[] {
     for (let a = mn1; a <= mx1; a++)
       for (let b = mn2; b <= mx2; b++)
         prods.add(a * b);
-  } else if (door.band) {
-    for (const [a, b] of pairsInBand(door)) prods.add(a * b);
+  } else if (door.family) {
+    for (const [a, b] of door.family) prods.add(a * b);
   } else {
     const min = door.min!, max = door.max!;
     for (let a = min; a <= max; a++)
@@ -319,8 +311,8 @@ export function makeChoices(correct: number, door: Door, rand: Rand = Math.rando
   // Fallback for large doors: add nearby valid values if still not enough
   const maxProd = door.ranges
     ? door.ranges.reduce((a, [, mx]) => a * mx, 1)
-    : door.band
-    ? door.band[1]
+    : door.family
+    ? Math.max(...door.family.map(([a, b]) => a * b))
     : Math.pow(door.max!, door.cnt);
   let tries = 0;
   while (s.size < 4 && tries < 40) {

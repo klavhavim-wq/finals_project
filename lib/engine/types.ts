@@ -75,9 +75,12 @@ export interface Door {
   max?: number;
   /** asymmetric ranges per die (hero / redlong) */
   ranges?: [number, number][];
-  /** product-band mode: any factor pair a≤b within `fac` whose product is in `band` */
-  fac?: [number, number];
-  band?: [number, number];
+  /**
+   * The exact factor pairs (a ≤ b) this door asks. Doors are fact families, not
+   * product ranges: how hard a multiplication fact is depends on whether it can
+   * be derived by a rule, not on how big its answer is.
+   */
+  family?: [number, number][];
   cnt: number;
   pts: number;
   color: string;

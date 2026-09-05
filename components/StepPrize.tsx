@@ -4,13 +4,6 @@ import { DC, LVL_DOORS, PELLET } from "@/lib/engine/constants";
 import type { DoorKey, GameState } from "@/lib/engine/types";
 import type { Dict } from "@/lib/i18n";
 
-/** Short product-range label for a door (e.g. "4–20" or "11–19 × 2–9"). */
-function doorRange(d: DoorKey): string {
-  const dc = DC[d];
-  if (dc.ranges) return `${dc.ranges[0][0]}–${dc.ranges[0][1]} × ${dc.ranges[1][0]}–${dc.ranges[1][1]}`;
-  if (dc.band) return `${dc.band[0]}–${dc.band[1]}`;
-  return `${dc.min}–${dc.max}`;
-}
 
 /** N little pellet (kibble) dots — the visual "this door pays N pellets". */
 function Pellets({ n }: { n: number }) {
@@ -103,7 +96,10 @@ export default function StepPrize({ t, state }: { t: Dict; state: GameState }) {
                 <div className="prizerow-name">{t.doorLabel(d)}</div>
                 {/* How hard it is, in words — the number range alone never said so */}
                 <div className="prizerow-diff">{t.doorDifficulty(d)}</div>
-                <div className="prizerow-range" dir="ltr">{doorRange(d)}</div>
+                {/* Which facts this door asks — "×2 and ×10" says what the door
+                    is for; the old answer range ("4–20") described the size of
+                    the answers, which is not what makes a fact hard. */}
+                <div className="prizerow-range">{t.doorFamily(d)}</div>
               </div>
               <span className="prizerow-val" style={{ color: dc.color, borderColor: dc.color }}>
                 {dc.pts} {PELLET}

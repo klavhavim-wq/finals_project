@@ -18,20 +18,64 @@ export const DOGS = ["🐕", "🐩", "🐶", "🦮"];
  */
 export const PELLET = "🦴";
 
-/** Door config — min/max range maps to cognitive difficulty families. Labels are localized. */
+// ── Door fact families ──
+//
+// A door is a family of multiplication facts that are learned the same way, not
+// a range of answer sizes. The previous design banded doors by product (4–20,
+// 10–40, 24–64, 42–81), which had two problems: the bands overlapped, so seven
+// of the nine "hardest" facts were also available at half the price one door
+// down; and product size is a poor proxy for difficulty. 9 × 10 = 90 is one of
+// the easiest facts in the table and 6 × 7 = 42 is one of the hardest.
+//
+// The families below follow how children actually acquire the table. Facts with
+// a 2, 5 or 10 in them are reached by a rule — double it, halve the ×10, add a
+// zero — and stay accessible long before recall is fluent. Ties (4 × 4, 7 × 7)
+// are retrieved faster and more accurately than non-ties of the same size. What
+// is left once those are removed is the small set of large non-tie facts that
+// every child finds hardest and that stay effortful longest.
+//
+// Every fact belongs to exactly one door, so a given exercise is always worth
+// the same, and what a door pays now tracks what it actually costs to answer.
+
+/** All factor pairs a ≤ b in 2..10 matching a test. */
+function pairs(test: (a: number, b: number) => boolean): [number, number][] {
+  const out: [number, number][] = [];
+  for (let a = 2; a <= 10; a++)
+    for (let b = a; b <= 10; b++) if (test(a, b)) out.push([a, b]);
+  return out;
+}
+
+const has = (a: number, b: number, n: number) => a === n || b === n;
+/** Reached by a rule rather than by recall: doubling, ×10, or halving the ×10. */
+const isRule = (a: number, b: number) => has(a, b, 2) || has(a, b, 10) || has(a, b, 5);
+/** Same number twice — retrieved faster and more accurately than its neighbours. */
+const isTie = (a: number, b: number) => a === b;
+
+/** ×2 and ×10 — doubling and place value. The first facts a child owns. */
+const FAM_DOUBLE = pairs((a, b) => has(a, b, 2) || has(a, b, 10));
+/** ×5, plus the two smallest ties. Halving the ×10, and the earliest recalled ties. */
+const FAM_FIVES = pairs((a, b) => !FAM_DOUBLE.some(([x, y]) => x === a && y === b) && (has(a, b, 5) || (isTie(a, b) && a <= 4)));
+/** ×3 and ×4 against a big partner, plus the remaining ties. Recall, but supported. */
+const FAM_MID = pairs(
+  (a, b) =>
+    !isRule(a, b) &&
+    !FAM_FIVES.some(([x, y]) => x === a && y === b) &&
+    (isTie(a, b) || a === 3 || a === 4)
+);
+/** 6, 7, 8, 9 against each other, no tie and no rule — the facts that stay hardest. */
+const FAM_HARD = pairs((a, b) => !isRule(a, b) && !isTie(a, b) && a >= 6);
+
+/** Door config — each door is one fact family. Labels are localized. */
 export const DC: Record<DoorKey, Door> = {
-  // Product-band doors: each asks any factor pair (a≤b) within `fac` whose product
-  // lands in `band`. This keeps each door's difficulty while widening the variety
-  // of facts practised far beyond the old fixed dice ranges.
-  blue: { key: "blue", fac: [2, 9], band: [4, 20], cnt: 2, pts: 1, color: "#3B82F6" },
+  blue: { key: "blue", family: FAM_DOUBLE, cnt: 2, pts: 1, color: "#3B82F6" },
   // Indigo (not light violet) so blue and purple doors stay distinguishable,
   // including for blue-yellow colour-vision deficiency.
-  purple: { key: "purple", fac: [2, 9], band: [10, 40], cnt: 2, pts: 2, color: "#7C3AED" },
+  purple: { key: "purple", family: FAM_FIVES, cnt: 2, pts: 2, color: "#7C3AED" },
   // Deepened from #F59E0B, which sat at 1.99:1 against the board parchment — the
   // line was there but a child with any low vision simply did not see it. This
   // reads as the same orange and clears 3:1.
-  yellow: { key: "yellow", fac: [3, 9], band: [24, 64], cnt: 2, pts: 5, color: "#C2660A" },
-  red: { key: "red", fac: [6, 9], band: [42, 81], cnt: 2, pts: 10, color: "#EF4444" },
+  yellow: { key: "yellow", family: FAM_MID, cnt: 2, pts: 5, color: "#C2660A" },
+  red: { key: "red", family: FAM_HARD, cnt: 2, pts: 10, color: "#EF4444" },
   // Hero level — long multiplication: 2-digit × 1-digit
   redlong: {
     key: "redlong",
@@ -96,26 +140,10 @@ export function boardRowsFor(level: Level): number {
 }
 
 // ── Target cards (phase 1) ──
-// Each level is "the full multiplication table up to N", like learned in school.
-// Targets are every times-table product (factors 2–10) up to the level's board
-// max. Primes are kept (as additions) so the 🎲 surprise tiles stay reachable.
-// No division or subtraction.
-
-/** One card per distinct times-table product (factors 2–10) up to a cap. */
-function timesTableTargets(cap: number, idBase: number): TargetCard[] {
-  const seen = new Set<number>();
-  const cards: TargetCard[] = [];
-  let id = idBase;
-  for (let a = 2; a <= 10; a++) {
-    for (let b = a; b <= 10; b++) {
-      const ans = a * b;
-      if (ans > cap || seen.has(ans)) continue;
-      seen.add(ans);
-      cards.push({ id: id++, ex: `${a} × ${b}`, ans });
-    }
-  }
-  return cards;
-}
+// A level is a set of fact families (see the doors above), and the find-the-target
+// card draws from the same families its doors do — so the level means one thing
+// wherever it appears. Primes are kept (as additions) so the 🎲 surprise tiles
+// stay reachable. No division or subtraction.
 
 /** Long-multiplication cards (2-digit × 1-digit) up to a cap. */
 function longTargets(cap: number, idBase: number): TargetCard[] {
@@ -158,38 +186,59 @@ const PRIME_TARGETS: TargetCard[] = [
   { id: 921, ex: "48 + 49", ans: 97, prime: true },
 ];
 
-function buildPool(mult: TargetCard[], cap: number): TargetCard[] {
-  return [...mult, ...PRIME_TARGETS].filter((c) => c.ans <= cap);
+/**
+ * Prime targets are written as additions, and they carry their own difficulty
+ * independent of the multiplication level: 18 + 19 needs carrying, 5 + 6 does
+ * not. They are capped separately so the addition stays inside the level too —
+ * on Beginner every prime card is a single-digit sum.
+ */
+const PRIME_CAP: Record<Level, number> = { beg: 19, med: 31, adv: 100, champ: 100, hero: 100 };
+
+function buildPool(mult: TargetCard[], cap: number, primeCap: number): TargetCard[] {
+  return [
+    ...mult.filter((c) => c.ans <= cap),
+    ...PRIME_TARGETS.filter((c) => c.ans <= Math.min(cap, primeCap)),
+  ];
 }
 
 /**
- * How hard the find-the-target card may be, per level — deliberately NOT the
- * board size.
+ * The find-the-target card draws from the same fact families as the level's
+ * doors — so a level means one thing, and it means it everywhere.
  *
- * The find step is the entry ticket to every turn: nothing else in the turn can
- * happen until it is answered, and it has no multiple choice. So it is capped at
- * the level's own door band, which is what the level name and description
- * promise. A beginner meeting 4 × 8 = 32 before they may move at all was the
- * level system quietly not applying to the first thing that happens.
+ * The find step is the entry ticket to every turn: nothing else can happen until
+ * it is answered, and it never offers multiple choice. Previously it ignored the
+ * level entirely and drew from the whole table up to the board size, so a
+ * beginner met 4 × 8 = 32 before they could move at all, on a level advertised
+ * as products up to 20.
  *
- * The board stays larger than this cap on purpose — the extra rows are walking
- * room, which keeps routes varied without raising the recall demand.
+ * The board stays larger than the facts require on purpose — the extra rows are
+ * walking room, which keeps routes varied without raising the recall demand.
  */
-export const TARGET_MAX: Record<Level, number> = {
-  beg: 20, // blue door: products to 20
-  med: 40, // + purple door
-  adv: 64, // + yellow door
-  champ: 100, // + red door — the full table
-  hero: 100, // long multiplication
-};
+function familyTargets(level: Level, idBase: number): TargetCard[] {
+  const cap = BOARD_MAX[level];
+  const seen = new Set<number>();
+  const cards: TargetCard[] = [];
+  let id = idBase;
+  for (const key of LVL_DOORS[level]) {
+    for (const [a, b] of DC[key].family ?? []) {
+      const ans = a * b;
+      if (ans > cap || seen.has(ans)) continue;
+      seen.add(ans);
+      cards.push({ id: id++, ex: `${a} × ${b}`, ans });
+    }
+  }
+  return cards;
+}
 
-/** Target-card pool per level — the level's own difficulty band, plus primes. */
+/** Target-card pool per level — the level's own fact families, plus primes. */
 export const TARGETS_BY_LEVEL: Record<Level, TargetCard[]> = {
-  beg: buildPool(timesTableTargets(TARGET_MAX.beg, 100), TARGET_MAX.beg),
-  med: buildPool(timesTableTargets(TARGET_MAX.med, 200), TARGET_MAX.med),
-  adv: buildPool(timesTableTargets(TARGET_MAX.adv, 300), TARGET_MAX.adv),
-  champ: buildPool(timesTableTargets(TARGET_MAX.champ, 400), TARGET_MAX.champ),
-  hero: buildPool(longTargets(TARGET_MAX.hero, 500), TARGET_MAX.hero),
+  beg: buildPool(familyTargets("beg", 100), BOARD_MAX.beg, PRIME_CAP.beg),
+  med: buildPool(familyTargets("med", 200), BOARD_MAX.med, PRIME_CAP.med),
+  adv: buildPool(familyTargets("adv", 300), BOARD_MAX.adv, PRIME_CAP.adv),
+  champ: buildPool(familyTargets("champ", 400), BOARD_MAX.champ, PRIME_CAP.champ),
+  // Hero is the one level whose find step is a different task from its doors:
+  // long multiplication is what the level is for.
+  hero: buildPool(longTargets(BOARD_MAX.hero, 500), BOARD_MAX.hero, PRIME_CAP.hero),
 };
 
 export function targetPoolFor(level: Level): TargetCard[] {

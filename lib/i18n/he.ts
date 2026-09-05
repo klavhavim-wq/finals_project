@@ -9,11 +9,12 @@ const DOOR_LABELS: Record<DoorKey, string> = {
   redlong: "דלת שחורה",
 };
 
+/** What each door asks, named by the family rather than by a range of answers. */
 const DOOR_RANGES: Record<DoorKey, string> = {
-  blue: "4–20",
-  purple: "10–40",
-  yellow: "24–64",
-  red: "42–81",
+  blue: "כפל ב-2 וב-10",
+  purple: "כפל ב-5",
+  yellow: "כפל ב-3 וב-4",
+  red: "6·7·8·9",
   redlong: "11–19 × 2–9",
 };
 
@@ -255,7 +256,7 @@ export const he: Dict = {
       x: '<strong>1.</strong> מקבלים תרגיל ולוחצים על המספר הנכון בלוח. 🔢<br><br><strong>2.</strong> בונים מסלול מהכלב עד המספר. 🗺️<br><br><strong>3.</strong> בכל צעד פותרים תרגיל קטן ומתקדמים — וכל צעד שווה גרגירים! 🦴<br><br>טעות? אפשר לנסות שוב, ויש גם רמז 💜',
     };
     const LV: Record<string, string> = {
-      beg: '🐾 <strong>מתחילים</strong> — מוצאים על הלוח מספרים עד 40. בדרך עוברים בדלת הכחולה ופותרים תרגילים קלים — מכפלות עד 20. מושלם להתחלה! 😊',
+      beg: '🐾 <strong>מתחילים</strong> — מוצאים על הלוח מספרים עד 40. כל התרגילים הם כפל ב-2 וכפל ב-10 — אפשר להגיע אליהם בהכפלה או בהוספת אפס, בלי לזכור בעל פה. מושלם להתחלה! 😊',
       med: '⭐ <strong>בינוני</strong> — מוצאים מספרים עד 60. תרגילי הדלתות שבדרך מגיעים עד 40.',
       adv: '🌟 <strong>מתקדם</strong> — מוצאים מספרים עד 90. תרגילי הדלתות שבדרך מגיעים עד 64.',
       champ: '🏆 <strong>אלוף</strong> — מוצאים מספרים עד 100. תרגילי הדלתות שבדרך מגיעים עד 81.',
@@ -442,11 +443,11 @@ export const he: Dict = {
   playerPlaceholder: (dog, i) => `${dog} שם שחקן ${i + 1}...`,
   difficulty: "📊 רמת קושי",
   levels: {
-    beg: { icon: "🐾", name: "מתחילים", desc: "לוח עד 40 · מכפלות עד 20", board: "לוח עד 40" },
-    med: { icon: "⭐", name: "בינוני", desc: "לוח עד 60 · מכפלות עד 40", board: "לוח עד 60" },
-    adv: { icon: "🌟", name: "מתקדם", desc: "לוח עד 90 · מכפלות עד 64", board: "לוח עד 90" },
-    champ: { icon: "🏆", name: "אלוף", desc: "לוח עד 100 · מכפלות עד 81 | 2 דקות", board: "לוח עד 100" },
-    hero: { icon: "⚡", name: "גיבור", desc: "כפל ארוך | \u2066(11–19)×(2–9)\u2069 | דקה וחצי", board: "כפל ארוך" },
+    beg: { icon: "🐾", name: "מתחילים", desc: "לוח עד 40 · כפל ב-2 וב-10", board: "לוח עד 40" },
+    med: { icon: "⭐", name: "בינוני", desc: "לוח עד 60 · נוסף כפל ב-5", board: "לוח עד 60" },
+    adv: { icon: "🌟", name: "מתקדם", desc: "לוח עד 90 · נוסף כפל ב-3 וב-4", board: "לוח עד 90" },
+    champ: { icon: "🏆", name: "אלוף", desc: "לוח עד 100 · כל לוח הכפל", board: "לוח עד 100" },
+    hero: { icon: "⚡", name: "גיבור", desc: "כפל ארוך | ⁦(11–19)×(2–9)⁩", board: "כפל ארוך" },
   },
   options: "🔧 התאמות",
   whatsThis: "מה זה?",
@@ -654,6 +655,7 @@ export const he: Dict = {
 
   doorLegendTitle: "🚪 דלתות וגרגירים",
   doorDifficulty: (key) => DOOR_DIFFICULTY[key],
+  doorFamily: (key) => DOOR_RANGES[key],
   doorMenuLead: "לכל דלת יש קו משלה בלוח — הצבע והקו מראים כמה קשה התרגיל וכמה גרגירים מקבלים",
   doorLegendPts: (pts) => `${pts}🦴`,
 
