@@ -17,14 +17,44 @@ export default function WalkPanel({
   t,
   state,
   actions,
+  onDock,
 }: {
   t: Dict;
   state: GameState;
   actions: GameActions;
+  /** How much of the bottom edge this sheet covers, in pixels (0 when it floats). */
+  onDock: (px: number | null) => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
   const drag = useRef({ active: false, dx: 0, dy: 0 });
+  const report = useRef<() => void>(() => {});
+
+  // Tell the screen how much of the bottom edge this sheet really takes, so the
+  // board gives up exactly that much and no more. It used to be told to give up
+  // a flat 59% of the screen, which on the commonest phone left the board a
+  // 157-pixel sliver with a 260-pixel empty gap under it. Dragged away from the
+  // bottom, the sheet reserves nothing at all: it floats, and the board — which
+  // can now be dragged — is pulled out from under it.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      const sitsOnBottom = window.innerHeight - r.bottom <= 24;
+      onDock(sitsOnBottom ? Math.round(window.innerHeight - r.top + 6) : 0);
+    };
+    report.current = () => requestAnimationFrame(measure);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+      onDock(null);
+    };
+  }, [onDock]);
 
   // Re-dock to the default spot whenever the window resizes or the phone rotates.
   useEffect(() => {
@@ -52,10 +82,12 @@ export default function WalkPanel({
     const x = Math.max(6, Math.min(e.clientX - d.dx, window.innerWidth - w - 6));
     const y = Math.max(6, Math.min(e.clientY - d.dy, window.innerHeight - h - 6));
     setPos({ x, y });
+    report.current();
   };
   const onUp = (e: React.PointerEvent<HTMLDivElement>) => {
     drag.current.active = false;
     ref.current?.releasePointerCapture(e.pointerId);
+    report.current();
   };
 
   return (

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import type { CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import HexBoard from "../HexBoard";
 import PlayerCards from "../PlayerCards";
 import StepPrize from "../StepPrize";
@@ -28,6 +29,8 @@ function fmtTime(s: number): string {
 // The board is wide and flat, so a sideways phone shows it far bigger. The tip
 // only appears while the phone is upright, and one tap retires it for good.
 const ROTATE_TIP_KEY = "kn-rotate-tip";
+/** Fit-to-screen, board centred — the board view a phone starts on. */
+const ORIGIN = { x: 0, y: 0 };
 const rotateTipListeners = new Set<() => void>();
 
 function subscribeRotateTip(onChange: () => void): () => void {
@@ -84,58 +87,181 @@ export default function GameScreen({
   const pct = state.timerTotal ? Math.max(0, (state.timerSecs / state.timerTotal) * 100) : 0;
   const curName = state.players[state.cur]?.name ?? "";
 
-  // ── Board pan ──
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const pan = useRef({ active: false, moved: false, x: 0, y: 0, l: 0, t: 0 });
-
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType !== "mouse" || e.button !== 0) return;
-    const el = scrollRef.current;
-    if (!el) return;
-    pan.current = { active: true, moved: false, x: e.clientX, y: e.clientY, l: el.scrollLeft, t: el.scrollTop };
-  };
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const p = pan.current;
-    if (!p.active) return;
-    const dx = e.clientX - p.x;
-    const dy = e.clientY - p.y;
-    if (!p.moved && Math.abs(dx) + Math.abs(dy) > 6) {
-      p.moved = true;
-      scrollRef.current?.setPointerCapture(e.pointerId);
-    }
-    if (p.moved && scrollRef.current) {
-      scrollRef.current.scrollLeft = p.l - dx;
-      scrollRef.current.scrollTop = p.t - dy;
-    }
-  };
-  const endPan = () => {
-    pan.current.active = false;
-    if (pan.current.moved) setTimeout(() => { pan.current.moved = false; }, 0);
-  };
-  const guardedHexClick = (n: number) => {
-    if (pan.current.moved) { pan.current.moved = false; return; }
-    actions.hexClick(n);
-  };
-
-  // ── Responsive + mobile bank drawer ──
-  // Which of the two layouts to use — a side column that is always open, or the
-  // board on the whole screen with the panels behind an edge tab. The rule lives
-  // in one place, because the guides describe the screen and must agree with it.
+  // ── Which layout: a side column, or the board on the whole screen ──
+  // The rule lives in one place, because the guides describe the screen and must
+  // agree with it.
   const isDesktop = useDeviceLayout() === "desktop";
   const [bankOpen, setBankOpen] = useState(false);
   // Close the mobile drawer whenever the stage changes.
   useEffect(() => { setBankOpen(false); }, [state.phase]);
 
-  // ── Mobile board zoom ──
-  // On phones the whole board is scaled to fit the screen. These let the player
-  // make the hexes bigger (to read/tap) or smaller, panning by dragging when the
-  // board is larger than the screen. `base` is the fit-to-screen size (zoom = 1),
-  // measured from the board area so the fit stays exact on any phone/orientation.
-  const ZMIN = 0.6, ZMAX = 3;
+  // ── Board view on a phone: drag with one finger, pinch with two ──
+  // `base` is the fit-to-screen size (zoom = 1), measured from the board area so
+  // the fit stays exact on any phone or orientation. The board is then moved and
+  // scaled with a CSS transform rather than by scrolling, for two reasons: a
+  // transform is smooth enough to follow a live pinch, and — unlike scrolling —
+  // it still works when the board already fits the screen. That second point is
+  // what stops the board going dead: a panel lying over it (the route strip, the
+  // walk sheet) used to leave the hexes underneath unreachable, because a board
+  // that fits its box has nothing to scroll.
+  const ZMIN = 0.5, ZMAX = 4;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const boardRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState(ORIGIN);
   const [base, setBase] = useState<{ w: number; h: number } | null>(null);
-  const zoomBy = (d: number) =>
-    setZoom((z) => Math.min(ZMAX, Math.max(ZMIN, Math.round((z + d) * 10) / 10)));
+  // The live view during a gesture, written straight onto the element so a pinch
+  // never waits for a re-render; committed to state when the fingers lift.
+  const view = useRef({ z: 1, x: 0, y: 0 });
+  const baseRef = useRef<{ w: number; h: number } | null>(null);
+  useEffect(() => { view.current = { z: zoom, x: pan.x, y: pan.y }; }, [zoom, pan]);
+  useEffect(() => { baseRef.current = base; }, [base]);
+
+  // How far the board may be dragged. Past the point where its edge meets the
+  // screen edge it may go a little further still — that slack is what lets a hex
+  // hidden under a panel be pulled into view even at fit-to-screen size.
+  const clampPan = (x: number, y: number, z: number) => {
+    const el = scrollRef.current, b = baseRef.current;
+    if (!el || !b) return { x, y };
+    const mx = Math.max(0, (b.w * z - el.clientWidth) / 2) + el.clientWidth * 0.3;
+    const my = Math.max(0, (b.h * z - el.clientHeight) / 2) + el.clientHeight * 0.4;
+    return { x: Math.min(mx, Math.max(-mx, x)), y: Math.min(my, Math.max(-my, y)) };
+  };
+  const applyView = (z: number, x: number, y: number) => {
+    const c = clampPan(x, y, z);
+    view.current = { z, x: c.x, y: c.y };
+    if (boardRef.current)
+      boardRef.current.style.transform = "translate(" + c.x + "px," + c.y + "px) scale(" + z + ")";
+  };
+  const commitView = () => {
+    setZoom(view.current.z);
+    setPan((p) =>
+      p.x === view.current.x && p.y === view.current.y ? p : { x: view.current.x, y: view.current.y }
+    );
+  };
+  // The buttons zoom about the middle of the board area, so what you were
+  // looking at stays where it was.
+  const zoomBy = (d: number) => {
+    const z = Math.min(ZMAX, Math.max(ZMIN, Math.round((view.current.z + d) * 10) / 10));
+    const k = z / view.current.z;
+    applyView(z, view.current.x * k, view.current.y * k);
+    commitView();
+  };
+  const resetView = () => { applyView(1, 0, 0); commitView(); };
+
+  // ── Fingers on the board ──
+  // One finger drags, two pinch. A tap that never moved still picks a hex.
+  const ptrs = useRef(new Map<number, { x: number; y: number }>());
+  const grab = useRef({ pinch: false, moved: false, sx: 0, sy: 0, ox: 0, oy: 0, d0: 1, z0: 1, mx: 0, my: 0 });
+  // Set when a gesture turned out to be a drag, so the click it ends with does
+  // not also pick whatever hex the finger happened to lift over. Cleared when
+  // the next gesture starts, which is always after that click.
+  const blockTap = useRef(false);
+  // A wide screen keeps the old mouse drag: there the board is scrolled inside
+  // its box, not transformed.
+  const mouseScroll = useRef({ active: false, x: 0, y: 0, l: 0, t: 0 });
+
+  // Where the fingers are, measured from the middle of the board area, and how
+  // far apart they are.
+  const fingerMid = () => {
+    const el = scrollRef.current;
+    const pts = [...ptrs.current.values()];
+    if (!el || pts.length === 0) return { x: 0, y: 0, d: 1 };
+    const r = el.getBoundingClientRect();
+    const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
+    const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+    const d = pts.length > 1 ? Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y) : 1;
+    return { x: cx - (r.left + r.width / 2), y: cy - (r.top + r.height / 2), d: d || 1 };
+  };
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isDesktop) {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      const el = scrollRef.current;
+      if (!el) return;
+      blockTap.current = false;
+      grab.current.moved = false;
+      mouseScroll.current = { active: true, x: e.clientX, y: e.clientY, l: el.scrollLeft, t: el.scrollTop };
+      return;
+    }
+    if (ptrs.current.size === 0) blockTap.current = false;
+    ptrs.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (ptrs.current.size === 1) {
+      grab.current = { ...grab.current, pinch: false, moved: false,
+        sx: e.clientX, sy: e.clientY, ox: view.current.x, oy: view.current.y };
+    } else if (ptrs.current.size === 2) {
+      const m = fingerMid();
+      grab.current = { pinch: true, moved: true, sx: 0, sy: 0,
+        ox: view.current.x, oy: view.current.y, d0: m.d, z0: view.current.z, mx: m.x, my: m.y };
+    }
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isDesktop) {
+      const p = mouseScroll.current;
+      if (!p.active) return;
+      const dx = e.clientX - p.x, dy = e.clientY - p.y;
+      if (!grab.current.moved && Math.abs(dx) + Math.abs(dy) > 6) {
+        grab.current.moved = true;
+        scrollRef.current?.setPointerCapture(e.pointerId);
+      }
+      if (grab.current.moved && scrollRef.current) {
+        scrollRef.current.scrollLeft = p.l - dx;
+        scrollRef.current.scrollTop = p.t - dy;
+      }
+      return;
+    }
+    if (!ptrs.current.has(e.pointerId)) return;
+    ptrs.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    const g = grab.current;
+    if (g.pinch && ptrs.current.size >= 2) {
+      const m = fingerMid();
+      const z = Math.min(ZMAX, Math.max(ZMIN, g.z0 * (m.d / g.d0)));
+      // Keep the spot between the fingers under the fingers, and let it follow
+      // them if the whole hand slides.
+      const k = z / g.z0;
+      applyView(z, m.x - k * (g.mx - g.ox), m.y - k * (g.my - g.oy));
+      return;
+    }
+    const dx = e.clientX - g.sx, dy = e.clientY - g.sy;
+    if (!g.moved) {
+      // Below this it is still a tap, so picking a hex keeps working.
+      if (Math.abs(dx) + Math.abs(dy) < 8) return;
+      g.moved = true;
+      try { scrollRef.current?.setPointerCapture(e.pointerId); } catch {}
+    }
+    applyView(view.current.z, g.ox + dx, g.oy + dy);
+  };
+
+  const endPan = (e?: React.PointerEvent<HTMLDivElement>) => {
+    if (isDesktop) {
+      mouseScroll.current.active = false;
+      if (grab.current.moved) {
+        blockTap.current = true;
+        grab.current.moved = false;
+      }
+      return;
+    }
+    if (e) ptrs.current.delete(e.pointerId);
+    else ptrs.current.clear();
+    if (ptrs.current.size === 1) {
+      // A finger lifted mid-pinch: carry on dragging with the one still down.
+      const p = [...ptrs.current.values()][0];
+      grab.current = { ...grab.current, pinch: false, moved: true,
+        sx: p.x, sy: p.y, ox: view.current.x, oy: view.current.y };
+      return;
+    }
+    if (ptrs.current.size > 0) return;
+    commitView();
+    if (grab.current.moved) blockTap.current = true;
+    grab.current.pinch = false;
+    grab.current.moved = false;
+  };
+
+  const guardedHexClick = (n: number) => {
+    if (blockTap.current) { blockTap.current = false; return; }
+    actions.hexClick(n);
+  };
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -145,7 +271,8 @@ export default function GameScreen({
       if (cw <= 0 || ch <= 0) return;
       const { w: nw, h: nh } = boardSvgSize(state.level);
       const fit = Math.min(cw / nw, ch / nh);
-      setBase({ w: nw * fit, h: nh * fit });
+      const w = nw * fit, h = nh * fit;
+      setBase((b) => (b && Math.abs(b.w - w) < 0.5 && Math.abs(b.h - h) < 0.5 ? b : { w, h }));
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -153,16 +280,51 @@ export default function GameScreen({
     return () => ro.disconnect();
   }, [isDesktop, state.level]);
 
-  // Reset the zoom back to fit-to-screen when leaving the phone layout.
-  useEffect(() => { if (isDesktop) setZoom(1); }, [isDesktop]);
+  // The board area changes size whenever a panel opens or the phone turns. Pull
+  // the board back inside the new bounds so it can never be parked off-screen.
+  useEffect(() => {
+    if (!base) return;
+    baseRef.current = base;
+    setPan((p) => {
+      const c = clampPan(p.x, p.y, view.current.z);
+      return c.x === p.x && c.y === p.y ? p : c;
+    });
+  }, [base]);
+
+  // Back to fit-to-screen on a new board, and when leaving the phone layout.
+  // Done as the render that brings the change in, not afterwards in an effect,
+  // so the board never paints once at the old zoom before snapping back.
+  const viewFor = state.level + "|" + isDesktop;
+  const [viewSetFor, setViewSetFor] = useState(viewFor);
+  if (viewSetFor !== viewFor) {
+    setViewSetFor(viewFor);
+    setZoom(1);
+    setPan(ORIGIN);
+  }
+
+  // How much of the bottom of the screen the walk sheet covers. The board area
+  // gives up that much and nothing more (see WalkPanel); until it says, the old
+  // flat reservation in the stylesheet stands.
+  const [walkReserve, setWalkReserve] = useState<number | null>(null);
+  const noteWalkReserve = useCallback(
+    (px: number | null) => setWalkReserve((v) => (v === px ? v : px)),
+    []
+  );
+  const mainStyle =
+    walkReserve == null
+      ? undefined
+      : ({ "--walk-h": walkReserve + "px" } as CSSProperties);
 
   // Is the tip to turn the phone sideways showing? (see rotateTipSnapshot)
   const rotateTip = useSyncExternalStore(subscribeRotateTip, rotateTipSnapshot, () => false);
 
+  // The board is laid out at its fit-to-screen size; zoom and pan ride on top of
+  // that as a transform.
   const boardSize =
     !isDesktop && base
-      ? { width: base.w * zoom, height: base.h * zoom, maxWidth: "none", maxHeight: "none" }
+      ? { width: base.w, height: base.h, maxWidth: "none", maxHeight: "none" }
       : undefined;
+  const viewMoved = Math.abs(zoom - 1) > 0.001 || pan.x !== 0 || pan.y !== 0;
 
   // ── Draggable bank tab (mobile) ──
   // The edge tab can be dragged anywhere so it never sits on top of a hex the
@@ -283,7 +445,7 @@ export default function GameScreen({
       </div>
 
       <div className="gstage">
-        <div className="gstage-main">
+        <div className="gstage-main" style={mainStyle}>
           {/* Mobile: a thin bar docked above the board (find & route stages) */}
           {!isDesktop && dockNode}
 
@@ -304,19 +466,32 @@ export default function GameScreen({
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={endPan}
+            onPointerCancel={endPan}
             onPointerLeave={endPan}
+            style={isDesktop ? undefined : { touchAction: "none" }}
           >
-            <HexBoard state={state} onHexClick={guardedHexClick} sizeStyle={boardSize} />
+            {isDesktop || !base ? (
+              <HexBoard state={state} onHexClick={guardedHexClick} />
+            ) : (
+              <div
+                ref={boardRef}
+                className="boardpan"
+                style={{ transform: `translate(${pan.x}px,${pan.y}px) scale(${zoom})` }}
+              >
+                <HexBoard state={state} onHexClick={guardedHexClick} sizeStyle={boardSize} />
+              </div>
+            )}
           </div>
 
-          {/* Mobile: make the board bigger/smaller. Drag the board to pan when it
-              grows past the screen. Hidden during the walk (the dog drives itself). */}
-          {!isDesktop && state.phase !== 3 && (
+          {/* Mobile: drag the board with one finger, pinch with two, or use these
+              buttons. Kept during the walk as well — the board area is at its
+              smallest there, so being able to zoom in on the dog matters most. */}
+          {!isDesktop && (
             <div className={"board-zoom" + (routeReady ? " lifted" : "")}>
               <button className="bz-btn" onClick={() => zoomBy(-0.3)} disabled={zoom <= ZMIN}
                 aria-label={t.zoomOut} title={t.zoomOut}>−</button>
-              {Math.abs(zoom - 1) > 0.001 && (
-                <button className="bz-btn bz-reset" onClick={() => setZoom(1)}
+              {viewMoved && (
+                <button className="bz-btn bz-reset" onClick={resetView}
                   aria-label={t.zoomReset} title={t.zoomReset}>⤢</button>
               )}
               <button className="bz-btn" onClick={() => zoomBy(0.3)} disabled={zoom >= ZMAX}
@@ -390,7 +565,9 @@ export default function GameScreen({
 
       {/* Walk stage: a movable panel floating beside the board — drag it by the
           title bar so the dog's progress along the route stays visible. */}
-      {state.phase === 3 && <WalkPanel t={t} state={state} actions={actions} />}
+      {state.phase === 3 && (
+        <WalkPanel t={t} state={state} actions={actions} onDock={noteWalkReserve} />
+      )}
     </div>
   );
 }
