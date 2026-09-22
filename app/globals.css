@@ -524,8 +524,12 @@ a.ghbtn,a.btnout{display:inline-flex;align-items:center;text-decoration:none}
 /* walk: a compact, movable panel docked to the lower inline-end corner by
    default — the board (and the walking dog) stays clear. Drag it by the title
    bar to move it anywhere. */
+/* 68vh, not 64: at 64 the question, the wrong-answer message, the hint, the
+   four answers and the "reveal the answer" way out could not all be on screen
+   at once on a 768-pixel laptop, and the way out is what the message tells the
+   child about. */
 .pw-walk{inset-inline-end:14px;bottom:14px;
-  width:340px;max-width:calc(100vw - 20px);max-height:64vh}
+  width:340px;max-width:calc(100vw - 20px);max-height:68vh}
 .pw-drag{cursor:grab;touch-action:none;user-select:none}
 .pw-drag:active{cursor:grabbing}
 /* Phone portrait: a bottom sheet. The board is lifted above it (see walk-mode

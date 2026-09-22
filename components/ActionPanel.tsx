@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RichText from "./RichText";
 import { DC, LVL_DOORS } from "@/lib/engine/constants";
 import { routeReachesTarget } from "@/lib/engine/gameReducer";
@@ -211,6 +211,22 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
   const col = state.pathDoors[step];
   const [hintVisible, setHintVisible] = useState(false);
   const [helperReveal, setHelperReveal] = useState(false);
+  const answersRef = useRef<HTMLDivElement>(null);
+
+  // The walk panel is shorter than everything it holds, so it scrolls inside
+  // itself. When the message and the hint appear they push the answers out of
+  // sight, and a child cannot try again without knowing to scroll. Bringing the
+  // answers back into view drags the message and the hint in with them, because
+  // they now sit directly above.
+  // Every wrong attempt re-runs it, not only the first: the message stays on
+  // screen between attempts, so watching it appear would fire once per question
+  // and a second wrong answer would scroll nowhere. The jump is instant, both
+  // because a smooth one gets cut short by the dice settling and because a
+  // child should not have to wait to see what to do next.
+  useEffect(() => {
+    if (!state.wrongAnswerVisible && !hintVisible) return;
+    answersRef.current?.scrollIntoView({ block: "nearest" });
+  }, [state.wrongAnswerVisible, state.mcWrong, state.inputWrong, hintVisible]);
 
   if (!col) return null;
   const dc = DC[col];
@@ -246,53 +262,64 @@ function Phase3({ t, state, actions }: { t: Dict; state: GameState; actions: Gam
             <div className="mathex">{state.pendingRoll.expr} = ?</div>
           </div>
 
-          {state.choices ? (
-            <div className="mcgrid">
-              {state.choices.map((c) => {
-                const cls =
-                  "mcb" +
-                  (state.mcCorrect === c ? " ok" : "") +
-                  (state.mcWrong === c ? " no" : "");
-                return (
-                  <button key={c} className={cls} onClick={() => actions.mcAnswer(c)}>
-                    {c}
-                  </button>
-                );
-              })}
-            </div>
-          ) : (
-            <AnswerInput t={t} wrong={state.inputWrong} onSubmit={actions.inputAnswer} />
-          )}
+          {/* Feedback sits above the answers, not below them. The walk panel is
+              capped at a fraction of the screen and scrolls inside itself, so a
+              message added under the answer buttons fell outside the visible
+              area: a child who answered wrongly saw only the half-second shake
+              on the button and never the sentence or the hint that teaches the
+              strategy. Above the buttons both are read without scrolling. */}
+          {state.wrongAnswerVisible && <div className="wrongbox">{t.wrongTryAgain}</div>}
 
-          {state.helperSolvedBy && !state.mcCorrect && (
-            helperReveal ? (
-              <div className="hintbox">{t.helperAnswerReveal(state.pendingRoll.correct)}</div>
-            ) : (
-              <div className="helper-solved">
-                <div className="helper-solved-note">{t.helperSolvedNote(state.helperSolvedBy)}</div>
-                <button className="abt abp" onClick={() => { actions.noteReveal(); setHelperReveal(true); }}>
-                  {t.helperRevealBtn}
-                </button>
-              </div>
-            )
-          )}
-
-          {(hintVisible || state.wrongAnswerVisible) ? (
+          {(hintVisible || state.wrongAnswerVisible) && (
             <RichText className="hintbox" html={t.hintResult(state.pendingRoll.expr)} />
-          ) : (
-            <button className="abt abp" onClick={() => { actions.noteHint(); setHintVisible(true); }}>
-              {t.hintBtn}
-            </button>
           )}
 
-          {state.wrongAnswerVisible && (
-            <div>
-              <div className="wrongbox">{t.wrongTryAgain}</div>
+          {/* The answers and the two ways out of a wrong answer, kept together
+              so one scroll brings all of them into view. */}
+          <div ref={answersRef}>
+            {state.choices ? (
+              <div className="mcgrid">
+                {state.choices.map((c) => {
+                  const cls =
+                    "mcb" +
+                    (state.mcCorrect === c ? " ok" : "") +
+                    (state.mcWrong === c ? " no" : "");
+                  return (
+                    <button key={c} className={cls} onClick={() => actions.mcAnswer(c)}>
+                      {c}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <AnswerInput t={t} wrong={state.inputWrong} onSubmit={actions.inputAnswer} />
+            )}
+
+            {state.helperSolvedBy && !state.mcCorrect && (
+              helperReveal ? (
+                <div className="hintbox">{t.helperAnswerReveal(state.pendingRoll.correct)}</div>
+              ) : (
+                <div className="helper-solved">
+                  <div className="helper-solved-note">{t.helperSolvedNote(state.helperSolvedBy)}</div>
+                  <button className="abt abp" onClick={() => { actions.noteReveal(); setHelperReveal(true); }}>
+                    {t.helperRevealBtn}
+                  </button>
+                </div>
+              )
+            )}
+
+            {!(hintVisible || state.wrongAnswerVisible) && (
+              <button className="abt abp" onClick={() => { actions.noteHint(); setHintVisible(true); }}>
+                {t.hintBtn}
+              </button>
+            )}
+
+            {state.wrongAnswerVisible && (
               <button className="abt aby" onClick={actions.openForfeit}>
                 {t.revealEndsTurn}
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
       <HelpCard t={t} level={state.level} />
